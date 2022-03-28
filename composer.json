@@ -1,0 +1,14 @@
+{
+    "name": "atsmacode/read-right-hands-vanilla",
+    "description": "Vanilla PHP Version of Read Right Hands",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Mark Ramage",
+            "email": "mramage@hotmail.co.uk"
+        }
+    ],
+    "require": {
+        "symfony/console": "^6.0"
+    }
+}
