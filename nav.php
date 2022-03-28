@@ -11,14 +11,14 @@
 
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/ViewController.php?requested_page=play">Play</a>
+                    <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/play.php') echo 'active'; ?>" aria-current="page" href="/play.php">Play</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Hand History</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/database/seeders/index.php">Build</a>
+                    <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/database/seeders/index.php') echo 'active'; ?>" href="/database/seeders/index.php">Build</a>
                 </li>
             </ul>
 
