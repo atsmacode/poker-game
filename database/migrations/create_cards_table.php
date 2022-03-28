@@ -6,8 +6,8 @@ try {
     $conn = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
     $sql = "CREATE TABLE cards (
         id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        rank_id INT(6) UNSIGNED,
-        suit_id INT(6) UNSIGNED,
+        rank_id INT(6) UNSIGNED NOT NULL,
+        suit_id INT(6) UNSIGNED NOT NULL,
         FOREIGN KEY (rank_id) REFERENCES ranks(id),
         FOREIGN KEY (suit_id) REFERENCES suits(id)
     )";
