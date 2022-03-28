@@ -15,8 +15,8 @@ try {
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // use exec() because no results are returned
     $conn->exec($sql);
-    echo "<p>" . "Cards table created successfully" . "</p>";
+    echo "<p class='bg-primary rounded'>" . "Cards table created successfully" . "</p>";
 } catch(PDOException $e) {
-    echo "<p>" . $sql . "<br>" . $e->getMessage() . "</p>";
+    echo "<p class='bg-danger rounded'>" . $sql . "<br>" . $e->getMessage() . "</p>";
 }
 $conn = null;

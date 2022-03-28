@@ -9,10 +9,9 @@ try {
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // use exec() because no results are returned
     $conn->exec($sql);
-    echo "<p>" . "Database created successfully" . "</p>";
+    echo "<p class='bg-primary rounded'>" . "Database created successfully" . "</p>";
 } catch(PDOException $e) {
-    echo "<p>" . $sql . "<br>" . $e->getMessage() . "</p>";
-
+    echo "<p class='bg-danger rounded'>" . $sql . "<br>" . $e->getMessage() . "</p>";
 }
 $conn = null;
 ?>

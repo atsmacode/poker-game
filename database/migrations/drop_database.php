@@ -9,13 +9,8 @@ try {
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // use exec() because no results are returned
     $conn->exec($sql);
-    echo "<p>" . "Database dropped successfully" . "</p>";
+    echo "<p class='bg-primary rounded'>" . "Database dropped successfully" . "</p>";
 } catch(PDOException $e) {
-    /*
-     * Do nothing as DB may not exist yet.
-     * Handle this elegantly like Laravel for fresh install
-     */
-    echo "<p>" . $sql . "<br>" . $e->getMessage() . "</p>";
-
+    echo "<p class='bg-danger rounded'>" . $sql . "<br>" . $e->getMessage() . "</p>";
 }
 $conn = null;

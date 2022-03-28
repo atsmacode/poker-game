@@ -22,9 +22,9 @@ try {
     }
 
 
-    echo "<p>" . "Cards seeded successfully" . "</p>";
+    echo "<p class='bg-primary rounded'>" . "Cards seeded successfully" . "</p>";
 } catch(PDOException $e) {
-    echo "<p>" . $sql . "<br>" . $e->getMessage() . "</p>";
+    echo "<p class='bg-danger rounded'>" . $sql . "<br>" . $e->getMessage() . "</p>";
 
 }
 $conn = null;

@@ -17,10 +17,9 @@ try {
         $abbreviation = $suit['abbreviation'];
         $stmt->execute();
     }
-    echo "<p>" . "Suits seeded successfully" . "</p>";
+    echo "<p class='bg-primary rounded'>" . "Suits seeded successfully" . "</p>";
 } catch(PDOException $e) {
-    echo "<p>" . $sql . "<br>" . $e->getMessage() . "</p>";
-
+    echo "<p class='bg-danger rounded'>" . $sql . "<br>" . $e->getMessage() . "</p>";
 }
 $conn = null;
 

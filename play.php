@@ -10,30 +10,7 @@
 
     <div id="app" class="container-sm">
 
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container-fluid ps-0">
-
-                <a class="navbar-brand" href="ViewController.php?requested_page=index"><strong><span class="text-danger">Read</span></strong> Right Hands</a>
-
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="ViewController.php?requested_page=play">Play</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Hand History</a>
-                        </li>
-                    </ul>
-
-                </div>
-
-            </div>
-        </nav>
+        <?php require('nav.php'); ?>
 
         <div class="bg-primary p-3 rounded mb-1">
 
