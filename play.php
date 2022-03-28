@@ -28,49 +28,7 @@
 
                 <h1>Players</h1>
 
-                <!--<div class="col-4 mb-3">
-
-                    <player :player="players[0]" :winner="winner"></player>
-
-
-                </div>
-
-                <div class="col-4 mb-3">
-
-                    <player :player="players[1]" :winner="winner"></player>
-
-                </div>
-
-                <div class="col-4 mb-3">
-
-                    <player :player="players[2]" :winner="winner"></player>
-
-
-                </div>-->
-
             </div>
-
-            <!--<div class="row">
-
-                <div class="col-4 mb-3">
-
-                    <player :player="players[5]" :winner="winner"></player>
-
-                </div>
-
-                <div class="col-4 mb-3">
-
-                    <player :player="players[4]" :winner="winner"></player>
-
-                </div>
-
-                <div class="col-4 mb-3">
-
-                    <player :player="players[3]" :winner="winner"></player>
-
-                </div>
-
-            </div>-->
 
         </div>
 
@@ -78,15 +36,6 @@
             <div class="row">
                 <div class="col">
                     <h2>Community Cards</h2>
-                    <!--<div v-if="communityCards.length > 0">
-                        <div class="row mb-2 ms-0">
-                            <div v-for="card in communityCards" class="m-0 bg-white ms-1" v-bind:class="suitColours[card.suit]" style="width:100px;height:130px">
-                                <div class="card-body ps-1 pe-0">
-                                    <p class="fs-2"><strong>@{{card.rank}}</strong> @{{card.suitAbbreviation}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>-->
                 </div>
             </div>
         </div>
@@ -95,10 +44,6 @@
         <div>
             <div class="bg-info p-3 rounded mb-1">
                 <h2>Winner</h2>
-                <!--<p>Player @{{winner.player.id}} with @{{winner.handType.name}}</p>
-                <button v-on:click="gameData" class="btn btn-primary">
-                    Next Hand
-                </button>-->
             </div>
         </div>
 
