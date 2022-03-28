@@ -1,8 +1,6 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "read-right-hands-vanilla";
+
+require('../../config/db.php');
 
 $ranks = require('../helpers/select_ranks.php');
 $suits = require('../helpers/select_suits.php');
