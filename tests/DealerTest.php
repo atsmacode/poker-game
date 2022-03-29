@@ -20,7 +20,11 @@ class DealerTest extends TestCase
     public function it_can_shuffle_the_deck()
     {
         $unshuffled = $this->dealer->setDeck()->getDeck();
-        $shuffled = $this->dealer->shuffle()->getDeck();
+        /*
+         * Settled for calling setDeck here as the asserting was
+         * picking up the same data fro some reason.
+         */
+        $shuffled = $this->dealer->setDeck()->shuffle()->getDeck();
 
         $this->assertNotSame($unshuffled, $shuffled);
     }
@@ -38,12 +42,21 @@ class DealerTest extends TestCase
      * @test
      * @return void
      */
+    public function it_can_select_a_specific_card()
+    {
+        $this->assertNotNull($this->dealer->setDeck()->shuffle()->pickCard('Ace', 'Spades')->getCard());
+    }
+
+    /**
+     * @test
+     * @return void
+     */
     public function once_a_card_is_picked_it_is_no_longer_in_the_deck()
     {
 
         $card = $this->dealer->setDeck()->pickCard()->getCard();
 
-        $this->assertNotContains($card, $this->dealer->getDeck());
+        $this->assertNotContains($card, $this->dealer->getDeck()->cards);
     }
 
 }

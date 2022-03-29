@@ -27,10 +27,7 @@ class Card
     {
         if($this->selectedRank && $this->selectedSuit){
             $this->getSelectedCard();
-        } else {
-            $this->getAllCards();
         }
-
     }
 
     private function getSelectedCard()
@@ -43,11 +40,12 @@ class Card
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             $stmt = $conn->prepare("
-                    SELECT r.name as rank, s.name as suit, r.ranking as ranking FROM cards c
+                    SELECT c.*, r.name as rank, s.name as suit, r.ranking as ranking FROM cards c
                     LEFT OUTER JOIN ranks r ON c.rank_id = r.id
                     LEFT OUTER JOIN suits s ON c.suit_id = s.id
                     WHERE r.name = '{$this->selectedRank}' AND s.name = '{$this->selectedSuit}'
                 ");
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
 
             $rows = $stmt->fetchAll();
@@ -64,34 +62,6 @@ class Card
         $this->rank = $result['rank'];
         $this->suit = $result['suit'];
         $this->ranking = $result['ranking'];
-
-    }
-
-    private function getAllCards()
-    {
-        $rows = null;
-
-        try {
-
-            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-            $stmt = $conn->prepare("
-                    SELECT r.name as rank, s.name as suit, r.ranking as ranking FROM cards c
-                    LEFT OUTER JOIN ranks r ON c.rank_id = r.id
-                    LEFT OUTER JOIN suits s ON c.suit_id = s.id
-                ");
-            $stmt->execute();
-
-            $rows = $stmt->fetchAll();
-
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-        }
-
-        $conn = null;
-
-        $this->content = $rows;
 
     }
 

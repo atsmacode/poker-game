@@ -10,16 +10,49 @@ class Deck
 
     use Connect;
 
-    public $cards;
+    public $cards = [];
 
     public function __construct()
     {
         $this->setCredentials();
-        $this->cards = $this->selectCards();
+        $this->cards = $this->compileDeck();
     }
 
-    private function selectCards()
+    private function compileDeck()
     {
-        return (new Card())->content;
+        foreach($this->selectAllCards() as $card){
+            $this->cards[] = new Card($card['rank'], $card['suit']);
+        }
+        return $this->cards;
     }
+
+    private function selectAllCards()
+    {
+        $rows = null;
+
+        try {
+
+            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $stmt = $conn->prepare("
+                    SELECT r.name as rank, s.name as suit, r.ranking as ranking FROM cards c
+                    LEFT OUTER JOIN ranks r ON c.rank_id = r.id
+                    LEFT OUTER JOIN suits s ON c.suit_id = s.id
+                ");
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $stmt->execute();
+
+            $rows = $stmt->fetchAll();
+
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+        }
+
+        $conn = null;
+
+        return $rows;
+
+    }
+
 }

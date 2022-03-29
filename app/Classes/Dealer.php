@@ -11,7 +11,7 @@ class Dealer
     public function setDeck()
     {
 
-        $this->deck = (new Deck())->cards;
+        $this->deck = new Deck();
 
         return $this;
     }
@@ -23,28 +23,30 @@ class Dealer
 
     public function shuffle()
     {
-        shuffle($this->deck);
+        shuffle($this->deck->cards);
 
         return $this;
     }
 
-    public function pickCard($rank = null, $suit = null)
+    public function pickCard(string $rank = null, string $suit = null)
     {
 
         if($rank === null && $suit === null){
-            $this->card = array_shift($this->deck);
+            $this->card = array_shift($this->deck->cards);
             return $this;
         }
 
-        $this->card = array_values(array_filter($this->deck, function($key, $value) use($rank, $suit){
-            return $value->rank_id === $rank->id && $value->suit_id === $suit->id;
-        }));
+        $filter = array_filter($this->deck->cards, function($value) use($rank, $suit){
+            var_dump($value);
+            return $value->rank === $rank && $value->suit === $suit;
+        });
+        $this->card = array_values($filter);
 
         $card = $this->card;
-
-        array_values(array_filter($this->deck, function($key, $value) use($card){
+        $reject = array_filter($this->deck->cards, function($value) use($card){
             return $value !== $card;
-        }));
+        });
+        $this->deck = array_values($reject);
 
         return $this;
     }
