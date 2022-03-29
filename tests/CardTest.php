@@ -1,6 +1,6 @@
 <?php
 
-use App\Classes\Dealer;
+use App\Classes\Card;
 use PHPUnit\Framework\TestCase;
 
 class CardTest extends TestCase
@@ -9,7 +9,7 @@ class CardTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->deck = (new Dealer())->setDeck()->getDeck();
+        $this->card = new Card('Ace', 'Spades');
     }
 
     /**
@@ -18,7 +18,7 @@ class CardTest extends TestCase
      */
     public function a_card_has_a_suit()
     {
-        $this->assertNotNull(array_shift($this->deck)['suit_id']);
+        $this->assertEquals('Spades', $this->card->suit);
     }
 
     /**
@@ -27,7 +27,16 @@ class CardTest extends TestCase
      */
     public function a_card_has_a_rank()
     {
-        $this->assertNotNull(array_shift($this->deck)['rank_id']);
+        $this->assertEquals('Ace', $this->card->rank);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function a_card_has_a_ranking()
+    {
+        $this->assertEquals(1, $this->card->ranking);
     }
 
 }
