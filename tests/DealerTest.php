@@ -21,8 +21,8 @@ class DealerTest extends TestCase
     {
         $unshuffled = $this->dealer->setDeck()->getDeck();
         /*
-         * Settled for calling setDeck here as the asserting was
-         * picking up the same data fro some reason.
+         * Settled for calling setDeck here as the assertion was
+         * picking up the same data for some reason.
          */
         $shuffled = $this->dealer->setDeck()->shuffle()->getDeck();
 
