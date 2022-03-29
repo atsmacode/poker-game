@@ -11,20 +11,10 @@ class Dealer
     public $deck;
     public $card;
 
-    public function __construct()
-    {
-        [
-            'servername' => $this->servername,
-            'username' => $this->username,
-            'password' => $this->password,
-            'database' => $this->database
-        ] = require('config/db.php');
-    }
-
     public function setDeck()
     {
 
-        $this->deck = $this->selectCards();
+        $this->deck = (new Deck())->cards;
 
         return $this;
     }
@@ -65,28 +55,6 @@ class Dealer
     public function getCard()
     {
         return $this->card;
-    }
-
-    private function selectCards()
-    {
-        $rows = null;
-
-        try {
-
-            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-            $stmt = $conn->prepare("SELECT * FROM cards");
-            $stmt->execute();
-
-            $rows = $stmt->fetchAll();
-
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-        }
-        $conn = null;
-
-        return $rows;
     }
 
     /*
