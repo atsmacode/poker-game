@@ -1,8 +1,9 @@
 <?php
 
 use App\Classes\Dealer;
+use PHPUnit\Framework\TestCase;
 
-class DealerTest extends BaseTest
+class DealerTest extends TestCase
 {
 
     public function setUp(): void
