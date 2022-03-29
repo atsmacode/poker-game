@@ -2,16 +2,29 @@
 
 namespace App\Classes;
 
+use PDO;
+use PDOException;
+
 class Dealer
 {
 
     public $deck;
     public $card;
 
+    public function __construct()
+    {
+        [
+            'servername' => $this->servername,
+            'username' => $this->username,
+            'password' => $this->password,
+            'database' => $this->database
+        ] = require('config/db.php');
+    }
+
     public function setDeck()
     {
 
-        $this->deck = '';
+        $this->deck = $this->selectCards();
 
         return $this;
     }
@@ -21,29 +34,30 @@ class Dealer
         return $this->deck;
     }
 
-    /*public function shuffle()
+    public function shuffle()
     {
-        $this->deck = $this->deck->shuffle();
+        shuffle($this->deck);
 
         return $this;
     }
 
     public function pickCard($rank = null, $suit = null)
     {
+
         if($rank === null && $suit === null){
-            $this->card = $this->getDeck()->shift();
+            $this->card = array_shift($this->deck);
             return $this;
         }
 
-        $this->card = $this->deck->filter(function($value) use ($rank, $suit){
+        $this->card = array_values(array_filter($this->deck, function($key, $value) use($rank, $suit){
             return $value->rank_id === $rank->id && $value->suit_id === $suit->id;
-        })->first();
+        }));
 
         $card = $this->card;
 
-        $this->deck->reject(function($value) use($card){
-            return $value === $card;
-        });
+        array_values(array_filter($this->deck, function($key, $value) use($card){
+            return $value !== $card;
+        }));
 
         return $this;
     }
@@ -52,6 +66,30 @@ class Dealer
     {
         return $this->card;
     }
+
+    private function selectCards()
+    {
+        $rows = null;
+
+        try {
+
+            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $stmt = $conn->prepare("SELECT * FROM cards");
+            $stmt->execute();
+
+            $rows = $stmt->fetchAll();
+
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+        }
+        $conn = null;
+
+        return $rows;
+    }
+
+    /*
 
     public function dealTo($players, $cardCount, $hand = null)
     {
