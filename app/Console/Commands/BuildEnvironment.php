@@ -45,28 +45,21 @@ class BuildEnvironment extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
 
-        [
-            'servername' => $servername,
-            'username' => $username,
-            'password' => $password,
-            'database' => $database
-        ] = require('config/db.php');
-
         foreach($this->methods as $method){
-            $this->{$method}($servername, $username, $password, $database, $output);
+            $this->{$method}($output);
         }
 
         return Command::SUCCESS;
 
     }
 
-    private function dropDatabase($servername, $username, $password, $database, $output)
+    private function dropDatabase($output)
     {
 
         $sql = "DROP DATABASE IF EXISTS `read-right-hands-vanilla`";
 
         try {
-            $conn = new PDO("mysql:host=$servername", $username, $password);
+            $conn = new PDO("mysql:host=$this->servername", $this->username, $this->password);
             // set the PDO error mode to exception
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             // use exec() because no results are returned
@@ -81,13 +74,13 @@ class BuildEnvironment extends Command
 
     }
 
-    private function createDatabase($servername, $username, $password, $database, $output)
+    private function createDatabase($output)
     {
 
         $sql = "CREATE DATABASE `read-right-hands-vanilla`";
 
         try {
-            $conn = new PDO("mysql:host=$servername", $username, $password);
+            $conn = new PDO("mysql:host=$this->servername", $this->username, $this->password);
             // set the PDO error mode to exception
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             // use exec() because no results are returned
@@ -102,7 +95,7 @@ class BuildEnvironment extends Command
 
     }
 
-    private function createRanksTable($servername, $username, $password, $database, $output)
+    private function createRanksTable($output)
     {
 
         $sql = "CREATE TABLE ranks (
@@ -113,7 +106,7 @@ class BuildEnvironment extends Command
             )";
 
         try {
-            $conn = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
+            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
             // set the PDO error mode to exception
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             // use exec() because no results are returned
@@ -125,7 +118,7 @@ class BuildEnvironment extends Command
         $conn = null;
     }
 
-    private function createSuitsTable($servername, $username, $password, $database, $output)
+    private function createSuitsTable($output)
     {
 
         $sql = "CREATE TABLE suits (
@@ -135,7 +128,7 @@ class BuildEnvironment extends Command
         )";
 
         try {
-            $conn = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
+            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
 
             // set the PDO error mode to exception
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -148,7 +141,7 @@ class BuildEnvironment extends Command
         $conn = null;
     }
 
-    private function createCardsTable($servername, $username, $password, $database, $output)
+    private function createCardsTable($output)
     {
 
         $sql = "CREATE TABLE cards (
@@ -160,7 +153,7 @@ class BuildEnvironment extends Command
         )";
 
         try {
-            $conn = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
+            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
 
             // set the PDO error mode to exception
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -174,13 +167,13 @@ class BuildEnvironment extends Command
         $conn = null;
     }
 
-    private function seedRanks($servername, $username, $password, $database, $output)
+    private function seedRanks($output)
     {
 
         $ranks = require('config/ranks.php');
 
         try {
-            $conn = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
+            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             $stmt = $conn->prepare("INSERT INTO ranks (name, abbreviation, ranking) VALUES (:name, :abbreviation, :ranking)");
@@ -202,13 +195,13 @@ class BuildEnvironment extends Command
         $conn = null;
     }
 
-    private function seedSuits($servername, $username, $password, $database, $output)
+    private function seedSuits($output)
     {
 
         $suits = require('config/suits.php');
 
         try {
-            $conn = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
+            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             $stmt = $conn->prepare("INSERT INTO suits (name, abbreviation) VALUES (:name, :abbreviation)");
@@ -227,14 +220,14 @@ class BuildEnvironment extends Command
         $conn = null;
     }
 
-    private function seedCards($servername, $username, $password, $database, $output)
+    private function seedCards($output)
     {
 
-        $ranks = $this->selectRanks($servername, $username, $password, $database, $output);
-        $suits = $this->selectSuits($servername, $username, $password, $database, $output);
+        $ranks = $this->selectRanks($output);
+        $suits = $this->selectSuits($output);
 
         try {
-            $conn = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
+            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             $stmt = $conn->prepare("INSERT INTO cards (rank_id, suit_id) VALUES (:rank_id, :suit_id)");
@@ -259,13 +252,13 @@ class BuildEnvironment extends Command
 
     }
 
-    private function selectRanks($servername, $username, $password, $database, $output)
+    private function selectRanks($output)
     {
         $rows = null;
 
         try {
 
-            $conn = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
+            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             $stmt = $conn->prepare("SELECT * FROM ranks");
@@ -285,13 +278,13 @@ class BuildEnvironment extends Command
 
     }
 
-    private function selectSuits($servername, $username, $password, $database, $output)
+    private function selectSuits($output)
     {
         $rows = null;
 
         try {
 
-            $conn = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
+            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             $stmt = $conn->prepare("SELECT * FROM suits");
