@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests;
+
 use App\Classes\Dealer;
 use PHPUnit\Framework\TestCase;
 

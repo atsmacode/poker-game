@@ -17,7 +17,7 @@ class Card extends Model
     public int $suit_id;
     public int $rank_id;
     public int $ranking;
-    public array $content;
+    public $content;
 
     public function __construct(string $rank = null, string $suit = null)
     {

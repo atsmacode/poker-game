@@ -9,8 +9,41 @@ use PDOException;
 class Model
 {
 
-    public $table;
-    public array $content;
+    protected $table;
+    protected $selected;
+    public $content;
+
+    protected function findOrCreate($column = null)
+    {
+        if($this->selected && !$this->getSelected($column, $this->selected)){
+            $this->create($column, $this->selected);
+        };
+    }
+
+    protected function create($column = null, $value = null)
+    {
+
+        $id = null;
+
+        try {
+            $conn = new CustomPDO(true);
+
+            $stmt = $conn->prepare("INSERT INTO {$this->table} ($column) VALUES (:$column)");
+            $stmt->bindParam(':'.$column, $column);
+
+            $column = $value;
+            $stmt->execute();
+
+            $id = $conn->lastInsertId();
+
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+        }
+        $conn = null;
+
+        $this->content = $this->getSelected('id', $id)->content;
+
+    }
 
     protected function getSelected($column = null, $value = null)
     {
@@ -34,6 +67,10 @@ class Model
         }
 
         $conn = null;
+
+        if(!$rows){
+            return null;
+        }
 
         $result = array_shift($rows);
         $this->content = $result;

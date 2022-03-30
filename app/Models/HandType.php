@@ -2,34 +2,35 @@
 
 namespace App\Models;
 
-use App\Classes\CustomPDO;
 use App\Traits\Connect;
-use PDO;
-use PDOException;
 
 class HandType extends Model
 {
 
     use Connect;
 
-    public $table = 'hand_types';
+    protected $table = 'hand_types';
     public string $name;
-    public int $ranking;
-    public array $content;
+    public $ranking;
+    public $content;
 
-    public function __construct(string $name = null)
+    public function __construct(string $selected = null)
     {
         $this->setCredentials();
-        $this->selectedName = $name;
-        $this->select();
+        $this->selected = $selected;
+        $this->initiate();
     }
 
-    public function select()
+    public function initiate()
     {
-        if($this->selectedName){
-            $this->getSelected('name', $this->selectedName);
+
+        $this->findOrCreate('name');
+
+        if($this->content){
             $this->ranking = $this->content['ranking'];
+            $this->name = $this->content['name'];
         }
+
     }
 
     public function collect()

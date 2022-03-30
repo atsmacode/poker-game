@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests;
+
 use App\Models\Card;
 use PHPUnit\Framework\TestCase;
 

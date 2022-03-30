@@ -17,7 +17,7 @@ class CreateHandTypes
         $sql = "CREATE TABLE hand_types (
                 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(30) NOT NULL,
-                ranking INT(2) NOT NULL
+                ranking INT(2) NULL
             )";
 
         try {
