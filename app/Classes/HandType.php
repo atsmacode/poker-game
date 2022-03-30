@@ -28,6 +28,14 @@ class HandType
         }
     }
 
+    public function collect()
+    {
+        foreach($this->content as $key => $value){
+            $this->content[$key] = new self($value['name']);
+        }
+        return $this;
+    }
+
     private function getSelected()
     {
         $rows = null;
@@ -58,6 +66,8 @@ class HandType
         $this->name = $result['name'];
         $this->ranking = $result['ranking'];
 
+        return $this;
+
     }
 
     public function all()
@@ -86,7 +96,7 @@ class HandType
         $result = $rows;
         $this->content = $result;
 
-        return $this->content;
+        return $this;
 
     }
 

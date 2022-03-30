@@ -23,10 +23,18 @@ class QueryHelper
 
             $rows = $stmt->fetchAll();
 
-            $output->writeln("Ranks selected successfully");
+            if($output){
+                $output->writeln("Ranks selected successfully");
+            } else {
+                echo "Ranks selected successfully";
+            }
 
         } catch(PDOException $e) {
-            $output->writeln($e->getMessage());
+            if($output){
+                $output->writeln($e->getMessage());
+            } else {
+                echo $e->getMessage();
+            }
         }
 
         $conn = null;
@@ -50,10 +58,16 @@ class QueryHelper
 
             $rows = $stmt->fetchAll();
 
-            $output->writeln("Suits selected successfully");
+            if($output){
+                $output->writeln("Suits selected successfully");
+            }
 
         } catch(PDOException $e) {
-            $output->writeln($e->getMessage());
+            if($output){
+                $output->writeln($e->getMessage());
+            } else {
+                echo $e->getMessage();
+            }
         }
         $conn = null;
 

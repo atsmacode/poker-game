@@ -12,6 +12,8 @@ class Card
 
     public string $rank;
     public string $suit;
+    public int $suit_id;
+    public int $rank_id;
     public int $ranking;
     public array $content;
 
@@ -61,6 +63,8 @@ class Card
 
         $this->rank = $result['rank'];
         $this->suit = $result['suit'];
+        $this->suit_id = $result['suit_id'];
+        $this->rank_id = $result['rank_id'];
         $this->ranking = $result['ranking'];
 
     }

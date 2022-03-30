@@ -2,8 +2,13 @@
 
 namespace App\Classes;
 
+use App\Helpers\QueryHelper;
+
 class HandIdentifier
 {
+
+    use Connect;
+
     public $handTypes;
     public $identifiedHandType = [
         'handType' => null,
@@ -28,14 +33,15 @@ class HandIdentifier
         'hasFlush',
         'hasStraight',
         'hasThreeOfAKind',
-        'hasTwoPair',
-        'hasPair',*/
+        'hasTwoPair',*/
+        'hasPair',
         'highestCard'
     ];
 
     public function __construct()
     {
-        $this->handTypes = (new HandType())->all();
+        $this->setCredentials();
+        $this->handTypes = (new HandType())->all()->collect()->content;
     }
 
     public function identify($wholeCards, $communityCards)
@@ -52,31 +58,31 @@ class HandIdentifier
 
     }
 
-    /*protected function checkForAceKicker($allCards, $forHandCheck, $activeCards = null)
+    private function checkForAceKicker($forHandCheck, $activeCards = null)
     {
-        if($this->thereIsNoAceInTheActiveCardsUnlessHandIsFlush($allCards, $forHandCheck, $activeCards)){
-            return 14;
-        }
-
-        return false;
-    }*/
-
-    protected function checkForHighAceActiveCardRanking($rank)
-    {
-        if($rank->ranking === 1){
+        if($this->thereIsNoAceInTheActiveCardsUnlessHandIsFlush($forHandCheck, $activeCards)){
             return 14;
         }
 
         return false;
     }
 
-    /*protected function thereIsNoAceInTheActiveCardsUnlessHandIsFlush($allCards, $forHandCheck, $activeCards)
+    private function checkForHighAceActiveCardRanking($rank)
     {
-        return ($activeCards && $allCards->contains('ranking', 1)
+        if($rank['ranking'] === 1){
+            return 14;
+        }
+
+        return false;
+    }
+
+    protected function thereIsNoAceInTheActiveCardsUnlessHandIsFlush($forHandCheck, $activeCards)
+    {
+        return ($activeCards && $this->search('allCards', 'ranking', 1)
                 && !in_array(1, $activeCards)
                 && !in_array(14, $activeCards))
             || (in_array(1, $activeCards) && $forHandCheck === 'hasFlush');
-    }*/
+    }
 
     private function getMax($haystack, $columm)
     {
@@ -88,21 +94,37 @@ class HandIdentifier
         return min(array_column($haystack, $columm));
     }
 
-    private function getKicker()
+    private function getKicker($highestActiveCard = null)
     {
         $rankings = array_column($this->allCards, 'ranking');
         arsort($rankings);
 
         foreach($rankings as $ranking){
-            if($ranking < $this->highCard){
+            if($ranking < $this->highCard || $ranking < $highestActiveCard){
                 return $ranking;
             }
         }
     }
 
-    private function search($hayStack, $column,  $value)
+    private function search($hayStack, $column, $value)
     {
-        return $this->{$hayStack}[array_search($value, array_column($this->{$hayStack}, $column))];
+
+        $key = array_search($value,
+            array_column($this->{$hayStack}, $column)
+        );
+
+        if(array_key_exists($key, $this->{$hayStack})){
+            return $this->{$hayStack}[$key];
+        }
+
+        return false;
+    }
+
+    private function filter($hayStack, $column, $filter)
+    {
+        return array_filter($this->{$hayStack}, function($value) use($column, $filter){
+            return $value->{$column} === $filter;
+        });
     }
 
     public function highestCard()
@@ -117,6 +139,35 @@ class HandIdentifier
         $this->identifiedHandType['handType'] = $this->search('handTypes', 'name', 'High Card');
         $this->identifiedHandType['activeCards'][] = $this->highCard;
         $this->identifiedHandType['kicker'] = $this->getKicker();
+
+        return $this;
+    }
+
+    public function hasPair()
+    {
+        foreach(QueryHelper::selectRanks($this->servername, $this->username, $this->password, $this->database) as $rank){
+            if(count($this->filter('allCards', 'rank_id', $rank['id'])) === 2){
+                $this->pairs[] = $rank;
+                $this->identifiedHandType['activeCards'][] = $this->checkForHighAceActiveCardRanking($rank) ?: $rank['ranking'];
+                /*
+                 * The showdown may be called pre-flop when the pot is checked down to BB.
+                 * In which case they may have a pair and no other kicker rank.
+                 * Ultimately this will be handled more elegantly when kickers are fully fleshed out.
+                 */
+                if(count($this->allCards) > 2){
+                    $this->identifiedHandType['kicker'] = $this->checkForAceKicker(__FUNCTION__,  $this->identifiedHandType['activeCards'])
+                        ?: $this->getKicker($rank['ranking']);
+                } else {
+                    $this->identifiedHandType['kicker'] = $rank['ranking'];
+                }
+
+            }
+        }
+
+        if(count($this->pairs) === 1){
+            $this->identifiedHandType['handType'] = $this->search('handTypes', 'name', 'Pair');
+            return true;
+        }
 
         return $this;
     }
