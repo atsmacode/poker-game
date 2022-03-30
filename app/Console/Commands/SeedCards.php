@@ -79,8 +79,8 @@ class SeedCards
     public function seedCards($output)
     {
 
-        $ranks = QueryHelper::selectRanks($output);
-        $suits = QueryHelper::selectSuits($output);
+        $ranks = QueryHelper::selectRanks($this->servername, $this->username, $this->password, $this->database, $output);
+        $suits = QueryHelper::selectSuits($this->servername, $this->username, $this->password, $this->database, $output);
 
         try {
             $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);

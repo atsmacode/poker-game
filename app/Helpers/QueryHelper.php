@@ -8,15 +8,8 @@ use PDOException;
 class QueryHelper
 {
 
-    public static function selectRanks($output)
+    public static function selectRanks($servername, $username, $password, $database, $output)
     {
-
-        [
-            'servername' => $servername,
-            'username' => $username,
-            'password' => $password,
-            'database' => $database
-        ] = require('config/db.php');
 
         $rows = null;
 
@@ -42,15 +35,8 @@ class QueryHelper
 
     }
 
-    public static function selectSuits($output)
+    public static function selectSuits($servername, $username, $password, $database, $output)
     {
-
-        [
-            'servername' => $servername,
-            'username' => $username,
-            'password' => $password,
-            'database' => $database
-        ] = require('config/db.php');
 
         $rows = null;
 
