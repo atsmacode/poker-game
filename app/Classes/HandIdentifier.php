@@ -80,16 +80,12 @@ class HandIdentifier
 
     private function getMax($haystack, $columm)
     {
-        $rankings = array_column($haystack, $columm);
-
-        return max($rankings);
+        return max(array_column($haystack, $columm));
     }
 
     private function getMin($haystack, $columm)
     {
-        $rankings = array_column($haystack, $columm);
-
-        return min($rankings);
+        return min(array_column($haystack, $columm));
     }
 
     private function getKicker()
@@ -104,22 +100,9 @@ class HandIdentifier
         }
     }
 
-    private function getHandType($name)
+    private function search($hayStack, $column,  $value)
     {
-        foreach($this->handTypes as $handType){
-            if($handType['name'] == $name){
-                return $handType;
-            }
-        }
-    }
-
-    private function search($haystack, $column, $value)
-    {
-        foreach($this->{$haystack} as $item){
-            if($item->{$column} == $value){
-                return $item;
-            }
-        }
+        return $this->{$hayStack}[array_search($value, array_column($this->{$hayStack}, $column))];
     }
 
     public function highestCard()
@@ -131,7 +114,7 @@ class HandIdentifier
             $this->highCard = $this->getMax($this->allCards, 'ranking');
         }
 
-        $this->identifiedHandType['handType'] = $this->getHandType('High Card');
+        $this->identifiedHandType['handType'] = $this->search('handTypes', 'name', 'High Card');
         $this->identifiedHandType['activeCards'][] = $this->highCard;
         $this->identifiedHandType['kicker'] = $this->getKicker();
 
