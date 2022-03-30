@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Classes\Connect;
-use PDO;
+use App\Classes\CustomPDO;
 use PDOException;
 
 class CreateTables
@@ -31,10 +31,7 @@ class CreateTables
             )";
 
         try {
-            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
-            // set the PDO error mode to exception
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            // use exec() because no results are returned
+            $conn = new CustomPDO(true);
             $conn->exec($sql);
             $output->writeln("Tables table created successfully");
         } catch(PDOException $e) {
@@ -58,16 +55,13 @@ class CreateTables
         )";
 
         try {
-            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
-
-            // set the PDO error mode to exception
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            // use exec() because no results are returned
+            $conn = new CustomPDO(true);
             $conn->exec($sql);
             $output->writeln("Table seats table created successfully");
         } catch(PDOException $e) {
             $output->writeln($sql . "<br>" . $e->getMessage());
         }
+
         $conn = null;
     }
 

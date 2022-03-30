@@ -3,8 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Classes\Connect;
-use App\Helpers\QueryHelper;
-use PDO;
+use App\Classes\CustomPDO;
 use PDOException;
 
 class SeedHandTypes
@@ -27,8 +26,7 @@ class SeedHandTypes
         $handTypes = require('config/handtypes.php');
 
         try {
-            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn = new CustomPDO(true);
 
             $stmt = $conn->prepare("INSERT INTO hand_types (name, ranking) VALUES (:name, :ranking)");
             $stmt->bindParam(':name', $name);

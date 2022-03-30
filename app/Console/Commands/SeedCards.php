@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Classes\Connect;
+use App\Classes\CustomPDO;
 use App\Helpers\QueryHelper;
-use PDO;
 use PDOException;
 
 class SeedCards
@@ -29,8 +29,7 @@ class SeedCards
         $ranks = require('config/ranks.php');
 
         try {
-            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn = new CustomPDO(true);
 
             $stmt = $conn->prepare("INSERT INTO ranks (name, abbreviation, ranking) VALUES (:name, :abbreviation, :ranking)");
             $stmt->bindParam(':name', $name);
@@ -57,9 +56,7 @@ class SeedCards
         $suits = require('config/suits.php');
 
         try {
-            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+            $conn = new CustomPDO(true);
             $stmt = $conn->prepare("INSERT INTO suits (name, abbreviation) VALUES (:name, :abbreviation)");
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':abbreviation', $abbreviation);
@@ -83,9 +80,7 @@ class SeedCards
         $suits = QueryHelper::selectSuits($this->servername, $this->username, $this->password, $this->database, $output);
 
         try {
-            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+            $conn = new CustomPDO(true);
             $stmt = $conn->prepare("INSERT INTO cards (rank_id, suit_id) VALUES (:rank_id, :suit_id)");
             $stmt->bindParam(':rank_id', $rank_id);
             $stmt->bindParam(':suit_id', $suit_id);
@@ -97,7 +92,6 @@ class SeedCards
                     $stmt->execute();
                 }
             }
-
 
             $output->writeln("Cards seeded successfully");
         } catch(PDOException $e) {
