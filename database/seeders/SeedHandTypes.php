@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Database\Seeders;
 
 use App\Classes\CustomPDO;
-use PDOException;
 
 class SeedHandTypes
 {

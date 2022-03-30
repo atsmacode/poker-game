@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Database\Seeders;
 
 use App\Classes\CustomPDO;
 use App\Helpers\QueryHelper;
-use PDOException;
 
 class SeedCards
 {

@@ -3,6 +3,8 @@
 namespace App\Classes;
 
 use App\Helpers\QueryHelper;
+use App\Models\HandType;
+use App\Traits\Connect;
 
 class HandIdentifier
 {

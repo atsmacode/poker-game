@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Classes;
+namespace App\Models;
 
+use App\Classes\CustomPDO;
+use App\Traits\Connect;
 use PDO;
 use PDOException;
 

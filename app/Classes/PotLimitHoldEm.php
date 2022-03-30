@@ -2,6 +2,8 @@
 
 namespace App\Classes;
 
+use App\Interfaces\Game;
+
 class PotLimitHoldEm implements Game
 {
 

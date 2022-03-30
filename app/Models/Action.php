@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Classes;
+namespace App\Models;
 
+use App\Classes\CustomPDO;
+use App\Traits\Connect;
 use PDO;
 use PDOException;
 
-class HandType
+class Action
 {
 
     use Connect;
 
     public string $name;
-    public int $ranking;
     public array $content;
 
     public function __construct(string $name = null)
@@ -45,8 +46,8 @@ class HandType
             $conn = new CustomPDO(true);
 
             $stmt = $conn->prepare("
-                    SELECT * FROM hand_types
-                    WHERE hand_types.name = '{$this->selectedName}'
+                    SELECT * FROM actions
+                    WHERE name = '{$this->selectedName}'
                 ");
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
@@ -63,7 +64,6 @@ class HandType
         $this->content = $result;
 
         $this->name = $result['name'];
-        $this->ranking = $result['ranking'];
 
         return $this;
 
@@ -78,7 +78,7 @@ class HandType
             $conn = new CustomPDO(true);
 
             $stmt = $conn->prepare("
-                    SELECT * FROM hand_types
+                    SELECT * FROM actions
                 ");
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();

@@ -1,6 +1,6 @@
 <?php
 
-use App\Classes\Card;
+use App\Models\Card;
 use PHPUnit\Framework\TestCase;
 
 class CardTest extends TestCase

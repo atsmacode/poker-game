@@ -2,6 +2,8 @@
 
 namespace App\Classes;
 
+use App\Models\Card;
+use App\Traits\Connect;
 use PDO;
 use PDOException;
 

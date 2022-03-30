@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Database\Migrations;
 
 use App\Classes\CustomPDO;
-use PDOException;
 
 class CreateTables
 {

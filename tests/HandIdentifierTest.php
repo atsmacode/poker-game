@@ -2,8 +2,8 @@
 
 namespace Tests;
 
-use App\Classes\Card;
 use App\Classes\HandIdentifier;
+use App\Models\Card;
 use PHPUnit\Framework\TestCase;
 
 class HandIdentifierTest extends TestCase

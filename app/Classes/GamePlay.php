@@ -2,6 +2,9 @@
 
 namespace App\Classes;
 
+use App\Models\Action;
+use App\Models\Table;
+
 class GamePlay
 {
     public $game;

@@ -2,6 +2,7 @@
 
 namespace App\Classes;
 
+use App\Traits\Connect;
 use PDO;
 
 class CustomPDO extends PDO
