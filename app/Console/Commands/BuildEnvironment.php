@@ -20,6 +20,12 @@ class BuildEnvironment extends Command
         CreateDatabase::class,
         CreateCards::class,
         CreateHandTypes::class,
+        CreatePlayers::class,
+        CreateTables::class,
+        CreateActions::class,
+        CreateStreets::class,
+        CreateHands::class,
+        CreatePlayerActions::class,
         SeedCards::class,
         SeedHandTypes::class
     ];
