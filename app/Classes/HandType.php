@@ -42,8 +42,7 @@ class HandType
 
         try {
 
-            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn = new CustomPDO(true);
 
             $stmt = $conn->prepare("
                     SELECT * FROM hand_types
@@ -76,8 +75,7 @@ class HandType
 
         try {
 
-            $conn = new PDO("mysql:host=$this->servername;dbname=$this->database", $this->username, $this->password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn = new CustomPDO(true);
 
             $stmt = $conn->prepare("
                     SELECT * FROM hand_types
