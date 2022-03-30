@@ -2,24 +2,16 @@
 
 namespace App\Console\Commands;
 
-use App\Classes\Connect;
 use App\Classes\CustomPDO;
 use PDOException;
 
 class CreateDatabase
 {
 
-    use Connect;
-
     public static array $methods = [
         'dropDatabase',
         'createDatabase'
     ];
-
-    public function __construct()
-    {
-        $this->setCredentials();
-    }
 
     public function dropDatabase($output)
     {

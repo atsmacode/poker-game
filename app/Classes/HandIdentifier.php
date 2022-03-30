@@ -145,7 +145,7 @@ class HandIdentifier
 
     public function hasPair()
     {
-        foreach(QueryHelper::selectRanks($this->servername, $this->username, $this->password, $this->database) as $rank){
+        foreach(QueryHelper::selectRanks() as $rank){
             if(count($this->filter('allCards', 'rank_id', $rank['id'])) === 2){
                 $this->pairs[] = $rank;
                 $this->identifiedHandType['activeCards'][] = $this->checkForHighAceActiveCardRanking($rank) ?: $rank['ranking'];

@@ -2,25 +2,17 @@
 
 namespace App\Console\Commands;
 
-use App\Classes\Connect;
 use App\Classes\CustomPDO;
 use PDOException;
 
 class CreateHands
 {
 
-    use Connect;
-
     public static array $methods = [
         'createHandsTable',
         'createHandStreetsTable',
         'createHandStreetCardsTable'
     ];
-
-    public function __construct()
-    {
-        $this->setCredentials();
-    }
 
     public function createHandsTable($output)
     {

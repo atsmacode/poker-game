@@ -2,24 +2,16 @@
 
 namespace App\Console\Commands;
 
-use App\Classes\Connect;
 use App\Classes\CustomPDO;
 use PDOException;
 
 class CreateTables
 {
 
-    use Connect;
-
     public static array $methods = [
         'createTablesTable',
         'createTableSeatsTable'
     ];
-
-    public function __construct()
-    {
-        $this->setCredentials();
-    }
 
     public function createTablesTable($output)
     {

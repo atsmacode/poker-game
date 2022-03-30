@@ -2,25 +2,17 @@
 
 namespace App\Console\Commands;
 
-use App\Classes\Connect;
 use App\Classes\CustomPDO;
 use PDOException;
 
 class CreateCards
 {
 
-    use Connect;
-
     public static array $methods = [
         'createRanksTable',
         'createSuitsTable',
         'createCardsTable'
     ];
-
-    public function __construct()
-    {
-        $this->setCredentials();
-    }
 
     public function createRanksTable($output)
     {

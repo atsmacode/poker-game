@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Classes\Connect;
 use App\Classes\CustomPDO;
 use App\Helpers\QueryHelper;
 use PDOException;
@@ -10,18 +9,11 @@ use PDOException;
 class SeedCards
 {
 
-    use Connect;
-
     public static array $methods = [
         'seedRanks',
         'seedSuits',
         'seedCards'
     ];
-
-    public function __construct()
-    {
-        $this->setCredentials();
-    }
 
     public function seedRanks($output)
     {
@@ -76,8 +68,8 @@ class SeedCards
     public function seedCards($output)
     {
 
-        $ranks = QueryHelper::selectRanks($this->servername, $this->username, $this->password, $this->database, $output);
-        $suits = QueryHelper::selectSuits($this->servername, $this->username, $this->password, $this->database, $output);
+        $ranks = QueryHelper::selectRanks($output);
+        $suits = QueryHelper::selectSuits($output);
 
         try {
             $conn = new CustomPDO(true);

@@ -2,22 +2,20 @@
 
 namespace App\Helpers;
 
-use PDO;
+use App\Classes\CustomPDO;
 use PDOException;
 
 class QueryHelper
 {
 
-    public static function selectRanks($servername, $username, $password, $database, $output = null)
+    public static function selectRanks($output = null)
     {
 
         $rows = null;
 
         try {
 
-            $conn = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+            $conn = new CustomPDO(true);
             $stmt = $conn->prepare("SELECT * FROM ranks");
             $stmt->execute();
 
@@ -43,16 +41,14 @@ class QueryHelper
 
     }
 
-    public static function selectSuits($servername, $username, $password, $database, $output = null)
+    public static function selectSuits($output = null)
     {
 
         $rows = null;
 
         try {
 
-            $conn = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+            $conn = new CustomPDO(true);
             $stmt = $conn->prepare("SELECT * FROM suits");
             $stmt->execute();
 

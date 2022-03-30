@@ -2,23 +2,15 @@
 
 namespace App\Console\Commands;
 
-use App\Classes\Connect;
 use App\Classes\CustomPDO;
 use PDOException;
 
 class CreateStreets
 {
 
-    use Connect;
-
     public static array $methods = [
         'createStreetsTable',
     ];
-
-    public function __construct()
-    {
-        $this->setCredentials();
-    }
 
     public function createStreetsTable($output)
     {

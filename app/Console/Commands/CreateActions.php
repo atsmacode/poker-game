@@ -2,23 +2,15 @@
 
 namespace App\Console\Commands;
 
-use App\Classes\Connect;
 use App\Classes\CustomPDO;
 use PDOException;
 
 class CreateActions
 {
 
-    use Connect;
-
     public static array $methods = [
         'createActionsTable',
     ];
-
-    public function __construct()
-    {
-        $this->setCredentials();
-    }
 
     public function createActionsTable($output)
     {
