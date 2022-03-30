@@ -8,7 +8,7 @@ use PDOException;
 class QueryHelper
 {
 
-    public static function selectRanks($servername, $username, $password, $database, $output)
+    public static function selectRanks($servername, $username, $password, $database, $output = null)
     {
 
         $rows = null;
@@ -35,7 +35,7 @@ class QueryHelper
 
     }
 
-    public static function selectSuits($servername, $username, $password, $database, $output)
+    public static function selectSuits($servername, $username, $password, $database, $output = null)
     {
 
         $rows = null;

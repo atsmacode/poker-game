@@ -37,7 +37,6 @@ class Dealer
         }
 
         $filter = array_filter($this->deck->cards, function($value) use($rank, $suit){
-            var_dump($value);
             return $value->rank === $rank && $value->suit === $suit;
         });
         $this->card = array_values($filter);

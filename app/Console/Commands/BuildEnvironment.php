@@ -19,7 +19,9 @@ class BuildEnvironment extends Command
     private $buildClasses = [
         CreateDatabase::class,
         CreateCards::class,
-        SeedCards::class
+        CreateHandTypes::class,
+        SeedCards::class,
+        SeedHandTypes::class
     ];
     protected static $defaultName = 'app:build-env';
 
