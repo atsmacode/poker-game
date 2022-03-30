@@ -7,13 +7,13 @@ use App\Traits\Connect;
 use PDO;
 use PDOException;
 
-class Action
+class Action extends Model
 {
 
     use Connect;
 
+    public $table = 'actions';
     public string $name;
-    public array $content;
 
     public function __construct(string $name = null)
     {
@@ -25,7 +25,7 @@ class Action
     public function select()
     {
         if($this->selectedName){
-            $this->getSelected();
+            $this->getSelected('name', $this->selectedName);
         }
     }
 
@@ -35,67 +35,6 @@ class Action
             $this->content[$key] = new self($value['name']);
         }
         return $this;
-    }
-
-    private function getSelected()
-    {
-        $rows = null;
-
-        try {
-
-            $conn = new CustomPDO(true);
-
-            $stmt = $conn->prepare("
-                    SELECT * FROM actions
-                    WHERE name = '{$this->selectedName}'
-                ");
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $stmt->execute();
-
-            $rows = $stmt->fetchAll();
-
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-        }
-
-        $conn = null;
-
-        $result = array_shift($rows);
-        $this->content = $result;
-
-        $this->name = $result['name'];
-
-        return $this;
-
-    }
-
-    public function all()
-    {
-        $rows = null;
-
-        try {
-
-            $conn = new CustomPDO(true);
-
-            $stmt = $conn->prepare("
-                    SELECT * FROM actions
-                ");
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $stmt->execute();
-
-            $rows = $stmt->fetchAll();
-
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-        }
-
-        $conn = null;
-
-        $result = $rows;
-        $this->content = $result;
-
-        return $this;
-
     }
 
 }

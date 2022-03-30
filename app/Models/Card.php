@@ -7,7 +7,7 @@ use App\Traits\Connect;
 use PDO;
 use PDOException;
 
-class Card
+class Card extends Model
 {
 
     use Connect;
@@ -30,11 +30,11 @@ class Card
     public function select()
     {
         if($this->selectedRank && $this->selectedSuit){
-            $this->getSelectedCard();
+            $this->getSelected();
         }
     }
 
-    private function getSelectedCard()
+    protected function getSelected($column = null, $value = null)
     {
         $rows = null;
 

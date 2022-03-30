@@ -7,7 +7,7 @@ use App\Traits\Connect;
 use PDO;
 use PDOException;
 
-class Table
+class Table extends Model
 {
 
     use Connect;
@@ -26,7 +26,8 @@ class Table
     public function select()
     {
         if($this->selectedName){
-            $this->getSelected();
+            $this->getSelected('name', $this->selectedName);
+            $this->seats = $this->content['seats'];
         }
     }
 
@@ -36,68 +37,6 @@ class Table
             $this->content[$key] = new self($value['name']);
         }
         return $this;
-    }
-
-    private function getSelected()
-    {
-        $rows = null;
-
-        try {
-
-            $conn = new CustomPDO(true);
-
-            $stmt = $conn->prepare("
-                    SELECT * FROM tables
-                    WHERE name = '{$this->selectedName}'
-                ");
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $stmt->execute();
-
-            $rows = $stmt->fetchAll();
-
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-        }
-
-        $conn = null;
-
-        $result = array_shift($rows);
-        $this->content = $result;
-
-        $this->name = $result['name'];
-        $this->seats = $result['seats'];
-
-        return $this;
-
-    }
-
-    public function all()
-    {
-        $rows = null;
-
-        try {
-
-            $conn = new CustomPDO(true);
-
-            $stmt = $conn->prepare("
-                    SELECT * FROM tables
-                ");
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $stmt->execute();
-
-            $rows = $stmt->fetchAll();
-
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-        }
-
-        $conn = null;
-
-        $result = $rows;
-        $this->content = $result;
-
-        return $this;
-
     }
 
 }

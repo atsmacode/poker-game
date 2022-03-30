@@ -7,11 +7,12 @@ use App\Traits\Connect;
 use PDO;
 use PDOException;
 
-class HandType
+class HandType extends Model
 {
 
     use Connect;
 
+    public $table = 'hand_types';
     public string $name;
     public int $ranking;
     public array $content;
@@ -26,7 +27,8 @@ class HandType
     public function select()
     {
         if($this->selectedName){
-            $this->getSelected();
+            $this->getSelected('name', $this->selectedName);
+            $this->ranking = $this->content['ranking'];
         }
     }
 
@@ -36,68 +38,6 @@ class HandType
             $this->content[$key] = new self($value['name']);
         }
         return $this;
-    }
-
-    private function getSelected()
-    {
-        $rows = null;
-
-        try {
-
-            $conn = new CustomPDO(true);
-
-            $stmt = $conn->prepare("
-                    SELECT * FROM hand_types
-                    WHERE hand_types.name = '{$this->selectedName}'
-                ");
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $stmt->execute();
-
-            $rows = $stmt->fetchAll();
-
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-        }
-
-        $conn = null;
-
-        $result = array_shift($rows);
-        $this->content = $result;
-
-        $this->name = $result['name'];
-        $this->ranking = $result['ranking'];
-
-        return $this;
-
-    }
-
-    public function all()
-    {
-        $rows = null;
-
-        try {
-
-            $conn = new CustomPDO(true);
-
-            $stmt = $conn->prepare("
-                    SELECT * FROM hand_types
-                ");
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $stmt->execute();
-
-            $rows = $stmt->fetchAll();
-
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-        }
-
-        $conn = null;
-
-        $result = $rows;
-        $this->content = $result;
-
-        return $this;
-
     }
 
 }
