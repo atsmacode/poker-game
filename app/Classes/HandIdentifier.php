@@ -9,8 +9,6 @@ use App\Traits\Connect;
 class HandIdentifier
 {
 
-    use Connect;
-
     public $handTypes;
     public $identifiedHandType = [
         'handType' => null,
@@ -42,7 +40,6 @@ class HandIdentifier
 
     public function __construct()
     {
-        $this->setCredentials();
         $this->handTypes = (new HandType())->all()->collect()->content;
     }
 
