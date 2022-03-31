@@ -2,12 +2,8 @@
 
 namespace App\Models;
 
-use App\Traits\Connect;
-
 class HandType extends Model
 {
-
-    use Connect;
 
     protected $table = 'hand_types';
     public string $name;
@@ -16,7 +12,6 @@ class HandType extends Model
 
     public function __construct(string $selected = null)
     {
-        $this->setCredentials();
         $this->selected = $selected;
         $this->initiate();
     }

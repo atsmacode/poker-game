@@ -2,15 +2,8 @@
 
 namespace App\Models;
 
-use App\Classes\CustomPDO;
-use App\Traits\Connect;
-use PDO;
-use PDOException;
-
 class Table extends Model
 {
-
-    use Connect;
 
     public string $name;
     public int $seats;
@@ -18,7 +11,6 @@ class Table extends Model
 
     public function __construct(string $name = null)
     {
-        $this->setCredentials();
         $this->selectedName = $name;
         $this->select();
     }

@@ -2,22 +2,14 @@
 
 namespace App\Models;
 
-use App\Classes\CustomPDO;
-use App\Traits\Connect;
-use PDO;
-use PDOException;
-
 class Action extends Model
 {
-
-    use Connect;
 
     public $table = 'actions';
     public string $name;
 
     public function __construct(string $name = null)
     {
-        $this->setCredentials();
         $this->selectedName = $name;
         $this->select();
     }
