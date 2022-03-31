@@ -19,9 +19,10 @@ class HandTypeTest extends TestCase
      */
     public function a_hand_type_can_be_found_or_created()
     {
-        $handType = new HandType('High Card + 16');
+        $handType = new HandType(['name' => 'High Card 24', 'ranking' => 16]);
 
-        $this->assertEquals('High Card + 16', $handType->name);
+        $this->assertEquals('High Card 24', $handType->name);
+        $this->assertEquals(16, $handType->ranking);
     }
 
 }

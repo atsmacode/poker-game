@@ -10,16 +10,16 @@ class HandType extends Model
     public $ranking;
     public $content;
 
-    public function __construct(string $selected = null)
+    public function __construct(array $data = null)
     {
-        $this->selected = $selected;
+        $this->data = $data;
         $this->initiate();
     }
 
     public function initiate()
     {
 
-        $this->findOrCreate('name');
+        $this->findOrCreate($this->data);
 
         if($this->content){
             $this->ranking = $this->content['ranking'];
@@ -31,7 +31,8 @@ class HandType extends Model
     public function collect()
     {
         foreach($this->content as $key => $value){
-            $this->content[$key] = new self($value['name']);
+            var_dump($value);
+            $this->content[$key] = new self($value);
         }
         return $this;
     }
