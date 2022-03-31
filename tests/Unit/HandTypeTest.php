@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Unit;
 
 use App\Models\HandType;
 use PHPUnit\Framework\TestCase;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Unit;
 
 use App\Models\Card;
 use PHPUnit\Framework\TestCase;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Unit;
 
 use App\Classes\HandIdentifier;
 use App\Models\Card;
