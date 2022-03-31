@@ -28,10 +28,8 @@ class Model
         try {
             $conn = new CustomPDO(true);
 
-            $stmt = $conn->prepare("INSERT INTO {$this->table} ($column) VALUES (:$column)");
-            $stmt->bindParam(':'.$column, $column);
-
-            $column = $value;
+            $stmt = $conn->prepare("INSERT INTO {$this->table} ($column) VALUES (:value)");
+            $stmt->bindParam(':value', $value);
             $stmt->execute();
 
             $id = $conn->lastInsertId();
