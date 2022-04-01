@@ -194,8 +194,10 @@ class Model
 
     private function setModelProperties($result)
     {
-        foreach(array_shift($result) as $column => $value){
-            $this->{$column} = $value;
+        if(count($result) === 1){
+            foreach(array_shift($result) as $column => $value){
+                $this->{$column} = $value;
+            }
         }
     }
 
