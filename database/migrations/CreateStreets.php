@@ -11,7 +11,12 @@ class CreateStreets
         'createStreetsTable',
     ];
 
-    public function createStreetsTable($output)
+    public function __construct($output)
+    {
+        $this->output = $output;
+    }
+
+    public function createStreetsTable()
     {
 
         $sql = "CREATE TABLE streets (
@@ -22,9 +27,9 @@ class CreateStreets
         try {
             $conn = new CustomPDO(true);
             $conn->exec($sql);
-            $output->writeln("Streets table created successfully");
+            $this->output->writeln("Streets table created successfully");
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            $this->output->writeln($sql . "<br>" . $e->getMessage());
         }
         $conn = null;
     }

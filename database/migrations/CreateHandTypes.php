@@ -11,7 +11,12 @@ class CreateHandTypes
         'createHandTypesTable',
     ];
 
-    public function createHandTypesTable($output)
+    public function __construct($output)
+    {
+        $this->output = $output;
+    }
+
+    public function createHandTypesTable()
     {
 
         $sql = "CREATE TABLE hand_types (
@@ -23,9 +28,9 @@ class CreateHandTypes
         try {
             $conn = new CustomPDO(true);
             $conn->exec($sql);
-            $output->writeln("Hand types table created successfully");
+            $this->output->writeln("Hand types table created successfully");
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            $this->output->writeln($sql . "<br>" . $e->getMessage());
         }
         $conn = null;
     }

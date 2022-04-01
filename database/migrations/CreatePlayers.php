@@ -11,7 +11,12 @@ class CreatePlayers
         'createPlayersTable',
     ];
 
-    public function createPlayersTable($output)
+    public function __construct($output)
+    {
+        $this->output = $output;
+    }
+
+    public function createPlayersTable()
     {
 
         $sql = "CREATE TABLE players (
@@ -24,9 +29,9 @@ class CreatePlayers
         try {
             $conn = new CustomPDO(true);
             $conn->exec($sql);
-            $output->writeln("Players table created successfully");
+            $this->output->writeln("Players table created successfully");
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            $this->output->writeln($sql . "<br>" . $e->getMessage());
         }
         $conn = null;
     }

@@ -11,7 +11,12 @@ class SeedHandTypes
         'seed'
     ];
 
-    public function seed($output)
+    public function __construct($output)
+    {
+        $this->output = $output;
+    }
+
+    public function seed()
     {
 
         $handTypes = require('config/handtypes.php');
@@ -28,9 +33,9 @@ class SeedHandTypes
                 $ranking = $handType['ranking'];
                 $stmt->execute();
             }
-            $output->writeln("Hand types seeded successfully");
+            $this->output->writeln("Hand types seeded successfully");
         } catch(PDOException $e) {
-            $output->writeln($e->getMessage());
+            $this->output->writeln($e->getMessage());
 
         }
         $conn = null;

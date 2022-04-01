@@ -12,7 +12,12 @@ class CreateTables
         'createTableSeatsTable'
     ];
 
-    public function createTablesTable($output)
+    public function __construct($output)
+    {
+        $this->output = $output;
+    }
+
+    public function createTablesTable()
     {
 
         $sql = "CREATE TABLE tables (
@@ -24,14 +29,14 @@ class CreateTables
         try {
             $conn = new CustomPDO(true);
             $conn->exec($sql);
-            $output->writeln("Tables table created successfully");
+            $this->output->writeln("Tables table created successfully");
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            $this->output->writeln($sql . "<br>" . $e->getMessage());
         }
         $conn = null;
     }
 
-    public function createTableSeatsTable($output)
+    public function createTableSeatsTable()
     {
 
         $sql = "CREATE TABLE table_seats (
@@ -40,17 +45,18 @@ class CreateTables
             can_continue BOOLEAN DEFAULT 0,
             is_dealer BOOLEAN DEFAULT 0,
             action_on BOOLEAN DEFAULT 0,
-            player_id INT(6) UNSIGNED NOT NULL,
+            player_id INT(6) UNSIGNED NULL,
             table_id INT(6) UNSIGNED NOT NULL,
-            FOREIGN KEY (table_id) REFERENCES tables(id)
+            FOREIGN KEY (table_id) REFERENCES tables(id),
+            FOREIGN KEY (player_id) REFERENCES players(id)
         )";
 
         try {
             $conn = new CustomPDO(true);
             $conn->exec($sql);
-            $output->writeln("Table seats table created successfully");
+            $this->output->writeln("Table seats table created successfully");
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            $this->output->writeln($sql . "<br>" . $e->getMessage());
         }
 
         $conn = null;

@@ -13,7 +13,12 @@ class CreateHands
         'createHandStreetCardsTable'
     ];
 
-    public function createHandsTable($output)
+    public function __construct($output)
+    {
+        $this->output = $output;
+    }
+
+    public function createHandsTable()
     {
 
         $sql = "CREATE TABLE hands (
@@ -27,14 +32,14 @@ class CreateHands
         try {
             $conn = new CustomPDO(true);
             $conn->exec($sql);
-            $output->writeln("Hands table created successfully");
+            $this->output->writeln("Hands table created successfully");
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            $this->output->writeln($sql . "<br>" . $e->getMessage());
         }
         $conn = null;
     }
 
-    public function createHandStreetsTable($output)
+    public function createHandStreetsTable()
     {
 
         $sql = "CREATE TABLE hand_streets (
@@ -48,14 +53,14 @@ class CreateHands
         try {
             $conn = new CustomPDO(true);
             $conn->exec($sql);
-            $output->writeln("Hand streets table created successfully");
+            $this->output->writeln("Hand streets table created successfully");
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            $this->output->writeln($sql . "<br>" . $e->getMessage());
         }
         $conn = null;
     }
 
-    public function createHandStreetCardsTable($output)
+    public function createHandStreetCardsTable()
     {
 
         $sql = "CREATE TABLE hand_street_cards (
@@ -67,9 +72,9 @@ class CreateHands
         try {
             $conn = new CustomPDO(true);
             $conn->exec($sql);
-            $output->writeln("Hand street cards table created successfully");
+            $this->output->writeln("Hand street cards table created successfully");
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            $this->output->writeln($sql . "<br>" . $e->getMessage());
         }
         $conn = null;
     }

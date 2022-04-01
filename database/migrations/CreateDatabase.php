@@ -13,7 +13,12 @@ class CreateDatabase
         'createDatabase'
     ];
 
-    public function dropDatabase($output)
+    public function __construct($output)
+    {
+        $this->output = $output;
+    }
+
+    public function dropDatabase()
     {
 
         $sql = "DROP DATABASE IF EXISTS `read-right-hands-vanilla`";
@@ -21,7 +26,7 @@ class CreateDatabase
         try {
             $conn = new CustomPDO();
             $conn->exec($sql);
-            $output->writeln("Database dropped successfully");
+            $this->output->writeln("Database dropped successfully");
         } catch(PDOException $e) {
             echo $sql . $e->getMessage();
         }
@@ -32,7 +37,7 @@ class CreateDatabase
 
     }
 
-    public function createDatabase($output)
+    public function createDatabase()
     {
 
         $sql = "CREATE DATABASE `read-right-hands-vanilla`";
@@ -40,9 +45,9 @@ class CreateDatabase
         try {
             $conn = new CustomPDO();
             $conn->exec($sql);
-            $output->writeln("Database created successfully");
+            $this->output->writeln("Database created successfully");
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            $this->output->writeln($sql . "<br>" . $e->getMessage());
         }
         $conn = null;
 

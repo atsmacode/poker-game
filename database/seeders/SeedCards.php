@@ -14,7 +14,12 @@ class SeedCards
         'seedCards'
     ];
 
-    public function seedRanks($output)
+    public function __construct($output)
+    {
+        $this->output = $output;
+    }
+
+    public function seedRanks()
     {
 
         $ranks = require('config/ranks.php');
@@ -33,15 +38,15 @@ class SeedCards
                 $ranking = $rank['ranking'];
                 $stmt->execute();
             }
-            $output->writeln("Ranks seeded successfully");
+            $this->output->writeln("Ranks seeded successfully");
         } catch(PDOException $e) {
-            $output->writeln($e->getMessage());
+            $this->output->writeln($e->getMessage());
 
         }
         $conn = null;
     }
 
-    public function seedSuits($output)
+    public function seedSuits()
     {
 
         $suits = require('config/suits.php');
@@ -57,18 +62,18 @@ class SeedCards
                 $abbreviation = $suit['abbreviation'];
                 $stmt->execute();
             }
-            $output->writeln("Suits seeded successfully");
+            $this->output->writeln("Suits seeded successfully");
         } catch(PDOException $e) {
-            $output->writeln($e->getMessage());
+            $this->output->writeln($e->getMessage());
         }
         $conn = null;
     }
 
-    public function seedCards($output)
+    public function seedCards()
     {
 
-        $ranks = QueryHelper::selectRanks($output);
-        $suits = QueryHelper::selectSuits($output);
+        $ranks = QueryHelper::selectRanks($this->output);
+        $suits = QueryHelper::selectSuits($this->output);
 
         try {
             $conn = new CustomPDO(true);
@@ -84,9 +89,9 @@ class SeedCards
                 }
             }
 
-            $output->writeln("Cards seeded successfully");
+            $this->output->writeln("Cards seeded successfully");
         } catch(PDOException $e) {
-            $output->writeln($e->getMessage());
+            $this->output->writeln($e->getMessage());
         }
 
         $conn = null;

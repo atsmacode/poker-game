@@ -11,8 +11,10 @@ use Database\Migrations\CreatePlayerActions;
 use Database\Migrations\CreatePlayers;
 use Database\Migrations\CreateStreets;
 use Database\Migrations\CreateTables;
+use Database\Migrations\CreateWholeCards;
 use Database\Seeders\SeedCards;
 use Database\Seeders\SeedHandTypes;
+use Database\Seeders\SeedTables;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,9 +38,11 @@ class BuildEnvironment extends Command
         CreateActions::class,
         CreateStreets::class,
         CreateHands::class,
+        CreateWholeCards::class,
         CreatePlayerActions::class,
         SeedCards::class,
-        SeedHandTypes::class
+        SeedHandTypes::class,
+        SeedTables::class
     ];
     protected static $defaultName = 'app:build-env';
 
@@ -52,7 +56,7 @@ class BuildEnvironment extends Command
 
         foreach($this->buildClasses as $class){
             foreach($class::$methods as $method){
-                (new $class)->{$method}($output);
+                (new $class($output))->{$method}();
             }
         }
 

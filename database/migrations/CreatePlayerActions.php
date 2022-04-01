@@ -11,7 +11,12 @@ class CreatePlayerActions
         'createPlayerActionsTable',
     ];
 
-    public function createPlayerActionsTable($output)
+    public function __construct($output)
+    {
+        $this->output = $output;
+    }
+
+    public function createPlayerActionsTable()
     {
 
         $sql = "CREATE TABLE player_actions (
@@ -33,9 +38,9 @@ class CreatePlayerActions
         try {
             $conn = new CustomPDO(true);
             $conn->exec($sql);
-            $output->writeln("Player actions table created successfully");
+            $this->output->writeln("Player actions table created successfully");
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            $this->output->writeln($sql . "<br>" . $e->getMessage());
         }
         $conn = null;
     }
