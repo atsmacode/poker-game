@@ -18,14 +18,7 @@ class HandType extends Model
 
     public function initiate()
     {
-
         $this->findOrCreate($this->data);
-
-        if($this->content){
-            $this->ranking = $this->content['ranking'];
-            $this->name = $this->content['name'];
-        }
-
     }
 
     public function collect()
