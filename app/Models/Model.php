@@ -13,68 +13,6 @@ class Model
     public $content = [];
     public $data;
 
-    private function compileWhereStatement($data)
-    {
-        $properties = "WHERE ";
-
-        $pointer = 1;
-        foreach($data as $column => $value){
-            $properties .= $column . " = '". $value . "'";
-
-            if($pointer < count($data)){
-                $properties .= " AND ";
-            };
-            $pointer++;
-        }
-
-        return $properties;
-    }
-
-    private function compileInsertStatement($data)
-    {
-        $properties = "INSERT INTO {$this->table} (";
-
-        $pointer = 1;
-        foreach(array_keys($data) as $column){
-
-            $properties .= $column;
-
-            if($pointer < count($data)){
-                $properties .= ", ";
-            } else {
-                $properties .= ") ";
-            };
-            $pointer++;
-        }
-
-        $properties .= "VALUES (";
-
-        reset($data);
-
-        $pointer = 1;
-        foreach(array_keys($data) as $column){
-            $properties .= ':'.$column;
-
-            if($pointer < count($data)){
-                $properties .= ", ";
-            } else {
-                $properties .= ")";
-            };
-            $pointer++;
-        }
-
-        return $properties;
-    }
-
-    private function setModelProperties($result)
-    {
-        if(count($result) === 1){
-            foreach(array_shift($result) as $column => $value){
-                $this->{$column} = $value;
-            }
-        }
-    }
-
     protected function findOrCreate($data, $stop = false)
     {
         if($this->data && !$this->getSelected($data)){
@@ -183,6 +121,82 @@ class Model
 
         return $this;
 
+    }
+
+    private function compileWhereStatement($data)
+    {
+        $properties = "WHERE ";
+
+        $pointer = 1;
+        foreach($data as $column => $value){
+            $properties .= $column . " = '". $value . "'";
+
+            if($pointer < count($data)){
+                $properties .= " AND ";
+            };
+            $pointer++;
+        }
+
+        return $properties;
+    }
+
+    private function compileInsertStatement($data)
+    {
+        $properties = "INSERT INTO {$this->table} (";
+
+        $properties = $this->compileColumns($data, $properties);
+
+        $properties .= "VALUES (";
+
+        reset($data);
+
+        $properties = $this->compileValues($data, $properties);
+
+        return $properties;
+    }
+
+    private function compileColumns($data, $properties)
+    {
+        $pointer = 1;
+        foreach(array_keys($data) as $column){
+
+            $properties .= $column;
+
+            if($pointer < count($data)){
+                $properties .= ", ";
+            } else {
+                $properties .= ") ";
+            };
+            $pointer++;
+        }
+
+        return $properties;
+    }
+
+    private function compileValues($data, $properties)
+    {
+        $pointer = 1;
+        foreach(array_keys($data) as $column){
+            $properties .= ':'.$column;
+
+            if($pointer < count($data)){
+                $properties .= ", ";
+            } else {
+                $properties .= ")";
+            };
+            $pointer++;
+        }
+
+        return $properties;
+    }
+
+    private function setModelProperties($result)
+    {
+        if(count($result) === 1){
+            foreach(array_shift($result) as $column => $value){
+                $this->{$column} = $value;
+            }
+        }
     }
 
 }
