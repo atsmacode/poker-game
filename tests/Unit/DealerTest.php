@@ -88,6 +88,11 @@ class DealerTest extends TestCase
             'name' => 'Table 1'
         ]);
 
+        /*
+         * Manually building the player array here.
+         * Might be better to build a hasManyThrough object relation
+         * for table > seats > players
+         */
         $players = new Player([], true);
 
         foreach($table->seats(true)->collect()->content as $seat){
