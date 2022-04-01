@@ -25,7 +25,7 @@ class Table extends Model
     public function collect()
     {
         foreach($this->content as $key => $value){
-            $this->content[$key] = new self($value);
+            $this->content[$key] = is_a($value, self::class) ? $value : new self($value);
         }
         return $this;
     }

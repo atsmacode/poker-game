@@ -8,23 +8,22 @@ class Action extends Model
     public $table = 'actions';
     public string $name;
 
-    public function __construct(string $name = null)
+    public function __construct(array $data = null, $stop = false)
     {
-        $this->selectedName = $name;
-        $this->select();
+        $this->data = $data;
+        $this->stop = $stop;
+        $this->initiate();
     }
 
-    public function select()
+    public function initiate()
     {
-        if($this->selectedName){
-            $this->getSelected('name', $this->selectedName);
-        }
+        $this->findOrCreate($this->data, $this->stop);
     }
 
     public function collect()
     {
         foreach($this->content as $key => $value){
-            $this->content[$key] = new self($value['name']);
+            $this->content[$key] = is_a($value, self::class) ? $value : new self($value);
         }
         return $this;
     }
