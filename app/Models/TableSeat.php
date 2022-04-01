@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-class Player extends Model
+class TableSeat extends Model
 {
 
-    protected $table = 'players';
+    protected $table = 'table_seats';
+    public string $name;
     public $content;
-    public $id;
+    public $player_id;
 
     public function __construct(array $data = null, $stop = false)
     {
@@ -24,14 +25,17 @@ class Player extends Model
     public function collect()
     {
         foreach($this->content as $key => $value){
-            $this->content[$key] = is_a($value, Player::class) ? $value : new self($value);
+            $this->content[$key] = new self($value, true);
         }
         return $this;
     }
 
-    public function wholeCards($stop = false)
+    public function player($stop = false)
     {
-        return new WholeCard(['player_id' => $this->id], $stop);
+
+        self::__construct($this->data, $stop);
+        var_dump($this->player_id);
+        return new Player(['id' => $this->player_id], $stop);
     }
 
 }

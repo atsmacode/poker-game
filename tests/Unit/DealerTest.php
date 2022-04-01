@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Classes\Dealer;
 use App\Models\Player;
+use App\Models\Table;
 use PHPUnit\Framework\TestCase;
 
 class DealerTest extends TestCase
@@ -75,6 +76,32 @@ class DealerTest extends TestCase
         $this->dealer->setDeck()->shuffle()->dealTo($player, 1);
 
         $this->assertCount(1, $player->wholeCards()->content);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function it_can_deal_cards_to_multiple_players_at_a_table()
+    {
+        $table = new Table([
+            'name' => 'Table 1'
+        ]);
+
+        $players = new Player([], true);
+
+        foreach($table->seats(true)->collect()->content as $seat){
+            $this->assertCount(0, $seat->player(true)->wholeCards(true)->content);
+
+            $players->content[] = $seat->player(true);
+        }
+
+        $this->dealer->setDeck()->shuffle()->dealTo($players, 1);
+
+        foreach($table->seats(true)->collect()->content as $seat){
+            $this->assertCount(1, $seat->player(true)->wholeCards(true)->content);
+        }
+
     }
 
 }

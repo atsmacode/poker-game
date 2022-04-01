@@ -129,11 +129,13 @@ class Model
 
         $pointer = 1;
         foreach($data as $column => $value){
-            $properties .= $column . " = '". $value . "'";
+            if($value !== null){
+                $properties .= $column . " = '". $value . "'";
 
-            if($pointer < count($data)){
-                $properties .= " AND ";
-            };
+                if($pointer < count($data)){
+                    $properties .= " AND ";
+                };
+            }
             $pointer++;
         }
 
@@ -192,10 +194,8 @@ class Model
 
     private function setModelProperties($result)
     {
-        if(count($result) === 1){
-            foreach(array_shift($result) as $column => $value){
-                $this->{$column} = $value;
-            }
+        foreach(array_shift($result) as $column => $value){
+            $this->{$column} = $value;
         }
     }
 

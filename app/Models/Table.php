@@ -5,30 +5,33 @@ namespace App\Models;
 class Table extends Model
 {
 
+    protected $table = 'tables';
     public string $name;
-    public int $seats;
-    public array $content;
+    public $content;
+    public $id;
 
-    public function __construct(string $name = null)
+    public function __construct(array $data = null)
     {
-        $this->selectedName = $name;
-        $this->select();
+        $this->data = $data;
+        $this->initiate();
     }
 
-    public function select()
+    public function initiate()
     {
-        if($this->selectedName){
-            $this->getSelected('name', $this->selectedName);
-            $this->seats = $this->content['seats'];
-        }
+        $this->findOrCreate($this->data);
     }
 
     public function collect()
     {
         foreach($this->content as $key => $value){
-            $this->content[$key] = new self($value['name']);
+            $this->content[$key] = new self($value);
         }
         return $this;
+    }
+
+    public function seats($stop = false)
+    {
+        return new TableSeat(['table_id' => $this->id], $stop);
     }
 
 }
