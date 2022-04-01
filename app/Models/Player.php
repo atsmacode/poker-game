@@ -31,6 +31,8 @@ class Player extends Model
 
     public function wholeCards($stop = false)
     {
+        self::__construct($this->data, $stop);
+
         return new WholeCard(['player_id' => $this->id], $stop);
     }
 

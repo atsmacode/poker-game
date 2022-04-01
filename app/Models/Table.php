@@ -10,9 +10,10 @@ class Table extends Model
     public $content;
     public $id;
 
-    public function __construct(array $data = null)
+    public function __construct(array $data = null,$stop = false)
     {
         $this->data = $data;
+        $this->stop = $stop;
         $this->initiate();
     }
 
@@ -31,6 +32,8 @@ class Table extends Model
 
     public function seats($stop = false)
     {
+        self::__construct($this->data, $stop);
+
         return new TableSeat(['table_id' => $this->id], $stop);
     }
 

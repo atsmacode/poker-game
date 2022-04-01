@@ -32,9 +32,8 @@ class TableSeat extends Model
 
     public function player($stop = false)
     {
-
         self::__construct($this->data, $stop);
-        var_dump($this->player_id);
+
         return new Player(['id' => $this->player_id], $stop);
     }
 
