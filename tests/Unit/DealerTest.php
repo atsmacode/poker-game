@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Classes\Dealer;
+use App\Models\Player;
 use PHPUnit\Framework\TestCase;
 
 class DealerTest extends TestCase
@@ -59,6 +60,21 @@ class DealerTest extends TestCase
         $card = $this->dealer->setDeck()->pickCard()->getCard();
 
         $this->assertNotContains($card, $this->dealer->getDeck()->cards);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function it_can_deal_a_card_to_a_player()
+    {
+        $player = new Player(['username' => 'Player 1']);
+
+        $this->assertCount(0, $player->wholeCards(true)->content);
+
+        $this->dealer->setDeck()->shuffle()->dealTo($player, 1);
+
+        $this->assertCount(1, $player->wholeCards()->content);
     }
 
 }

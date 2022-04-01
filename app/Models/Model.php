@@ -10,19 +10,21 @@ class Model
 {
 
     protected $table;
-    public $content;
+    public $content = [];
     public $data;
 
     private function compileWhereStatement($data)
     {
         $properties = "WHERE ";
 
+        $pointer = 1;
         foreach($data as $column => $value){
             $properties .= $column . " = '". $value . "'";
 
-            if(next($data)){
+            if($pointer < count($data)){
                 $properties .= " AND ";
             };
+            $pointer++;
         }
 
         return $properties;
@@ -32,28 +34,33 @@ class Model
     {
         $properties = "INSERT INTO {$this->table} (";
 
+        $pointer = 1;
         foreach(array_keys($data) as $column){
+
             $properties .= $column;
 
-            if(next($data)){
+            if($pointer < count($data)){
                 $properties .= ", ";
             } else {
                 $properties .= ") ";
             };
+            $pointer++;
         }
 
         $properties .= "VALUES (";
 
         reset($data);
 
+        $pointer = 1;
         foreach(array_keys($data) as $column){
             $properties .= ':'.$column;
 
-            if(next($data)){
+            if($pointer < count($data)){
                 $properties .= ", ";
             } else {
                 $properties .= ")";
             };
+            $pointer++;
         }
 
         return $properties;
@@ -61,19 +68,23 @@ class Model
 
     private function setModelProperties($result)
     {
-        foreach($result as $column => $value){
-            $this->{$column} = $value;
+        if(count($result) === 1){
+            foreach(array_shift($result) as $column => $value){
+                $this->{$column} = $value;
+            }
         }
     }
 
-    protected function findOrCreate($data = null)
+    protected function findOrCreate($data, $stop = false)
     {
         if($this->data && !$this->getSelected($data)){
-            $this->create($data);
+            if(!$stop){
+                $this->create($data);
+            }
         };
     }
 
-    protected function create($data)
+    public function create($data)
     {
 
         $id = null;
@@ -137,10 +148,9 @@ class Model
             return null;
         }
 
-        $result = array_shift($rows);
-        $this->content = $result;
+        $this->content = $rows;
 
-        $this->setModelProperties($result);
+        $this->setModelProperties($rows);
 
         return $this;
 

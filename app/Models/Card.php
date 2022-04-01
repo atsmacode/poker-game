@@ -67,6 +67,7 @@ class Card extends Model
         $this->suit_id = $result['suit_id'];
         $this->rank_id = $result['rank_id'];
         $this->ranking = $result['ranking'];
+        $this->id = $result['id'];
 
     }
 

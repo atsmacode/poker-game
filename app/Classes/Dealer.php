@@ -55,6 +55,27 @@ class Dealer
         return $this->card;
     }
 
+    public function dealTo($players, $cardCount, $hand = null)
+    {
+
+        foreach($players->collect()->content as $player){
+
+            $dealtCards = 0;
+            while($dealtCards < $cardCount){
+                $player->wholeCards(true)->create([
+                    'player_id' => $player->id,
+                    'card_id' => $this->pickCard()->getCard()->id,
+                    'hand_id' => $hand ? $hand->id : null
+                ]);
+                $dealtCards++;
+            }
+
+        }
+
+        return $this;
+
+    }
+
     /*
 
     public function dealTo($players, $cardCount, $hand = null)
