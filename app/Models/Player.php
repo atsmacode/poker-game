@@ -36,4 +36,18 @@ class Player extends Model
         return new WholeCard(['player_id' => $this->id], $stop);
     }
 
+    public function actions($stop = false)
+    {
+        self::__construct($this->data, $stop);
+
+        return new PlayerAction(['player_id' => $this->id], $stop);
+    }
+
+    public function stacks($stop = false)
+    {
+        self::__construct($this->data, $stop);
+
+        return new Stack(['player_id' => $this->id], $stop);
+    }
+
 }

@@ -25,9 +25,13 @@ class Model
     public function create($data)
     {
 
+        var_dump($data);
+
         $id = null;
 
         $insertStatement = $this->compileInsertStatement($data);
+
+        var_dump($insertStatement);
 
         try {
             $conn = new CustomPDO(true);

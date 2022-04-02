@@ -10,7 +10,7 @@ class Dealer
     public $deck;
     public $card;
 
-    public function setDeck()
+    public function setDeck($deck = null)
     {
 
         $this->deck = new Deck();

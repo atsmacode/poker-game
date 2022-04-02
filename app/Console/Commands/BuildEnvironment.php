@@ -9,6 +9,7 @@ use Database\Migrations\CreateHands;
 use Database\Migrations\CreateHandTypes;
 use Database\Migrations\CreatePlayerActions;
 use Database\Migrations\CreatePlayers;
+use Database\Migrations\CreateStacks;
 use Database\Migrations\CreateStreets;
 use Database\Migrations\CreateTables;
 use Database\Migrations\CreateWholeCards;
@@ -42,6 +43,7 @@ class BuildEnvironment extends Command
         CreateHands::class,
         CreateWholeCards::class,
         CreatePlayerActions::class,
+        CreateStacks::class,
         SeedCards::class,
         SeedHandTypes::class,
         SeedTables::class,

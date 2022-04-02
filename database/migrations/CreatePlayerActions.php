@@ -24,7 +24,7 @@ class CreatePlayerActions
             bet_amount INT(6) UNSIGNED NULL,
             active BOOLEAN DEFAULT 0,
             player_id INT(6) UNSIGNED NOT NULL,
-            action_id INT(6) UNSIGNED NOT NULL,
+            action_id INT(6) UNSIGNED NULL,
             hand_id INT(6) UNSIGNED NOT NULL,
             hand_street_id INT(6) UNSIGNED NOT NULL,
             table_seat_id INT(6) UNSIGNED NOT NULL,

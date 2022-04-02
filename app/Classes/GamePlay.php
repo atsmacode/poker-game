@@ -3,6 +3,8 @@
 namespace App\Classes;
 
 use App\Models\Action;
+use App\Models\HandStreet;
+use App\Models\Street;
 use App\Models\Table;
 
 class GamePlay
@@ -21,13 +23,13 @@ class GamePlay
         $this->game = new PotLimitHoldEm();
         $this->dealer = (new Dealer())->setDeck($deck);
         $this->hand = $hand;
-        $this->handTable = new Table();
+        $this->handTable = new Table(['id' => 1]);
         $this->street = null;
-        $this->fold = new Action('Fold');
-        $this->check = new Action('Check');
-        $this->call = new Action('Call');
-        $this->bet = new Action('Bet');
-        $this->raise = new Action('Raise');
+        $this->fold = new Action(['name' =>'Fold']);
+        $this->check = new Action(['name' =>'Check']);
+        $this->call = new Action(['name' =>'Call']);
+        $this->bet = new Action(['name' =>'Bet']);
+        $this->raise = new Action(['name' =>'Raise']);
 
         //$this->handTable->hands()->save($this->hand);
     }
@@ -97,7 +99,7 @@ class GamePlay
 
         if($this->game->streets[0]['whole_cards']){
             $this->dealer->dealTo(
-                $this->handTable->fresh()->players,
+                $this->handTable->players(),
                 $this->game->streets[0]['whole_cards'],
                 $this->hand,
             );
@@ -505,26 +507,27 @@ class GamePlay
 
     public function initiateStreetActions()
     {
-        $this->street = HandStreet::create([
-            'street_id' => Street::where('name', 'Pre-flop')->first()->id,
+        $this->street = (new HandStreet())->create([
+            'street_id' => (new Street(['name' => 'Pre-flop']))->id,
             'hand_id' => $this->hand->id
         ]);
 
-        foreach($this->handTable->tableSeats as $seat){
-            $seat->player->actions()->create([
+        foreach($this->handTable->seats(true)->collect()->content as $seat){
+            $seat->player(true)->actions(true)->create([
+                'player_id' => $seat->player_id,
                 'hand_street_id' => $this->street->id,
                 'table_seat_id' => $seat->id,
                 'hand_id' => $this->hand->id,
                 'active' => 1
             ]);
 
-            PlayerAction::where([
+            /*PlayerAction::where([
                 'hand_street_id' => $this->street->id,
                 'table_seat_id' => $seat->id,
                 'hand_id' => $this->hand->id,
             ])->update([
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-15 seconds')) // For testing so I can get the latest action, otherwise they are all the same
-            ]);
+            ]);*/
 
         }
 
@@ -534,10 +537,12 @@ class GamePlay
     public function initiatePlayerStacks()
     {
 
-        foreach($this->handTable->tableSeats as $tableSeat){
-            if($tableSeat->player->stacks->count() === 0){
-                $tableSeat->player->stacks()->create([
+        foreach($this->handTable->seats(true)->collect()->content as $seat){
+            if(count($seat->player(true)->stacks(true)->content) === 0){
+                var_dump($this->handTable->id);
+                $seat->player(true)->stacks(true)->create([
                     'amount' => 1000,
+                    'player_id' => $seat->player_id,
                     'table_id' => $this->handTable->id
                 ]);
             }

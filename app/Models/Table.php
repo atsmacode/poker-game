@@ -37,4 +37,15 @@ class Table extends Model
         return new TableSeat(['table_id' => $this->id], $stop);
     }
 
+    public function players()
+    {
+        $players = new Player([], true);
+
+        foreach($this->seats(true)->collect()->content as $seat){
+            $players->content[] = $seat->player(true);
+        }
+
+        return $players;
+    }
+
 }
