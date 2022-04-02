@@ -109,4 +109,24 @@ class DealerTest extends TestCase
 
     }
 
+    /**
+     * @test
+     * @return void
+     */
+    public function it_can_deal_a_street_card()
+    {
+
+        $handStreet = HandStreet::factory()->create([
+            'street_id' => Street::where('name', 'Flop')->first()->id,
+            'hand_id' => Hand::factory()->create()
+        ]);
+
+        $this->dealer->setDeck()->dealStreetCards(
+            $handStreet,
+            1
+        );
+
+        $this->assertCount(1, $handStreet->cards);
+    }
+
 }

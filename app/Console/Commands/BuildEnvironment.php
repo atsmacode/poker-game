@@ -15,6 +15,7 @@ use Database\Migrations\CreateWholeCards;
 use Database\Seeders\SeedCards;
 use Database\Seeders\SeedHandTypes;
 use Database\Seeders\SeedPlayers;
+use Database\Seeders\SeedStreets;
 use Database\Seeders\SeedTables;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -44,7 +45,8 @@ class BuildEnvironment extends Command
         SeedCards::class,
         SeedHandTypes::class,
         SeedTables::class,
-        SeedPlayers::class
+        SeedPlayers::class,
+        SeedStreets::class
     ];
     protected static $defaultName = 'app:build-env';
 

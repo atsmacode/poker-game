@@ -76,40 +76,29 @@ class Dealer
 
     }
 
-    /*
-
-    public function dealTo($players, $cardCount, $hand = null)
+    public function dealStreetCards($handStreet, $cardCount)
     {
-        if($players instanceof Player){
 
-            $dealtCards = 0;
-            while($dealtCards < $cardCount){
-                $players->wholeCards()->create([
-                    'card_id' => $this->pickCard()->getCard()->id,
-                    'hand_id' => $hand ? $hand->id : null
-                ]);
-                $dealtCards++;
-            }
+        $dealtCards = 0;
 
-            return $this;
-        }
+        while($dealtCards < $cardCount){
 
-        foreach($players as $player){
+            $cardId = is_object($this->pickCard()->getCard()) ? $this->pickCard()->getCard()->id : $this->pickCard()->getCard()['id'];
 
-            $dealtCards = 0;
-            while($dealtCards < $cardCount){
-                $player->wholeCards()->create([
-                    'card_id' => $this->pickCard()->getCard()->id,
-                    'hand_id' => $hand ? $hand->id : null
-                ]);
-                $dealtCards++;
-            }
+            HandStreetCard::create([
+                'card_id' => $cardId,
+                'hand_street_id' => $handStreet->id
+            ]);
+
+            $dealtCards++;
 
         }
 
         return $this;
 
     }
+
+    /*
 
     public function dealCardTo($player)
     {
