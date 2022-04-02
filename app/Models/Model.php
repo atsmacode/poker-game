@@ -96,6 +96,34 @@ class Model
 
     }
 
+    public function update($data)
+    {
+
+        $properties = $this->compileUpdateStatement($data);
+
+        try {
+            $conn = new CustomPDO(true);
+
+            $stmt = $conn->prepare($properties);
+
+            foreach($data as $column => &$value){
+                $stmt->bindParam(':'.$column, $value);
+            }
+
+            $stmt->execute();
+
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+
+        }
+        $conn = null;
+
+        $this->content = $this->getSelected(['id' => $this->id])->content;
+
+        return $this;
+
+    }
+
     public function all()
     {
         $rows = null;
@@ -123,6 +151,36 @@ class Model
 
         return $this;
 
+    }
+
+    private function compileUpdateStatement($data)
+    {
+        $properties = "UPDATE {$this->table} SET ";
+
+        $pointer = 1;
+        foreach($data as $column => $value){
+            if($value !== null){
+                $properties .= $column . " = :". $column;
+
+                if($pointer < count($data)){
+                    $properties .= ", ";
+                };
+            }
+            $pointer++;
+        }
+
+        $properties .= " WHERE id = {$this->id}";
+
+        return $properties;
+    }
+
+    private function compileWhereIdStatement($data)
+    {
+        $properties = "WHERE ";
+
+        $properties .= " id = '". $data['id'] . "'";
+
+        return $properties;
     }
 
     private function compileWhereStatement($data)
