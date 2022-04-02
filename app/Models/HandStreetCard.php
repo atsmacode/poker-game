@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-class Hand extends Model
+class HandStreetCard extends Model
 {
 
-    protected $table = 'hands';
-    public $id;
+    protected $table = 'hand_street_cards';
 
     public function __construct(array $data = null)
     {

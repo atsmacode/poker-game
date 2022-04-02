@@ -3,7 +3,10 @@
 namespace Tests\Unit;
 
 use App\Classes\Dealer;
+use App\Models\Hand;
+use App\Models\HandStreet;
 use App\Models\Player;
+use App\Models\Street;
 use App\Models\Table;
 use PHPUnit\Framework\TestCase;
 
@@ -116,9 +119,9 @@ class DealerTest extends TestCase
     public function it_can_deal_a_street_card()
     {
 
-        $handStreet = HandStreet::factory()->create([
-            'street_id' => Street::where('name', 'Flop')->first()->id,
-            'hand_id' => Hand::factory()->create()
+        $handStreet = (new HandStreet())->create([
+            'street_id' => (new Street(['name' => 'Flop']))->id,
+            'hand_id' => (new Hand(['table_id' => 1]))->id
         ]);
 
         $this->dealer->setDeck()->dealStreetCards(
@@ -126,7 +129,7 @@ class DealerTest extends TestCase
             1
         );
 
-        $this->assertCount(1, $handStreet->cards);
+        $this->assertCount(1, $handStreet->cards(true)->content);
     }
 
 }

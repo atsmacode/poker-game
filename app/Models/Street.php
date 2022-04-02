@@ -7,6 +7,8 @@ class Street extends Model
 
     public $table = 'streets';
     public string $name;
+    public $id;
+
 
     public function __construct(array $data = null, $stop = false)
     {

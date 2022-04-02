@@ -55,6 +55,8 @@ class Model
 
         $this->content = $this->getSelected(['id' => $id])->content;
 
+        return $this;
+
     }
 
     protected function getSelected($data)

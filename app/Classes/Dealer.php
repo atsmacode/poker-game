@@ -2,6 +2,8 @@
 
 namespace App\Classes;
 
+use App\Models\HandStreetCard;
+
 class Dealer
 {
 
@@ -85,7 +87,7 @@ class Dealer
 
             $cardId = is_object($this->pickCard()->getCard()) ? $this->pickCard()->getCard()->id : $this->pickCard()->getCard()['id'];
 
-            HandStreetCard::create([
+            (new HandStreetCard())->create([
                 'card_id' => $cardId,
                 'hand_street_id' => $handStreet->id
             ]);

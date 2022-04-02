@@ -66,7 +66,9 @@ class CreateHands
         $sql = "CREATE TABLE hand_street_cards (
                 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 hand_street_id INT(6) UNSIGNED NOT NULL,
-                FOREIGN KEY (hand_street_id) REFERENCES hand_streets(id)
+                card_id INT(6) UNSIGNED NOT NULL,
+                FOREIGN KEY (hand_street_id) REFERENCES hand_streets(id),
+                FOREIGN KEY (card_id) REFERENCES cards(id)
             )";
 
         try {
