@@ -91,23 +91,14 @@ class DealerTest extends TestCase
             'name' => 'Table 1'
         ]);
 
-        /*
-         * Manually building the player array here.
-         * Might be better to build a hasManyThrough object relation
-         * for table > seats > players
-         */
-        $players = new Player([], true);
-
-        foreach($table->seats(true)->collect()->content as $seat){
-            $this->assertCount(0, $seat->player(true)->wholeCards(true)->content);
-
-            $players->content[] = $seat->player(true);
+        foreach($table->players()->collect()->content as $player){
+            $this->assertCount(0, $player->wholeCards(true)->content);
         }
 
-        $this->dealer->setDeck()->shuffle()->dealTo($players, 1);
+        $this->dealer->setDeck()->shuffle()->dealTo($table->players(), 1);
 
-        foreach($table->seats(true)->collect()->content as $seat){
-            $this->assertCount(1, $seat->player(true)->wholeCards(true)->content);
+        foreach($table->players()->collect()->content as $player){
+            $this->assertCount(1, $player->wholeCards(true)->content);
         }
 
     }
