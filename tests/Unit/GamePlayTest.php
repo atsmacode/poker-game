@@ -13,7 +13,7 @@ class GamePlayTest extends TestCase
     {
         parent::setUp();
 
-        $this->gamePlay = new GamePlay(new Hand(['table_id' => 1]));
+        $this->gamePlay = new GamePlay(Hand::create(['table_id' => 1]));
     }
 
     /**

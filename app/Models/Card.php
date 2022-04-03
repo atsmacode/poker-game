@@ -10,7 +10,7 @@ use PDOException;
 class Card extends Model
 {
 
-    use Connect;
+    use Connect, Collection;
 
     public string $rank;
     public string $suit;

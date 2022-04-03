@@ -23,13 +23,13 @@ class GamePlay
         $this->game = new PotLimitHoldEm();
         $this->dealer = (new Dealer())->setDeck($deck);
         $this->hand = $hand;
-        $this->handTable = new Table(['id' => 1]);
+        $this->handTable = Table::find(['id' => 1]);
         $this->street = null;
-        $this->fold = new Action(['name' =>'Fold']);
-        $this->check = new Action(['name' =>'Check']);
-        $this->call = new Action(['name' =>'Call']);
-        $this->bet = new Action(['name' =>'Bet']);
-        $this->raise = new Action(['name' =>'Raise']);
+        $this->fold = Action::find(['name' =>'Fold']);
+        $this->check = Action::find(['name' =>'Check']);
+        $this->call = Action::find(['name' =>'Call']);
+        $this->bet = Action::find(['name' =>'Bet']);
+        $this->raise = Action::find(['name' =>'Raise']);
 
         //$this->handTable->hands()->save($this->hand);
     }
@@ -507,13 +507,13 @@ class GamePlay
 
     public function initiateStreetActions()
     {
-        $this->street = (new HandStreet())->create([
-            'street_id' => (new Street(['name' => 'Pre-flop']))->id,
+        $this->street = HandStreet::create([
+            'street_id' => Street::find(['name' => 'Pre-flop'])->id,
             'hand_id' => $this->hand->id
         ]);
 
         foreach($this->handTable->seats(true)->collect()->content as $seat){
-            $seat->player(true)->actions(true)->create([
+            $seat->player(true)->actions(true)::create([
                 'player_id' => $seat->player_id,
                 'hand_street_id' => $this->street->id,
                 'table_seat_id' => $seat->id,
@@ -539,8 +539,7 @@ class GamePlay
 
         foreach($this->handTable->seats(true)->collect()->content as $seat){
             if(count($seat->player(true)->stacks(true)->content) === 0){
-                var_dump($this->handTable->id);
-                $seat->player(true)->stacks(true)->create([
+                $seat->player(true)->stacks(true)::create([
                     'amount' => 1000,
                     'player_id' => $seat->player_id,
                     'table_id' => $this->handTable->id

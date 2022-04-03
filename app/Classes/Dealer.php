@@ -87,7 +87,7 @@ class Dealer
 
             $cardId = is_object($this->pickCard()->getCard()) ? $this->pickCard()->getCard()->id : $this->pickCard()->getCard()['id'];
 
-            (new HandStreetCard())->create([
+            HandStreetCard::create([
                 'card_id' => $cardId,
                 'hand_street_id' => $handStreet->id
             ]);

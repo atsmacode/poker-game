@@ -20,7 +20,7 @@ class TableSeatTest extends TestCase
      */
     public function a_table_seat_can_be_updated()
     {
-        $tableSeat = new TableSeat(['id' => 1]);
+        $tableSeat = TableSeat::find(['id' => 1]);
 
         $this->assertEquals(0, $tableSeat->can_continue);
 

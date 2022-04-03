@@ -13,6 +13,28 @@ class Model
     public $content = [];
     public $data;
 
+    public function __construct(array $data = null, $stop = false)
+    {
+        $this->data = $data;
+        $this->stop = $stop;
+        //$this->initiate();
+    }
+
+    public static function find(array $data = null, $stop = false)
+    {
+        return (new static($data, $stop))->getSelected($data);
+    }
+
+    public static function create(array $data = null, $stop = false)
+    {
+        return (new static($data, $stop))->createEntry($data);
+    }
+
+    public function initiate()
+    {
+        $this->findOrCreate($this->data, $this->stop);
+    }
+
     protected function findOrCreate($data, $stop = false)
     {
         if($this->data && !$this->getSelected($data)){
@@ -22,16 +44,12 @@ class Model
         };
     }
 
-    public function create($data)
+    public function createEntry($data)
     {
-
-        var_dump($data);
 
         $id = null;
 
         $insertStatement = $this->compileInsertStatement($data);
-
-        var_dump($insertStatement);
 
         try {
             $conn = new CustomPDO(true);
@@ -89,7 +107,7 @@ class Model
         $conn = null;
 
         if(!$rows){
-            return null;
+            return $this;
         }
 
         $this->content = $rows;
