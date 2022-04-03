@@ -10,25 +10,25 @@ class Player extends Model
     protected $table = 'players';
     public $id;
 
-    public function wholeCards($stop = false)
+    public function wholeCards()
     {
-        self::__construct($this->data, $stop);
+        self::__construct($this->data);
 
-        return WholeCard::find(['player_id' => $this->id], $stop);
+        return WholeCard::find(['player_id' => $this->id]);
     }
 
-    public function actions($stop = false)
+    public function actions()
     {
-        self::__construct($this->data, $stop);
+        self::__construct($this->data);
 
-        return PlayerAction::find(['player_id' => $this->id], $stop);
+        return PlayerAction::find(['player_id' => $this->id]);
     }
 
-    public function stacks($stop = false)
+    public function stacks()
     {
-        self::__construct($this->data, $stop);
+        self::__construct($this->data);
 
-        return Stack::find(['player_id' => $this->id], $stop);
+        return Stack::find(['player_id' => $this->id]);
     }
 
 }

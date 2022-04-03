@@ -12,19 +12,19 @@ class Table extends Model
     public $content;
     public $id;
 
-    public function seats($stop = false)
+    public function seats()
     {
-        self::__construct($this->data, $stop);
+        self::__construct($this->data);
 
-        return TableSeat::find(['table_id' => $this->id], $stop);
+        return TableSeat::find(['table_id' => $this->id]);
     }
 
     public function players()
     {
-        $players = new Player([], true);
+        $players = new Player([]);
 
-        foreach($this->seats(true)->collect()->content as $seat){
-            $players->content[] = $seat->player(true);
+        foreach($this->seats()->collect()->content as $seat){
+            $players->content[] = $seat->player();
         }
 
         return $players;

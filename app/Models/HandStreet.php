@@ -10,11 +10,11 @@ class HandStreet extends Model
     protected $table = 'hand_streets';
     public $id;
 
-    public function cards($stop = false)
+    public function cards()
     {
-        self::__construct($this->data, $stop);
+        self::__construct($this->data);
 
-        return HandStreetCard::find(['hand_street_id' => $this->id], $stop);
+        return HandStreetCard::find(['hand_street_id' => $this->id]);
     }
 
 }

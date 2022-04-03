@@ -13,35 +13,19 @@ class Model
     public $content = [];
     public $data;
 
-    public function __construct(array $data = null, $stop = false)
+    public function __construct(array $data = null)
     {
         $this->data = $data;
-        $this->stop = $stop;
-        //$this->initiate();
     }
 
-    public static function find(array $data = null, $stop = false)
+    public static function find(array $data = null)
     {
-        return (new static($data, $stop))->getSelected($data);
+        return (new static($data))->getSelected($data);
     }
 
-    public static function create(array $data = null, $stop = false)
+    public static function create(array $data = null)
     {
-        return (new static($data, $stop))->createEntry($data);
-    }
-
-    public function initiate()
-    {
-        $this->findOrCreate($this->data, $this->stop);
-    }
-
-    protected function findOrCreate($data, $stop = false)
-    {
-        if($this->data && !$this->getSelected($data)){
-            if(!$stop){
-                $this->create($data);
-            }
-        };
+        return (new static($data))->createEntry($data);
     }
 
     public function createEntry($data)
