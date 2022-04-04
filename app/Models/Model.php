@@ -71,8 +71,6 @@ class Model
 
         $properties = $this->compileWhereStatement($data);
 
-        var_dump($properties);
-
         try {
 
             $conn = new CustomPDO(true);
