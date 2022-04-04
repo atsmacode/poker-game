@@ -23,6 +23,8 @@ class CreatePlayerActions
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             bet_amount INT(6) UNSIGNED NULL,
             active BOOLEAN DEFAULT 0,
+            big_blind BOOLEAN DEFAULT 0,
+            small_blind BOOLEAN DEFAULT 0,
             player_id INT(6) UNSIGNED NOT NULL,
             action_id INT(6) UNSIGNED NULL,
             hand_id INT(6) UNSIGNED NOT NULL,

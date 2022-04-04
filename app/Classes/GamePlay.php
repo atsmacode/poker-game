@@ -621,13 +621,15 @@ class GamePlay
     public function setDealerAndBlindSeats($currentDealer = null)
     {
 
-        if($this->hand->fresh()->streets->count() === 1){
-            PlayerAction::query()
-                ->where('hand_id', $this->hand->fresh()->id)
-                ->where('big_blind', 1)
-                ->update([
-                    'big_blind' => 0
-                ]);
+        if(count($this->hand->streets()->content) === 1){
+            $bigBlind = PlayerAction::find([
+                'hand_id' => $this->hand->id,
+                'big_blind' => 1
+            ]);
+
+            $bigBlind->update([
+                'big_blind' => 0
+            ]);
         }
 
         [
