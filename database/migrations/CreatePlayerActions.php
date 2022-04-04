@@ -28,6 +28,7 @@ class CreatePlayerActions
             hand_id INT(6) UNSIGNED NOT NULL,
             hand_street_id INT(6) UNSIGNED NOT NULL,
             table_seat_id INT(6) UNSIGNED NOT NULL,
+            updated_at DATETIME NULL,
             FOREIGN KEY (action_id) REFERENCES actions(id),
             FOREIGN KEY (player_id) REFERENCES players(id),
             FOREIGN KEY (hand_id) REFERENCES hands(id),

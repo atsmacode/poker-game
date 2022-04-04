@@ -47,6 +47,7 @@ class CreateTables
             action_on BOOLEAN DEFAULT 0,
             player_id INT(6) UNSIGNED NULL,
             table_id INT(6) UNSIGNED NOT NULL,
+            updated_at DATETIME NULL,
             FOREIGN KEY (table_id) REFERENCES tables(id),
             FOREIGN KEY (player_id) REFERENCES players(id)
         )";
