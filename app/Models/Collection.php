@@ -27,6 +27,25 @@ trait Collection
         return false;
     }
 
+    public function searchMultiple($column, $value)
+    {
+
+        $keys = array_keys(
+            array_column($this->content, $column),
+            $value
+        );
+
+        if($keys > 0){
+            array_filter($this->content, function($key) use($keys){
+                return in_array($key, $keys);
+            }, ARRAY_FILTER_USE_KEY);
+
+            return $this->content;
+        }
+
+        return false;
+    }
+
     public function slice($start, $finish)
     {
 

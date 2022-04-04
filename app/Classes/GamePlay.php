@@ -285,8 +285,16 @@ class GamePlay
 
         $lastToAct = $this->hand->actions()->latest();
 
-        $playerAfterLastToAct = $this->hand->playerActions->fresh()->where('active', 1)->where('table_seat_id', '>', $lastToAct)->first()
-            ? $this->hand->playerActions->fresh()->where('active', 1)->where('table_seat_id', '>', $lastToAct)->first()->tableSeat
+        $activePlayersAfterLastToAct = array_filter(
+            PlayerAction::find(['active' => 1, 'hand_id' => $this->hand->id])
+                ->collect()->content,
+            function($value) use($lastToAct){
+                return $value->table_seat_id > $lastToAct;
+            }
+        );
+
+        $playerAfterLastToAct = array_shift($activePlayersAfterLastToAct)
+            ? array_shift($activePlayersAfterLastToAct)
             : null;
 
         if(!$playerAfterLastToAct){
@@ -310,15 +318,15 @@ class GamePlay
                 $actionOn = true;
             }
 
-            $actionName = $playerAction->action ? $playerAction->action->name : null;
+            $actionName = $playerAction->action_id ? $playerAction->action()->name : null;
 
-            $stack = $playerAction->player->fresh()->stacks->where('table_id', $this->handTable->id)->first()
-                ? $playerAction->player->fresh()->stacks->where('table_id', $this->handTable->id)->first()->amount
+            $stack = $playerAction->player()->stacks()->search('table_id', $this->handTable->id)
+                ? $playerAction->player()->stacks()->search('table_id', $this->handTable->id)->amount
                 : null;
 
             $playerData[] = [
                 'stack' => $stack,
-                'name' => $playerAction->player->name,
+                'name' => $playerAction->player()->username,
                 'action_id' => $playerAction->action_id,
                 'action_name' => $actionName ,
                 'player_id' => $playerAction->player_id,
@@ -326,11 +334,11 @@ class GamePlay
                 'hand_street_id' => $playerAction->hand_street_id,
                 'bet_amount' => $playerAction->bet_amount,
                 'active' => $playerAction->active,
-                'can_continue' => $playerAction->tableSeat->can_continue,
-                'is_dealer' => $playerAction->tableSeat->is_dealer,
+                'can_continue' => $playerAction->tableSeat()->can_continue,
+                'is_dealer' => $playerAction->tableSeat()->is_dealer,
                 'big_blind' => $playerAction->big_blind,
                 'small_blind' => $playerAction->small_blind,
-                'whole_cards' => $this->getWholeCards($playerAction->player),
+                'whole_cards' => $this->getWholeCards($playerAction->player()),
                 'action_on' => $actionOn,
                 'availableOptions' => $this->getAvailableOptionsBasedOnLatestAction($playerAction)
             ];
@@ -345,25 +353,25 @@ class GamePlay
         $wholeCards = [];
 
         if(isset($player)){
-            foreach($player->wholeCards->where('hand_id', $this->hand->fresh()->id) as $wholeCard){
+            foreach($player->wholeCards()->collect()->searchMultiple('hand_id', $this->hand->id) as $wholeCard){
                 $wholeCards[] = [
                     'player_id' => $wholeCard->player_id,
-                    'rank' => $wholeCard->card->rank->abbreviation,
-                    'suit' => $wholeCard->card->suit->name,
-                    'suitAbbreviation' => $wholeCard->card->suit->abbreviation
+                    'rank' => $wholeCard->card()->rank,
+                    'suit' => $wholeCard->card()->suit,
+                    'suitAbbreviation' => $wholeCard->card()->suit
                 ];
             }
 
             return $wholeCards;
         }
 
-        foreach(TableSeat::where('can_continue', 1)->get() as $tableSeat){
-            foreach($tableSeat->player->wholeCards->where('hand_id',$this->hand->fresh()->id) as $wholeCard){
+        foreach(TableSeat::find(['can_continue' => 1]) as $tableSeat){
+            foreach($tableSeat->player()->collect()->searchMultiple('hand_id', $this->hand->id) as $wholeCard){
                 $wholeCards[] = [
-                    'player_id' => $tableSeat->player->id,
-                    'rank' => $wholeCard->card->rank->abbreviation,
-                    'suit' => $wholeCard->card->suit->name,
-                    'suitAbbreviation' => $wholeCard->card->suit->abbreviation
+                    'player_id' => $wholeCard->player_id,
+                    'rank' => $wholeCard->card()->rank,
+                    'suit' => $wholeCard->card()->suit,
+                    'suitAbbreviation' => $wholeCard->card()->suit
                 ];
             }
         }
