@@ -4,6 +4,7 @@ namespace App\Classes;
 
 use App\Models\Action;
 use App\Models\HandStreet;
+use App\Models\PlayerAction;
 use App\Models\Street;
 use App\Models\Table;
 
@@ -512,8 +513,8 @@ class GamePlay
             'hand_id' => $this->hand->id
         ]);
 
-        foreach($this->handTable->seats(true)->collect()->content as $seat){
-            $seat->player(true)->actions(true)::create([
+        foreach($this->handTable->seats()->collect()->content as $seat){
+            $seat->player()->actions()::create([
                 'player_id' => $seat->player_id,
                 'hand_street_id' => $this->street->id,
                 'table_seat_id' => $seat->id,
@@ -521,13 +522,15 @@ class GamePlay
                 'active' => 1
             ]);
 
-            /*PlayerAction::where([
+            $playerAction = PlayerAction::find([
                 'hand_street_id' => $this->street->id,
                 'table_seat_id' => $seat->id,
                 'hand_id' => $this->hand->id,
-            ])->update([
+            ]);
+
+            $playerAction->update([
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-15 seconds')) // For testing so I can get the latest action, otherwise they are all the same
-            ]);*/
+            ]);
 
         }
 

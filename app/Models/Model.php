@@ -71,6 +71,8 @@ class Model
 
         $properties = $this->compileWhereStatement($data);
 
+        var_dump($properties);
+
         try {
 
             $conn = new CustomPDO(true);
@@ -195,13 +197,15 @@ class Model
 
         $pointer = 1;
         foreach($data as $column => $value){
-            if($value !== null){
+            if($value === null) {
+                $properties .= $column . " IS NULL";
+            } else {
                 $properties .= $column . " = '". $value . "'";
-
-                if($pointer < count($data)){
-                    $properties .= " AND ";
-                };
             }
+
+            if($pointer < count($data)){
+                $properties .= " AND ";
+            };
             $pointer++;
         }
 
