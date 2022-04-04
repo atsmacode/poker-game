@@ -2,14 +2,17 @@
 
 namespace App\Classes;
 
+use App\Helpers\BetHelper;
 use App\Models\Action;
 use App\Models\HandStreet;
 use App\Models\PlayerAction;
 use App\Models\Street;
 use App\Models\Table;
+use App\Models\TableSeat;
 
 class GamePlay
 {
+
     public $game;
     public $dealer;
     protected $actionOn;
@@ -553,72 +556,59 @@ class GamePlay
 
     protected function noDealerIsSetOrThereIsNoSeatAfterTheCurrentDealer($currentDealer)
     {
-        return !$currentDealer->isNotEmpty() || !$this->handTable->seats()::find(['id' => $currentDealer->content->id + 1]);
+        return !$currentDealer || !$this->handTable->seats()->search(['id', $currentDealer->content->id + 1]);
     }
 
     protected function thereAreThreeSeatsAfterTheCurrentDealer($currentDealer)
     {
-        return $this->handTable->tableSeats->fresh()->where('id', $currentDealer->id + 3)->first();
+
+        return $this->handTable->seats()->search('id', $currentDealer->id + 3);
     }
 
     protected function thereAreTwoSeatsAfterTheCurrentDealer($currentDealer)
     {
-        return $this->handTable->tableSeats->fresh()->where('id', $currentDealer->id + 2)->first() &&
-            !$this->handTable->tableSeats->fresh()->where('id', $currentDealer->id + 3)->first();
+        return $this->handTable->seats()->search('id', $currentDealer->id + 2) &&
+            $this->handTable->seats()->search('id', $currentDealer->id + 3);
     }
 
     protected function thereIsOneSeatAfterTheDealer($currentDealer)
     {
-        return $this->handTable->tableSeats->fresh()->where('id', $currentDealer->id + 1)->first()
-            && !$this->handTable->tableSeats->fresh()->where('id', $currentDealer->id + 2)->first();
-    }
-
-    private function search($hayStack, $column, $value)
-    {
-
-        $key = array_search($value,
-            array_column($hayStack, $column)
-        );
-
-        if(array_key_exists($key, $hayStack)){
-            return $hayStack[$key];
-        }
-
-        return false;
+        return $this->handTable->seats()->search('id', $currentDealer->id + 1) &&
+            $this->handTable->seats()->search('id', $currentDealer->id + 2);
     }
 
     protected function identifyTheNextDealerAndBlindSeats($currentDealer)
     {
 
         if($currentDealer){
-            $currentDealer = $this->handTable->seats()::find(['id' => $currentDealer]);
+            $currentDealer = $this->handTable->seats()->search('id', $currentDealer);
         } else {
-            $currentDealer = $this->handTable->seats()::find(['is_dealer' => 1]);
+            $currentDealer = $this->handTable->seats()->search('is_dealer', 1);
         }
 
         if($this->noDealerIsSetOrThereIsNoSeatAfterTheCurrentDealer($currentDealer)){
 
-            $dealer = $this->handTable->tableSeats->fresh()->slice(0, 1)->first();
-            $smallBlindSeat = $this->handTable->tableSeats->fresh()->where('id', $dealer->id + 1)->first();
-            $bigBlindSeat = $this->handTable->tableSeats->fresh()->where('id', $dealer->id + 2)->first();
+            $dealer = $this->handTable->seats()->slice(0, 1);
+            $smallBlindSeat = $this->handTable->seats()->search('id', $dealer->id + 1);
+            $bigBlindSeat = $this->handTable->seats()->search('id', $dealer->id + 2);
 
         } else if($this->thereAreThreeSeatsAfterTheCurrentDealer($currentDealer)) {
 
-            $dealer = $this->handTable->tableSeats->fresh()->where('id', $currentDealer->id + 1)->first();
-            $smallBlindSeat = $this->handTable->tableSeats->fresh()->where('id', $dealer->id + 1)->first();
-            $bigBlindSeat = $this->handTable->tableSeats->fresh()->where('id', $dealer->id + 2)->first();
+            $dealer = $this->handTable->seats()->search('id', $currentDealer->id + 1);
+            $smallBlindSeat = $this->handTable->seats()->search('id', $dealer->id + 1);
+            $bigBlindSeat = $this->handTable->seats()->search('id', $dealer->id + 2);
 
         } else if($this->thereAreTwoSeatsAfterTheCurrentDealer($currentDealer)) {
 
-            $dealer = $this->handTable->tableSeats->fresh()->where('id', $currentDealer->id + 1)->first();
-            $smallBlindSeat = $this->handTable->tableSeats->fresh()->where('id', $dealer->id + 1)->first();
-            $bigBlindSeat = $this->handTable->tableSeats->fresh()->slice(0, 1)->first();
+            $dealer = $this->handTable->seats()->search('id', $currentDealer->id + 1);
+            $smallBlindSeat = $this->handTable->seats()->search('id', $dealer->id + 1);
+            $bigBlindSeat = $this->handTable->seats()->slice(0, 1);
 
         } else {
 
-            $dealer = $this->handTable->tableSeats->fresh()->where('id', $currentDealer->id + 1)->first();
-            $smallBlindSeat = $this->handTable->tableSeats->fresh()->slice(0, 1)->first();
-            $bigBlindSeat = $this->handTable->tableSeats->fresh()->slice(1, 1)->first();
+            $dealer = $this->handTable->seats()->search('id', $currentDealer->id + 1);
+            $smallBlindSeat = $this->handTable->seats()->slice(0, 1);
+            $bigBlindSeat = $this->handTable->seats()->slice(1, 1);
 
         }
 
@@ -655,40 +645,44 @@ class GamePlay
         ] = $this->identifyTheNextDealerAndBlindSeats($currentDealer);
 
         if($currentDealer){
-            TableSeat::query()
-                ->where('table_id', $this->handTable->id)
-                ->where('id', '=',  $currentDealer->id)
-                ->update([
-                    'is_dealer' => 0,
-                    'updated_at' => date('Y-m-d H:i:s', strtotime('- 20 seconds'))
-                ]);
-        }
-
-        TableSeat::query()
-            ->where('table_id', $this->handTable->id)
-            ->where('id', '=',  $dealer->id)
-            ->update([
-                'is_dealer' => 1,
-                'updated_at' => date('Y-m-d H:i:s', strtotime('- 18 seconds'))
+            $tableSeat = TableSeat::find([
+                'id' =>  $currentDealer->id,
+                'table_id' => $this->handTable->id
             ]);
 
-        $smallBlind = PlayerAction::where([
-            'player_id' =>  $smallBlindSeat->player->id,
-            'table_seat_id' =>  $smallBlindSeat->id,
-            'hand_street_id' => HandStreet::where([
-                'street_id' => Street::where('name', $this->game->streets[0]['name'])->first()->id,
-                'hand_id' => $this->hand->id
-            ])->first()->id
-        ])->first();
+            $tableSeat->update([
+                'is_dealer' => 0,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('- 20 seconds'))
+            ]);
+        }
 
-        $bigBlind = PlayerAction::where([
-            'player_id' =>  $bigBlindSeat->player->id,
-            'table_seat_id' =>  $bigBlindSeat->id,
-            'hand_street_id' => HandStreet::where([
-                'street_id' => Street::where('name', $this->game->streets[0]['name'])->first()->id,
+        $tableSeat = TableSeat::find([
+            'id' =>  $dealer->id,
+            'table_id' => $this->handTable->id
+        ]);
+
+        $tableSeat->update([
+            'is_dealer' => 1,
+            'updated_at' => date('Y-m-d H:i:s', strtotime('- 18 seconds'))
+        ]);
+
+        $smallBlind = PlayerAction::find([
+            'player_id' =>  $smallBlindSeat->player()->id,
+            'table_seat_id' =>  $smallBlindSeat->id,
+            'hand_street_id' => HandStreet::find([
+                'street_id' => Street::find(['name' => $this->game->streets[0]['name']])->id,
                 'hand_id' => $this->hand->id
-            ])->first()->id
-        ])->first();
+            ])->id
+        ]);
+
+        $bigBlind = PlayerAction::find([
+            'player_id' =>  $bigBlindSeat->player()->id,
+            'table_seat_id' =>  $bigBlindSeat->id,
+            'hand_street_id' => HandStreet::find([
+                'street_id' => Street::find(['name' => $this->game->streets[0]['name']])->id,
+                'hand_id' => $this->hand->id
+            ])->id
+        ]);
 
         BetHelper::postBlinds($this->hand, $smallBlind, $bigBlind);
 
