@@ -39,4 +39,18 @@ trait Collection
         return false;
     }
 
+    public function latest()
+    {
+        $dates = array_column($this->content, 'updated_at');
+
+        uasort($dates, function ($a, $b) {
+            if ($a == $b) {
+                return 0;
+            }
+            return ($a > $b) ? -1 : 1;
+        });
+
+        return array_shift($dates);
+    }
+
 }

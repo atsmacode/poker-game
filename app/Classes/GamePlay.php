@@ -111,7 +111,7 @@ class GamePlay
 
         return [
             'deck' => $this->dealer->getDeck(),
-            'pot' => $this->hand->fresh()->pot->amount,
+            'pot' => $this->hand->pot()->amount,
             'communityCards' => $this->getCommunityCards(),
             'players' => $this->getPlayerData(),
             'winner' => null
@@ -210,7 +210,7 @@ class GamePlay
 
     protected function allPlayerActionsAreNullSoANewSreetHasBeenSet()
     {
-        return !$this->hand->playerActions->fresh()->whereNotNull('action_id')->first();
+        return !$this->hand->actions()->search('action_id', null);
     }
 
     protected function getThePlayerActionShouldBeOnForANewStreet($firstActivePlayer)
@@ -274,25 +274,16 @@ class GamePlay
     public function getActionOn()
     {
 
-        $firstActivePlayer = TableSeat::query()
-            ->select('table_seats.*')
-            ->leftJoin('player_actions', 'table_seats.id', '=', 'player_actions.table_seat_id')
-            ->where('table_seats.table_id', $this->handTable->fresh()->id)
-            ->where('table_seats.id', $this->hand->fresh()->playerActions->where('active', 1)->first()->table_seat_id)
-            ->first()
-            ->fresh();
+        $firstActivePlayer = TableSeat::find([
+            'id' => $this->hand->actions()->search('active', 1)->table_seat_id,
+            'table_id' => $this->handTable->id
+        ]);
 
         if($this->allPlayerActionsAreNullSoANewSreetHasBeenSet()){
             return $this->getThePlayerActionShouldBeOnForANewStreet($firstActivePlayer);
         }
 
-        $lastToAct = $this->hand->playerActions
-            ->fresh()
-            ->sortBy([
-                ['updated_at', 'desc']
-            ], SORT_NUMERIC)
-            ->first()
-            ->table_seat_id;
+        $lastToAct = $this->hand->actions()->latest();
 
         $playerAfterLastToAct = $this->hand->playerActions->fresh()->where('active', 1)->where('table_seat_id', '>', $lastToAct)->first()
             ? $this->hand->playerActions->fresh()->where('active', 1)->where('table_seat_id', '>', $lastToAct)->first()->tableSeat
@@ -311,7 +302,7 @@ class GamePlay
 
         $playerData = [];
 
-        foreach($this->hand->playerActions->fresh() as $playerAction){
+        foreach($this->hand->actions()->collect()->content as $playerAction){
 
             $actionOn = false;
 
@@ -383,12 +374,12 @@ class GamePlay
     public function getCommunityCards()
     {
         $cards = [];
-        foreach($this->hand->fresh()->streets as $street){
-            foreach($street->cards as $streetCard){
+        foreach($this->hand->streets()->collect()->content as $street){
+            foreach($street->cards()->collect()->content as $streetCard){
                 $cards[] = [
-                    'rank' => $streetCard->card->rank->abbreviation,
-                    'suit' => $streetCard->card->suit->name,
-                    'suitAbbreviation' => $streetCard->card->suit->abbreviation
+                    'rank' => $streetCard->card()->rank,
+                    'suit' => $streetCard->card()->suit,
+                    'suitAbbreviation' => $streetCard->card()->suit
                 ];
             }
         }

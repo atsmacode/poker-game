@@ -10,4 +10,11 @@ class PlayerAction extends Model
     protected $table = 'player_actions';
     public $id;
 
+    public function player()
+    {
+        self::__construct($this->data);
+
+        return Player::find(['id' => $this->player_id]);
+    }
+
 }
