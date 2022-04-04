@@ -19,11 +19,12 @@ class Card extends Model
     public int $ranking;
     public $content;
 
-    public function __construct(string $rank = null, string $suit = null)
+    public function __construct(array $data = null)
     {
         $this->setCredentials();
-        $this->selectedRank = $rank;
-        $this->selectedSuit = $suit;
+        $this->selectedRank = array_key_exists('rank', $data)  ? $data['rank'] : null;
+        $this->selectedSuit = array_key_exists('suit', $data)  ? $data['suit'] : null;
+        $this->id = array_key_exists('id', $data) ? $data['id'] : null;
         $this->select();
     }
 
@@ -36,8 +37,22 @@ class Card extends Model
 
     protected function getSelected($column = null, $value = null)
     {
-        $rows = null;
+        $rows = $this->id ? $this->getById() : $this->getByNames();
 
+        $result = array_shift($rows);
+        $this->content = $result;
+
+        $this->rank = $result['rank'];
+        $this->suit = $result['suit'];
+        $this->suit_id = $result['suit_id'];
+        $this->rank_id = $result['rank_id'];
+        $this->ranking = $result['ranking'];
+        $this->id = $result['id'];
+
+    }
+
+    private function getByNames()
+    {
         try {
 
             $conn = new CustomPDO(true);
@@ -55,20 +70,35 @@ class Card extends Model
 
         } catch(PDOException $e) {
             echo $e->getMessage();
+            return null;
         }
 
-        $conn = null;
+        return $rows;
+    }
 
-        $result = array_shift($rows);
-        $this->content = $result;
+    private function getById()
+    {
+        try {
 
-        $this->rank = $result['rank'];
-        $this->suit = $result['suit'];
-        $this->suit_id = $result['suit_id'];
-        $this->rank_id = $result['rank_id'];
-        $this->ranking = $result['ranking'];
-        $this->id = $result['id'];
+            $conn = new CustomPDO(true);
 
+            $stmt = $conn->prepare("
+                    SELECT c.*, r.name as rank, s.name as suit, r.ranking as ranking FROM cards c
+                    LEFT OUTER JOIN ranks r ON c.rank_id = r.id
+                    LEFT OUTER JOIN suits s ON c.suit_id = s.id
+                    WHERE c.id = {$this->id}
+                ");
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $stmt->execute();
+
+            $rows = $stmt->fetchAll();
+
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+            return null;
+        }
+
+        return $rows;
     }
 
 }
