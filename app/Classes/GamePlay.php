@@ -522,13 +522,11 @@ class GamePlay
                 'active' => 1
             ]);
 
-            $playerAction = PlayerAction::find([
+            PlayerAction::find([
                 'hand_street_id' => $this->street->id,
                 'table_seat_id' => $seat->id,
                 'hand_id' => $this->hand->id,
-            ]);
-
-            $playerAction->update([
+            ])->update([
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-15 seconds')) // For testing so I can get the latest action, otherwise they are all the same
             ]);
 
@@ -555,7 +553,7 @@ class GamePlay
 
     protected function noDealerIsSetOrThereIsNoSeatAfterTheCurrentDealer($currentDealer)
     {
-        return !$currentDealer || !$this->handTable->tableSeats->fresh()->where('id', $currentDealer->id + 1)->first();
+        return !$currentDealer->isNotEmpty() || !$this->handTable->seats()::find(['id' => $currentDealer->content->id + 1]);
     }
 
     protected function thereAreThreeSeatsAfterTheCurrentDealer($currentDealer)
@@ -575,13 +573,27 @@ class GamePlay
             && !$this->handTable->tableSeats->fresh()->where('id', $currentDealer->id + 2)->first();
     }
 
+    private function search($hayStack, $column, $value)
+    {
+
+        $key = array_search($value,
+            array_column($hayStack, $column)
+        );
+
+        if(array_key_exists($key, $hayStack)){
+            return $hayStack[$key];
+        }
+
+        return false;
+    }
+
     protected function identifyTheNextDealerAndBlindSeats($currentDealer)
     {
 
         if($currentDealer){
-            $currentDealer = $this->handTable->tableSeats->where('id', $currentDealer)->first();
+            $currentDealer = $this->handTable->seats()::find(['id' => $currentDealer]);
         } else {
-            $currentDealer = $this->handTable->tableSeats->where('is_dealer', 1)->first();
+            $currentDealer = $this->handTable->seats()::find(['is_dealer' => 1]);
         }
 
         if($this->noDealerIsSetOrThereIsNoSeatAfterTheCurrentDealer($currentDealer)){
@@ -627,9 +639,12 @@ class GamePlay
                 'big_blind' => 1
             ]);
 
-            $bigBlind->update([
-                'big_blind' => 0
-            ]);
+            if($bigBlind->isNotEmpty()){
+                $bigBlind->update([
+                    'big_blind' => 0
+                ]);
+            }
+
         }
 
         [

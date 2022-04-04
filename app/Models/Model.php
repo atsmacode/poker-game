@@ -195,8 +195,11 @@ class Model
 
         $pointer = 1;
         foreach($data as $column => $value){
+
             if($value === null) {
                 $properties .= $column . " IS NULL";
+            } else if(is_int($value)) {
+                $properties .= $column . " = ". $value;
             } else {
                 $properties .= $column . " = '". $value . "'";
             }
@@ -267,6 +270,11 @@ class Model
                 $this->{$column} = $value;
             }
         }
+    }
+
+    public function isNotEmpty()
+    {
+        return count($this->content) > 0;
     }
 
 }
