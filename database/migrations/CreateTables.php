@@ -2,9 +2,9 @@
 
 namespace Database\Migrations;
 
-use App\Classes\CustomPDO;
+use App\Classes\Database;
 
-class CreateTables
+class CreateTables extends Database
 {
 
     public static array $methods = [
@@ -12,12 +12,7 @@ class CreateTables
         'createTableSeatsTable'
     ];
 
-    public function __construct($output)
-    {
-        $this->output = $output;
-    }
-
-    public function createTablesTable()
+    public function createTablesTable($output)
     {
 
         $sql = "CREATE TABLE tables (
@@ -27,16 +22,15 @@ class CreateTables
             )";
 
         try {
-            $conn = new CustomPDO(true);
-            $conn->exec($sql);
-            $this->output->writeln("Tables table created successfully");
+            $this->connection->exec($sql);
+            $output->writeln("Tables table created successfully");
         } catch(PDOException $e) {
-            $this->output->writeln($sql . "<br>" . $e->getMessage());
+            $output->writeln($sql . "<br>" . $e->getMessage());
         }
-        $conn = null;
+        $this->connection = null;
     }
 
-    public function createTableSeatsTable()
+    public function createTableSeatsTable($output)
     {
 
         $sql = "CREATE TABLE table_seats (
@@ -53,14 +47,13 @@ class CreateTables
         )";
 
         try {
-            $conn = new CustomPDO(true);
-            $conn->exec($sql);
-            $this->output->writeln("Table seats table created successfully");
+            $this->connection->exec($sql);
+            $output->writeln("Table seats table created successfully");
         } catch(PDOException $e) {
-            $this->output->writeln($sql . "<br>" . $e->getMessage());
+            $output->writeln($sql . "<br>" . $e->getMessage());
         }
 
-        $conn = null;
+        $this->connection = null;
     }
 
 

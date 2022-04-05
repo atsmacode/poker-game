@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Classes\CustomPDO;
+use App\Classes\Database;
 use App\Helpers\QueryHelper;
 
-class SeedCards
+class SeedCards extends Database
 {
 
     public static array $methods = [
@@ -13,21 +13,13 @@ class SeedCards
         'seedSuits',
         'seedCards'
     ];
-
-    public function __construct($output)
-    {
-        $this->output = $output;
-    }
-
-    public function seedRanks()
+    public function seedRanks($output)
     {
 
         $ranks = require('config/ranks.php');
 
         try {
-            $conn = new CustomPDO(true);
-
-            $stmt = $conn->prepare("INSERT INTO ranks (name, abbreviation, ranking) VALUES (:name, :abbreviation, :ranking)");
+            $stmt = $this->connection->prepare("INSERT INTO ranks (name, abbreviation, ranking) VALUES (:name, :abbreviation, :ranking)");
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':abbreviation', $abbreviation);
             $stmt->bindParam(':ranking', $ranking);
@@ -38,22 +30,21 @@ class SeedCards
                 $ranking = $rank['ranking'];
                 $stmt->execute();
             }
-            $this->output->writeln("Ranks seeded successfully");
+            $output->writeln("Ranks seeded successfully");
         } catch(PDOException $e) {
-            $this->output->writeln($e->getMessage());
+            $output->writeln($e->getMessage());
 
         }
-        $conn = null;
+        $this->connection = null;
     }
 
-    public function seedSuits()
+    public function seedSuits($output)
     {
 
         $suits = require('config/suits.php');
 
         try {
-            $conn = new CustomPDO(true);
-            $stmt = $conn->prepare("INSERT INTO suits (name, abbreviation) VALUES (:name, :abbreviation)");
+            $stmt = $this->connection->prepare("INSERT INTO suits (name, abbreviation) VALUES (:name, :abbreviation)");
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':abbreviation', $abbreviation);
 
@@ -62,22 +53,21 @@ class SeedCards
                 $abbreviation = $suit['abbreviation'];
                 $stmt->execute();
             }
-            $this->output->writeln("Suits seeded successfully");
+            $output->writeln("Suits seeded successfully");
         } catch(PDOException $e) {
-            $this->output->writeln($e->getMessage());
+            $output->writeln($e->getMessage());
         }
-        $conn = null;
+        $this->connection = null;
     }
 
-    public function seedCards()
+    public function seedCards($output)
     {
 
-        $ranks = QueryHelper::selectRanks($this->output);
-        $suits = QueryHelper::selectSuits($this->output);
+        $ranks = QueryHelper::selectRanks($output);
+        $suits = QueryHelper::selectSuits($output);
 
         try {
-            $conn = new CustomPDO(true);
-            $stmt = $conn->prepare("INSERT INTO cards (rank_id, suit_id) VALUES (:rank_id, :suit_id)");
+            $stmt = $this->connection->prepare("INSERT INTO cards (rank_id, suit_id) VALUES (:rank_id, :suit_id)");
             $stmt->bindParam(':rank_id', $rank_id);
             $stmt->bindParam(':suit_id', $suit_id);
 
@@ -89,12 +79,12 @@ class SeedCards
                 }
             }
 
-            $this->output->writeln("Cards seeded successfully");
+            $output->writeln("Cards seeded successfully");
         } catch(PDOException $e) {
-            $this->output->writeln($e->getMessage());
+            $output->writeln($e->getMessage());
         }
 
-        $conn = null;
+        $this->connection = null;
 
     }
 

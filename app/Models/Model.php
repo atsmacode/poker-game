@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use App\Classes\CustomPDO;
+use App\Classes\Database;
 use PDO;
 use PDOException;
 
-class Model
+class Model extends Database
 {
 
     protected $table;
@@ -15,6 +15,7 @@ class Model
 
     public function __construct(array $data = null)
     {
+        parent::__construct();
         $this->data = $data;
     }
 
@@ -36,9 +37,8 @@ class Model
         $insertStatement = $this->compileInsertStatement($data);
 
         try {
-            $conn = new CustomPDO(true);
 
-            $stmt = $conn->prepare($insertStatement);
+            $stmt = $this->connection->prepare($insertStatement);
 
             /*
              * https://stackoverflow.com/questions/27978175/pdo-bindparam-php-foreach-loop
@@ -52,12 +52,11 @@ class Model
 
             $stmt->execute();
 
-            $id = $conn->lastInsertId();
+            $id = $this->connection->lastInsertId();
 
         } catch(PDOException $e) {
             echo $e->getMessage();
         }
-        $conn = null;
 
         $this->content = $this->getSelected(['id' => $id])->content;
 
@@ -73,9 +72,7 @@ class Model
 
         try {
 
-            $conn = new CustomPDO(true);
-
-            $stmt = $conn->prepare("
+            $stmt = $this->connection->prepare("
                     SELECT * FROM {$this->table}
                     {$properties}
                 ");
@@ -87,8 +84,6 @@ class Model
         } catch(PDOException $e) {
             echo $e->getMessage();
         }
-
-        $conn = null;
 
         if(!$rows){
             return $this;
@@ -108,9 +103,8 @@ class Model
         $properties = $this->compileUpdateStatement($data);
 
         try {
-            $conn = new CustomPDO(true);
 
-            $stmt = $conn->prepare($properties);
+            $stmt = $this->connection->prepare($properties);
 
             foreach($data as $column => &$value){
                 $stmt->bindParam(':'.$column, $value);
@@ -122,7 +116,6 @@ class Model
             echo $e->getMessage();
 
         }
-        $conn = null;
 
         $this->content = $this->getSelected(['id' => $this->id])->content;
 
@@ -136,9 +129,7 @@ class Model
 
         try {
 
-            $conn = new CustomPDO(true);
-
-            $stmt = $conn->prepare("
+            $stmt = $this->connection->prepare("
                     SELECT * FROM {$this->table}
                 ");
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -149,8 +140,6 @@ class Model
         } catch(PDOException $e) {
             echo $e->getMessage();
         }
-
-        $conn = null;
 
         $result = $rows;
         $this->content = $result;
@@ -275,6 +264,11 @@ class Model
     public function isNotEmpty()
     {
         return count($this->content) > 0;
+    }
+
+    public function __destruct()
+    {
+        parent::__destruct();
     }
 
 }

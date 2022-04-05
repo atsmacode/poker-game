@@ -2,21 +2,16 @@
 
 namespace Database\Migrations;
 
-use App\Classes\CustomPDO;
+use App\Classes\Database;
 
-class CreateActions
+class CreateActions extends Database
 {
 
     public static array $methods = [
         'createActionsTable',
     ];
 
-    public function __construct($output)
-    {
-        $this->output = $output;
-    }
-
-    public function createActionsTable()
+    public function createActionsTable($output)
     {
 
         $sql = "CREATE TABLE actions (
@@ -25,14 +20,13 @@ class CreateActions
             )";
 
         try {
-            $conn = new CustomPDO(true);
-            $conn->exec($sql);
-            $this->output->writeln("Actions table created successfully");
+            $this->connection->exec($sql);
+            $output->writeln("Actions table created successfully");
         } catch(PDOException $e) {
             $this->output->writeln($sql . "<br>" . $e->getMessage());
         }
 
-        $conn = null;
+        $this->connection = null;
     }
 
 }

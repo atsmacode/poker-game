@@ -2,21 +2,16 @@
 
 namespace Database\Migrations;
 
-use App\Classes\CustomPDO;
+use App\Classes\Database;
 
-class CreatePots
+class CreatePots extends Database
 {
 
     public static array $methods = [
         'createPotsTable',
     ];
 
-    public function __construct($output)
-    {
-        $this->output = $output;
-    }
-
-    public function createPotsTable()
+    public function createPotsTable($output)
     {
 
         $sql = "CREATE TABLE pots (
@@ -27,13 +22,12 @@ class CreatePots
         )";
 
         try {
-            $conn = new CustomPDO(true);
-            $conn->exec($sql);
-            $this->output->writeln("Pots table created successfully");
+            $this->connection->exec($sql);
+            $output->writeln("Pots table created successfully");
         } catch(PDOException $e) {
-            $this->output->writeln($sql . "<br>" . $e->getMessage());
+            $output->writeln($sql . "<br>" . $e->getMessage());
         }
-        $conn = null;
+        $this->connection = null;
     }
 
 

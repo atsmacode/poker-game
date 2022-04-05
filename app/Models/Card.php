@@ -21,6 +21,7 @@ class Card extends Model
 
     public function __construct(array $data = null)
     {
+        parent::__construct();
         $this->setCredentials();
         $this->selectedRank = array_key_exists('rank', $data)  ? $data['rank'] : null;
         $this->selectedSuit = array_key_exists('suit', $data)  ? $data['suit'] : null;
@@ -57,9 +58,7 @@ class Card extends Model
     {
         try {
 
-            $conn = new CustomPDO(true);
-
-            $stmt = $conn->prepare("
+            $stmt = $this->connection->prepare("
                     SELECT c.*, r.name as rank, s.name as suit, r.ranking as ranking FROM cards c
                     LEFT OUTER JOIN ranks r ON c.rank_id = r.id
                     LEFT OUTER JOIN suits s ON c.suit_id = s.id
@@ -82,9 +81,7 @@ class Card extends Model
     {
         try {
 
-            $conn = new CustomPDO(true);
-
-            $stmt = $conn->prepare("
+            $stmt = $this->connection->prepare("
                     SELECT c.*, r.name as rank, s.name as suit, r.ranking as ranking FROM cards c
                     LEFT OUTER JOIN ranks r ON c.rank_id = r.id
                     LEFT OUTER JOIN suits s ON c.suit_id = s.id

@@ -2,21 +2,16 @@
 
 namespace Database\Migrations;
 
-use App\Classes\CustomPDO;
+use App\Classes\Database;
 
-class CreateStacks
+class CreateStacks extends Database
 {
 
     public static array $methods = [
         'createStacksTable',
     ];
 
-    public function __construct($output)
-    {
-        $this->output = $output;
-    }
-
-    public function createStacksTable()
+    public function createStacksTable($output)
     {
 
         $sql = "CREATE TABLE stacks (
@@ -29,13 +24,12 @@ class CreateStacks
         )";
 
         try {
-            $conn = new CustomPDO(true);
-            $conn->exec($sql);
-            $this->output->writeln("Stacks table created successfully");
+            $this->connection->exec($sql);
+            $output->writeln("Stacks table created successfully");
         } catch(PDOException $e) {
-            $this->output->writeln($sql . "<br>" . $e->getMessage());
+            $output->writeln($sql . "<br>" . $e->getMessage());
         }
-        $conn = null;
+        $this->connection = null;
     }
 
 

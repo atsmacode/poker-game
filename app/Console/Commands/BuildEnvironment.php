@@ -66,7 +66,7 @@ class BuildEnvironment extends Command
 
         foreach($this->buildClasses as $class){
             foreach($class::$methods as $method){
-                (new $class($output))->{$method}();
+                (new $class())->{$method}($output);
             }
         }
 

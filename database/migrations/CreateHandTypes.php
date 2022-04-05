@@ -2,21 +2,16 @@
 
 namespace Database\Migrations;
 
-use App\Classes\CustomPDO;
+use App\Classes\Database;
 
-class CreateHandTypes
+class CreateHandTypes extends Database
 {
 
     public static array $methods = [
         'createHandTypesTable',
     ];
 
-    public function __construct($output)
-    {
-        $this->output = $output;
-    }
-
-    public function createHandTypesTable()
+    public function createHandTypesTable($output)
     {
 
         $sql = "CREATE TABLE hand_types (
@@ -26,13 +21,12 @@ class CreateHandTypes
             )";
 
         try {
-            $conn = new CustomPDO(true);
-            $conn->exec($sql);
-            $this->output->writeln("Hand types table created successfully");
+            $this->connection->exec($sql);
+            $output->writeln("Hand types table created successfully");
         } catch(PDOException $e) {
-            $this->output->writeln($sql . "<br>" . $e->getMessage());
+            $output->writeln($sql . "<br>" . $e->getMessage());
         }
-        $conn = null;
+        $this->connection = null;
     }
 
 }

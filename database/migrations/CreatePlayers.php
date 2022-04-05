@@ -2,21 +2,16 @@
 
 namespace Database\Migrations;
 
-use App\Classes\CustomPDO;
+use App\Classes\Database;
 
-class CreatePlayers
+class CreatePlayers extends Database
 {
 
     public static array $methods = [
         'createPlayersTable',
     ];
 
-    public function __construct($output)
-    {
-        $this->output = $output;
-    }
-
-    public function createPlayersTable()
+    public function createPlayersTable($output)
     {
 
         $sql = "CREATE TABLE players (
@@ -27,13 +22,12 @@ class CreatePlayers
             )";
 
         try {
-            $conn = new CustomPDO(true);
-            $conn->exec($sql);
-            $this->output->writeln("Players table created successfully");
+            $this->connection->exec($sql);
+            $output->writeln("Players table created successfully");
         } catch(PDOException $e) {
-            $this->output->writeln($sql . "<br>" . $e->getMessage());
+            $output->writeln($sql . "<br>" . $e->getMessage());
         }
-        $conn = null;
+        $this->connection = null;
     }
 
 }

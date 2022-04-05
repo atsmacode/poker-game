@@ -2,54 +2,55 @@
 
 namespace Database\Migrations;
 
-use App\Classes\CustomPDO;
+use App\Models\Collection;
+use App\Traits\Connect;
+use PDO;
 use PDOException;
 
 class CreateDatabase
 {
+
+    use Connect;
 
     public static array $methods = [
         'dropDatabase',
         'createDatabase'
     ];
 
-    public function __construct($output)
+    public function __construct()
     {
-        $this->output = $output;
+        $this->setCredentials();
     }
 
-    public function dropDatabase()
+    public function dropDatabase($output)
     {
 
         $sql = "DROP DATABASE IF EXISTS `read-right-hands-vanilla`";
 
         try {
-            $conn = new CustomPDO();
-            $conn->exec($sql);
-            $this->output->writeln("Database dropped successfully");
+            $this->connection = new PDO("mysql:host=$this->servername;", $this->username, $this->password);
+            $this->connection->exec($sql);
+            $output->writeln("Database dropped successfully");
         } catch(PDOException $e) {
             echo $sql . $e->getMessage();
         }
-
-        $conn = null;
 
         return $this;
 
     }
 
-    public function createDatabase()
+    public function createDatabase($output)
     {
 
         $sql = "CREATE DATABASE `read-right-hands-vanilla`";
 
         try {
-            $conn = new CustomPDO();
-            $conn->exec($sql);
-            $this->output->writeln("Database created successfully");
+            $this->connection = new PDO("mysql:host=$this->servername;", $this->username, $this->password);
+            $this->connection->exec($sql);
+            $output->writeln("Database created successfully");
         } catch(PDOException $e) {
             $this->output->writeln($sql . "<br>" . $e->getMessage());
         }
-        $conn = null;
 
         return $this;
 

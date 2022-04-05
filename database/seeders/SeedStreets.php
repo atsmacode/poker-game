@@ -2,38 +2,32 @@
 
 namespace Database\Seeders;
 
-use App\Classes\CustomPDO;
+use App\Classes\Database;
 
-class SeedStreets
+class SeedStreets extends Database
 {
 
     public static array $methods = [
         'seed'
     ];
 
-    public function __construct($output)
-    {
-        $this->output = $output;
-    }
-
-    public function seed()
+    public function seed($output)
     {
 
         $streets = require('config/streets.php');
 
         try {
-            $conn = new CustomPDO(true);
 
-            $stmt = $conn->prepare("INSERT INTO streets (name) VALUES (:name)");
+            $stmt = $this->connection->prepare("INSERT INTO streets (name) VALUES (:name)");
             $stmt->bindParam(':name', $name);
 
             foreach($streets as $street) {
                 $name = $street['name'];
                 $stmt->execute();
             }
-            $this->output->writeln("Streets seeded successfully");
+            $output->writeln("Streets seeded successfully");
         } catch(PDOException $e) {
-            $this->output->writeln($e->getMessage());
+            $output->writeln($e->getMessage());
 
         }
         $conn = null;

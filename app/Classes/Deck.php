@@ -7,7 +7,7 @@ use App\Traits\Connect;
 use PDO;
 use PDOException;
 
-class Deck
+class Deck extends Database
 {
 
     use Connect;
@@ -16,6 +16,7 @@ class Deck
 
     public function __construct()
     {
+        parent::__construct();
         $this->setCredentials();
         $this->cards = $this->compileDeck();
     }
@@ -37,9 +38,7 @@ class Deck
 
         try {
 
-            $conn = new CustomPDO(true);
-
-            $stmt = $conn->prepare("
+            $stmt = $this->connection->prepare("
                     SELECT r.name as rank, s.name as suit, r.ranking as ranking FROM cards c
                     LEFT OUTER JOIN ranks r ON c.rank_id = r.id
                     LEFT OUTER JOIN suits s ON c.suit_id = s.id
@@ -53,7 +52,7 @@ class Deck
             echo $e->getMessage();
         }
 
-        $conn = null;
+        $this->connection = null;
 
         return $rows;
 

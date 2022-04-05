@@ -2,62 +2,52 @@
 
 namespace Database\Seeders;
 
-use App\Classes\CustomPDO;
+use App\Classes\Database;
 
-class SeedTables
+class SeedTables extends Database
 {
 
     public static array $methods = [
         'seed'
     ];
 
-    public function __construct($output)
+    public function seed($output)
     {
-        $this->output = $output;
+        $this->createTable($output)->createTableSeats($output);
     }
 
-    public function seed()
-    {
-        $this->createTable()->createTableSeats();
-    }
-
-    private function createTable()
+    private function createTable($output)
     {
         $name = 'Table 1';
         $seats = 6;
 
         try {
-            $conn = new CustomPDO(true);
-
-            $stmt = $conn->prepare("INSERT INTO tables (name, seats) VALUES (:name, :seats)");
+            $stmt = $this->connection->prepare("INSERT INTO tables (name, seats) VALUES (:name, :seats)");
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':seats', $seats);
 
             $stmt->execute();
 
-            $this->output->writeln("Table seeded successfully");
+            $output->writeln("Table seeded successfully");
         } catch(PDOException $e) {
-            $this->output->writeln($e->getMessage());
+            $output->writeln($e->getMessage());
 
         }
-        $conn = null;
 
         return $this;
 
     }
 
-    private function createTableSeats()
+    private function createTableSeats($output)
     {
         $seats = 6;
 
         try {
-            $conn = new CustomPDO(true);
-
             $inserted = 0;
 
             while($inserted < $seats){
 
-                $stmt = $conn->prepare("
+                $stmt = $this->connection->prepare("
                         INSERT INTO table_seats (table_id) VALUES (1)
                     ");
                 $stmt->execute();
@@ -65,12 +55,12 @@ class SeedTables
                 $inserted++;
             }
 
-            $this->output->writeln("Table seats seeded successfully");
+            $output->writeln("Table seats seeded successfully");
         } catch(PDOException $e) {
-            $this->output->writeln($e->getMessage());
+            $output->writeln($e->getMessage());
 
         }
-        $conn = null;
+        $this->connection = null;
 
         return $this;
 

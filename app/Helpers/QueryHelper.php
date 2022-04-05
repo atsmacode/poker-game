@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Classes\CustomPDO;
+use App\Classes\Database;
 use PDOException;
 
 class QueryHelper
@@ -15,8 +15,8 @@ class QueryHelper
 
         try {
 
-            $conn = new CustomPDO(true);
-            $stmt = $conn->prepare("SELECT * FROM ranks");
+            $db = new Database();
+            $stmt = $db->connection->prepare("SELECT * FROM ranks");
             $stmt->execute();
 
             $rows = $stmt->fetchAll();
@@ -35,7 +35,7 @@ class QueryHelper
             }
         }
 
-        $conn = null;
+        $db = null;
 
         return $rows;
 
@@ -48,8 +48,8 @@ class QueryHelper
 
         try {
 
-            $conn = new CustomPDO(true);
-            $stmt = $conn->prepare("SELECT * FROM suits");
+            $db = new Database();
+            $stmt = $db->connection->prepare("SELECT * FROM suits");
             $stmt->execute();
 
             $rows = $stmt->fetchAll();
@@ -65,7 +65,7 @@ class QueryHelper
                 echo $e->getMessage();
             }
         }
-        $conn = null;
+        $db = null;
 
         return $rows;
     }
