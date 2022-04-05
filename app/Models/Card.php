@@ -30,7 +30,7 @@ class Card extends Model
 
     public function select()
     {
-        if($this->selectedRank && $this->selectedSuit){
+        if($this->selectedRank && $this->selectedSuit || $this->id){
             $this->getSelected();
         }
     }
@@ -48,6 +48,8 @@ class Card extends Model
         $this->rank_id = $result['rank_id'];
         $this->ranking = $result['ranking'];
         $this->id = $result['id'];
+
+        return $this;
 
     }
 

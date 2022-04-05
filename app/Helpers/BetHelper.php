@@ -49,7 +49,7 @@ class BetHelper
             'action_id' => Action::find(['name' => 'Bet'])->id,
             'bet_amount' => 50.0,
             'active' => 1,
-            'small_blind' => 1,
+            'big_blind' => 1,
             'updated_at' => date('Y-m-d H:i:s', strtotime('- 5 seconds'))
         ]);
 

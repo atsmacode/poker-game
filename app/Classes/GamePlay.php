@@ -286,14 +286,13 @@ class GamePlay
         $lastToAct = $this->hand->actions()->latest();
 
         $activePlayersAfterLastToAct = array_filter(
-            PlayerAction::find(['active' => 1, 'hand_id' => $this->hand->id])
-                ->collect()->content,
+            PlayerAction::find(['active' => 1, 'hand_id' => $this->hand->id])->collect()->content,
             function($value) use($lastToAct){
                 return $value->table_seat_id > $lastToAct;
             }
         );
 
-        $playerAfterLastToAct = array_shift($activePlayersAfterLastToAct)
+        $playerAfterLastToAct = count($activePlayersAfterLastToAct)
             ? array_shift($activePlayersAfterLastToAct)
             : null;
 
@@ -403,15 +402,7 @@ class GamePlay
         /*
          * We only need to update the available actions if a player did something other than fold.
          */
-        $latestAction = $this->hand->playerActions
-            ->fresh()
-            ->whereNotIn('action_id', [
-                $this->fold->id
-            ])
-            ->sortBy([
-                ['updated_at', 'desc']
-            ], SORT_NUMERIC)
-            ->first();
+        $latestAction = $this->hand->actions()->filter('action_id', $this->fold->id)->latest();
 
         if($playerAction->active === 1){
 
@@ -419,14 +410,14 @@ class GamePlay
                 $this->fold
             ];
 
-            switch($latestAction->action_id){
+            switch(PlayerAction::find(['table_seat_id' => $latestAction])->action_id){
                 case $this->call->id:
                     /*
                      * BB can only check if there were no raises before the latest call action.
                      */
                     if(
                         $playerAction->big_blind === 1 &&
-                        !$this->hand->playerActions->fresh()->whereIn('action_id', $this->raise->id)->first()
+                        !$this->hand->actions()->search('action_id', $this->raise->id)
                     ){
                         array_push($options, $this->check, $this->raise);
                     } else {
@@ -445,7 +436,7 @@ class GamePlay
 
         }
 
-        return collect($options);
+        return $options;
     }
 
     public function updateAllOtherSeatsBasedOnLatestAction()

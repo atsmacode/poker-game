@@ -58,9 +58,18 @@ trait Collection
         return false;
     }
 
+    public function filter($column, $value)
+    {
+        array_filter($this->content, function($key) use($column, $value){
+            return $this->content[$key][$column] !== $value;
+        }, ARRAY_FILTER_USE_KEY);
+
+        return $this;
+    }
+
     public function latest()
     {
-        $dates = array_column($this->content, 'updated_at');
+        $dates = array_column($this->content, 'updated_at', 'table_seat_id');
 
         uasort($dates, function ($a, $b) {
             if ($a == $b) {
@@ -69,7 +78,7 @@ trait Collection
             return ($a > $b) ? -1 : 1;
         });
 
-        return array_shift($dates);
+        return array_key_first(array_slice($dates, 0, 1, true));
     }
 
 }

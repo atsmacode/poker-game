@@ -23,7 +23,10 @@ class Deck
     private function compileDeck()
     {
         foreach($this->selectAllCards() as $card){
-            $this->cards[] = new Card($card['rank'], $card['suit']);
+            $this->cards[] = new Card([
+                'rank' => $card['rank'],
+                'suit' => $card['suit']
+            ]);
         }
         return $this->cards;
     }
