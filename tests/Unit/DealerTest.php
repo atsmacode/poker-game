@@ -74,7 +74,7 @@ class DealerTest extends TestCase
     {
         $player = Player::find(['username' => 'Player 1']);
 
-        $this->assertCount(0, $player->wholeCards(true)->content);
+        $this->assertCount(0, $player->wholeCards()->content);
 
         $this->dealer->setDeck()->shuffle()->dealTo($player, 1);
 
@@ -92,13 +92,13 @@ class DealerTest extends TestCase
         ]);
 
         foreach($table->players()->collect()->content as $player){
-            $this->assertCount(0, $player->wholeCards(true)->content);
+            $this->assertCount(0, $player->wholeCards()->content);
         }
 
         $this->dealer->setDeck()->shuffle()->dealTo($table->players(), 1);
 
         foreach($table->players()->collect()->content as $player){
-            $this->assertCount(1, $player->wholeCards(true)->content);
+            $this->assertCount(1, $player->wholeCards()->content);
         }
 
     }
@@ -120,7 +120,7 @@ class DealerTest extends TestCase
             1
         );
 
-        $this->assertCount(1, $handStreet->cards(true)->content);
+        $this->assertCount(1, $handStreet->cards()->content);
     }
 
 }

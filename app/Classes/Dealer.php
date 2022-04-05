@@ -64,7 +64,7 @@ class Dealer
 
             $dealtCards = 0;
             while($dealtCards < $cardCount){
-                $player->wholeCards(true)->create([
+                $player->wholeCards()->create([
                     'player_id' => $player->id,
                     'card_id' => $this->pickCard()->getCard()->id,
                     'hand_id' => $hand ? $hand->id : null

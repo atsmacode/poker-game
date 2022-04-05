@@ -531,9 +531,9 @@ class GamePlay
     public function initiatePlayerStacks()
     {
 
-        foreach($this->handTable->seats(true)->collect()->content as $seat){
-            if(count($seat->player(true)->stacks(true)->content) === 0){
-                $seat->player(true)->stacks(true)::create([
+        foreach($this->handTable->seats()->collect()->content as $seat){
+            if(count($seat->player()->stacks()->content) === 0){
+                $seat->player()->stacks()::create([
                     'amount' => 1000,
                     'player_id' => $seat->player_id,
                     'table_id' => $this->handTable->id
