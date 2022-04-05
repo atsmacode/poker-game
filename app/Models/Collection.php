@@ -36,7 +36,7 @@ trait Collection
         );
 
         if($keys > 0){
-            array_filter($this->content, function($key) use($keys){
+            $this->content = array_filter($this->content, function($key) use($keys){
                 return in_array($key, $keys);
             }, ARRAY_FILTER_USE_KEY);
 
