@@ -11,7 +11,10 @@ class CardTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->card = new Card('Ace', 'Spades');
+        $this->card = new Card([
+            'rank' => 'Ace',
+            'suit' => 'Spades'
+        ]);
     }
 
     /**

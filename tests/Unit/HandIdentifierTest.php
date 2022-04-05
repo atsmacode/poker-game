@@ -22,19 +22,40 @@ class HandIdentifierTest extends TestCase
     public function it_can_identify_the_card_with_the_highest_rank()
     {
 
-        $highestCard = new Card('King', 'Spades');
+        $highestCard = new Card([
+            'rank' => 'King',
+            'suit' => 'Spades'
+        ]);
 
         $wholeCards = [
-            new Card('Deuce', 'Spades'),
+            new Card([
+                'rank' => 'Deuce',
+                'suit' => 'Spades'
+            ]),
             $highestCard,
         ];
 
         $communityCards = [
-            new Card('Queen', 'Hearts'),
-            new Card('Seven', 'Diamonds'),
-            new Card('Ten', 'Clubs'),
-            new Card('Three', 'Spades'),
-            new Card('Four', 'Diamonds'),
+            new Card([
+                'rank' => 'Queen',
+                'suit' => 'Hearts'
+            ]),
+            new Card([
+                'rank' => 'Seven',
+                'suit' => 'Diamonds'
+            ]),
+            new Card([
+                'rank' => 'Ten',
+                'suit' => 'Clubs'
+            ]),
+            new Card([
+                'rank' => 'Three',
+                'suit' => 'Spades'
+            ]),
+            new Card([
+                'rank' => 'Four',
+                'suit' => 'Diamonds'
+            ]),
         ];
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
@@ -55,19 +76,40 @@ class HandIdentifierTest extends TestCase
     public function it_can_identify_an_ace_as_the_card_with_the_highest_rank()
     {
 
-        $highestCard = new Card('Ace', 'Spades');
+        $highestCard = new Card([
+            'rank' => 'Ace',
+            'suit' => 'Spades'
+        ]);
 
         $wholeCards = [
             $highestCard,
-            new Card('King', 'Diamonds')
+            new Card([
+                'rank' => 'King',
+                'suit' => 'Diamonds'
+            ])
         ];
 
         $communityCards = [
-            new Card('Queen', 'Clubs'),
-            new Card('Four', 'Spades'),
-            new Card('Ten', 'Diamonds'),
-            new Card('Deuce', 'Clubs'),
-            new Card('Eight', 'Hearts'),
+            new Card([
+                'rank' => 'Queen',
+                'suit' => 'Clubs'
+            ]),
+            new Card([
+                'rank' => 'Four',
+                'suit' => 'Spades'
+            ]),
+            new Card([
+                'rank' => 'Ten',
+                'suit' => 'Diamonds'
+            ]),
+            new Card([
+                'rank' => 'Deuce',
+                'suit' => 'Clubs'
+            ]),
+            new Card([
+                'rank' => 'Eight',
+                'suit' => 'Hearts'
+            ]),
         ];
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
@@ -88,16 +130,37 @@ class HandIdentifierTest extends TestCase
     public function it_can_identify_a_pair()
     {
         $wholeCards = [
-            new Card('Ace', 'Spades'),
-            new Card('King', 'Diamonds'),
+            new Card([
+                'rank' => 'Ace',
+                'suit' => 'Spades'
+            ]),
+            new Card([
+                'rank' => 'King',
+                'suit' => 'Diamonds'
+            ]),
         ];
 
         $communityCards = [
-            new Card('Ace', 'Hearts'),
-            new Card('Jack', 'Diamonds'),
-            new Card('Four', 'Diamonds'),
-            new Card('Nine', 'Clubs'),
-            new Card('Seven', 'Diamonds'),
+            new Card([
+                'rank' => 'Ace',
+                'suit' => 'Hearts'
+            ]),
+            new Card([
+                'rank' => 'Jack',
+                'suit' => 'Diamonds'
+            ]),
+            new Card([
+                'rank' => 'Four',
+                'suit' => 'Diamonds'
+            ]),
+            new Card([
+                'rank' => 'Nine',
+                'suit' => 'Clubs'
+            ]),
+            new Card([
+                'rank' => 'Seven',
+                'suit' => 'Diamonds'
+            ]),
         ];
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
