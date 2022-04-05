@@ -274,10 +274,7 @@ class GamePlay
     public function getActionOn()
     {
 
-        $firstActivePlayer = TableSeat::find([
-            'id' => $this->hand->actions()->search('active', 1)->table_seat_id,
-            'table_id' => $this->handTable->id
-        ]);
+        $firstActivePlayer = $this->hand->actions()->search('active', 1)->tableSeat();
 
         if($this->allPlayerActionsAreNullSoANewSreetHasBeenSet()){
             return $this->getThePlayerActionShouldBeOnForANewStreet($firstActivePlayer);
