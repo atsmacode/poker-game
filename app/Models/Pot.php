@@ -12,10 +12,6 @@ class Pot extends Model
 
     public function hand()
     {
-        self::__construct($this->data);
-
-        $this->getSelected($this->data);
-
         return Hand::find(['id' => $this->hand_id]);
     }
 

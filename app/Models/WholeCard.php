@@ -11,10 +11,6 @@ class WholeCard extends Model
 
     public function card()
     {
-        self::__construct($this->data);
-
-        $this->getSelected($this->data);
-
         return Card::find(['id' => $this->card_id]);
     }
 

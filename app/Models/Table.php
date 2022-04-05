@@ -14,8 +14,6 @@ class Table extends Model
 
     public function seats()
     {
-        self::__construct($this->data);
-
         return TableSeat::find(['table_id' => $this->id]);
     }
 
