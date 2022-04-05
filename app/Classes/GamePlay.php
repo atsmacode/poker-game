@@ -27,15 +27,13 @@ class GamePlay
         $this->game = new PotLimitHoldEm();
         $this->dealer = (new Dealer())->setDeck($deck);
         $this->hand = $hand;
-        $this->handTable = Table::find(['id' => 1]);
+        $this->handTable = $hand->table();
         $this->street = null;
         $this->fold = Action::find(['name' =>'Fold']);
         $this->check = Action::find(['name' =>'Check']);
         $this->call = Action::find(['name' =>'Call']);
         $this->bet = Action::find(['name' =>'Bet']);
         $this->raise = Action::find(['name' =>'Raise']);
-
-        //$this->handTable->hands()->save($this->hand);
     }
 
     public function play()
