@@ -266,9 +266,4 @@ class Model extends Database
         return count($this->content) > 0;
     }
 
-    public function __destruct()
-    {
-        parent::__destruct();
-    }
-
 }
