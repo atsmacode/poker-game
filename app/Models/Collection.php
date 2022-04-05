@@ -60,7 +60,7 @@ trait Collection
 
     public function filter($column, $value)
     {
-        array_filter($this->content, function($key) use($column, $value){
+        $this->content = array_filter($this->content, function($key) use($column, $value){
             return $this->content[$key][$column] !== $value;
         }, ARRAY_FILTER_USE_KEY);
 
