@@ -11,7 +11,7 @@ class SeedHandTypes extends Database
         'seed'
     ];
 
-    public function seed($output)
+    public function seed($output, $showMessages = true)
     {
 
         $handTypes = require('config/handtypes.php');
@@ -26,7 +26,10 @@ class SeedHandTypes extends Database
                 $ranking = $handType['ranking'];
                 $stmt->execute();
             }
-            $output->writeln("Hand types seeded successfully");
+
+            if ($showMessages) {
+                $output->writeln("Hand types  seeded successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($e->getMessage());
 

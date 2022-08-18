@@ -11,7 +11,7 @@ class CreatePots extends Database
         'createPotsTable',
     ];
 
-    public function createPotsTable($output)
+    public function createPotsTable($output, $showMessages = true)
     {
 
         $sql = "CREATE TABLE pots (
@@ -23,7 +23,10 @@ class CreatePots extends Database
 
         try {
             $this->connection->exec($sql);
-            $output->writeln("Pots table created successfully");
+
+            if ($showMessages) {
+                $output->writeln("Pots table created successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($sql . "<br>" . $e->getMessage());
         }

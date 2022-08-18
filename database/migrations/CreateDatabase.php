@@ -22,7 +22,7 @@ class CreateDatabase
         $this->setCredentials();
     }
 
-    public function dropDatabase($output)
+    public function dropDatabase($output, $showMessages = true)
     {
 
         $sql = "DROP DATABASE IF EXISTS `read-right-hands-vanilla`";
@@ -30,7 +30,10 @@ class CreateDatabase
         try {
             $this->connection = new PDO("mysql:host=$this->servername;", $this->username, $this->password);
             $this->connection->exec($sql);
-            $output->writeln("Database dropped successfully");
+
+            if ($showMessages) {
+                $output->writeln("Database dropped successfully");
+            }
         } catch(PDOException $e) {
             echo $sql . $e->getMessage();
         }
@@ -39,7 +42,7 @@ class CreateDatabase
 
     }
 
-    public function createDatabase($output)
+    public function createDatabase($output, $showMessages = true)
     {
 
         $sql = "CREATE DATABASE `read-right-hands-vanilla`";
@@ -47,7 +50,10 @@ class CreateDatabase
         try {
             $this->connection = new PDO("mysql:host=$this->servername;", $this->username, $this->password);
             $this->connection->exec($sql);
-            $output->writeln("Database created successfully");
+
+            if ($showMessages) {
+                $output->writeln("Database created successfully");
+            }
         } catch(PDOException $e) {
             $this->output->writeln($sql . "<br>" . $e->getMessage());
         }

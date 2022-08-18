@@ -11,12 +11,12 @@ class SeedPlayers extends Database
         'seed'
     ];
 
-    public function seed($output)
+    public function seed($output, $showMessages = true)
     {
-        $this->createPlayers($output);
+        $this->createPlayers($output, $showMessages);
     }
 
-    private function createPlayers($output)
+    private function createPlayers($output, $showMessages = true)
     {
 
         $seats = 6;
@@ -44,8 +44,9 @@ class SeedPlayers extends Database
                 $inserted++;
             }
 
-            $output->writeln("Players seeded successfully");
-
+            if ($showMessages) {
+                $output->writeln("Players seeded successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($e->getMessage());
 

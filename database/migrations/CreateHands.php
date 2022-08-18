@@ -13,7 +13,7 @@ class CreateHands extends Database
         'createHandStreetCardsTable'
     ];
 
-    public function createHandsTable($output)
+    public function createHandsTable($output, $showMessages = true)
     {
 
         $sql = "CREATE TABLE hands (
@@ -26,14 +26,17 @@ class CreateHands extends Database
 
         try {
             $this->connection->exec($sql);
-            $output->writeln("Hands table created successfully");
+
+            if ($showMessages) {
+                $output->writeln("Hands table created successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($sql . "<br>" . $e->getMessage());
         }
         $this->connection = null;
     }
 
-    public function createHandStreetsTable($output)
+    public function createHandStreetsTable($output, $showMessages = true)
     {
 
         $sql = "CREATE TABLE hand_streets (
@@ -46,14 +49,17 @@ class CreateHands extends Database
 
         try {
             $this->connection->exec($sql);
-            $output->writeln("Hand streets table created successfully");
+
+            if ($showMessages) {
+                $output->writeln("Hand streets table created successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($sql . "<br>" . $e->getMessage());
         }
         $this->connection = null;
     }
 
-    public function createHandStreetCardsTable($output)
+    public function createHandStreetCardsTable($output, $showMessages = true)
     {
 
         $sql = "CREATE TABLE hand_street_cards (
@@ -66,7 +72,10 @@ class CreateHands extends Database
 
         try {
             $this->connection->exec($sql);
-            $output->writeln("Hand street cards table created successfully");
+
+            if ($showMessages) {
+                $output->writeln("Hand street cards table created successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($sql . "<br>" . $e->getMessage());
         }

@@ -13,7 +13,7 @@ class SeedCards extends Database
         'seedSuits',
         'seedCards'
     ];
-    public function seedRanks($output)
+    public function seedRanks($output, $showMessages = true)
     {
 
         $ranks = require('config/ranks.php');
@@ -30,7 +30,10 @@ class SeedCards extends Database
                 $ranking = $rank['ranking'];
                 $stmt->execute();
             }
-            $output->writeln("Ranks seeded successfully");
+
+            if ($showMessages) {
+                $output->writeln("Ranks seeded successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($e->getMessage());
 
@@ -38,7 +41,7 @@ class SeedCards extends Database
         $this->connection = null;
     }
 
-    public function seedSuits($output)
+    public function seedSuits($output, $showMessages = true)
     {
 
         $suits = require('config/suits.php');
@@ -53,14 +56,17 @@ class SeedCards extends Database
                 $abbreviation = $suit['abbreviation'];
                 $stmt->execute();
             }
-            $output->writeln("Suits seeded successfully");
+
+            if ($showMessages) {
+                $output->writeln("Suits seeded successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($e->getMessage());
         }
         $this->connection = null;
     }
 
-    public function seedCards($output)
+    public function seedCards($output, $showMessages = true)
     {
 
         $ranks = QueryHelper::selectRanks($output);
@@ -79,7 +85,9 @@ class SeedCards extends Database
                 }
             }
 
-            $output->writeln("Cards seeded successfully");
+            if ($showMessages) {
+                $output->writeln("Cards seeded successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($e->getMessage());
         }

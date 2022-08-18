@@ -11,7 +11,7 @@ class SeedStreets extends Database
         'seed'
     ];
 
-    public function seed($output)
+    public function seed($output, $showMessages = true)
     {
 
         $streets = require('config/streets.php');
@@ -25,7 +25,10 @@ class SeedStreets extends Database
                 $name = $street['name'];
                 $stmt->execute();
             }
-            $output->writeln("Streets seeded successfully");
+
+            if ($showMessages) {
+                $output->writeln("Streets seeded successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($e->getMessage());
 
