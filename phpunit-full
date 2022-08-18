@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+echo '/*** REBUILDING DB ***/';
+php application.php app:build-env
+
+echo "/*** Running CardTest.php ***/"
+./vendor/bin/phpunit --testdox tests/Unit/CardTest.php
+
+echo '/*** REBUILDING DB ***/';
+php application.php app:build-env
+
+echo "/*** Running CardTest.php ***/"
+./vendor/bin/phpunit --testdox tests/Unit/DealerTest.php --exclude skip
+
+echo '/*** REBUILDING DB ***/';
+php application.php app:build-env
+
+echo "/*** Running CardTest.php ***/"
+./vendor/bin/phpunit --testdox tests/Unit/DealerTest.php --filter it_can_deal_cards_to_multiple_players_at_a_table
+
+echo '/*** REBUILDING DB ***/';
+php application.php app:build-env
+
+echo "/*** Running GamePlayTest.php ***/"
+./vendor/bin/phpunit tests/Unit/GamePlayTest.php
+
+echo '/*** REBUILDING DB ***/';
+php application.php app:build-env
+
+echo "/*** Running HandIdentifierTest.php ***/"
+./vendor/bin/phpunit tests/Unit/HandIdentifierTest.php
+
+echo '/*** REBUILDING DB ***/';
+php application.php app:build-env
+
+echo "/*** Running HandTypeTest.php ***/"
+./vendor/bin/phpunit tests/Unit/HandTypeTest.php
+
+echo '/*** REBUILDING DB ***/';
+php application.php app:build-env
+
+echo "/*** Running TableSeatTest.php ***/"
+./vendor/bin/phpunit tests/Unit/TableSeatTest.php

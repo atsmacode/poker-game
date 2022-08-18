@@ -12,7 +12,6 @@ class GamePlayTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
         $this->gamePlay = new GamePlay(Hand::create(['table_id' => 1]));
     }
 

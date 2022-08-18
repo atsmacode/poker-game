@@ -546,7 +546,7 @@ class GamePlay
 
     protected function noDealerIsSetOrThereIsNoSeatAfterTheCurrentDealer($currentDealer)
     {
-        return !$currentDealer || !$this->handTable->seats()->search(['id', $currentDealer->content->id + 1]);
+        return !$currentDealer || !$this->handTable->seats()->search('id', $currentDealer->id + 1);
     }
 
     protected function thereAreThreeSeatsAfterTheCurrentDealer($currentDealer)

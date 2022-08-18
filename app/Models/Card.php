@@ -59,10 +59,16 @@ class Card extends Model
         try {
 
             $stmt = $this->connection->prepare("
-                    SELECT c.*, r.name as rank, s.name as suit, r.ranking as ranking FROM cards c
-                    LEFT OUTER JOIN ranks r ON c.rank_id = r.id
-                    LEFT OUTER JOIN suits s ON c.suit_id = s.id
-                    WHERE r.name = '{$this->selectedRank}' AND s.name = '{$this->selectedSuit}'
+                    SELECT 
+                        c.*, r.name AS 'rank', s.name AS suit, r.ranking AS ranking 
+                    FROM 
+                        cards c
+                    LEFT OUTER JOIN 
+                        ranks r ON c.rank_id = r.id
+                    LEFT OUTER JOIN 
+                        suits s ON c.suit_id = s.id
+                    WHERE 
+                        r.name = '{$this->selectedRank}' AND s.name = '{$this->selectedSuit}'
                 ");
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
@@ -82,10 +88,16 @@ class Card extends Model
         try {
 
             $stmt = $this->connection->prepare("
-                    SELECT c.*, r.name as rank, s.name as suit, r.ranking as ranking FROM cards c
-                    LEFT OUTER JOIN ranks r ON c.rank_id = r.id
-                    LEFT OUTER JOIN suits s ON c.suit_id = s.id
-                    WHERE c.id = {$this->id}
+                    SELECT
+                        c.*, r.name AS 'rank', s.name suit, r.ranking ranking 
+                    FROM 
+                        cards c
+                    LEFT OUTER JOIN 
+                        ranks r ON c.rank_id = r.id
+                    LEFT OUTER JOIN 
+                        suits s ON c.suit_id = s.id
+                    WHERE 
+                        c.id = {$this->id}
                 ");
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
