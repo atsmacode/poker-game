@@ -11,7 +11,7 @@ class CreateStreets extends Database
         'createStreetsTable',
     ];
 
-    public function createStreetsTable($output)
+    public function createStreetsTable($output, $showMessages = true)
     {
 
         $sql = "CREATE TABLE streets (
@@ -21,7 +21,10 @@ class CreateStreets extends Database
 
         try {
             $this->connection->exec($sql);
-            $output->writeln("Streets table created successfully");
+
+            if ($showMessages) {
+                $output->writeln("Streets table created successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($sql . "<br>" . $e->getMessage());
         }

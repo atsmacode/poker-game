@@ -22,9 +22,9 @@ class QueryHelper
             $rows = $stmt->fetchAll();
 
             if($output){
-                $output->writeln("Ranks selected successfully");
+                $output->writeln("Ranks selected successfully" . PHP_EOL);
             } else {
-                echo "Ranks selected successfully";
+                echo "Ranks selected successfully"  . PHP_EOL;
             }
 
         } catch(PDOException $e) {
@@ -55,7 +55,7 @@ class QueryHelper
             $rows = $stmt->fetchAll();
 
             if($output){
-                $output->writeln("Suits selected successfully");
+                $output->writeln("Suits selected successfully"  . PHP_EOL);
             }
 
         } catch(PDOException $e) {

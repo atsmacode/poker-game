@@ -12,7 +12,7 @@ class CreateTables extends Database
         'createTableSeatsTable'
     ];
 
-    public function createTablesTable($output)
+    public function createTablesTable($output, $showMessages = true)
     {
 
         $sql = "CREATE TABLE tables (
@@ -23,14 +23,17 @@ class CreateTables extends Database
 
         try {
             $this->connection->exec($sql);
-            $output->writeln("Tables table created successfully");
+
+            if ($showMessages) {
+                $output->writeln("Tables table created successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($sql . "<br>" . $e->getMessage());
         }
         $this->connection = null;
     }
 
-    public function createTableSeatsTable($output)
+    public function createTableSeatsTable($output, $showMessages = true)
     {
 
         $sql = "CREATE TABLE table_seats (
@@ -48,7 +51,10 @@ class CreateTables extends Database
 
         try {
             $this->connection->exec($sql);
-            $output->writeln("Table seats table created successfully");
+
+            if ($showMessages) {
+                $output->writeln("Table seats table created successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($sql . "<br>" . $e->getMessage());
         }

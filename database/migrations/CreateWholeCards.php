@@ -11,7 +11,7 @@ class CreateWholeCards extends Database
         'createWholeCardsTable',
     ];
 
-    public function createWholeCardsTable($output)
+    public function createWholeCardsTable($output, $showMessages = true)
     {
 
         $sql = "CREATE TABLE whole_cards (
@@ -26,7 +26,10 @@ class CreateWholeCards extends Database
 
         try {
             $this->connection->exec($sql);
-            $output->writeln("Whole cards table created successfully");
+
+            if ($showMessages) {
+                $output->writeln("Whole cards table created successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($sql . "<br>" . $e->getMessage());
         }

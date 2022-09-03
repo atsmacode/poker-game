@@ -11,7 +11,7 @@ class CreatePlayers extends Database
         'createPlayersTable',
     ];
 
-    public function createPlayersTable($output)
+    public function createPlayersTable($output, $showMessages = true)
     {
 
         $sql = "CREATE TABLE players (
@@ -23,7 +23,10 @@ class CreatePlayers extends Database
 
         try {
             $this->connection->exec($sql);
-            $output->writeln("Players table created successfully");
+
+            if ($showMessages) {
+                $output->writeln("Players table created successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($sql . "<br>" . $e->getMessage());
         }

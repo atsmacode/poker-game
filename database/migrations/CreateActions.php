@@ -11,7 +11,7 @@ class CreateActions extends Database
         'createActionsTable',
     ];
 
-    public function createActionsTable($output)
+    public function createActionsTable($output, $showMessages = true)
     {
 
         $sql = "CREATE TABLE actions (
@@ -21,7 +21,10 @@ class CreateActions extends Database
 
         try {
             $this->connection->exec($sql);
-            $output->writeln("Actions table created successfully");
+
+            if($showMessages){
+                $output->writeln("Actions table created successfully");
+            }
         } catch(PDOException $e) {
             $this->output->writeln($sql . "<br>" . $e->getMessage());
         }

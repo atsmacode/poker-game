@@ -11,7 +11,7 @@ class CreateHandTypes extends Database
         'createHandTypesTable',
     ];
 
-    public function createHandTypesTable($output)
+    public function createHandTypesTable($output, $showMessages = true)
     {
 
         $sql = "CREATE TABLE hand_types (
@@ -22,7 +22,10 @@ class CreateHandTypes extends Database
 
         try {
             $this->connection->exec($sql);
-            $output->writeln("Hand types table created successfully");
+
+            if ($showMessages) {
+                $output->writeln("Hand types table created successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($sql . "<br>" . $e->getMessage());
         }

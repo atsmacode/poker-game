@@ -11,7 +11,7 @@ class CreatePlayerActions extends Database
         'createPlayerActionsTable',
     ];
 
-    public function createPlayerActionsTable($output)
+    public function createPlayerActionsTable($output, $showMessages = true)
     {
 
         $sql = "CREATE TABLE player_actions (
@@ -35,7 +35,10 @@ class CreatePlayerActions extends Database
 
         try {
             $this->connection->exec($sql);
-            $output->writeln("Player actions table created successfully");
+
+            if ($showMessages) {
+                $output->writeln("Player actions table created successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($sql . "<br>" . $e->getMessage());
         }

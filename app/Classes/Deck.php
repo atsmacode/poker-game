@@ -39,7 +39,7 @@ class Deck extends Database
         try {
 
             $stmt = $this->connection->prepare("
-                    SELECT r.name as rank, s.name as suit, r.ranking as ranking FROM cards c
+                    SELECT r.name as 'rank', s.name as suit, r.ranking as ranking FROM cards c
                     LEFT OUTER JOIN ranks r ON c.rank_id = r.id
                     LEFT OUTER JOIN suits s ON c.suit_id = s.id
                 ");

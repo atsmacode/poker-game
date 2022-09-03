@@ -13,7 +13,7 @@ class CreateCards extends Database
         'createCardsTable'
     ];
 
-    public function createRanksTable($output)
+    public function createRanksTable($output, $showMessages = true)
     {
 
         $sql = "CREATE TABLE ranks (
@@ -25,14 +25,16 @@ class CreateCards extends Database
 
         try {
             $this->connection->exec($sql);
-            $output->writeln("Ranks table created successfully");
+            if ($showMessages) {
+                $output->writeln("Ranks table created successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($sql . "<br>" . $e->getMessage());
         }
         $this->connection = null;
     }
 
-    public function createSuitsTable($output)
+    public function createSuitsTable($output, $showMessages = true)
     {
 
         $sql = "CREATE TABLE suits (
@@ -43,14 +45,16 @@ class CreateCards extends Database
 
         try {
             $this->connection->exec($sql);
-            $output->writeln("Suits table created successfully");
+            if ($showMessages) {
+                $output->writeln("Suits table created successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($sql . "<br>" . $e->getMessage());
         }
         $this->connection = null;
     }
 
-    public function createCardsTable($output)
+    public function createCardsTable($output, $showMessages = true)
     {
 
         $sql = "CREATE TABLE cards (
@@ -63,7 +67,9 @@ class CreateCards extends Database
 
         try {
             $this->connection->exec($sql);
-            $output->writeln("Cards table created successfully");
+            if ($showMessages) {
+                $output->writeln("Cards table created successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($sql . "<br>" . $e->getMessage());
         }

@@ -11,7 +11,7 @@ class CreateStacks extends Database
         'createStacksTable',
     ];
 
-    public function createStacksTable($output)
+    public function createStacksTable($output, $showMessages = true)
     {
 
         $sql = "CREATE TABLE stacks (
@@ -25,7 +25,10 @@ class CreateStacks extends Database
 
         try {
             $this->connection->exec($sql);
-            $output->writeln("Stacks table created successfully");
+
+            if ($showMessages) {
+                $output->writeln("Stacks table created successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($sql . "<br>" . $e->getMessage());
         }

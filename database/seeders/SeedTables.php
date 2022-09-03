@@ -11,12 +11,12 @@ class SeedTables extends Database
         'seed'
     ];
 
-    public function seed($output)
+    public function seed($output, $showMessages = true)
     {
-        $this->createTable($output)->createTableSeats($output);
+        $this->createTable($output, $showMessages)->createTableSeats($output, $showMessages);
     }
 
-    private function createTable($output)
+    private function createTable($output, $showMessages = true)
     {
         $name = 'Table 1';
         $seats = 6;
@@ -28,7 +28,9 @@ class SeedTables extends Database
 
             $stmt->execute();
 
-            $output->writeln("Table seeded successfully");
+            if ($showMessages) {
+                $output->writeln("Table seeded successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($e->getMessage());
 
@@ -38,7 +40,7 @@ class SeedTables extends Database
 
     }
 
-    private function createTableSeats($output)
+    private function createTableSeats($output, $showMessages = true)
     {
         $seats = 6;
 
@@ -55,7 +57,9 @@ class SeedTables extends Database
                 $inserted++;
             }
 
-            $output->writeln("Table seats seeded successfully");
+            if ($showMessages) {
+                $output->writeln("Table seats seeded successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($e->getMessage());
 

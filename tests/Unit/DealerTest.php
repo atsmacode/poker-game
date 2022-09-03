@@ -83,6 +83,7 @@ class DealerTest extends TestCase
 
     /**
      * @test
+     * @group skip
      * @return void
      */
     public function it_can_deal_cards_to_multiple_players_at_a_table()

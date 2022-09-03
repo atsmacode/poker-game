@@ -11,7 +11,7 @@ class SeedActions extends Database
         'seed'
     ];
 
-    public function seed($output)
+    public function seed($output, $showMessages = true)
     {
 
         $actions = require('config/actions.php');
@@ -24,7 +24,10 @@ class SeedActions extends Database
                 $name = $action['name'];
                 $stmt->execute();
             }
-            $output->writeln("Actions seeded successfully");
+
+            if ($showMessages) {
+                $output->writeln("Actions seeded successfully");
+            }
         } catch(PDOException $e) {
             $output->writeln($e->getMessage());
 
