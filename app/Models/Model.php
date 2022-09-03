@@ -29,6 +29,11 @@ class Model extends Database
         return (new static($data))->createEntry($data);
     }
 
+    public function contains(array $data)
+    {
+        return in_array($data, $this->content);
+    }
+
     public function createEntry($data)
     {
 

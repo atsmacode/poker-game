@@ -12,7 +12,6 @@ class Dealer
 
     public function setDeck($deck = null)
     {
-
         $this->deck = new Deck();
 
         return $this;
@@ -32,7 +31,6 @@ class Dealer
 
     public function pickCard(string $rank = null, string $suit = null)
     {
-
         if($rank === null && $suit === null){
             $this->card = array_shift($this->deck->cards);
             return $this;
@@ -41,7 +39,7 @@ class Dealer
         $filter = array_filter($this->deck->cards, function($value) use($rank, $suit){
             return $value->rank === $rank && $value->suit === $suit;
         });
-        $this->card = array_values($filter);
+        $this->card = array_values($filter)[0];
 
         $card = $this->card;
         $reject = array_filter($this->deck->cards, function($value) use($card){
@@ -59,7 +57,6 @@ class Dealer
 
     public function dealTo($players, $cardCount, $hand = null)
     {
-
         foreach($players->collect()->content as $player){
 
             $dealtCards = 0;
@@ -75,12 +72,10 @@ class Dealer
         }
 
         return $this;
-
     }
 
     public function dealStreetCards($handStreet, $cardCount)
     {
-
         $dealtCards = 0;
 
         while($dealtCards < $cardCount){
@@ -97,7 +92,23 @@ class Dealer
         }
 
         return $this;
-
     }
 
+    /**
+     * @param HandStreet $handStreet
+     * @param string $rank
+     * @param string $suit
+     * @return $this
+     */
+    public function dealThisStreetCard($rank, $suit, $handStreet)
+    {
+        $cardId = $this->pickCard($rank, $suit)->getCard()->id;
+
+        HandStreetCard::create([
+            'card_id' => $cardId,
+            'hand_street_id' => $handStreet->id
+        ]);
+
+        return $this;
+    }
 }
