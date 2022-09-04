@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase as FrameworkTestCase;
 
 class PotTest extends FrameworkTestCase
 {
-
     public function setUp(): void
     {
         parent::setUp();
@@ -22,7 +21,7 @@ class PotTest extends FrameworkTestCase
     {
         $hand = Hand::create(['table_id' => 1]);
 
-        $this->assertNull($hand->pot());
+        $this->assertCount(0, $hand->pot()->content);
 
         $pot = Pot::create([
             'amount' => 75,

@@ -4,7 +4,6 @@ namespace App\Models;
 
 class Player extends Model
 {
-
     use Collection;
 
     protected $table = 'players';
@@ -24,5 +23,4 @@ class Player extends Model
     {
         return Stack::find(['player_id' => $this->id]);
     }
-
 }

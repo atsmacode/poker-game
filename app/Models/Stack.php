@@ -9,5 +9,4 @@ class Stack extends Model
 
     public $table = 'stacks';
     public string $name;
-
 }

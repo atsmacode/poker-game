@@ -4,7 +4,6 @@ namespace App\Models;
 
 trait Collection
 {
-
     public function collect()
     {
         foreach($this->content as $key => $value){
@@ -13,6 +12,24 @@ trait Collection
         return $this;
     }
 
+    /**
+     * Used when $this->content is an array of the DB properties:
+     * 
+     * array(4) {      
+     *   'id' =>       
+     *   int(11)       
+     *   'amount' =>   
+     *   int(1000)     
+     *   'player_id' =>
+     *   int(1)        
+     *   'table_id' => 
+     *   int(1)        
+     * }
+     * 
+     * And when desired result is a single self instance.
+     * 
+     * @return self            
+     */
     public function search($column, $value)
     {
 
@@ -27,6 +44,22 @@ trait Collection
         return false;
     }
 
+    /**
+     * Used when $this->content is an array of Models:
+     * 
+     * array(1) {
+     *   [14] =>
+     *   class App\Models\Stack#69 (13) {
+     *       public $servername =>
+     *       string(9) "localhost"
+     *       public $username =>
+     *       string(4) "root"
+     * ...
+     * 
+     * And when desired result is an array of selfs.
+     * 
+     * @return array<self>
+     */
     public function searchMultiple($column, $value)
     {
 
@@ -81,4 +114,8 @@ trait Collection
         return array_key_first(array_slice($dates, 0, 1, true));
     }
 
+    public function first()
+    {
+        return $this->content[0];
+    }
 }

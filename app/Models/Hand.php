@@ -4,7 +4,6 @@ namespace App\Models;
 
 class Hand extends Model
 {
-
     use Collection;
 
     protected $table = 'hands';
@@ -29,5 +28,4 @@ class Hand extends Model
     {
         return Pot::find(['hand_id' => $this->id]);
     }
-
 }

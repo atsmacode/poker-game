@@ -13,7 +13,6 @@ use PHPUnit\Framework\TestCase;
 
 class DealerTest extends TestCase
 {
-
     public function setUp(): void
     {
         parent::setUp();

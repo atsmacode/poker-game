@@ -8,7 +8,6 @@ use PDOException;
 
 class Model extends Database
 {
-
     protected $table;
     public $content = [];
     public $data;
@@ -88,10 +87,6 @@ class Model extends Database
 
         } catch(PDOException $e) {
             echo $e->getMessage();
-        }
-
-        if (empty($rows)) {
-            return null;
         }
 
         if(!$rows){
@@ -270,5 +265,4 @@ class Model extends Database
     {
         return count($this->content) > 0;
     }
-
 }

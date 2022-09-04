@@ -19,5 +19,4 @@ class Pot extends Model
     {
         return $this->hand()->table();
     }
-
 }
