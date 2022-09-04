@@ -56,3 +56,9 @@ php application.php app:build-env
 
 echo "/*** Running PotHelperTest.php ***/"
 ./vendor/bin/phpunit --testdox tests/Unit/PotHelperTest.php
+
+echo '/*** REBUILDING DB ***/';
+php application.php app:build-env
+
+echo "/*** Running BetHelperTest.php ***/"
+./vendor/bin/phpunit --testdox tests/Unit/BetHelperTest.php
