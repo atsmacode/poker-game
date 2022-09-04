@@ -18,7 +18,6 @@ class SeedPlayers extends Database
 
     private function createPlayers($output, $showMessages = true)
     {
-
         $seats = 6;
 
         try {
@@ -54,12 +53,10 @@ class SeedPlayers extends Database
         $this->connection = null;
 
         return $this;
-
     }
 
     private function addPlayerToSeat($playerId, $seatId)
     {
-
         try {
             $stmt = $this->connection->prepare("
                     UPDATE table_seats SET player_id = :playerId
@@ -76,7 +73,6 @@ class SeedPlayers extends Database
         }
 
         return $this;
-
     }
 
 }

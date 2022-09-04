@@ -90,6 +90,10 @@ class Model extends Database
             echo $e->getMessage();
         }
 
+        if (empty($rows)) {
+            return null;
+        }
+
         if(!$rows){
             return $this;
         }
@@ -99,12 +103,10 @@ class Model extends Database
         $this->setModelProperties($rows);
 
         return $this;
-
     }
 
     public function update($data)
     {
-
         $properties = $this->compileUpdateStatement($data);
 
         try {
@@ -125,7 +127,6 @@ class Model extends Database
         $this->content = $this->getSelected(['id' => $this->id])->content;
 
         return $this;
-
     }
 
     public function all()
@@ -150,7 +151,6 @@ class Model extends Database
         $this->content = $result;
 
         return $this;
-
     }
 
     private function compileUpdateStatement($data)

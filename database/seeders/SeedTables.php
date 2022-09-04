@@ -33,11 +33,9 @@ class SeedTables extends Database
             }
         } catch(PDOException $e) {
             $output->writeln($e->getMessage());
-
         }
 
         return $this;
-
     }
 
     private function createTableSeats($output, $showMessages = true)
@@ -62,13 +60,9 @@ class SeedTables extends Database
             }
         } catch(PDOException $e) {
             $output->writeln($e->getMessage());
-
         }
         $this->connection = null;
 
         return $this;
-
     }
-
-
 }
