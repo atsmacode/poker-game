@@ -12,14 +12,13 @@ class BetHelper
     public static function handle(Hand $hand, Player $player, $betAmount = null)
     {
         if($betAmount){
-
             $hand->pot()->update(['amount' => $betAmount]);
 
-            $player->stacks()->search('table_id', $hand->table()->id)
-                ->update(['amount' => $betAmount]);
+            $stack = $player->stacks()->search('table_id', $hand->table()->id);
+
+            $stack->update(['amount' => $stack->amount - $betAmount]);
 
             return $betAmount;
-
         }
 
         return null;
@@ -27,7 +26,6 @@ class BetHelper
 
     public static function postBlinds($hand, $smallBlind, $bigBlind)
     {
-
         PotHelper::initiatePot($hand);
 
         $smallBlind->update([
@@ -59,6 +57,5 @@ class BetHelper
             ]);
 
         BetHelper::handle($hand, $bigBlind->player(), $bigBlind->bet_amount);
-
     }
 }

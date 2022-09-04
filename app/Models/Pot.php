@@ -9,6 +9,7 @@ class Pot extends Model
 
     public $table = 'pots';
     public string $name;
+    public $id;
 
     public function hand()
     {

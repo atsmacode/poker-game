@@ -17,7 +17,6 @@ class PotHelper
     {
         $stack = $player->stacks()->search('table_id', $pot->table()->id);
 
-        $player->stacks()->search('table_id', $pot->table()->id)
-            ->update(['amount' => $stack->amount + $pot->amount]);
+        $stack->update(['amount' => $stack->amount + $pot->amount]);
     }
 }
