@@ -9,6 +9,12 @@ echo "/*** Running CardTest.php ***/"
 echo '/*** REBUILDING DB ***/';
 php application.php app:build-env
 
+echo "/*** Running DeckTest.php ***/"
+./vendor/bin/phpunit --testdox tests/Unit/DeckTest.php
+
+echo '/*** REBUILDING DB ***/';
+php application.php app:build-env
+
 echo "/*** Running CardTest.php ***/"
 ./vendor/bin/phpunit --testdox tests/Unit/DealerTest.php --exclude skip
 
@@ -22,22 +28,31 @@ echo '/*** REBUILDING DB ***/';
 php application.php app:build-env
 
 echo "/*** Running GamePlayTest.php ***/"
-./vendor/bin/phpunit tests/Unit/GamePlayTest.php
+./vendor/bin/phpunit --testdox tests/Unit/GamePlayTest.php
 
 echo '/*** REBUILDING DB ***/';
 php application.php app:build-env
 
 echo "/*** Running HandIdentifierTest.php ***/"
-./vendor/bin/phpunit tests/Unit/HandIdentifierTest.php
+./vendor/bin/phpunit --testdox tests/Unit/HandIdentifierTest.php
 
 echo '/*** REBUILDING DB ***/';
 php application.php app:build-env
 
 echo "/*** Running HandTypeTest.php ***/"
-./vendor/bin/phpunit tests/Unit/HandTypeTest.php
+./vendor/bin/phpunit --testdox tests/Unit/HandTypeTest.php
 
 echo '/*** REBUILDING DB ***/';
 php application.php app:build-env
 
 echo "/*** Running TableSeatTest.php ***/"
-./vendor/bin/phpunit tests/Unit/TableSeatTest.php
+./vendor/bin/phpunit --testdox tests/Unit/TableSeatTest.php
+
+echo "/*** Running PotTest.php ***/"
+./vendor/bin/phpunit --testdox tests/Unit/PotTest.php
+
+echo '/*** REBUILDING DB ***/';
+php application.php app:build-env
+
+echo "/*** Running PotHelperTest.php ***/"
+./vendor/bin/phpunit --testdox tests/Unit/PotHelperTest.php
