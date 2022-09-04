@@ -21,11 +21,11 @@ class QueryHelper
 
             $rows = $stmt->fetchAll();
 
-            if($output){
-                $output->writeln("Ranks selected successfully" . PHP_EOL);
-            } else {
-                echo "Ranks selected successfully"  . PHP_EOL;
-            }
+            // if($output){
+            //     $output->writeln("Ranks selected successfully" . PHP_EOL);
+            // } else {
+            //     echo "Ranks selected successfully"  . PHP_EOL;
+            // }
 
         } catch(PDOException $e) {
             if($output){
@@ -54,9 +54,9 @@ class QueryHelper
 
             $rows = $stmt->fetchAll();
 
-            if($output){
-                $output->writeln("Suits selected successfully"  . PHP_EOL);
-            }
+            // if($output){
+            //     $output->writeln("Suits selected successfully"  . PHP_EOL);
+            // }
 
         } catch(PDOException $e) {
             if($output){
