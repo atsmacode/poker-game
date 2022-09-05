@@ -33,3 +33,6 @@ C:\laragon\bin\php\php-8.1.3-nts-Win32-vs16-x64/php ./vendor/bin/phpunit --testd
 php application.php app:build-env
 C:\laragon\bin\php\php-8.1.3-nts-Win32-vs16-x64/php ./vendor/bin/phpunit --testdox  tests/Unit/GamePlayPotTest.php
 
+php application.php app:build-env
+C:\laragon\bin\php\php-8.1.3-nts-Win32-vs16-x64/php ./vendor/bin/phpunit --testdox  tests/Unit/ActionOptionsTest.php --filter a_player_facing_a_bet_can_fold_call_or_raise
+
