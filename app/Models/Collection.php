@@ -97,8 +97,6 @@ trait Collection
             return $this->content[$key][$column] !== $value;
         }, ARRAY_FILTER_USE_KEY);
 
-        //var_dump($this->content);
-
         return $this;
     }
 
