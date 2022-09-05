@@ -16,24 +16,24 @@ class GamePlay
     public $game;
     public $dealer;
     protected $actionOn;
-    protected $fold;
-    protected $check;
-    protected $call;
-    protected $bet;
-    protected $raise;
+    public $fold;
+    public $check;
+    public $call;
+    public $bet;
+    public $raise;
 
     public function __construct($hand, $deck = null)
     {
-        $this->game = new PotLimitHoldEm();
-        $this->dealer = (new Dealer())->setDeck($deck);
-        $this->hand = $hand;
+        $this->game      = new PotLimitHoldEm();
+        $this->dealer    = (new Dealer())->setDeck($deck);
+        $this->hand      = $hand;
         $this->handTable = $hand->table();
-        $this->street = null;
-        $this->fold = Action::find(['name' =>'Fold']);
-        $this->check = Action::find(['name' =>'Check']);
-        $this->call = Action::find(['name' =>'Call']);
-        $this->bet = Action::find(['name' =>'Bet']);
-        $this->raise = Action::find(['name' =>'Raise']);
+        $this->street    = null;
+        $this->fold      = Action::find(['name' =>'Fold']);
+        $this->check     = Action::find(['name' =>'Check']);
+        $this->call      = Action::find(['name' =>'Call']);
+        $this->bet       = Action::find(['name' =>'Bet']);
+        $this->raise     = Action::find(['name' =>'Raise']);
     }
 
     public function play()
@@ -56,17 +56,16 @@ class GamePlay
         $this->hand->complete();
 
         return [
-            'deck' => $this->dealer->getDeck(),
-            'pot' => $this->hand->fresh()->pot->amount,
+            'deck'           => $this->dealer->getDeck(),
+            'pot'            => $this->hand->fresh()->pot->amount,
             'communityCards' => $this->getCommunityCards(),
-            'players' => $this->getPlayerData(),
-            'winner' => $winner
+            'players'        => $this->getPlayerData(),
+            'winner'         => $winner
         ];
     }
 
     public function continue()
     {
-
         $this->updatePlayerStatusesOnNewStreet();
 
         // Not keen on the way I'm adding/subtracting from the handStreets->count() to match array starting with 0
@@ -80,19 +79,17 @@ class GamePlay
             $this->game->streets[$this->hand->fresh()->streets->count() - 1]['community_cards']
         );
 
-
         return [
-            'deck' => $this->dealer->getDeck(),
-            'pot' => $this->hand->fresh()->pot->amount,
+            'deck'           => $this->dealer->getDeck(),
+            'pot'            => $this->hand->fresh()->pot->amount,
             'communityCards' => $this->getCommunityCards(),
-            'players' => $this->getPlayerData(),
-            'winner' => null
+            'players'        => $this->getPlayerData(),
+            'winner'         => null
         ];
     }
 
     public function start($currentDealer = null)
     {
-
         $this->initiateStreetActions();
         $this->initiatePlayerStacks();
         $this->setDealerAndBlindSeats($currentDealer);
@@ -108,18 +105,16 @@ class GamePlay
         }
 
         return [
-            'deck' => $this->dealer->getDeck(),
-            'pot' => $this->hand->pot()->amount,
+            'deck'           => $this->dealer->getDeck(),
+            'pot'            => $this->hand->pot()->amount,
             'communityCards' => $this->getCommunityCards(),
-            'players' => $this->getPlayerData(),
-            'winner' => null
+            'players'        => $this->getPlayerData(),
+            'winner'         => null
         ];
-
     }
 
     public function nextStep()
     {
-
         if($this->theBigBlindIsTheOnlyActivePlayerRemainingPreFlop()){
 
             TableSeat::query()
@@ -146,11 +141,11 @@ class GamePlay
         }
 
         return [
-            'deck' => $this->dealer->getDeck(),
-            'pot' => $this->hand->fresh()->pot->fresh()->amount,
+            'deck'           => $this->dealer->getDeck(),
+            'pot'            => $this->hand->fresh()->pot->fresh()->amount,
             'communityCards' => $this->getCommunityCards(),
-            'players' => $this->getPlayerData(),
-            'winner' => null
+            'players'        => $this->getPlayerData(),
+            'winner'         => null
         ];
     }
 
@@ -319,21 +314,21 @@ class GamePlay
                 : null;
 
             $playerData[] = [
-                'stack' => $stack,
-                'name' => $playerAction->player()->username,
-                'action_id' => $playerAction->action_id,
-                'action_name' => $actionName ,
-                'player_id' => $playerAction->player_id,
-                'table_seat_id' =>  $playerAction->table_seat_id,
-                'hand_street_id' => $playerAction->hand_street_id,
-                'bet_amount' => $playerAction->bet_amount,
-                'active' => $playerAction->active,
-                'can_continue' => $playerAction->tableSeat()->can_continue,
-                'is_dealer' => $playerAction->tableSeat()->is_dealer,
-                'big_blind' => $playerAction->big_blind,
-                'small_blind' => $playerAction->small_blind,
-                'whole_cards' => $this->getWholeCards($playerAction->player()),
-                'action_on' => $actionOn,
+                'stack'            => $stack,
+                'name'             => $playerAction->player()->username,
+                'action_id'        => $playerAction->action_id,
+                'action_name'      => $actionName ,
+                'player_id'        => $playerAction->player_id,
+                'table_seat_id'    => $playerAction->table_seat_id,
+                'hand_street_id'   => $playerAction->hand_street_id,
+                'bet_amount'       => $playerAction->bet_amount,
+                'active'           => $playerAction->active,
+                'can_continue'     => $playerAction->tableSeat()->can_continue,
+                'is_dealer'        => $playerAction->tableSeat()->is_dealer,
+                'big_blind'        => $playerAction->big_blind,
+                'small_blind'      => $playerAction->small_blind,
+                'whole_cards'      => $this->getWholeCards($playerAction->player()),
+                'action_on'        => $actionOn,
                 'availableOptions' => $this->getAvailableOptionsBasedOnLatestAction($playerAction)
             ];
         }
@@ -349,9 +344,9 @@ class GamePlay
         if(isset($player)){
             foreach($player->wholeCards()->collect()->searchMultiple('hand_id', $this->hand->id) as $wholeCard){
                 $wholeCards[] = [
-                    'player_id' => $wholeCard->player_id,
-                    'rank' => $wholeCard->card()->rank,
-                    'suit' => $wholeCard->card()->suit,
+                    'player_id'        => $wholeCard->player_id,
+                    'rank'             => $wholeCard->card()->rank,
+                    'suit'             => $wholeCard->card()->suit,
                     'suitAbbreviation' => $wholeCard->card()->suit
                 ];
             }
@@ -362,9 +357,9 @@ class GamePlay
         foreach(TableSeat::find(['can_continue' => 1]) as $tableSeat){
             foreach($tableSeat->player()->collect()->searchMultiple('hand_id', $this->hand->id) as $wholeCard){
                 $wholeCards[] = [
-                    'player_id' => $wholeCard->player_id,
-                    'rank' => $wholeCard->card()->rank,
-                    'suit' => $wholeCard->card()->suit,
+                    'player_id'        => $wholeCard->player_id,
+                    'rank'             => $wholeCard->card()->rank,
+                    'suit'             => $wholeCard->card()->suit,
                     'suitAbbreviation' => $wholeCard->card()->suit
                 ];
             }
@@ -379,8 +374,8 @@ class GamePlay
         foreach($this->hand->streets()->collect()->content as $street){
             foreach($street->cards()->collect()->content as $streetCard){
                 $cards[] = [
-                    'rank' => $streetCard->card()->rank,
-                    'suit' => $streetCard->card()->suit,
+                    'rank'             => $streetCard->card()->rank,
+                    'suit'             => $streetCard->card()->suit,
                     'suitAbbreviation' => $streetCard->card()->suit
                 ];
             }
@@ -391,7 +386,6 @@ class GamePlay
 
     public function getAvailableOptionsBasedOnLatestAction($playerAction)
     {
-
         $options = [];
 
         /*
@@ -437,12 +431,7 @@ class GamePlay
     public function updateAllOtherSeatsBasedOnLatestAction()
     {
 
-        $latestAction = $this->hand->playerActions
-            ->fresh()
-            ->sortBy([
-                ['updated_at', 'desc']
-            ], SORT_NUMERIC)
-            ->first();
+        $latestAction = PlayerAction::find(['id' => $this->hand->actions()->latest()]);
 
         // Update the other table seat statuses accordingly
         switch($latestAction->action_id){
@@ -455,12 +444,13 @@ class GamePlay
         }
 
         if(isset($canContinue)){
-            TableSeat::query()
-                ->where('table_id', $this->handTable->id)
-                ->where('id', '!=', $latestAction->table_seat_id)
-                ->update([
-                    'can_continue' => $canContinue
-                ]);
+            $tableSeats = TableSeat::find(['table_id' => $this->handTable->id]);
+            /**
+             * Next line is in dev progress. Need to look into the filter method
+             * which does not seem to be doing what it should, $this->content 
+             * still contains all table seats.
+             */
+            //$tableSeats->filter('id', $latestAction->table_seat_id)->update(['can_continue' => $canContinue]);
         }
 
     }
@@ -468,12 +458,7 @@ class GamePlay
     public function updateSeatStatusOfLatestAction()
     {
 
-        $latestAction = $this->hand->playerActions
-            ->fresh()
-            ->sortBy([
-                ['updated_at', 'desc']
-            ], SORT_NUMERIC)
-            ->first();
+        $latestAction = PlayerAction::find(['id' => $this->hand->actions()->latest()]);
 
         // Update the table seat status of the latest action accordingly
         switch($latestAction->action_id){
@@ -488,7 +473,7 @@ class GamePlay
                 break;
         }
 
-        TableSeat::where('id', $latestAction->table_seat_id)
+        TableSeat::find(['id' => $latestAction->table_seat_id])
             ->update([
                 'can_continue' => $canContinue
             ]);

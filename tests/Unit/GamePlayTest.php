@@ -45,7 +45,6 @@ class GamePlayTest extends TestCase
 
         // the_action_will_be_on_the_player_after_the_big_blind_once_a_hand_is_started
         $this->assertTrue($response['players'][3]['action_on']);
-
     }
 
 }

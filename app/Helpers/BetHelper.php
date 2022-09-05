@@ -12,7 +12,7 @@ class BetHelper
     public static function handle(Hand $hand, Player $player, $betAmount = null)
     {
         if($betAmount){
-            $hand->pot()->update(['amount' => $betAmount]);
+            $hand->pot()->update(['amount' => $hand->pot()->amount + $betAmount]);
 
             $stack = $player->stacks()->search('table_id', $hand->table()->id);
 
@@ -29,11 +29,11 @@ class BetHelper
         PotHelper::initiatePot($hand);
 
         $smallBlind->update([
-            'action_id' => Action::find(['name' => 'Bet'])->id,
-            'bet_amount' => 25.0,
-            'active' => 1,
+            'action_id'   => Action::find(['name' => 'Bet'])->id,
+            'bet_amount'  => 25.0,
+            'active'      => 1,
             'small_blind' => 1,
-            'updated_at' => date('Y-m-d H:i:s', strtotime('- 10 seconds'))
+            'updated_at'  => date('Y-m-d H:i:s', strtotime('- 10 seconds'))
         ]);
 
         TableSeat::find(['id' => $smallBlind->table_seat_id])
@@ -44,10 +44,10 @@ class BetHelper
         BetHelper::handle($hand, $smallBlind->player(), $smallBlind->bet_amount);
 
         $bigBlind->update([
-            'action_id' => Action::find(['name' => 'Bet'])->id,
+            'action_id'  => Action::find(['name' => 'Bet'])->id,
             'bet_amount' => 50.0,
-            'active' => 1,
-            'big_blind' => 1,
+            'active'     => 1,
+            'big_blind'  => 1,
             'updated_at' => date('Y-m-d H:i:s', strtotime('- 5 seconds'))
         ]);
 
