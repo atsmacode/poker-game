@@ -66,7 +66,7 @@ class ActionOptionsTest extends TestCase
                 'can_continue' => 1
             ]);
 
-        // Player 1 Folds
+        // Player 2 Folds
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(1, 1)->id])
             ->update([
                 'action_id' => Action::find(['name' => 'Fold'])->id,

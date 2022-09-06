@@ -15,5 +15,4 @@ class TableSeat extends Model
     {
         return Player::find(['id' => $this->player_id]);
     }
-
 }

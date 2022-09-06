@@ -100,26 +100,68 @@ class Model extends Database
         return $this;
     }
 
+    /**
+     * To be used to update a single model instance.
+     *
+     * @param array $data
+     * @return void
+     */
     public function update($data)
     {
         $properties = $this->compileUpdateStatement($data);
 
         try {
-
             $stmt = $this->connection->prepare($properties);
 
             foreach($data as $column => &$value){
-                $stmt->bindParam(':'.$column, $value);
+                if ($value !== null) { 
+                    $stmt->bindParam(':'.$column, $value);
+                }
+            }
+
+            if ($this->table == 'player_actions' || $this->table == 'table_seats') {
+                $now = date('Y-m-d H:i:s');
+                $stmt->bindParam(':updated_at', $now);
             }
 
             $stmt->execute();
-
         } catch(PDOException $e) {
             echo $e->getMessage();
-
         }
 
         $this->content = $this->getSelected(['id' => $this->id])->content;
+
+        return $this;
+    }
+
+    /**
+     * To be used to update a multiple model instances.
+     *
+     * @param array $data
+     * @return void
+     */
+    public function updateBatch($data, $where)
+    {
+        $properties = $this->compileUpdateBatchStatement($data, $where);
+
+        try {
+            $stmt = $this->connection->prepare($properties);
+
+            foreach($data as $column => &$value){
+                if ($value !== null) { 
+                    $stmt->bindParam(':'.$column, $value);
+                }
+            }
+            
+            if ($this->table == 'player_actions' || $this->table == 'table_seats') {
+                $now = date('Y-m-d H:i:s');
+                $stmt->bindParam(':updated_at', $now);
+            }
+
+            $stmt->execute();
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+        }
 
         return $this;
     }
@@ -164,7 +206,35 @@ class Model extends Database
             $pointer++;
         }
 
+        if ($this->table == 'player_actions' || $this->table == 'table_seats') {
+            $properties .= ', updated_at = :updated_at';
+        }
+    
         $properties .= " WHERE id = {$this->id}";
+
+        return $properties;
+    }
+
+    private function compileUpdateBatchStatement($data, $where)
+    {
+        $properties = "UPDATE {$this->table} SET ";
+
+        $pointer = 1;
+        foreach($data as $column => $value){
+            if($value !== null){
+                $properties .= $column . " = :". $column;
+
+                if($pointer < count($data)){
+                    $properties .= ", ";
+                };
+            }
+            $pointer++;
+        };
+
+        if ($this->table == 'player_actions' || $this->table == 'table_seats') {
+            $properties .= ', updated_at = :updated_at';
+        }
+        $properties .= " WHERE {$where}";
 
         return $properties;
     }

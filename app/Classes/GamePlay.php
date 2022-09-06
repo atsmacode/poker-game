@@ -142,7 +142,7 @@ class GamePlay
 
         return [
             'deck'           => $this->dealer->getDeck(),
-            'pot'            => $this->hand->fresh()->pot->fresh()->amount,
+            'pot'            => $this->hand->pot()->amount,
             'communityCards' => $this->getCommunityCards(),
             'players'        => $this->getPlayerData(),
             'winner'         => null
@@ -172,33 +172,33 @@ class GamePlay
 
     protected function readyForShowdown()
     {
-        return $this->hand->fresh()->streets->count() === count($this->game->streets) &&
-            $this->hand->fresh()->playerActions->where('active', 1)->count() ===
-            $this->handTable->fresh()->tableSeats->where('can_continue', 1)->count();
+        return count($this->hand->streets()->content) === count($this->game->streets) &&
+            count($this->hand->actions()::find(['active' => 1])->content) ===
+            count($this->handTable->seats()::find(['can_continue' => 1])->content);
     }
 
     protected function onePlayerRemainsThatCanContinue()
     {
-        return $this->hand->fresh()->playerActions->where('active', 1)->count()
-            === $this->handTable->fresh()->tableSeats->where('can_continue', 1)->count()
-            && $this->handTable->fresh()->tableSeats->where('can_continue', 1)->count() === 1;
+        return count($this->hand->actions()::find(['active' => 1])->content)
+            === count($this->handTable->seats()::find(['can_continue' => 1])->content)
+            && count($this->handTable->seats()::find(['can_continue' => 1])->content) === 1;
     }
 
     protected function allActivePlayersCanContinue()
     {
-        return $this->hand->fresh()->playerActions->fresh()->where('active', 1)->count() ===
-            $this->handTable->fresh()->tableSeats->fresh()->where('can_continue', 1)->count();
+        return count($this->hand->actions()::find(['active' => 1])->content) ===
+            count($this->handTable->seats()::find(['can_continue' => 1])->content);
     }
 
     protected function theBigBlindIsTheOnlyActivePlayerRemainingPreFlop()
     {
-        return $this->hand->fresh()->playerActions->fresh()->where('active', 1)->where('big_blind', 1)->count() === 1
-            && !$this->hand->fresh()->playerActions->fresh()->where('active', 1)->where('big_blind', 0)->first();
+        return count($this->hand->actions()::find(['active' => 1, 'big_blind' => 1])->content) === 1
+            && count($this->hand->actions()::find(['active' => 1, 'big_blind' => 0])->content) === 0;
     }
 
     protected function theLastHandWasCompleted()
     {
-        return $this->hand->fresh()->completed_on;
+        return $this->hand->completed_on;
     }
 
     protected function allPlayerActionsAreNullSoANewSreetHasBeenSet()
@@ -450,7 +450,7 @@ class GamePlay
              * which does not seem to be doing what it should, $this->content 
              * still contains all table seats.
              */
-            //$tableSeats->filter('id', $latestAction->table_seat_id)->update(['can_continue' => $canContinue]);
+            $tableSeats->updateBatch(['can_continue' => $canContinue], 'table_seat_id != ' . $latestAction->table_seat_id);
         }
 
     }

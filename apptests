@@ -2,49 +2,41 @@
 
 echo '/*** REBUILDING DB ***/';
 php application.php app:build-env
-
 echo "/*** Running CardTest.php ***/"
 ./vendor/bin/phpunit --testdox tests/Unit/CardTest.php
 
 echo '/*** REBUILDING DB ***/';
 php application.php app:build-env
-
 echo "/*** Running DeckTest.php ***/"
 ./vendor/bin/phpunit --testdox tests/Unit/DeckTest.php
 
 echo '/*** REBUILDING DB ***/';
 php application.php app:build-env
-
 echo "/*** Running CardTest.php ***/"
 ./vendor/bin/phpunit --testdox tests/Unit/DealerTest.php --exclude skip
 
 echo '/*** REBUILDING DB ***/';
 php application.php app:build-env
-
 echo "/*** Running CardTest.php ***/"
 ./vendor/bin/phpunit --testdox tests/Unit/DealerTest.php --filter it_can_deal_cards_to_multiple_players_at_a_table
 
 echo '/*** REBUILDING DB ***/';
 php application.php app:build-env
-
 echo "/*** Running GamePlayTest.php ***/"
 ./vendor/bin/phpunit --testdox tests/Unit/GamePlayTest.php
 
 echo '/*** REBUILDING DB ***/';
 php application.php app:build-env
-
 echo "/*** Running HandIdentifierTest.php ***/"
 ./vendor/bin/phpunit --testdox tests/Unit/HandIdentifierTest.php
 
 echo '/*** REBUILDING DB ***/';
 php application.php app:build-env
-
 echo "/*** Running HandTypeTest.php ***/"
 ./vendor/bin/phpunit --testdox tests/Unit/HandTypeTest.php
 
 echo '/*** REBUILDING DB ***/';
 php application.php app:build-env
-
 echo "/*** Running TableSeatTest.php ***/"
 ./vendor/bin/phpunit --testdox tests/Unit/TableSeatTest.php
 
@@ -53,12 +45,20 @@ echo "/*** Running PotTest.php ***/"
 
 echo '/*** REBUILDING DB ***/';
 php application.php app:build-env
-
 echo "/*** Running PotHelperTest.php ***/"
 ./vendor/bin/phpunit --testdox tests/Unit/PotHelperTest.php
 
 echo '/*** REBUILDING DB ***/';
 php application.php app:build-env
-
 echo "/*** Running BetHelperTest.php ***/"
 ./vendor/bin/phpunit --testdox tests/Unit/BetHelperTest.php
+
+echo '/*** REBUILDING DB ***/';
+php application.php app:build-env
+echo "/*** Running GamePlayPotTest.php ***/"
+./vendor/bin/phpunit --testdox  tests/Unit/GamePlayPotTest.php
+
+echo '/*** REBUILDING DB ***/';
+php application.php app:build-env
+echo "/*** Running ActionOptionsTest.php ***/"
+./vendor/bin/phpunit --testdox  tests/Unit/ActionOptionsTest.php --filter a_player_facing_a_bet_can_fold_call_or_raise
