@@ -5,7 +5,6 @@ namespace Tests\Unit;
 use App\Classes\GamePlay;
 use App\Models\Action;
 use App\Models\Hand;
-use App\Models\Player;
 use App\Models\PlayerAction;
 use App\Models\TableSeat;
 use PHPUnit\Framework\TestCase;
@@ -18,10 +17,6 @@ class ActionOptionsTest extends TestCase
         parent::setUp();
 
         $this->gamePlay = new GamePlay(Hand::create(['table_id' => 1]));
-
-        $this->player1 = Player::find(['id' => 1]);
-        $this->player2 = Player::find(['id' => 2]);
-        $this->player3 = Player::find(['id' => 3]);
 
         $this->fold  = $this->gamePlay->fold;
         $this->check = $this->gamePlay->check;
@@ -59,6 +54,7 @@ class ActionOptionsTest extends TestCase
                 'action_id' => Action::find(['name' => 'Raise'])->id,
                 'bet_amount' => 100.0,
                 'active' => 1,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
             ]);
 
         TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
@@ -71,7 +67,8 @@ class ActionOptionsTest extends TestCase
             ->update([
                 'action_id' => Action::find(['name' => 'Fold'])->id,
                 'bet_amount' => null,
-                'active' => 0
+                'active' => 0,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
             ]);
 
         $gamePlay = $this->gamePlay->play();
@@ -93,24 +90,26 @@ class ActionOptionsTest extends TestCase
         $this->gamePlay->start();
 
         // Player 1 Raises BB
-        PlayerAction::where('id', $this->gamePlay->hand->playerActions->fresh()->slice(0, 1)->first()->id)
+        PlayerAction::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
             ->update([
-                'action_id' => Action::where('name', 'Raise')->first()->id,
+                'action_id' => Action::find(['name' => 'Raise'])->id,
                 'bet_amount' => 100.0,
                 'active' => 1,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
             ]);
 
-        TableSeat::query()->where('id', $this->gamePlay->handTable->fresh()->tableSeats->slice(0, 1)->first()->id)
+        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
             ->update([
                 'can_continue' => 1
             ]);
 
-        // Player 1 Folds
-        PlayerAction::where('id', $this->gamePlay->hand->playerActions->fresh()->slice(1, 1)->first()->id)
+        // Player 2 Folds
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(1, 1)->id])
             ->update([
-                'action_id' => Action::where('name', 'Fold')->first()->id,
+                'action_id' => Action::find(['name' => 'Fold'])->id,
                 'bet_amount' => null,
-                'active' => 0
+                'active' => 0,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
             ]);
 
         $gamePlay = $this->gamePlay->play();
@@ -119,7 +118,6 @@ class ActionOptionsTest extends TestCase
         $this->assertTrue($gamePlay['players'][2]['action_on']);
 
         $this->assertEmpty($gamePlay['players'][1]['availableOptions']);
-
     }
 
     /**
@@ -131,34 +129,36 @@ class ActionOptionsTest extends TestCase
         $this->gamePlay->start();
 
         // Player 1 Calls BB
-        PlayerAction::where('id', $this->gamePlay->hand->playerActions->fresh()->slice(0, 1)->first()->id)
+        PlayerAction::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
             ->update([
-                'action_id' => Action::where('name', 'Call')->first()->id,
+                'action_id' => Action::find(['name' => 'Call'])->id,
                 'bet_amount' => 50.0,
                 'active' => 1,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
             ]);
 
-        TableSeat::query()->where('id', $this->gamePlay->handTable->fresh()->tableSeats->slice(0, 1)->first()->id)
+        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
             ->update([
                 'can_continue' => 1
             ]);
 
         // Player 2 Folds
-        PlayerAction::where('id', $this->gamePlay->hand->playerActions->fresh()->slice(1, 1)->first()->id)
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(1, 1)->id])
             ->update([
-                'action_id' => Action::where('name', 'Fold')->first()->id,
+                'action_id' => Action::find(['name' => 'Fold'])->id,
                 'bet_amount' => null,
-                'active' => 0
+                'active' => 0,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
             ]);
 
         $gamePlay = $this->gamePlay->play();
 
+        // Action On BB
         $this->assertTrue($gamePlay['players'][2]['action_on']);
 
-        $this->assertTrue($gamePlay['players'][2]['availableOptions']->contains('name', 'Fold'));
-        $this->assertTrue($gamePlay['players'][2]['availableOptions']->contains('name', 'Check'));
-        $this->assertTrue($gamePlay['players'][2]['availableOptions']->contains('name', 'Raise'));
-
+        $this->assertContains($this->fold, $gamePlay['players'][2]['availableOptions']);
+        $this->assertContains($this->check, $gamePlay['players'][2]['availableOptions']);
+        $this->assertContains($this->raise, $gamePlay['players'][2]['availableOptions']);
     }
 
     /**
@@ -170,22 +170,21 @@ class ActionOptionsTest extends TestCase
         $this->gamePlay->start();
 
         // Player 1 Calls BB
-        PlayerAction::where('id', $this->gamePlay->hand->playerActions->fresh()->slice(0, 1)->first()->id)
+        PlayerAction::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
             ->update([
-                'action_id' => Action::where('name', 'Call')->first()->id,
+                'action_id' => Action::find(['name' => 'Call'])->id,
                 'bet_amount' => 50.0,
                 'active' => 1,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
             ]);
 
         $gamePlay = $this->gamePlay->play();
 
-        // Action on SB
+        // Action On SB
         $this->assertTrue($gamePlay['players'][1]['action_on']);
 
-        $this->assertTrue($gamePlay['players'][1]['availableOptions']->contains('name', 'Fold'));
-        $this->assertTrue($gamePlay['players'][1]['availableOptions']->contains('name', 'Call'));
-        $this->assertTrue($gamePlay['players'][1]['availableOptions']->contains('name', 'Raise'));
-
+        $this->assertContains($this->fold, $gamePlay['players'][1]['availableOptions']);
+        $this->assertContains($this->call, $gamePlay['players'][1]['availableOptions']);
+        $this->assertContains($this->raise, $gamePlay['players'][1]['availableOptions']);
     }
-
 }

@@ -119,10 +119,10 @@ class Model extends Database
                 }
             }
 
-            if ($this->table == 'player_actions' || $this->table == 'table_seats') {
-                $now = date('Y-m-d H:i:s');
-                $stmt->bindParam(':updated_at', $now);
-            }
+            // if ($this->table == 'player_actions' || $this->table == 'table_seats') {
+            //     $now = date('Y-m-d H:i:s');
+            //     $stmt->bindParam(':updated_at', $now);
+            // }
 
             $stmt->execute();
         } catch(PDOException $e) {
@@ -153,10 +153,10 @@ class Model extends Database
                 }
             }
             
-            if ($this->table == 'player_actions' || $this->table == 'table_seats') {
-                $now = date('Y-m-d H:i:s');
-                $stmt->bindParam(':updated_at', $now);
-            }
+            // if ($this->table == 'player_actions' || $this->table == 'table_seats') {
+            //     $now = date('Y-m-d H:i:s');
+            //     $stmt->bindParam(':updated_at', $now);
+            // }
 
             $stmt->execute();
         } catch(PDOException $e) {
@@ -206,9 +206,9 @@ class Model extends Database
             $pointer++;
         }
 
-        if ($this->table == 'player_actions' || $this->table == 'table_seats') {
-            $properties .= ', updated_at = :updated_at';
-        }
+        // if ($this->table == 'player_actions' || $this->table == 'table_seats') {
+        //     $properties .= ', updated_at = :updated_at';
+        // }
     
         $properties .= " WHERE id = {$this->id}";
 
@@ -231,9 +231,9 @@ class Model extends Database
             $pointer++;
         };
 
-        if ($this->table == 'player_actions' || $this->table == 'table_seats') {
-            $properties .= ', updated_at = :updated_at';
-        }
+        // if ($this->table == 'player_actions' || $this->table == 'table_seats') {
+        //     $properties .= ', updated_at = :updated_at';
+        // }
         $properties .= " WHERE {$where}";
 
         return $properties;

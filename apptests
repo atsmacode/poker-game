@@ -60,5 +60,25 @@ echo "/*** Running GamePlayPotTest.php ***/"
 
 echo '/*** REBUILDING DB ***/';
 php application.php app:build-env
-echo "/*** Running ActionOptionsTest.php ***/"
+echo "/*** Running ActionOptionsTest.php a_player_facing_a_bet_can_fold_call_or_raise ***/"
 ./vendor/bin/phpunit --testdox  tests/Unit/ActionOptionsTest.php --filter a_player_facing_a_bet_can_fold_call_or_raise
+
+echo '/*** REBUILDING DB ***/';
+php application.php app:build-env
+echo "/*** Running ActionOptionsTest.php a_player_facing_a_raise_can_fold_call_or_raise ***/"
+./vendor/bin/phpunit --testdox  tests/Unit/ActionOptionsTest.php --filter a_player_facing_a_raise_can_fold_call_or_raise
+
+echo '/*** REBUILDING DB ***/';
+php application.php app:build-env
+echo "/*** Running ActionOptionsTest.php a_folded_player_has_no_options ***/"
+./vendor/bin/phpunit --testdox  tests/Unit/ActionOptionsTest.php --filter a_folded_player_has_no_options
+
+echo '/*** REBUILDING DB ***/';
+php application.php app:build-env
+echo "/*** Running ActionOptionsTest.php the_big_blind_facing_a_call_can_fold_check_or_raise ***/"
+./vendor/bin/phpunit --testdox  tests/Unit/ActionOptionsTest.php --filter the_big_blind_facing_a_call_can_fold_check_or_raise
+
+echo '/*** REBUILDING DB ***/';
+php application.php app:build-env
+echo "/*** Running ActionOptionsTest.php a_player_facing_a_call_can_fold_call_or_raise ***/"
+./vendor/bin/phpunit --testdox  tests/Unit/ActionOptionsTest.php --filter a_player_facing_a_call_can_fold_call_or_raise
