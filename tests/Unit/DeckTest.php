@@ -3,9 +3,8 @@
 namespace Tests\Unit;
 
 use App\Classes\Deck;
-use PHPUnit\Framework\TestCase;
 
-class DeckTest extends TestCase
+class DeckTest extends BaseTest
 {
     public function setUp(): void
     {

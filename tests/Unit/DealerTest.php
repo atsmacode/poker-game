@@ -9,9 +9,8 @@ use App\Models\HandStreet;
 use App\Models\Player;
 use App\Models\Street;
 use App\Models\Table;
-use PHPUnit\Framework\TestCase;
 
-class DealerTest extends TestCase
+class DealerTest extends BaseTest
 {
     public function setUp(): void
     {

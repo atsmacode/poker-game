@@ -8,9 +8,8 @@ use App\Models\Player;
 use App\Models\Pot;
 use App\Models\Stack;
 use App\Models\Table;
-use PHPUnit\Framework\TestCase;
 
-class BetHelperTest extends TestCase
+class BetHelperTest extends BaseTest
 {
     public function setUp(): void
     {

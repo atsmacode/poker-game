@@ -24,8 +24,8 @@ testsToRun=(
 
 # Using quotes around ${testsToRun[@]} to ignore spaces between array elements
 for test in "${testsToRun[@]}"; do
-    echo '/*** REBUILDING DB ***/';
-        php application.php app:build-env
+    echo '/*** REBUILDING TEST DB ***/';
+        php application.php app:build-env -d true
     echo "/*** Running $test ***/"
         ./vendor/bin/phpunit --testdox $test
 done

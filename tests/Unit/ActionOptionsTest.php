@@ -7,9 +7,8 @@ use App\Models\Action;
 use App\Models\Hand;
 use App\Models\PlayerAction;
 use App\Models\TableSeat;
-use PHPUnit\Framework\TestCase;
 
-class ActionOptionsTest extends TestCase
+class ActionOptionsTest extends BaseTest
 {
 
     protected function setUp(): void

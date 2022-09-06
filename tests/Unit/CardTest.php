@@ -3,9 +3,8 @@
 namespace Tests\Unit;
 
 use App\Models\Card;
-use PHPUnit\Framework\TestCase;
 
-class CardTest extends TestCase
+class CardTest extends BaseTest
 {
 
     public function setUp(): void

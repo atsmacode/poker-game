@@ -3,9 +3,8 @@
 namespace Tests\Unit;
 
 use App\Models\HandType;
-use PHPUnit\Framework\TestCase;
 
-class HandTypeTest extends TestCase
+class HandTypeTest extends BaseTest
 {
 
     public function setUp(): void

@@ -8,9 +8,8 @@ use App\Models\Player;
 use App\Models\Pot;
 use App\Models\Stack;
 use App\Models\Table;
-use PHPUnit\Framework\TestCase;
 
-class PotHelperTest extends TestCase
+class PotHelperTest extends BaseTest
 {
     public function setUp(): void
     {

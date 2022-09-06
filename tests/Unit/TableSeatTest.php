@@ -3,9 +3,8 @@
 namespace Tests\Unit;
 
 use App\Models\TableSeat;
-use PHPUnit\Framework\TestCase;
 
-class TableSeatTest extends TestCase
+class TableSeatTest extends BaseTest
 {
 
     public function setUp(): void

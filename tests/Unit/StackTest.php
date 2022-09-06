@@ -5,9 +5,8 @@ namespace Tests\Unit;
 use App\Models\Player;
 use App\Models\Stack;
 use App\Models\Table;
-use PHPUnit\Framework\TestCase as FrameworkTestCase;
 
-class StackTest extends FrameworkTestCase
+class StackTest extends BaseTest
 {
 
     public function setUp(): void

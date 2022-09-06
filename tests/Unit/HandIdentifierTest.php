@@ -4,9 +4,8 @@ namespace Tests\Unit;
 
 use App\Classes\HandIdentifier;
 use App\Models\Card;
-use PHPUnit\Framework\TestCase;
 
-class HandIdentifierTest extends TestCase
+class HandIdentifierTest extends BaseTest
 {
 
     protected function setUp(): void

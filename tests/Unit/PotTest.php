@@ -4,9 +4,8 @@ namespace Tests\Unit;
 
 use App\Models\Hand;
 use App\Models\Pot;
-use PHPUnit\Framework\TestCase as FrameworkTestCase;
 
-class PotTest extends FrameworkTestCase
+class PotTest extends BaseTest
 {
     public function setUp(): void
     {
