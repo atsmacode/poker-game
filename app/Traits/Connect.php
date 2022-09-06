@@ -11,12 +11,16 @@ trait Connect
 
     public function setCredentials()
     {
+        $dbConfig = 'db.php';
+        if (isset($GLOBALS['dev'])) {
+            $dbConfig = 'db-test.php';
+        }
+
         [
             'servername' => $this->servername,
             'username' => $this->username,
             'password' => $this->password,
             'database' => $this->database
-        ] = require('config/db.php');
+        ] = require('config/' . $dbConfig);
     }
-
 }

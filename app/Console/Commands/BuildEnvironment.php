@@ -65,12 +65,17 @@ class BuildEnvironment extends Command
     protected function configure(): void
     {
         $this->addArgument('-v', InputArgument::OPTIONAL, 'Display feedback message in console.');
+        $this->addOption('-d', '-d', InputArgument::OPTIONAL, 'Run in dev mode for running unit tests.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-
-        $showMessages = $input->getArgument('-v') === 'yes' ?: false;
+        unset($GLOBALS['dev']);
+        $showMessages   = $input->getArgument('-v') === 'yes' ?: false;
+        $dev            = $input->getOption('-d') === 'true' ?: false;
+        if ($dev) {
+            $GLOBALS['dev'] = $dev;
+        }
 
         foreach($this->buildClasses as $class){
             foreach($class::$methods as $method){
@@ -79,8 +84,5 @@ class BuildEnvironment extends Command
         }
 
         return Command::SUCCESS;
-
     }
-
-
 }

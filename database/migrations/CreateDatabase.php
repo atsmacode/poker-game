@@ -2,14 +2,12 @@
 
 namespace Database\Migrations;
 
-use App\Models\Collection;
 use App\Traits\Connect;
 use PDO;
 use PDOException;
 
 class CreateDatabase
 {
-
     use Connect;
 
     public static array $methods = [
@@ -24,8 +22,7 @@ class CreateDatabase
 
     public function dropDatabase($output, $showMessages = true)
     {
-
-        $sql = "DROP DATABASE IF EXISTS `read-right-hands-vanilla`";
+        $sql = "DROP DATABASE IF EXISTS `{$this->database}`";
 
         try {
             $this->connection = new PDO("mysql:host=$this->servername;", $this->username, $this->password);
@@ -39,13 +36,11 @@ class CreateDatabase
         }
 
         return $this;
-
     }
 
     public function createDatabase($output, $showMessages = true)
     {
-
-        $sql = "CREATE DATABASE `read-right-hands-vanilla`";
+        $sql = "CREATE DATABASE `{$this->database}`";
 
         try {
             $this->connection = new PDO("mysql:host=$this->servername;", $this->username, $this->password);
@@ -59,7 +54,5 @@ class CreateDatabase
         }
 
         return $this;
-
     }
-
 }

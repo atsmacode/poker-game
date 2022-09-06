@@ -4,9 +4,8 @@ namespace Tests\Unit;
 
 use App\Classes\GamePlay;
 use App\Models\Hand;
-use PHPUnit\Framework\TestCase;
 
-class GamePlayTest extends TestCase
+class GamePlayTest extends BaseTest
 {
 
     public function setUp(): void
