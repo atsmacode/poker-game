@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+testsToRun=(
+    'tests/Unit/CardTest.php'
+    'tests/Unit/DeckTest.php'
+    'tests/Unit/DealerTest.php --exclude skip'
+    'tests/Unit/DealerTest.php --filter it_can_deal_cards_to_multiple_players_at_a_table'
+    'tests/Unit/GamePlayTest.php'
+    'tests/Unit/HandIdentifierTest.php'
+    'tests/Unit/HandTypeTest.php'
+    'tests/Unit/HandIdentifierTest.php'
+    'tests/Unit/HandTypeTest.php'
+    'tests/Unit/TableSeatTest.php'
+    'tests/Unit/PotTest.php'
+    'tests/Unit/PotHelperTest.php'
+    'tests/Unit/BetHelperTest.php'
+    'tests/Unit/GamePlayPotTest.php'
+    'tests/Unit/ActionOptionsTest.php --filter a_player_facing_a_bet_can_fold_call_or_raise'
+    'tests/Unit/ActionOptionsTest.php --filter a_player_facing_a_raise_can_fold_call_or_raise'
+    'tests/Unit/ActionOptionsTest.php --filter a_folded_player_has_no_options'
+    'tests/Unit/ActionOptionsTest.php --filter the_big_blind_facing_a_call_can_fold_check_or_raise'
+    'tests/Unit/ActionOptionsTest.php --filter a_player_facing_a_call_can_fold_call_or_raise'
+)
