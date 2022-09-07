@@ -140,7 +140,7 @@ class Model extends Database
      * @param array $data
      * @return void
      */
-    public function updateBatch($data, $where)
+    public function updateBatch($data, $where = null)
     {
         $properties = $this->compileUpdateBatchStatement($data, $where);
 
@@ -215,7 +215,7 @@ class Model extends Database
         return $properties;
     }
 
-    private function compileUpdateBatchStatement($data, $where)
+    private function compileUpdateBatchStatement($data, $where = null)
     {
         $properties = "UPDATE {$this->table} SET ";
 
@@ -234,7 +234,9 @@ class Model extends Database
         // if ($this->table == 'player_actions' || $this->table == 'table_seats') {
         //     $properties .= ', updated_at = :updated_at';
         // }
-        $properties .= " WHERE {$where}";
+        if ($where) {
+            $properties .= " WHERE {$where}";
+        }
 
         return $properties;
     }

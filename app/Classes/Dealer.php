@@ -88,7 +88,6 @@ class Dealer
             ]);
 
             $dealtCards++;
-
         }
 
         return $this;

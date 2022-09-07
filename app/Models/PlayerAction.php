@@ -25,4 +25,14 @@ class PlayerAction extends Model
         return Action::find(['id' => $this->action_id]);
     }
 
+    public function playerAfterDealer()
+    {
+        // TODO
+    }
+
+    public function firstActivePlayer()
+    {
+        // TODO
+    }
+
 }

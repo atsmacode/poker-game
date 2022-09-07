@@ -70,18 +70,18 @@ class GamePlay
 
         // Not keen on the way I'm adding/subtracting from the handStreets->count() to match array starting with 0
         $this->street = HandStreet::create([
-            'street_id' => Street::where('name', $this->game->streets[$this->hand->fresh()->streets->count()]['name'])->first()->id,
+            'street_id' => Street::find(['name' => $this->game->streets[count($this->hand->streets()->content)]['name']])->id,
             'hand_id' => $this->hand->id
         ]);
 
         $this->dealer->dealStreetCards(
             $this->street,
-            $this->game->streets[$this->hand->fresh()->streets->count() - 1]['community_cards']
+            $this->game->streets[count($this->hand->streets()->content) - 1]['community_cards']
         );
 
         return [
             'deck'           => $this->dealer->getDeck(),
-            'pot'            => $this->hand->fresh()->pot->amount,
+            'pot'            => $this->hand->pot()->amount,
             'communityCards' => $this->getCommunityCards(),
             'players'        => $this->getPlayerData(),
             'winner'         => null
@@ -116,7 +116,6 @@ class GamePlay
     public function nextStep()
     {
         if($this->theBigBlindIsTheOnlyActivePlayerRemainingPreFlop()){
-
             TableSeat::query()
                 ->where(
                     'id',
@@ -154,18 +153,16 @@ class GamePlay
         /*
          * Reset can_continue & BB status once pre-flop action and/or previous street is finished.
          */
-        TableSeat::query()
-            ->where('table_id', $this->handTable->fresh()->id)
-            ->update([
+        TableSeat::find(['table_id' => $this->handTable->id])
+            ->updateBatch([
                 'can_continue' => 0
             ]);
 
         /*
          * Always reset action_id.
          */
-        PlayerAction::query()
-            ->where('hand_id', $this->hand->fresh()->id)
-            ->update([
+        PlayerAction::find(['hand_id' => $this->hand->id])
+            ->updateBatch([
                 'action_id' => null
             ]);
     }
@@ -208,13 +205,9 @@ class GamePlay
 
     protected function getThePlayerActionShouldBeOnForANewStreet($firstActivePlayer)
     {
-
-        $dealer = $this->hand->fresh()
-            ->playerActions
-            ->where('table_seat_id', TableSeat::where('is_dealer', 1)->first()->fresh()->id)
-            ->first()
-            ->fresh()
-            ->tableSeat->fresh();
+        $dealer = $this->hand->actions()::find([
+            'table_seat_id' => TableSeat::find(['is_dealer' => 1, 'table_id' => $this->handTable->id])->id
+        ]);
 
         $dealerIsActive = $dealer->active ? $dealer : false;
 
@@ -222,6 +215,9 @@ class GamePlay
 
             if($firstActivePlayer->is_dealer){
 
+                /**
+                 * TODO custom SQL playerAfterDealer in PlayerAction model
+                 */
                 $playerAfterDealer = $this->hand->playerActions
                     ->fresh()
                     ->where('active', 1)
@@ -229,6 +225,9 @@ class GamePlay
                     ->first()
                     ->tableSeat;
 
+                /**
+                 * TODO custom SQL firstActivePlayer in PlayerAction model
+                 */
                 $firstActivePlayer = $playerAfterDealer ?: $this->hand->playerActions
                     ->fresh()
                     ->where('active', 1)
@@ -431,7 +430,7 @@ class GamePlay
     public function updateAllOtherSeatsBasedOnLatestAction()
     {
 
-        $latestAction = PlayerAction::find(['id' => $this->hand->actions()->latest()]);
+        $latestAction = PlayerAction::find(['table_seat_id' => $this->hand->actions()->latest()]);
 
         // Update the other table seat statuses accordingly
         switch($latestAction->action_id){
@@ -457,8 +456,7 @@ class GamePlay
 
     public function updateSeatStatusOfLatestAction()
     {
-
-        $latestAction = PlayerAction::find(['id' => $this->hand->actions()->latest()]);
+        $latestAction = PlayerAction::find(['table_seat_id' => $this->hand->actions()->latest()]);
 
         // Update the table seat status of the latest action accordingly
         switch($latestAction->action_id){
@@ -592,7 +590,6 @@ class GamePlay
 
     public function setDealerAndBlindSeats($currentDealer = null)
     {
-
         if(count($this->hand->streets()->content) === 1){
             $bigBlind = PlayerAction::find([
                 'hand_id' => $this->hand->id,
@@ -604,7 +601,6 @@ class GamePlay
                     'big_blind' => 0
                 ]);
             }
-
         }
 
         [
@@ -655,7 +651,6 @@ class GamePlay
         ]);
 
         BetHelper::postBlinds($this->hand, $smallBlind, $bigBlind);
-
     }
 
 }

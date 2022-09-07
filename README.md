@@ -2,7 +2,7 @@
 
 Run the unit test suite on Linux:
 
->./apptests
+>./apptests test-names
 
 Run the unit test suite on Windows:
 

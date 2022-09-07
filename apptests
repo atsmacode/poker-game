@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-
+#!/usr/bin/bash
 source "$1"
 
 # Using quotes around ${testsToRun[@]} to ignore spaces between array elements
