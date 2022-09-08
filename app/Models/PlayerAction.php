@@ -63,9 +63,38 @@ class PlayerAction extends Model
         }
     }
 
-    public function firstActivePlayer()
+    public static function firstActivePlayer($handId, $firstActivePlayer)
     {
-        // TODO
+        return (new static())->firstActivePlayerQuery($handId, $firstActivePlayer);
     }
 
+    private function firstActivePlayerQuery($handId, $firstActivePlayer)
+    {
+        $query = sprintf("
+            SELECT
+                *
+            FROM
+                player_actions
+            WHERE
+                hand_id = :hand_id
+            AND
+                active = 1
+            AND
+                table_seat_id != :first_active_player
+            LIMIT
+                1
+        ");
+
+        try {
+            $stmt = $this->connection->prepare($query);
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $stmt->bindParam(':hand_id', $handId);
+            $stmt->bindParam(':first_active_player', $firstActivePlayer);
+            $stmt->execute();
+
+            return $stmt->fetch();
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
 }

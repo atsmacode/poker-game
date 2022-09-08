@@ -7,7 +7,6 @@ use App\Models\Action;
 use App\Models\HandStreet;
 use App\Models\PlayerAction;
 use App\Models\Street;
-use App\Models\Table;
 use App\Models\TableSeat;
 
 class GamePlay
@@ -48,20 +47,26 @@ class GamePlay
 
     public function showdown()
     {
-
-        $winner = (new Showdown($this->hand->fresh()))->compileHands()->decideWinner();
-
-        PotHelper::awardPot($this->hand->fresh()->pot, $winner['player']);
-
-        $this->hand->complete();
-
         return [
             'deck'           => $this->dealer->getDeck(),
-            'pot'            => $this->hand->fresh()->pot->amount,
+            'pot'            => $this->hand->pot()->amount,
             'communityCards' => $this->getCommunityCards(),
             'players'        => $this->getPlayerData(),
-            'winner'         => $winner
+            'winner'         => true
         ];
+        // $winner = (new Showdown($this->hand->fresh()))->compileHands()->decideWinner();
+
+        // PotHelper::awardPot($this->hand->pot(), $winner['player']);
+
+        // $this->hand->complete();
+
+        // return [
+        //     'deck'           => $this->dealer->getDeck(),
+        //     'pot'            => $this->hand->fresh()->pot->amount,
+        //     'communityCards' => $this->getCommunityCards(),
+        //     'players'        => $this->getPlayerData(),
+        //     'winner'         => $winner
+        // ];
     }
 
     public function continue()
@@ -156,7 +161,7 @@ class GamePlay
         TableSeat::find(['table_id' => $this->handTable->id])
             ->updateBatch([
                 'can_continue' => 0
-            ]);
+            ], 'table_id = ' . $this->handTable->id);
 
         /*
          * Always reset action_id.
@@ -164,7 +169,7 @@ class GamePlay
         PlayerAction::find(['hand_id' => $this->hand->id])
             ->updateBatch([
                 'action_id' => null
-            ]);
+            ], 'hand_id = ' . $this->hand->id);
     }
 
     protected function readyForShowdown()
@@ -214,42 +219,50 @@ class GamePlay
         if($dealerIsActive){
 
             if($firstActivePlayer->is_dealer){
-
                 /**
-                 * TODO custom SQL playerAfterDealer in PlayerAction model
+                 * NOTE: either model names or usage are misleading/incorrect here.
+                 * Commented original code for ref.
                  */
-                $playerAfterDealer = $this->hand->playerActions
-                    ->fresh()
-                    ->where('active', 1)
-                    ->where('table_seat_id', '>', $firstActivePlayer->id)
-                    ->first()
-                    ->tableSeat;
+                $playerAfterDealer = TableSeat::playerAfterDealer(
+                    $this->hand->id,
+                    $firstActivePlayer->id
+                );
 
-                /**
-                 * TODO custom SQL firstActivePlayer in PlayerAction model
-                 */
-                $firstActivePlayer = $playerAfterDealer ?: $this->hand->playerActions
-                    ->fresh()
-                    ->where('active', 1)
-                    ->where('table_seat_id', '!=', $firstActivePlayer->table_seat_id)
-                    ->first()
-                    ->tableSeat;
+                // $playerAfterDealer = $this->hand->playerActions
+                //     ->fresh()
+                //     ->where('active', 1)
+                //     ->where('table_seat_id', '>', $firstActivePlayer->id)
+                //     ->first()
+                //     ->tableSeat;
+
+                $playerAfterDealer = $playerAfterDealer ?: TableSeat::firstActivePlayer(
+                    $this->hand->id,
+                    $firstActivePlayer->id
+                );
+
+                // $firstActivePlayer = $playerAfterDealer ?: $this->hand->playerActions
+                //     ->fresh()
+                //     ->where('active', 1)
+                //     ->where('table_seat_id', '!=', $firstActivePlayer->table_seat_id)
+                //     ->first()
+                //     ->tableSeat;
 
             } else if($firstActivePlayer->id < $dealerIsActive->id){
+                $playerAfterDealer = TableSeat::playerAfterDealer(
+                    $this->hand->id,
+                    $firstActivePlayer->id
+                );
 
-                $playerAfterDealer = $this->hand->playerActions
-                    ->fresh()
-                    ->where('active', 1)
-                    ->where('table_seat_id', '>', $dealerIsActive->id)
-                    ->first()
-                    ->tableSeat;
+                // $playerAfterDealer = $this->hand->playerActions
+                //     ->fresh()
+                //     ->where('active', 1)
+                //     ->where('table_seat_id', '>', $dealerIsActive->id)
+                //     ->first()
+                //     ->tableSeat;
 
                 $firstActivePlayer = $playerAfterDealer ?: $firstActivePlayer;
-
             }
-
         } else {
-
             $playerAfterDealer = $this->hand->playerActions
                 ->fresh()
                 ->where('active', 1)
@@ -257,7 +270,6 @@ class GamePlay
                 ->first();
 
             $firstActivePlayer = $playerAfterDealer ? $playerAfterDealer->tableSeat : $firstActivePlayer;
-
         }
 
         return $firstActivePlayer;
@@ -295,14 +307,15 @@ class GamePlay
 
     protected function getPlayerData()
     {
-
         $playerData = [];
 
         foreach($this->hand->actions()->collect()->content as $playerAction){
-
+            $actionOnGet = $this->getActionOn();
             $actionOn = false;
 
-            if($this->getActionOn() && $this->getActionOn()->player_id === $playerAction->player_id){
+            if($actionOnGet && 
+            $actionOnGet->player_id 
+            === $playerAction->player_id){
                 $actionOn = true;
             }
 

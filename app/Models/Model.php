@@ -59,7 +59,7 @@ class Model extends Database
             $id = $this->connection->lastInsertId();
 
         } catch(PDOException $e) {
-            echo $e->getMessage();
+            echo $this->table . ' ->' . 'updateBatch() ' . $e->getMessage();
         }
 
         $this->content = $this->getSelected(['id' => $id])->content;
@@ -86,7 +86,7 @@ class Model extends Database
             $rows = $stmt->fetchAll();
 
         } catch(PDOException $e) {
-            echo $e->getMessage();
+            echo $this->table . ' ->' . 'updateBatch() ' . $e->getMessage();
         }
 
         if(!$rows){
@@ -126,7 +126,7 @@ class Model extends Database
 
             $stmt->execute();
         } catch(PDOException $e) {
-            echo $e->getMessage();
+            echo $this->table . ' ->' . 'updateBatch() ' . $e->getMessage();
         }
 
         $this->content = $this->getSelected(['id' => $this->id])->content;
@@ -148,9 +148,7 @@ class Model extends Database
             $stmt = $this->connection->prepare($properties);
 
             foreach($data as $column => &$value){
-                if ($value !== null) { 
-                    $stmt->bindParam(':'.$column, $value);
-                }
+                $stmt->bindParam(':'.$column, $value);
             }
             
             // if ($this->table == 'player_actions' || $this->table == 'table_seats') {
@@ -159,8 +157,10 @@ class Model extends Database
             // }
 
             $stmt->execute();
+
+            //$stmt->debugDumpParams();
         } catch(PDOException $e) {
-            echo $e->getMessage();
+            echo $this->table . ' ->' . 'updateBatch() ' . $e->getMessage();
         }
 
         return $this;
@@ -181,7 +181,7 @@ class Model extends Database
             $rows = $stmt->fetchAll();
 
         } catch(PDOException $e) {
-            echo $e->getMessage();
+            echo $this->table . ' ->' . 'updateBatch() ' . $e->getMessage();
         }
 
         $result = $rows;
@@ -221,13 +221,11 @@ class Model extends Database
 
         $pointer = 1;
         foreach($data as $column => $value){
-            if($value !== null){
-                $properties .= $column . " = :". $column;
+            $properties .= $column . " = :". $column;
 
-                if($pointer < count($data)){
-                    $properties .= ", ";
-                };
-            }
+            if($pointer < count($data)){
+                $properties .= ", ";
+            };
             $pointer++;
         };
 

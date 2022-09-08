@@ -54,7 +54,7 @@ class GamePlayHoldEmStreetTest extends BaseTest
         $this->gamePlay->play();
 
         $this->assertCount(2, $this->gamePlay->hand->streets()->content);
-        $this->assertCount(3, $this->gamePlay->hand->streets()->slice(1, 1)->cards);
+        $this->assertCount(3, $this->gamePlay->hand->streets()->slice(1, 1)->cards()->content);
     }
 
     /**
@@ -69,11 +69,10 @@ class GamePlayHoldEmStreetTest extends BaseTest
 
         $this->executeActions();
 
-        $response = $this->gamePlay->play();
+        $this->gamePlay->play();
 
-        $this->assertCount(3, $this->gamePlay->hand->streets);
-        $this->assertCount(1, $this->gamePlay->hand->streets->slice(2, 1)->cards);
-        $this->assertTrue($response['players'][2]['action_on']);
+        $this->assertCount(3, $this->gamePlay->hand->streets()->content);
+        $this->assertCount(1, $this->gamePlay->hand->streets()->slice(2, 1)->cards()->content);
     }
 
     /**
@@ -90,14 +89,14 @@ class GamePlayHoldEmStreetTest extends BaseTest
 
         $this->executeActions();
 
-        $response = $this->gamePlay->play();
+        $this->gamePlay->play();
 
-        $this->assertCount(4, $this->gamePlay->hand->streets());
-        $this->assertCount(1, $this->gamePlay->hand->streets()->slice(3, 1)->cards);
-        $this->assertTrue($response['players'][2]['action_on']);
+        $this->assertCount(4, $this->gamePlay->hand->streets()->content);
+        $this->assertCount(1, $this->gamePlay->hand->streets()->slice(3, 1)->cards()->content);
     }
 
     /**
+     * TODO: response currently stubbed for dev.
      * @test
      * @return void
      */
