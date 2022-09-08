@@ -219,55 +219,28 @@ class GamePlay
         if($dealerIsActive){
 
             if($firstActivePlayer->is_dealer){
-                /**
-                 * NOTE: either model names or usage are misleading/incorrect here.
-                 * Commented original code for ref.
-                 */
                 $playerAfterDealer = TableSeat::playerAfterDealer(
                     $this->hand->id,
                     $firstActivePlayer->id
                 );
 
-                // $playerAfterDealer = $this->hand->playerActions
-                //     ->fresh()
-                //     ->where('active', 1)
-                //     ->where('table_seat_id', '>', $firstActivePlayer->id)
-                //     ->first()
-                //     ->tableSeat;
-
                 $playerAfterDealer = $playerAfterDealer ?: TableSeat::firstActivePlayer(
                     $this->hand->id,
                     $firstActivePlayer->id
                 );
-
-                // $firstActivePlayer = $playerAfterDealer ?: $this->hand->playerActions
-                //     ->fresh()
-                //     ->where('active', 1)
-                //     ->where('table_seat_id', '!=', $firstActivePlayer->table_seat_id)
-                //     ->first()
-                //     ->tableSeat;
-
             } else if($firstActivePlayer->id < $dealerIsActive->id){
                 $playerAfterDealer = TableSeat::playerAfterDealer(
                     $this->hand->id,
                     $firstActivePlayer->id
                 );
 
-                // $playerAfterDealer = $this->hand->playerActions
-                //     ->fresh()
-                //     ->where('active', 1)
-                //     ->where('table_seat_id', '>', $dealerIsActive->id)
-                //     ->first()
-                //     ->tableSeat;
-
                 $firstActivePlayer = $playerAfterDealer ?: $firstActivePlayer;
             }
         } else {
-            $playerAfterDealer = $this->hand->playerActions
-                ->fresh()
-                ->where('active', 1)
-                ->where('table_seat_id', '>', $dealer->id)
-                ->first();
+            $playerAfterDealer = TableSeat::playerAfterDealer(
+                $this->hand->id,
+                $firstActivePlayer->id
+            );
 
             $firstActivePlayer = $playerAfterDealer ? $playerAfterDealer->tableSeat : $firstActivePlayer;
         }
@@ -277,7 +250,6 @@ class GamePlay
 
     public function getActionOn()
     {
-
         $firstActivePlayer = $this->hand->actions()->search('active', 1)->tableSeat();
 
         if($this->allPlayerActionsAreNullSoANewSreetHasBeenSet()){
@@ -350,7 +322,6 @@ class GamePlay
 
     public function getWholeCards($player = null)
     {
-
         $wholeCards = [];
 
         if(isset($player)){
@@ -442,7 +413,6 @@ class GamePlay
 
     public function updateAllOtherSeatsBasedOnLatestAction()
     {
-
         $latestAction = PlayerAction::find(['table_seat_id' => $this->hand->actions()->latest()]);
 
         // Update the other table seat statuses accordingly
@@ -457,14 +427,8 @@ class GamePlay
 
         if(isset($canContinue)){
             $tableSeats = TableSeat::find(['table_id' => $this->handTable->id]);
-            /**
-             * Next line is in dev progress. Need to look into the filter method
-             * which does not seem to be doing what it should, $this->content 
-             * still contains all table seats.
-             */
             $tableSeats->updateBatch(['can_continue' => $canContinue], 'table_seat_id != ' . $latestAction->table_seat_id);
         }
-
     }
 
     public function updateSeatStatusOfLatestAction()
@@ -521,7 +485,6 @@ class GamePlay
 
     public function initiatePlayerStacks()
     {
-
         foreach($this->handTable->seats()->collect()->content as $seat){
             if(count($seat->player()->stacks()->content) === 0){
                 $seat->player()->stacks()::create([
@@ -560,7 +523,6 @@ class GamePlay
 
     protected function identifyTheNextDealerAndBlindSeats($currentDealer)
     {
-
         if($currentDealer){
             $currentDealer = $this->handTable->seats()->search('id', $currentDealer);
         } else {
@@ -665,5 +627,4 @@ class GamePlay
 
         BetHelper::postBlinds($this->hand, $smallBlind, $bigBlind);
     }
-
 }
