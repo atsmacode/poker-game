@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use PDO;
-use PDOException;
-
 class PlayerAction extends Model
 {
 
