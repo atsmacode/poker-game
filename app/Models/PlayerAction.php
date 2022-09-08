@@ -28,11 +28,17 @@ class PlayerAction extends Model
         return Action::find(['id' => $this->action_id]);
     }
 
+    /**
+     * May not bee needed, is in TableSeat
+     */
     public static function playerAfterDealer($handId, $firstActivePlayer)
     {
         return (new static())->playerAfterDealerQuery($handId, $firstActivePlayer);
     }
 
+    /**
+     * May not bee needed, is in TableSeat
+     */
     private function playerAfterDealerQuery($handId, $firstActivePlayer)
     {
         $query = sprintf("
