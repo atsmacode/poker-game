@@ -324,10 +324,10 @@ class Model extends Database
         return $properties;
     }
 
-    private function setModelProperties($result)
+    protected function setModelProperties($result)
     {
         if(count($result) === 1){
-            foreach(array_shift($result) as $column => $value){
+            foreach (array_shift($result) as $column => $value) {
                 $this->{$column} = $value;
             }
         }

@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use PDO;
+use PDOException;
+
 class PlayerAction extends Model
 {
 
@@ -25,9 +28,39 @@ class PlayerAction extends Model
         return Action::find(['id' => $this->action_id]);
     }
 
-    public function playerAfterDealer()
+    public static function playerAfterDealer($handId, $firstActivePlayer)
     {
-        // TODO
+        return (new static())->playerAfterDealerQuery($handId, $firstActivePlayer);
+    }
+
+    private function playerAfterDealerQuery($handId, $firstActivePlayer)
+    {
+        $query = sprintf("
+            SELECT
+                *
+            FROM
+                player_actions
+            WHERE
+                hand_id = :hand_id
+            AND
+                active = 1
+            AND
+                table_seat_id > :first_active_player
+            LIMIT
+                1
+        ");
+
+        try {
+            $stmt = $this->connection->prepare($query);
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $stmt->bindParam(':hand_id', $handId);
+            $stmt->bindParam(':first_active_player', $firstActivePlayer);
+            $stmt->execute();
+
+            return $stmt->fetch();
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+        }
     }
 
     public function firstActivePlayer()
