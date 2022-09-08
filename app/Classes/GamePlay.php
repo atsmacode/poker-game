@@ -3,6 +3,7 @@
 namespace App\Classes;
 
 use App\Helpers\BetHelper;
+use App\Helpers\PotHelper;
 use App\Models\Action;
 use App\Models\HandStreet;
 use App\Models\PlayerAction;
@@ -47,26 +48,26 @@ class GamePlay
 
     public function showdown()
     {
+        // return [
+        //     'deck'           => $this->dealer->getDeck(),
+        //     'pot'            => $this->hand->pot()->amount,
+        //     'communityCards' => $this->getCommunityCards(),
+        //     'players'        => $this->getPlayerData(),
+        //     'winner'         => true
+        // ];
+        $winner = (new Showdown($this->hand))->compileHands()->decideWinner();
+
+        PotHelper::awardPot($this->hand->pot(), $winner['player']);
+
+        $this->hand->complete();
+
         return [
             'deck'           => $this->dealer->getDeck(),
             'pot'            => $this->hand->pot()->amount,
             'communityCards' => $this->getCommunityCards(),
             'players'        => $this->getPlayerData(),
-            'winner'         => true
+            'winner'         => $winner
         ];
-        // $winner = (new Showdown($this->hand->fresh()))->compileHands()->decideWinner();
-
-        // PotHelper::awardPot($this->hand->pot(), $winner['player']);
-
-        // $this->hand->complete();
-
-        // return [
-        //     'deck'           => $this->dealer->getDeck(),
-        //     'pot'            => $this->hand->fresh()->pot->amount,
-        //     'communityCards' => $this->getCommunityCards(),
-        //     'players'        => $this->getPlayerData(),
-        //     'winner'         => $winner
-        // ];
     }
 
     public function continue()

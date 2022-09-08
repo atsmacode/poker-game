@@ -34,19 +34,15 @@ class Showdown
          * Then compare the hand rankings of each remaining player hand
          */
 
-        $playerHands = collect($this->playerHands);
+        $playerHands = $this->playerHands;
         $playerHandsReset = null;
 
         foreach($this->handIdentifier->handTypes as $handType){
+            $playerHandsOfHandType = $this->filter('playerHands', 'handType', 'id', $handType->id);
 
-            $playerHandsOfHandType = $playerHands->where('handType.id' , $handType->id);
-
-            if($playerHandsOfHandType->count() > 1){
-
+            if(count($playerHandsOfHandType) > 1){
                 $playerHandsReset = $this->identifyHighestRankedHandAndKickerOfThisType($playerHands, $playerHandsOfHandType, $handType);
-
             }
-
         }
 
         if($this->considerRankings || $this->considerKickers){
@@ -71,21 +67,32 @@ class Showdown
     {
         $this->considerRankings = true;
 
-        $playerHandsReset = $playerHands->reject(function($value) use($handType){
-            return $value['handType']->id === $handType->id;
+        // $playerHandsReset = $playerHands->reject(function($value) use($handType){
+        //     return $value['handType']->id === $handType->id;
+        // });
+
+        $playerHandsReset = array_filter($playerHands, function($value) use($handType){
+            return $value['handType']->id !== $handType->id;
         });
 
-        $highestRankedHandOfThisType = $playerHandsOfHandType->reject(function($value) use($playerHands, $handType){
+        // $highestRankedHandOfThisType = $playerHandsOfHandType->reject(function($value) use($playerHands, $handType){
 
-            /*
-             * Only reject less than, if multiple remain with same
-             * highestActiveRanking we will consider kickers.
-             */
+        //     /*
+        //      * Only reject less than, if multiple remain with same
+        //      * highestActiveRanking we will consider kickers.
+        //      */
+        //     return max($value['activeCards']) < $playerHands
+        //             ->where('handType' , $handType)
+        //             ->sortByDesc('highestActiveCard')
+        //             ->first()['highestActiveCard'];
+
+        // });
+
+        $highestRankedHandOfThisType = array_filter($playerHandsOfHandType, function($value) use($playerHands, $handType){
             return max($value['activeCards']) < $playerHands
                     ->where('handType' , $handType)
                     ->sortByDesc('highestActiveCard')
                     ->first()['highestActiveCard'];
-
         });
 
         if($highestRankedHandOfThisType->count() > 1){
@@ -112,15 +119,21 @@ class Showdown
     {
         $this->getCommunityCards();
 
-        foreach(TableSeat::where('can_continue', 1)->get() as $tableSeat){
+        foreach(TableSeat::find(['can_continue' => 1])->collect()->content as $tableSeat){
             $wholeCards = [];
-            foreach($tableSeat->player->wholeCards->where('hand_id', $this->hand->id) as $wholeCard){
-                $wholeCards[] = $wholeCard->card;
+
+            /**
+             * TODO: Custom query, too many relations
+             */
+            foreach($tableSeat->player()->wholeCards()::find([
+                'hand_id' => $this->hand->id, 'player_id' => $tableSeat->player()->id
+            ])->collect()->content as $wholeCard){
+                $wholeCards[] = $wholeCard->card();
             }
 
             $compileInfo = (new HandIdentifier())->identify($wholeCards, $this->communityCards)->identifiedHandType;
             $compileInfo['highestActiveCard'] = max($compileInfo['activeCards']);
-            $compileInfo['player'] = $tableSeat->player;
+            $compileInfo['player'] = $tableSeat->player();
 
             $this->playerHands[] = $compileInfo;
         }
@@ -131,11 +144,17 @@ class Showdown
 
     public function getCommunityCards()
     {
-        foreach($this->hand->streets as $handStreets){
-            foreach($handStreets->cards as $handStreetCard){
-                $this->communityCards[] = $handStreetCard->card;
+        foreach($this->hand->streets()->collect()->content as $handStreet){
+            foreach($handStreet->cards()->collect()->content as $handStreetCard){
+                $this->communityCards[] = $handStreetCard->card();
             }
         }
     }
 
+    private function filter($hayStack, $column, $objProperty, $filter)
+    {
+        return array_filter($this->{$hayStack}, function($value) use($column, $objProperty, $filter){
+            return $value[$column]->{$objProperty} === $filter;
+        });
+    }
 }

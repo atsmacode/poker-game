@@ -168,4 +168,49 @@ class HandIdentifierTest extends BaseTest
 
     }
 
+    /**
+     * @test
+     * @return void
+     */
+    public function it_can_identify_two_pair()
+    {
+        $wholeCards = [
+            new Card([
+                'rank' => 'Ace',
+                'suit' => 'Spades'
+            ]),
+            new Card([
+                'rank' => 'King',
+                'suit' => 'Spades'
+            ]),
+        ];
+
+        $communityCards = [
+            new Card([
+                'rank' => 'Ace',
+                'suit' => 'Hearts'
+            ]),
+            new Card([
+                'rank' => 'King',
+                'suit' => 'Hearts'
+            ]),
+            new Card([
+                'rank' => 'Ten',
+                'suit' => 'Diamonds'
+            ]),
+            new Card([
+                'rank' => 'Nine',
+                'suit' => 'Clubs'
+            ]),
+            new Card([
+                'rank' => 'Eight',
+                'suit' => 'Diamonds'
+            ]),
+        ];
+
+        $this->handIdentifier->identify($wholeCards, $communityCards);
+        $this->assertEquals('Two Pair', $this->handIdentifier->identifiedHandType['handType']->name);
+        $this->assertCount(2, $this->handIdentifier->pairs);
+    }
+
 }
