@@ -2,15 +2,15 @@
 
 Run the unit test suite on Linux:
 
->./apptests test-names
+>./runtests suite
 
 Run the unit test suite on Windows:
 
->./apptests.bat
+>./runtests.bat
 
-Drop, Create and Seed all tables
+Drop, Create and Seed all tables. '-d true' is required to run this in test DB
 
-> php application.php app:build-env
+> php application.php app:build-env -d true
 
 # Todo:
 

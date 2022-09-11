@@ -52,6 +52,80 @@ class ShowdownTest extends BaseTest
      * @test
      * @return void
      */
+    public function a_pair_beats_high_card()
+    {
+        $this->gamePlay->initiateStreetActions()
+            ->initiatePlayerStacks()
+            ->setDealerAndBlindSeats();
+
+        $wholeCards = [
+            [
+                'player' => $this->player3,
+                'rank' => 'King',
+                'suit' => 'Spades'
+            ],
+            [
+                'player' => $this->player3,
+                'rank' => 'Six',
+                'suit' => 'Diamonds'
+            ],
+            [
+                'player' => $this->player1,
+                'rank' => 'Six',
+                'suit' => 'Hearts'
+            ],
+            [
+                'player' => $this->player1,
+                'rank' => 'Seven',
+                'suit' => 'Diamonds'
+            ],
+        ];
+
+        $this->setWholeCards($wholeCards);
+
+        $this->executeActions();
+
+        $flopCards = [
+            [
+                'rank' => 'King',
+                'suit' => 'Clubs'
+            ],
+            [
+                'rank' => 'Queen',
+                'suit' => 'Spades'
+            ],
+            [
+                'rank' => 'Deuce',
+                'suit' => 'Clubs'
+            ]
+        ];
+
+        $this->setFlop($flopCards);
+
+        $turnCard = [
+            'rank' => 'Nine',
+            'suit' => 'Diamonds'
+        ];
+
+        $this->setTurn($turnCard);
+
+        $riverCard = [
+            'rank' => 'Three',
+            'suit' => 'Spades'
+        ];
+
+        $this->setRiver($riverCard);
+
+        $gamePlay = $this->gamePlay->play();
+
+        $this->assertEquals($this->player3->id, $gamePlay['winner']['player']->id);
+        $this->assertEquals($this->handTypes->find(['name' => 'Pair'])->id, $gamePlay['winner']['handType']->id);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
     public function two_pair_beats_a_pair()
     {
         $this->gamePlay->initiateStreetActions()

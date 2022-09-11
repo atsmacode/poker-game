@@ -16,7 +16,7 @@ class QueryHelper
         try {
 
             $db = new Database();
-            $stmt = $db->connection->prepare("SELECT * FROM ranks");
+            $stmt = $db->connection->prepare("SELECT * FROM ranks ORDER BY ranking DESC");
             $stmt->execute();
 
             $rows = $stmt->fetchAll();

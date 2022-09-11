@@ -24,5 +24,8 @@ testsToRun=(
     'tests/Unit/GamePlayHoldEmStreetTest.php --filter it_can_deal_1_card_to_a_turn'
     'tests/Unit/GamePlayHoldEmStreetTest.php --filter it_can_deal_1_card_to_a_river'
     'tests/Unit/GamePlayHoldEmStreetTest.php --filter it_can_reach_showdown_when_all_active_players_can_continue_on_the_river'
-    'tests/Unit/ShowdownTest.php'
+    'tests/Unit/ShowdownTest.php --filter a_pair_beats_high_card'
+    'tests/Unit/ShowdownTest.php --filter two_pair_beats_a_pair'
+    'tests/Unit/HandIdentifierKickerTest.php --filter it_can_identify_the_kicker_and_active_ranks_for_a_high_card_hand'
+    'tests/Unit/HandIdentifierKickerTest.php --filter it_can_identify_the_kicker_and_active_ranks_for_a_pair'
 )
