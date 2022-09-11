@@ -17,7 +17,7 @@ class Showdown
      * @var array<Card>
      */
     public $communityCards = [];
-    
+
     /**
      * @var array<mixed>
      */
@@ -60,7 +60,7 @@ class Showdown
                 ->first();
         }
 
-        return $this->highestRankedPlayerHand($this->playerHands, 'handType', 'ranking');
+        return $this->highestRankedPlayerHand();
     }
 
     protected function identifyHighestRankedHandAndKickerOfThisType($playerHands, $playerHandsOfHandType, $handType)
