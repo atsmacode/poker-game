@@ -9,11 +9,19 @@ class Showdown
 {
     public $handIdentifier;
     public $hand;
-    public $communityCards = [];
-    public $playerHands = [];
     public $winner;
     protected $considerKickers = false;
     protected $considerRankings = false;
+
+    /**
+     * @var array<Card>
+     */
+    public $communityCards = [];
+    
+    /**
+     * @var array<mixed>
+     */
+    public array $playerHands = [];
 
     /**
      * @param Hand $hand
@@ -26,14 +34,12 @@ class Showdown
 
     public function decideWinner()
     {
-
         /*
          * foreach handType
          * If there are more than 1 players with that hand type
          * Retain only the one with the highest kicker or active cards as appropriate
          * Then compare the hand rankings of each remaining player hand
          */
-
         $playerHands = $this->playerHands;
         $playerHandsReset = null;
 
@@ -54,13 +60,7 @@ class Showdown
                 ->first();
         }
 
-        // Return the player hand with the highest rank
-        return collect($this->playerHands)
-            ->sortBy(function ($item) {
-                return $item['handType']['ranking'];
-            })
-            ->values()
-            ->first();
+        return $this->highestRankedPlayerHand($this->playerHands, 'handType', 'ranking');
     }
 
     protected function identifyHighestRankedHandAndKickerOfThisType($playerHands, $playerHandsOfHandType, $handType)
@@ -139,7 +139,6 @@ class Showdown
         }
 
         return $this;
-
     }
 
     public function getCommunityCards()
@@ -151,10 +150,34 @@ class Showdown
         }
     }
 
+    /**
+     * To filter an array of objects, specifying the column $column where
+     * the object resides in the array, and the object property
+     * $objProperty to filter by. $hayStack must be a property in
+     * this class.
+     *
+     * @param array $hayStack
+     * @param $column
+     * @param $objProperty
+     * @param string $filter
+     * @return array
+     */
     private function filter($hayStack, $column, $objProperty, $filter)
     {
         return array_filter($this->{$hayStack}, function($value) use($column, $objProperty, $filter){
             return $value[$column]->{$objProperty} === $filter;
         });
+    }
+
+    private function highestRankedPlayerHand()
+    {
+        uasort($this->playerHands, function ($a, $b){
+            if ($a['handType']->ranking == $b['handType']->ranking) {
+                return 0;
+            }
+            return ($a['handType']->ranking > $b['handType']->ranking) ? 1 : -1;
+        });
+
+        return $this->playerHands[array_key_first($this->playerHands)];
     }
 }

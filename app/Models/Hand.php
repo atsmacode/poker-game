@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use PDOException;
+
 class Hand extends Model
 {
     use Collection;
@@ -27,5 +29,24 @@ class Hand extends Model
     public function pot()
     {
         return Pot::find(['hand_id' => $this->id]);
+    }
+
+    public function complete()
+    {
+        $query = sprintf("
+            UPDATE
+                hands
+            SET
+                completed_on = NOW()
+            WHERE
+                id = {$this->id}
+        ");
+
+        try {
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute();
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+        }
     }
 }

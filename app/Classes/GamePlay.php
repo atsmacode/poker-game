@@ -48,13 +48,6 @@ class GamePlay
 
     public function showdown()
     {
-        // return [
-        //     'deck'           => $this->dealer->getDeck(),
-        //     'pot'            => $this->hand->pot()->amount,
-        //     'communityCards' => $this->getCommunityCards(),
-        //     'players'        => $this->getPlayerData(),
-        //     'winner'         => true
-        // ];
         $winner = (new Showdown($this->hand))->compileHands()->decideWinner();
 
         PotHelper::awardPot($this->hand->pot(), $winner['player']);

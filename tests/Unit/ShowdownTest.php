@@ -54,7 +54,6 @@ class ShowdownTest extends BaseTest
      */
     public function two_pair_beats_a_pair()
     {
-
         $this->gamePlay->initiateStreetActions()
             ->initiatePlayerStacks()
             ->setDealerAndBlindSeats();
@@ -83,6 +82,8 @@ class ShowdownTest extends BaseTest
         ];
 
         $this->setWholeCards($wholeCards);
+
+        $this->executeActions();
 
         $flopCards = [
             [
@@ -115,13 +116,10 @@ class ShowdownTest extends BaseTest
 
         $this->setRiver($riverCard);
 
-        $this->executeActions();
-
         $gamePlay = $this->gamePlay->play();
 
         $this->assertEquals($this->player3->id, $gamePlay['winner']['player']->id);
         $this->assertEquals($this->handTypes->find(['name' => 'Two Pair'])->id, $gamePlay['winner']['handType']->id);
-
     }
 
     protected function setWholeCards($wholeCards)
