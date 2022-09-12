@@ -7,7 +7,6 @@ use App\Models\HandType;
 
 class HandIdentifier
 {
-
     public $handTypes;
     public $identifiedHandType = [
         'handType' => null,
@@ -106,10 +105,14 @@ class HandIdentifier
         /**
          * Check against $this->highCard & activeCards so only
          * inactive cards are used as kickers kickers.
+         * 
+         * TODO: This won't yet cover all cases as it will return
+         * null if none of the player's inactive cards meet the
+         * two conditions.
          */
         foreach ($cardRankings as $cardRanking) {
             if (
-                ($this->highCard && $cardRanking != $this->highCard) || 
+                ($this->highCard && $cardRanking != $this->highCard) ||
                 ($activeCards && !in_array($cardRanking, $activeCards))
             ) {
                 return $cardRanking;
