@@ -99,13 +99,20 @@ class HandIdentifier
         return min(array_column($haystack, $columm));
     }
 
-    private function getKicker($highestActiveCard = null)
+    private function getKicker(array $activeCards = null)
     {
         $cardRankings = array_column($this->sortCardsByDescRanking(), 'ranking');
 
-        foreach ($cardRankings as $cardRankings) {
-            if(($this->highCard && $cardRankings != $this->highCard) || $cardRankings != $highestActiveCard){
-                return $cardRankings;
+        /**
+         * Check against $this->highCard & activeCards so only
+         * inactive cards are used as kickers kickers.
+         */
+        foreach ($cardRankings as $cardRanking) {
+            if (
+                ($this->highCard && $cardRanking != $this->highCard) || 
+                ($activeCards && !in_array($cardRanking, $activeCards))
+            ) {
+                return $cardRanking;
             }
         }
     }
@@ -116,7 +123,7 @@ class HandIdentifier
             array_column($this->{$hayStack}, $column)
         );
 
-        if(array_key_exists($key, $this->{$hayStack})){
+        if (array_key_exists($key, $this->{$hayStack})) {
             return $this->{$hayStack}[$key];
         }
 
@@ -172,7 +179,7 @@ class HandIdentifier
                  */
                 if (count($this->allCards) > 2) {
                     $this->identifiedHandType['kicker'] = $this->checkForAceKicker(__FUNCTION__,  $this->identifiedHandType['activeCards'])
-                        ?: $this->getKicker($rank['ranking']);
+                        ?: $this->getKicker($this->identifiedHandType['activeCards']);
                 } else {
                     $this->identifiedHandType['kicker'] = $rank['ranking'];
                 }
@@ -199,7 +206,7 @@ class HandIdentifier
                  */
                 if(count($this->allCards) > 2){
                     $this->identifiedHandType['kicker'] = $this->checkForAceKicker(__FUNCTION__,  $this->identifiedHandType['activeCards'])
-                        ?: $this->getKicker($rank['ranking']);
+                        ?: $this->getKicker($this->identifiedHandType['activeCards']);
                 } else {
                     $this->identifiedHandType['kicker'] = $rank['ranking'];
                 }
