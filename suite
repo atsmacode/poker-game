@@ -8,8 +8,6 @@ testsToRun=(
     'tests/Unit/GamePlayTest.php'
     'tests/Unit/HandIdentifierTest.php'
     'tests/Unit/HandTypeTest.php'
-    'tests/Unit/HandIdentifierTest.php'
-    'tests/Unit/HandTypeTest.php'
     'tests/Unit/TableSeatTest.php'
     'tests/Unit/PotTest.php'
     'tests/Unit/PotHelperTest.php'

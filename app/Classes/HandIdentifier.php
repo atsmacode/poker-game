@@ -41,7 +41,7 @@ class HandIdentifier
         $this->handTypes = (new HandType())->all()->collect()->content;
     }
 
-    public function identify($wholeCards, $communityCards)
+    public function identify(array $wholeCards, array $communityCards): self
     {
         $this->allCards = array_merge($wholeCards, $communityCards);
 
@@ -54,7 +54,7 @@ class HandIdentifier
         return $this;
     }
 
-    private function checkForAceKicker($forHandCheck, $activeCards = null)
+    private function checkForAceKicker(string $forHandCheck, array $activeCards = null): int|bool
     {
         if ($this->thereIsNoAceInTheActiveCardsUnlessHandIsFlush($forHandCheck, $activeCards)) {
             return 14;
@@ -71,7 +71,7 @@ class HandIdentifier
      * @param array<mixed> $rank
      * @return int|bool
      */
-    private function checkForHighAceActiveCardRanking($rank)
+    private function checkForHighAceActiveCardRanking(array $rank): int|bool
     {
         if ($rank['ranking'] === 1) {
             return 14;
@@ -88,17 +88,25 @@ class HandIdentifier
             || (in_array(1, $activeCards) && $forHandCheck === 'hasFlush');
     }
 
-    private function getMax($haystack, $columm)
+    /**
+     * @param array|object $haystack
+     * @param string $columm
+     */
+    private function getMax($haystack, string $columm)
     {
         return max(array_column($haystack, $columm));
     }
 
+    /**
+     * @param array|object $haystack
+     * @param string $columm
+     */
     private function getMin($haystack, $columm)
     {
         return min(array_column($haystack, $columm));
     }
 
-    private function getKicker(array $activeCards = null)
+    private function getKicker(array $activeCards = null): int
     {
         $cardRankings = array_column($this->sortCardsByDescRanking(), 'ranking');
 
@@ -120,7 +128,7 @@ class HandIdentifier
         }
     }
 
-    private function search($hayStack, $column, $value)
+    private function search(string $hayStack, string $column, $value)
     {
         $key = array_search($value,
             array_column($this->{$hayStack}, $column)
@@ -133,7 +141,7 @@ class HandIdentifier
         return false;
     }
 
-    private function filter($hayStack, $column, $filter)
+    private function filter(string $hayStack, string $column, $filter)
     {
         return array_filter($this->{$hayStack}, function($value) use($column, $filter){
             return $value->{$column} === $filter;
@@ -141,7 +149,7 @@ class HandIdentifier
     }
 
     /**
-     * @return array>Card>
+     * @return array<Card>
      */
     private function sortCardsByDescRanking()
     {
@@ -155,7 +163,7 @@ class HandIdentifier
         return $this->allCards;
     }
 
-    public function highestCard()
+    public function highestCard(): self
     {
         if ($this->getMin($this->allCards, 'ranking') === 1) {
             $this->highCard = 14;
@@ -170,7 +178,7 @@ class HandIdentifier
         return $this;
     }
 
-    public function hasPair()
+    public function hasPair(): bool|self
     {
         foreach (QueryHelper::selectRanks() as $rank) {
             if (count($this->filter('allCards', 'rank_id', $rank['id'])) === 2) {
@@ -197,7 +205,7 @@ class HandIdentifier
         return $this;
     }
 
-    public function hasTwoPair()
+    public function hasTwoPair(): bool|self
     {
         foreach(QueryHelper::selectRanks() as $rank){
             if (count($this->filter('allCards', 'rank_id', $rank['id'])) === 2) {

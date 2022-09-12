@@ -3,6 +3,7 @@
 namespace App\Classes;
 
 use App\Models\Hand;
+use App\Models\HandType;
 use App\Models\TableSeat;
 
 class Showdown
@@ -32,22 +33,21 @@ class Showdown
         $this->hand = $hand;
     }
 
-    public function decideWinner()
+    public function decideWinner(): array
     {
         /*
-         * foreach handType
-         * If there are more than 1 players with that hand type
-         * Retain only the one with the highest kicker or active cards as appropriate
-         * Then compare the hand rankings of each remaining player hand
+         * foreach handType, if there are more than 1 players with that hand type,
+         * retain only the one with the highest kicker & active cards as appropriate
+         * then compare the hand rankings of each remaining player hand.
          */
         $playerHands = $this->playerHands;
         $playerHandsReset = null;
 
         foreach($this->handIdentifier->handTypes as $handType){
-            $playerHandsOfHandType = $this->filter('playerHands', 'handType', 'id', $handType->id);
+            $playerHandsOfType = $this->filter('playerHands', 'handType', 'id', $handType->id);
 
-            if(count($playerHandsOfHandType) > 1){
-                $playerHandsReset = $this->identifyHighestRankedHandAndKickerOfThisType($playerHands, $playerHandsOfHandType, $handType);
+            if(count($playerHandsOfType) > 1){
+                $playerHandsReset = $this->identifyHighestRankedHandAndKickerOfThisType($playerHands, $playerHandsOfType, $handType);
             }
         }
 
@@ -58,16 +58,25 @@ class Showdown
         return $this->highestRankedPlayerHand();
     }
 
-    protected function identifyHighestRankedHandAndKickerOfThisType($playerHands, $playerHandsOfHandType, $handType)
+    protected function identifyHighestRankedHandAndKickerOfThisType(
+        array $playerHands,
+        array $playerHandsOfType,
+        HandType $handType
+    ): array
     {
         $this->considerRankings = true;
 
+        /**
+         * Remove hands of this type from the array. That way we can only 
+         * retain the highest rank/kicker-ed hand and put it back in to be 
+         * compared against the other highest ranked/kicker-ed hand types.
+         */
         $playerHandsReset = array_filter($playerHands, function($value) use($handType){
             return $value['handType']->id !== $handType->id;
         });
 
-        $handsOfThisTypeRanked = $this->sortHandsOfTypeByHighestActiveCards(
-            $playerHandsOfHandType
+        $handsOfThisTypeRanked = $this->getBestHandByHighestActiveCardRanksAndKickers(
+            $playerHandsOfType
         );
 
         if(count($handsOfThisTypeRanked) > 1){
@@ -75,7 +84,8 @@ class Showdown
             $this->considerKickers = true;
             /*
              * TODO: split pots & kickers, this functionality is currently
-             * set to only return the first one regardles of count
+             * set to only return the first one even if multiple players
+             * share the same best active cards and kickers.
              */
         }
 
@@ -86,7 +96,7 @@ class Showdown
         return $playerHandsReset;
     }
 
-    public function compileHands()
+    public function compileHands(): self
     {
         $this->getCommunityCards();
 
@@ -104,7 +114,7 @@ class Showdown
 
             $compileInfo = (new HandIdentifier())->identify($wholeCards, $this->communityCards)->identifiedHandType;
             $compileInfo['highestActiveCard'] = max($compileInfo['activeCards']);
-            $compileInfo['player'] = $tableSeat->player();
+            $compileInfo['player']            = $tableSeat->player();
 
             $this->playerHands[] = $compileInfo;
         }
@@ -112,7 +122,7 @@ class Showdown
         return $this;
     }
 
-    public function getCommunityCards()
+    public function getCommunityCards(): void
     {
         foreach($this->hand->streets()->collect()->content as $handStreet){
             foreach($handStreet->cards()->collect()->content as $handStreetCard){
@@ -122,37 +132,34 @@ class Showdown
     }
 
     /**
-     * To filter an array of objects, specifying the column $column where
-     * the object resides in the array, and the object property
-     * $objProperty to filter by. $hayStack must be a property in
-     * this class.
+     * To filter an array of objects, specifying the $column where
+     * the object resides in the array, and the $objProperty to 
+     * filter by. $hayStack must be a property in this class.
      *
      * @param array $hayStack
      * @param $column
      * @param $objProperty
-     * @param string $filter
+     * @param string|int $filter
      * @return array
      */
-    private function filter($hayStack, $column, $objProperty, $filter)
+    private function filter(string $hayStack, string $column, string $objProperty, $filter): array
     {
         return array_filter($this->{$hayStack}, function($value) use($column, $objProperty, $filter){
-            return $value[$column]->{$objProperty} === $filter;
+            return $value[$column]->{$objProperty} == $filter;
         });
     }
 
     /**
      * @param array $hayStack
      */
-    private function sortHandsOfTypeByHighestActiveCards(array $handsOfType): array
+    private function getBestHandByHighestActiveCardRanksAndKickers(array $playerHandsOfType): array
     {
-        uasort($handsOfType, function ($a, $b){
-            if ($a['highestActiveCard'] == $b['highestActiveCard']) {
-                return 0;
-            }
-            return ($a['highestActiveCard'] > $b['highestActiveCard']) ? -1 : 1;
-        });
+        $maxKicker     = max(array_column($playerHandsOfType, 'kicker'));
+        $maxActiveCard = max(array_column($playerHandsOfType, 'highestActiveCard'));
 
-        return $handsOfType;
+        return array_filter($playerHandsOfType, function($value) use($maxKicker, $maxActiveCard){
+            return $value['highestActiveCard'] >= $maxActiveCard && $value['kicker'] >= $maxKicker;
+        });
     }
 
     /**
