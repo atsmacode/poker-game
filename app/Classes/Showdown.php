@@ -52,12 +52,7 @@ class Showdown
         }
 
         if($this->considerRankings || $this->considerKickers){
-            return $playerHandsReset
-                ->sortBy(function ($item) {
-                    return $item['handType']->ranking;
-                })
-                ->values()
-                ->first();
+            return $playerHandsReset[0];
         }
 
         return $this->highestRankedPlayerHand();
@@ -67,52 +62,28 @@ class Showdown
     {
         $this->considerRankings = true;
 
-        // $playerHandsReset = $playerHands->reject(function($value) use($handType){
-        //     return $value['handType']->id === $handType->id;
-        // });
-
         $playerHandsReset = array_filter($playerHands, function($value) use($handType){
             return $value['handType']->id !== $handType->id;
         });
 
-        // $highestRankedHandOfThisType = $playerHandsOfHandType->reject(function($value) use($playerHands, $handType){
+        $handsOfThisTypeRanked = $this->sortHandsOfTypeByHighestActiveCards(
+            $playerHandsOfHandType
+        );
 
-        //     /*
-        //      * Only reject less than, if multiple remain with same
-        //      * highestActiveRanking we will consider kickers.
-        //      */
-        //     return max($value['activeCards']) < $playerHands
-        //             ->where('handType' , $handType)
-        //             ->sortByDesc('highestActiveCard')
-        //             ->first()['highestActiveCard'];
-
-        // });
-
-        $highestRankedHandOfThisType = array_filter($playerHandsOfHandType, function($value) use($playerHands, $handType){
-            return max($value['activeCards']) < $playerHands
-                    ->where('handType' , $handType)
-                    ->sortByDesc('highestActiveCard')
-                    ->first()['highestActiveCard'];
-        });
-
-        if($highestRankedHandOfThisType->count() > 1){
+        if(count($handsOfThisTypeRanked) > 1){
 
             $this->considerKickers = true;
-
-            $highestRankedHandOfThisType = $highestRankedHandOfThisType->reject(function($value) use($highestRankedHandOfThisType){
-
-                /*
-                 * Only reject less than, if multiple remain
-                 * with same kicker it's a split pot.
-                 */
-                return $value['kicker'] < $highestRankedHandOfThisType
-                        ->sortByDesc('kicker')
-                        ->first()['kicker'];
-
-            });
+            /*
+             * TODO: split pots & kickers, this functionality is currently
+             * set to only return the first one regardles of count
+             */
         }
 
-        return $playerHandsReset->push($highestRankedHandOfThisType->first());
+        $highestRankedHandOfType = $handsOfThisTypeRanked[array_key_first($handsOfThisTypeRanked)];
+
+        array_push($playerHandsReset, $highestRankedHandOfType);
+
+        return $playerHandsReset;
     }
 
     public function compileHands()
@@ -169,7 +140,25 @@ class Showdown
         });
     }
 
-    private function highestRankedPlayerHand()
+    /**
+     * @param array $hayStack
+     */
+    private function sortHandsOfTypeByHighestActiveCards(array $handsOfType): array
+    {
+        uasort($handsOfType, function ($a, $b){
+            if ($a['highestActiveCard'] == $b['highestActiveCard']) {
+                return 0;
+            }
+            return ($a['highestActiveCard'] > $b['highestActiveCard']) ? -1 : 1;
+        });
+
+        return $handsOfType;
+    }
+
+    /**
+     * @return array
+     */
+    private function highestRankedPlayerHand(): array
     {
         uasort($this->playerHands, function ($a, $b){
             if ($a['handType']->ranking == $b['handType']->ranking) {

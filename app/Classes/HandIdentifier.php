@@ -130,6 +130,9 @@ class HandIdentifier
         });
     }
 
+    /**
+     * @return array>Card>
+     */
     private function sortCardsByDescRanking()
     {
         uasort($this->allCards, function ($a, $b){
@@ -166,7 +169,6 @@ class HandIdentifier
                 /*
                  * The showdown may be called pre-flop when the pot is checked down to BB.
                  * In which case they may have a pair and no other kicker rank.
-                 * Ultimately this will be handled more elegantly when kickers are fully fleshed out.
                  */
                 if (count($this->allCards) > 2) {
                     $this->identifiedHandType['kicker'] = $this->checkForAceKicker(__FUNCTION__,  $this->identifiedHandType['activeCards'])
@@ -194,7 +196,6 @@ class HandIdentifier
                 /*
                  * The showdown may be called pre-flop when the pot is checked down to BB.
                  * In which case they may have a pair and no other kicker rank.
-                 * Ultimately this will be handled more elegantly when kickers are fully fleshed out.
                  */
                 if(count($this->allCards) > 2){
                     $this->identifiedHandType['kicker'] = $this->checkForAceKicker(__FUNCTION__,  $this->identifiedHandType['activeCards'])

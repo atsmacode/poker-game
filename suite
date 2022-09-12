@@ -28,4 +28,5 @@ testsToRun=(
     'tests/Unit/ShowdownTest.php --filter two_pair_beats_a_pair'
     'tests/Unit/HandIdentifierKickerTest.php --filter it_can_identify_the_kicker_and_active_ranks_for_a_high_card_hand'
     'tests/Unit/HandIdentifierKickerTest.php --filter it_can_identify_the_kicker_and_active_ranks_for_a_pair'
+    'tests/Unit/ShowdownKickerAndRankingTest.php'
 )
