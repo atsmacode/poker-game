@@ -24,3 +24,5 @@ Drop, Create and Seed all tables. '-d true' is required to run this in test DB
 - Address updated_at reliance
     - Currenly manually setting these values so the expected 'action on' seat can be identified in tests
     - Could use UNIX timestamp in miliseconds value
+- Use constants for cards, suits, rankings & deck instead of DB
+- Review all TODO comments and implement solution
