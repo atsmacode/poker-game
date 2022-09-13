@@ -2,6 +2,8 @@
 
 namespace Tests\Unit;
 
+use App\Classes\GamePlay;
+use App\Models\Hand;
 use App\Models\TableSeat;
 
 class TableSeatTest extends BaseTest
@@ -10,6 +12,7 @@ class TableSeatTest extends BaseTest
     public function setUp(): void
     {
         parent::setUp();
+        $this->gamePlay = new GamePlay(Hand::create(['table_id' => 1]));
     }
 
     /**
@@ -25,5 +28,21 @@ class TableSeatTest extends BaseTest
         $tableSeat->update(['can_continue' => 1]);
 
         $this->assertEquals(1, $tableSeat->can_continue);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function it_can_select_first_active_player_after_dealer()
+    {
+        $this->gamePlay->start();
+
+        $playerAction = TableSeat::playerAfterDealer(
+            $this->gamePlay->hand->id,
+            1
+        );
+
+        $this->assertEquals(2, $playerAction['id']);
     }
 }

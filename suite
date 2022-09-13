@@ -9,6 +9,7 @@ testsToRun=(
     'tests/Unit/HandIdentifierTest.php'
     'tests/Unit/HandTypeTest.php'
     'tests/Unit/TableSeatTest.php'
+    'tests/Unit/TableSeatTest.php --filter it_can_select_first_active_player_after_dealer' 
     'tests/Unit/PotTest.php'
     'tests/Unit/PotHelperTest.php'
     'tests/Unit/BetHelperTest.php'
