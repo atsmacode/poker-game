@@ -26,3 +26,4 @@ Drop, Create and Seed all tables. '-d true' is required to run this in test DB
     - Could use UNIX timestamp in miliseconds value
 - Use constants for cards, suits, rankings & deck instead of DB
 - Review all TODO comments and implement solution
+- Once everything above is tidied/finalised, add remaining unit tests from original app
