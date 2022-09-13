@@ -27,3 +27,4 @@ Drop, Create and Seed all tables. '-d true' is required to run this in test DB
 - Use constants for cards, suits, rankings & deck instead of DB
 - Review all TODO comments and implement solution
 - Once everything above is tidied/finalised, add remaining unit tests from original app
+- Also look into proper DB refresh solution as my bash script one does fail sometimes (Symfony component? I want to avoid requiring an entire framework)

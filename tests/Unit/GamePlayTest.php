@@ -48,9 +48,6 @@ class GamePlayTest extends BaseTest
     {
         $response = $this->gamePlay->start();
 
-        // There are 4 players at the table
-        $this->assertCount(6, $this->gamePlay->hand->actions()->content);
-
         // The small blind was posted
         $this->assertEquals(25.0, $this->gamePlay->hand->actions()->slice(1, 1)->bet_amount);
         $this->assertEquals('Bet', $this->gamePlay->hand->actions()->slice(1, 1)->action()->name);
@@ -59,9 +56,9 @@ class GamePlayTest extends BaseTest
         $this->assertEquals(50.0, $this->gamePlay->hand->actions()->slice(2, 1)->bet_amount);
         $this->assertEquals('Bet', $this->gamePlay->hand->actions()->slice(2, 1)->action()->name);
 
-        // The last player at the table has not acted yet
-        $this->assertEquals(null, $this->gamePlay->hand->actions()->slice(3, 1)->bet_amount);
-        $this->assertEquals(null, $this->gamePlay->hand->actions()->slice(3, 1)->action_id);
+        // The dealer, seat 1, has not acted yet
+        $this->assertEquals(null, $this->gamePlay->hand->actions()->slice(0, 1)->bet_amount);
+        $this->assertEquals(null, $this->gamePlay->hand->actions()->slice(0, 1)->action_id);
 
         // Each player in the hand has 2 whole cards
         foreach($this->gamePlay->handTable->players()->collect()->content as $player){
@@ -69,7 +66,7 @@ class GamePlayTest extends BaseTest
         }
 
         // the_action_will_be_on_the_player_after_the_big_blind_once_a_hand_is_started
-        $this->assertTrue($response['players'][3]['action_on']);
+        $this->assertTrue($response['players'][0]['action_on']);
     }
 
     /**

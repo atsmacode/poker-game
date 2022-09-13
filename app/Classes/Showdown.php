@@ -158,7 +158,7 @@ class Showdown
         $maxActiveCard = max(array_column($playerHandsOfType, 'highestActiveCard'));
 
         return array_filter($playerHandsOfType, function($value) use($maxKicker, $maxActiveCard){
-            return $value['highestActiveCard'] >= $maxActiveCard && $value['kicker'] >= $maxKicker;
+            return $value['highestActiveCard'] == $maxActiveCard && $value['kicker'] == $maxKicker;
         });
     }
 
