@@ -92,4 +92,38 @@ class TableSeat extends Model
             echo $e->getMessage();
         }
     }
+
+    public static function bigBlindWins($handId)
+    {
+        return (new static())->bigBlindWinsQuery($handId);
+    }
+
+    private function bigBlindWinsQuery($handId)
+    {
+        $query = sprintf("
+            UPDATE
+                table_seats AS ts
+            LEFT JOIN
+                player_actions AS pa ON ts.id = pa.table_seat_id
+            SET
+                ts.can_continue = 1
+            WHERE
+                pa.hand_id = :hand_id
+            AND
+                pa.active = 1
+            AND
+                pa.big_blind = 1
+        ");
+
+        try {
+            $stmt = $this->connection->prepare($query);
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $stmt->bindParam(':hand_id', $handId);
+            $stmt->execute();
+
+            return true;
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
 }

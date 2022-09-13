@@ -35,13 +35,11 @@ class Model extends Database
 
     public function createEntry($data)
     {
-
         $id = null;
 
         $insertStatement = $this->compileInsertStatement($data);
 
         try {
-
             $stmt = $this->connection->prepare($insertStatement);
 
             /*
@@ -57,7 +55,6 @@ class Model extends Database
             $stmt->execute();
 
             $id = $this->connection->lastInsertId();
-
         } catch(PDOException $e) {
             echo $this->table . ' ->' . 'updateBatch() ' . $e->getMessage();
         }
@@ -65,7 +62,6 @@ class Model extends Database
         $this->content = $this->getSelected(['id' => $id])->content;
 
         return $this;
-
     }
 
     protected function getSelected($data)
@@ -119,6 +115,13 @@ class Model extends Database
                 }
             }
 
+            /**
+             * TODO: not all models have updated_at.
+             *
+             * & A better way to keep track of timings so I don't have
+             * to manually set updated_at for testing. A more precise
+             * time measurement including miliseconds perhaps.
+             */
             // if ($this->table == 'player_actions' || $this->table == 'table_seats') {
             //     $now = date('Y-m-d H:i:s');
             //     $stmt->bindParam(':updated_at', $now);
@@ -157,8 +160,6 @@ class Model extends Database
             // }
 
             $stmt->execute();
-
-            //$stmt->debugDumpParams();
         } catch(PDOException $e) {
             echo $this->table . ' ->' . 'updateBatch() ' . $e->getMessage();
         }
@@ -171,7 +172,6 @@ class Model extends Database
         $rows = null;
 
         try {
-
             $stmt = $this->connection->prepare("
                     SELECT * FROM {$this->table}
                 ");
@@ -179,7 +179,6 @@ class Model extends Database
             $stmt->execute();
 
             $rows = $stmt->fetchAll();
-
         } catch(PDOException $e) {
             echo $this->table . ' ->' . 'updateBatch() ' . $e->getMessage();
         }

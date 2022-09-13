@@ -115,13 +115,7 @@ class GamePlay
     public function nextStep()
     {
         if($this->theBigBlindIsTheOnlyActivePlayerRemainingPreFlop()){
-            TableSeat::query()
-                ->where(
-                    'id',
-                    $this->hand->fresh()->playerActions->fresh()->where('active', 1)->where('big_blind', 1)->first()->table_seat_id
-                )->update([
-                    'can_continue' => 1
-                ]);
+            TableSeat::bigBlindWins($this->hand->id);
 
             return $this->showdown();
         }
@@ -202,6 +196,9 @@ class GamePlay
         return !$this->hand->actions()->search('action_id', null);
     }
 
+    /**
+     * TODO: the logic in this method needs clarified.
+     */
     protected function getThePlayerActionShouldBeOnForANewStreet($firstActivePlayer)
     {
         $dealer = $this->hand->actions()::find([
