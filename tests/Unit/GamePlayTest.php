@@ -17,12 +17,13 @@ class GamePlayTest extends BaseTest
     {
         parent::setUp();
 
-        $this->table = Table::create(['name' => 'Table 2', 'seats' => 3]);
+        $this->table = Table::create(['name' => 'Table 2', 'seats' => 4]);
         $this->gamePlay = new GamePlay(Hand::create(['table_id' => 2]));
 
         $this->player1 = Player::find(['id' => 1]);
         $this->player2 = Player::find(['id' => 2]);
         $this->player3 = Player::find(['id' => 3]);
+        $this->player4 = Player::find(['id' => 4]);
 
         TableSeat::create([
             'table_id' => $this->gamePlay->handTable->id,
@@ -38,6 +39,11 @@ class GamePlayTest extends BaseTest
             'table_id' => $this->gamePlay->handTable->id,
             'player_id' => $this->player3->id
         ]);
+
+        TableSeat::create([
+            'table_id' => $this->gamePlay->handTable->id,
+            'player_id' => $this->player4->id
+        ]);
     }
 
     /**
@@ -46,7 +52,7 @@ class GamePlayTest extends BaseTest
      */
     public function it_can_start_the_game()
     {
-        $response = $this->gamePlay->start();
+        $this->gamePlay->start();
 
         // The small blind was posted
         $this->assertEquals(25.0, $this->gamePlay->hand->actions()->slice(1, 1)->bet_amount);
@@ -64,9 +70,86 @@ class GamePlayTest extends BaseTest
         foreach($this->gamePlay->handTable->players()->collect()->content as $player){
             $this->assertCount(2, $player->wholeCards()->searchMultiple('hand_id', $this->gamePlay->hand->id));
         }
+    }
 
-        // the_action_will_be_on_the_player_after_the_big_blind_once_a_hand_is_started
-        $this->assertTrue($response['players'][0]['action_on']);
+    /**
+     * @test
+     * @return void
+     */
+    public function the_pre_flop_action_will_initially_be_on_the_player_after_big_blind()
+    {
+        $response = $this->gamePlay->start();
+
+        $this->assertTrue($response['players'][3]['action_on']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function it_adds_a_player_that_calls_the_big_blind_to_the_list_of_table_seats_that_can_continue()
+    {
+        $this->gamePlay->start();
+
+        $this->assertCount(0, $this->gamePlay->handTable->seats()::find(['can_continue' => 1])->content);
+
+        // Player 4 Calls
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
+            ->update([
+                'action_id' => Action::find(['name' => 'Call'])->id,
+                'bet_amount' => 50.00,
+                'active' => 1,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-3 seconds'))
+            ]);
+
+        $this->gamePlay->play();
+
+        $this->assertCount(1, $this->gamePlay->handTable->seats()::find(['can_continue' => 1])->content);
+        $this->assertEquals(1, $this->gamePlay->handTable->seats()->slice(3, 1)->can_continue);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function it_removes_a_folded_player_from_the_list_of_seats_that_can_continue()
+    {
+        $this->gamePlay->start();
+
+        $this->assertCount(0, $this->gamePlay->handTable->seats()::find(['can_continue' => 1])->content);
+
+        $this->givenPlayerFourPreviouslyCalled();
+
+        // Player 4 Folds
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
+            ->update([
+                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'bet_amount' => null,
+                'active' => 0,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
+            ]);
+
+        $this->gamePlay->play();
+
+        $this->assertCount(0, $this->gamePlay->handTable->seats()::find(['can_continue' => 1])->content);
+        $this->assertEquals(0, $this->gamePlay->handTable->seats()->slice(3, 1)->can_continue);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function it_can_deal_a_new_street()
+    {
+        $this->gamePlay->start();
+
+        $this->assertCount(1, $this->gamePlay->hand->streets()->content);
+
+        $this->givenActionsMeanNewStreetIsDealt();
+
+        $this->gamePlay->play();
+
+        $this->assertCount(2, $this->gamePlay->hand->streets()->content);
     }
 
     /**
@@ -79,13 +162,137 @@ class GamePlayTest extends BaseTest
 
         $this->assertCount(1, $this->gamePlay->hand->streets()->content);
 
+        $this->givenActionFoldsToBigBlind();
+
+        $gamePlay = $this->gamePlay->play();
+
+        $this->assertCount(1, $this->gamePlay->hand->streets()->content);
+        $this->assertEquals(1, $gamePlay['players'][2]['can_continue']);
+        $this->assertEquals($this->player3->id, $gamePlay['winner']['player']->id);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function the_pre_flop_action_will_be_back_on_the_big_blind_caller_if_the_big_blind_raises()
+    {
+        $this->gamePlay->start();
+
+        $this->assertCount(1, $this->gamePlay->hand->streets() ->content);
+
+        $this->givenBigBlindRaisesPreFlopCaller();
+
+        $response = $this->gamePlay->play();
+
+        // We are still on the pre-flop action
+        $this->assertCount(1, $this->gamePlay->hand->streets() ->content);
+
+        $this->assertTrue($response['players'][3]['action_on']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function if_the_dealer_is_seat_two_and_the_first_active_seat_on_a_new_street_the_first_active_seat_after_them_will_be_first_to_act()
+    {
+        $this->gamePlay->start(TableSeat::find([
+            'id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id
+        ]));
+
+        $this->assertCount(1, $this->gamePlay->hand->streets()->content);
+
+        $this->givenActionsMeanNewStreetIsDealtWhenDealerIsSeatTwo();
+
+        $response = $this->gamePlay->play();
+
+        $this->assertCount(2, $this->gamePlay->hand->streets()->content);
+
+        $this->assertTrue($response['players'][3]['action_on']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    // public function with_three_players_if_the_dealer_is_the_first_active_seat_on_a_new_street_the_first_active_seat_after_them_will_be_first_to_act()
+    // {
+    //     $this->gamePlay->start();
+
+    //     $this->assertCount(1, $this->gamePlay->hand->streets()->content);
+
+    //     $this->givenActionsMeanNewStreetIsDealt();
+
+    //     $response = $this->gamePlay->play();
+
+    //     $this->assertTrue($response['players'][2]['action_on']);
+    // }
+
+    /**
+     * @test
+     * @return void
+     */
+    // public function with_three_players_the_pre_flop_action_will_initially_be_on_player_one()
+    // {
+
+    //     TableSeat::where([
+    //         'table_id' => $this->gamePlay->handTable->id,
+    //         'player_id' => $this->player4->id
+    //     ])->delete();
+
+    //     $this->player4 = null;
+
+    //     $response = $this->gamePlay->start();
+
+    //     $this->assertTrue($response['players'][0]['action_on']);
+
+    //     $this->assertTrue($response['players'][0]['availableOptions']->contains('name', 'Fold'));
+    //     $this->assertTrue($response['players'][0]['availableOptions']->contains('name', 'Call'));
+    //     $this->assertTrue($response['players'][0]['availableOptions']->contains('name', 'Raise'));
+
+    // }
+
+    private function givenPlayerFourPreviouslyCalled()
+    {
+        // Player 4 Calls
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
+            ->update([
+                'action_id' => Action::find(['name' => 'Call'])->id,
+                'bet_amount' => 50.00,
+                'active' => 1,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
+            ]);
+
+        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(3, 1)->id])
+            ->update([
+                'can_continue' => 1
+            ]);
+    }
+
+    private function givenActionFoldsToBigBlind()
+    {
+        // Player 4 Folds
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
+            ->update([
+                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'bet_amount' => null,
+                'active' => 0,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
+            ]);
+
+        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(3, 1)->id])
+            ->update([
+                'can_continue' => 0
+            ]);
+
         // Player 1 Folds
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(0, 1)->id])
             ->update([
                 'action_id' => Action::find(['name' => 'Fold'])->id,
                 'bet_amount' => null,
                 'active' => 0,
-                'updated_at' => date('Y-m-d H:i:s', strtotime('-3 seconds'))
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
             ]);
 
         TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
@@ -99,7 +306,47 @@ class GamePlayTest extends BaseTest
                 'action_id' => Action::find(['name' => 'Fold'])->id,
                 'bet_amount' => null,
                 'active' => 0,
+                'updated_at' => date('Y-m-d H:i:s', time())
+            ]);
+    }
+
+    private function givenActionsMeanNewStreetIsDealt()
+    {
+        // Player 4 Calls
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
+            ->update([
+                'action_id' => Action::find(['name' => 'Call'])->id,
+                'bet_amount' => 50.00,
+                'active' => 1,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-3 seconds'))
+            ]);
+
+        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(3, 1)->id])
+            ->update([
+                'can_continue' => 1
+            ]);
+
+        // Player 1 Folds
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(0, 1)->id])
+            ->update([
+                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'bet_amount' => null,
+                'active' => 0,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
+            ]);
+
+        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
+            ->update([
+                'can_continue' => 0
+            ]);
+
+        // Player 2 Folds
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(1, 1)->id])
+            ->update([
+                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'bet_amount' => null,
+                'active' => 0,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
             ]);
 
         TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(1, 1)->id])
@@ -107,10 +354,121 @@ class GamePlayTest extends BaseTest
                 'can_continue' => 0
             ]);
 
-        $gamePlay = $this->gamePlay->play();
+        // Player 3 Checks
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(2, 1)->id])
+            ->update([
+                'action_id' => Action::find(['name' => 'Check'])->id,
+                'bet_amount' => null,
+                'active' => 1,
+                'updated_at' => date('Y-m-d H:i:s', time())
+            ]);
+    }
 
-        $this->assertCount(1, $this->gamePlay->hand->streets() ->content);
-        $this->assertEquals(1, $gamePlay['players'][2]['can_continue']);
-        $this->assertEquals($this->player3->id, $gamePlay['winner']['player']->id);
+    private function givenActionsMeanNewStreetIsDealtWhenDealerIsSeatTwo()
+    {
+        // Player 1 Calls
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(0, 1)->id])
+            ->update([
+                'action_id' => Action::find(['name' => 'Call'])->id,
+                'bet_amount' => 50.00,
+                'active' => 1,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-3 seconds'))
+            ]);
+
+        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
+            ->update([
+                'can_continue' => 1
+            ]);
+
+        // Player 2 Calls
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(1, 1)->id])
+            ->update([
+                'action_id' => Action::find(['name' => 'Call'])->id,
+                'bet_amount' => 50.00,
+                'active' => 1,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
+            ]);
+
+        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(1, 1)->id])
+            ->update([
+                'can_continue' => 1
+            ]);
+
+        // Player 3 Folds
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(2, 1)->id])
+            ->update([
+                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'bet_amount' => null,
+                'active' => 0,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
+            ]);
+
+        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(2, 1)->id])
+            ->update([
+                'can_continue' => 0
+            ]);
+
+        // Player 4 Checks
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
+            ->update([
+                'action_id' => Action::find(['name' => 'Check'])->id,
+                'bet_amount' => null,
+                'active' => 1,
+                'updated_at' => date('Y-m-d H:i:s', time())
+            ]);
+    }
+
+    private function givenBigBlindRaisesPreFlopCaller()
+    {
+        // Player 4 Calls
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
+            ->update([
+                'action_id' => Action::find(['name' => 'Call'])->id,
+                'bet_amount' => 50.00,
+                'active' => 1,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-3 seconds'))
+            ]);
+
+        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(3, 1)->id])
+            ->update([
+                'can_continue' => 1
+            ]);
+
+        // Player 1 Folds
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(0, 1)->id])
+            ->update([
+                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'bet_amount' => null,
+                'active' => 0,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
+            ]);
+
+        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
+            ->update([
+                'can_continue' => 0
+            ]);
+
+        // Player 2 Folds
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(1, 1)->id])
+            ->update([
+                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'bet_amount' => null,
+                'active' => 0,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
+            ]);
+
+        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(1, 1)->id])
+            ->update([
+                'can_continue' => 0
+            ]);
+
+        // Player 3 Raises
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(2, 1)->id])
+            ->update([
+                'action_id' => Action::find(['name' => 'Raise'])->id,
+                'bet_amount' => 100.00,
+                'active' => 1,
+                'updated_at' => date('Y-m-d H:i:s', time())
+            ]);
     }
 }

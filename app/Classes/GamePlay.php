@@ -193,7 +193,8 @@ class GamePlay
 
     protected function allPlayerActionsAreNullSoANewSreetHasBeenSet()
     {
-        return !$this->hand->actions()->search('action_id', null);
+        return count($this->hand->actions()->content)
+            === count($this->hand->actions()->find(['action_id' => null])->content);
     }
 
     /**
@@ -208,7 +209,6 @@ class GamePlay
         $dealerIsActive = $dealer->active ? $dealer : false;
 
         if($dealerIsActive){
-
             if($firstActivePlayer->is_dealer){
                 $playerAfterDealer = TableSeat::playerAfterDealer(
                     $this->hand->id,
@@ -219,10 +219,10 @@ class GamePlay
                     $this->hand->id,
                     $firstActivePlayer->id
                 );
-            } else if($firstActivePlayer->id < $dealerIsActive->id){
+            } else if($firstActivePlayer->id < $dealerIsActive->table_seat_id){
                 $playerAfterDealer = TableSeat::playerAfterDealer(
                     $this->hand->id,
-                    $firstActivePlayer->id
+                    $dealerIsActive->table_seat_id
                 );
 
                 $firstActivePlayer = $playerAfterDealer ?: $firstActivePlayer;
@@ -233,7 +233,7 @@ class GamePlay
                 $firstActivePlayer->id
             );
 
-            $firstActivePlayer = $playerAfterDealer ? $playerAfterDealer->tableSeat : $firstActivePlayer;
+            $firstActivePlayer = $playerAfterDealer ? $playerAfterDealer : $firstActivePlayer;
         }
 
         return $firstActivePlayer;
@@ -418,7 +418,7 @@ class GamePlay
 
         if(isset($canContinue)){
             $tableSeats = TableSeat::find(['table_id' => $this->handTable->id]);
-            $tableSeats->updateBatch(['can_continue' => $canContinue], 'table_seat_id != ' . $latestAction->table_seat_id);
+            $tableSeats->updateBatch(['can_continue' => $canContinue], 'id != ' . $latestAction->table_seat_id);
         }
     }
 
@@ -496,7 +496,6 @@ class GamePlay
 
     protected function thereAreThreeSeatsAfterTheCurrentDealer($currentDealer)
     {
-
         return $this->handTable->seats()->search('id', $currentDealer->id + 3);
     }
 
@@ -515,7 +514,7 @@ class GamePlay
     protected function identifyTheNextDealerAndBlindSeats($currentDealer)
     {
         if($currentDealer){
-            $currentDealer = $this->handTable->seats()->search('id', $currentDealer);
+            $currentDealer = $this->handTable->seats()->search('id', $currentDealer->id);
         } else {
             $currentDealer = $this->handTable->seats()->search('is_dealer', 1);
         }

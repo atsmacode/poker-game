@@ -38,11 +38,11 @@ class TableSeatTest extends BaseTest
     {
         $this->gamePlay->start();
 
-        $playerAction = TableSeat::playerAfterDealer(
+        $tableSeat = TableSeat::playerAfterDealer(
             $this->gamePlay->hand->id,
             1
         );
 
-        $this->assertEquals(2, $playerAction['id']);
+        $this->assertEquals(2, $tableSeat->id);
     }
 }

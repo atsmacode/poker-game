@@ -14,6 +14,7 @@ Drop, Create and Seed all tables. '-d true' is required to run this in test DB
 
 # Todo:
 
+- Review how theplayer after Dealer is retrieved, I suspect it is a bit off
 - Convert GamePlay class into a middleware pipeline
     - Class can be divided into different classes responsible for a different set of actions like:
         - Who goes next

@@ -24,7 +24,7 @@ class TableSeat extends Model
         return (new static())->playerAfterDealerQuery($handId, $firstActivePlayer);
     }
 
-    private function playerAfterDealerQuery($handId, $firstActivePlayer)
+    private function playerAfterDealerQuery($handId, $dealer)
     {
         $query = sprintf("
             SELECT
@@ -38,7 +38,7 @@ class TableSeat extends Model
             AND
                 pa.active = 1
             AND
-                ts.id > :first_active_player
+                ts.id > :dealer
             LIMIT
                 1
         ");
@@ -47,10 +47,14 @@ class TableSeat extends Model
             $stmt = $this->connection->prepare($query);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->bindParam(':hand_id', $handId);
-            $stmt->bindParam(':first_active_player', $firstActivePlayer);
+            $stmt->bindParam(':dealer', $dealer);
             $stmt->execute();
 
-            return $stmt->fetch();
+            $rows = $stmt->fetchAll();
+
+            $this->setModelProperties($rows);
+
+            return $this;
         } catch(PDOException $e) {
             echo $e->getMessage();
         }
