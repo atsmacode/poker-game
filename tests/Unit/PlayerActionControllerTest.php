@@ -14,19 +14,18 @@ class PlayerActionControllerTest extends BaseTest
         parent::setUp();
 
         $this->gamePlay = new GamePlay(Hand::create(['table_id' => 1]));
-        $this->player1  = Player::find(['id' => 1]);
+        $this->player   = Player::find(['id' => 4]);
     }
 
     /**
      * @test
      * @return void
      */
-    public function it_returns_valid_response_keys_on_post_request()
+    public function an_action_can_be_taken()
     {
-        $_SERVER["REQUEST_METHOD"] = "POST";
-        $_POST['deck']             = $this->gamePlay->dealer->getDeck();
-
         $this->gamePlay->start();
+
+        $this->setPost();
 
         $controller = new PlayerActionController();
         $response   = $controller->action();
@@ -46,5 +45,18 @@ class PlayerActionControllerTest extends BaseTest
             'players',
             'winner'
         ];
+    }
+
+    private function setPost()
+    {
+        $_SERVER["REQUEST_METHOD"] = "POST";
+        $_POST['deck']             = $this->gamePlay->dealer->getDeck();
+        $_POST['player_id']        = $this->player->id;
+        $_POST['table_seat_id']    = 4;
+        $_POST['hand_street_id']   = 1;
+        $_POST['action_id']        = 3;
+        $_POST['bet_amount']       = 50.0;
+        $_POST['active']           = 1;
+        $_POST['player']           = $this->player;
     }
 }

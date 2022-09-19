@@ -56,7 +56,7 @@ class Model extends Database
 
             $id = $this->connection->lastInsertId();
         } catch(PDOException $e) {
-            echo $this->table . ' ->' . 'updateBatch() ' . $e->getMessage();
+            echo $this->table . ' ->' . 'createEntry() ' . $e->getMessage();
         }
 
         $this->content = $this->getSelected(['id' => $id])->content;
@@ -82,7 +82,7 @@ class Model extends Database
             $rows = $stmt->fetchAll();
 
         } catch(PDOException $e) {
-            echo $this->table . ' ->' . 'updateBatch() ' . $e->getMessage();
+            echo $this->table . ' ->' . 'getSelected() ' . $e->getMessage();
         }
 
         if(!$rows){
@@ -129,7 +129,7 @@ class Model extends Database
 
             $stmt->execute();
         } catch(PDOException $e) {
-            echo $this->table . ' ->' . 'updateBatch() ' . $e->getMessage();
+            echo $this->table . ' ->' . 'update() ' . $e->getMessage();
         }
 
         $this->content = $this->getSelected(['id' => $this->id])->content;
@@ -180,13 +180,50 @@ class Model extends Database
 
             $rows = $stmt->fetchAll();
         } catch(PDOException $e) {
-            echo $this->table . ' ->' . 'updateBatch() ' . $e->getMessage();
+            echo $this->table . ' ->' . 'all() ' . $e->getMessage();
         }
 
         $result = $rows;
         $this->content = $result;
 
         return $this;
+    }
+
+    /**
+     * Created this to help with setting NULL values if
+     * required. The condition if($value !== null){ causes
+     * problem from time to time in the other methods.
+     * 
+     * TODO ^
+     *
+     * @param string $column
+     * @param string $value
+     * @return self
+     */
+    public function setValue($column, $value)
+    {
+        $query = sprintf("
+            UPDATE
+                {$this->table}
+            SET
+                {$column} = :value
+            WHERE
+                {$this->table}.id = :id
+            LIMIT
+                1
+        ");
+
+        try {
+            $stmt = $this->connection->prepare($query);
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $stmt->bindParam(':id', $this->id);
+            $stmt->bindParam(':value', $value);
+            $stmt->execute();
+
+            return $this;
+        } catch(PDOException $e) {
+            echo $this->table . ' ->' . 'setNullValue() ' . $e->getMessage();
+        }
     }
 
     private function compileUpdateStatement($data)

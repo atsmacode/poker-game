@@ -39,7 +39,7 @@ class HandControllerTest extends BaseTest
         $controller = new HandController();
         $response   = $controller->play();
 
-        $this->assertEquals(include('index.php'), $response);
+        $this->assertEquals(include('resources/index.php'), $response);
     }
 
     public function validResponseKeys()

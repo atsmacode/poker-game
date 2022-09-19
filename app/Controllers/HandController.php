@@ -33,7 +33,7 @@ class HandController
         if (!isset($GLOBALS['dev'])) {
             return include('../../index.php'); 
         } else {
-            return include('index.php'); 
+            return include('public/index.php'); 
         }
     }
 }
