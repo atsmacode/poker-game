@@ -1,0 +1,9 @@
+@import "bootstrap";
+
+body {
+  font-family: 'Zilla Slab', serif;
+}
+
+strong {
+	font-weight:  700;
+}

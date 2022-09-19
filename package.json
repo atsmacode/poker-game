@@ -1,5 +1,10 @@
 {
   "dependencies": {
+    "bootstrap": "^5.2.1",
     "vue": "^3.2.39"
+  },
+  "devDependencies": {
+    "laravel-mix": "^6.0.49",
+    "vue-loader": "^16.8.3"
   }
 }
