@@ -11,9 +11,15 @@ trait Connect
 
     public function setCredentials()
     {
-        $dbConfig = 'db.php';
+        /**
+         * Manually switching between DIR references.
+         * They are different when actually hitting
+         * endpoint and running unit tests: TODO
+         */
+        $dbConfig = '../../config/db.php';
+
         if (isset($GLOBALS['dev'])) {
-            $dbConfig = 'db-test.php';
+            $dbConfig = 'config/db-test.php';
         }
 
         [
@@ -21,6 +27,6 @@ trait Connect
             'username' => $this->username,
             'password' => $this->password,
             'database' => $this->database
-        ] = require('config/' . $dbConfig);
+        ] = require($dbConfig);
     }
 }

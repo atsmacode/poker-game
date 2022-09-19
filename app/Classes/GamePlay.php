@@ -365,7 +365,7 @@ class GamePlay
         /*
          * We only need to update the available actions if a player did something other than fold.
          */
-        $latestAction = $this->hand->actions()->filter('action_id', $this->fold->id)->latest();
+        $latestAction = $this->hand->actions()->filter('action_id', $this->fold->id)->collect()->latest();
 
         if($playerAction->active === 1){
 
@@ -373,7 +373,10 @@ class GamePlay
                 $this->fold
             ];
 
-            switch(PlayerAction::find(['table_seat_id' => $latestAction])->action_id){
+            switch(PlayerAction::find([
+                'table_seat_id' => $latestAction,
+                'hand_id' => $this->hand->id
+            ])->action_id){
                 case $this->call->id:
                     /*
                      * BB can only check if there were no raises before the latest call action.

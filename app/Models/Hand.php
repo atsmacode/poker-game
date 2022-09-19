@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use PDO;
 use PDOException;
 
 class Hand extends Model
@@ -45,6 +46,32 @@ class Hand extends Model
         try {
             $stmt = $this->connection->prepare($query);
             $stmt->execute();
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public static function latest()
+    {
+        return (new static())->latestQuery();
+    }
+
+    private function latestQuery()
+    {
+        $query = sprintf("
+            SELECT * FROM hands ORDER BY id DESC LIMIT 1
+        ");
+
+        try {
+            $stmt = $this->connection->prepare($query);
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $stmt->execute();
+
+            $rows = $stmt->fetchAll();
+
+            $this->setModelProperties($rows);
+
+            return $this;
         } catch(PDOException $e) {
             echo $e->getMessage();
         }

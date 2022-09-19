@@ -12,6 +12,10 @@ class Dealer
 
     public function setDeck($deck = null)
     {
+        if ($deck) {
+            $this->deck = $deck;
+        }
+
         $this->deck = new Deck();
 
         return $this;
