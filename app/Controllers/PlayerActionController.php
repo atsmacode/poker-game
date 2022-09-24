@@ -2,10 +2,6 @@
 
 namespace App\Controllers;
 
-if (!isset($GLOBALS['dev'])) {
-    require_once('../../vendor/autoload.php');
-}
-
 use App\Classes\GamePlay;
 use App\Helpers\BetHelper;
 use App\Models\Hand;

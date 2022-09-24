@@ -16,7 +16,7 @@ trait Connect
          * They are different when actually hitting
          * endpoint and running unit tests: TODO
          */
-        $dbConfig = '../../config/db.php';
+        $dbConfig = 'config/db.php';
 
         if (isset($GLOBALS['dev'])) {
             $dbConfig = 'config/db-test.php';
@@ -27,6 +27,6 @@ trait Connect
             'username' => $this->username,
             'password' => $this->password,
             'database' => $this->database
-        ] = require($dbConfig);
+        ] = require($GLOBALS['THE_ROOT'] . $dbConfig);
     }
 }

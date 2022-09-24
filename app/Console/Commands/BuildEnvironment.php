@@ -70,6 +70,8 @@ class BuildEnvironment extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $GLOBALS['THE_ROOT'] = '';
+        
         unset($GLOBALS['dev']);
         $showMessages   = $input->getArgument('-v') === 'yes' ?: false;
         $dev            = $input->getOption('-d') === 'true' ?: false;

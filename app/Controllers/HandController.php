@@ -2,10 +2,6 @@
 
 namespace App\Controllers;
 
-if (!isset($GLOBALS['dev'])) {
-    require_once('../../vendor/autoload.php');
-}
-
 use App\Classes\GamePlay;
 use App\Models\Hand;
 
@@ -16,10 +12,14 @@ class HandController
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $gamePlay = (new GamePlay(Hand::create(['table_id' => 1])))->start();
 
-            if (!isset($GLOBALS['dev'])) {
-                header("Content-Type: application/json");
-                http_response_code(200);
-            }
+            /**
+             * Results in headers already sent message
+             * due to require() dumping out data: TODO
+             */
+            // if (!isset($GLOBALS['dev'])) {
+            //     header("Content-Type: application/json");
+            //     http_response_code(200);
+            // }
 
             return json_encode([
                 'deck'           => $gamePlay['deck'],
@@ -30,11 +30,7 @@ class HandController
             ]);
         }
 
-        if (!isset($GLOBALS['dev'])) {
-            return include('../../index.php'); 
-        } else {
-            return include('public/index.php'); 
-        }
+        return include($GLOBALS['THE_ROOT'] . 'public/index.php'); 
     }
 }
 
