@@ -50,13 +50,17 @@ class PlayerActionControllerTest extends BaseTest
     private function setPost()
     {
         $_SERVER["REQUEST_METHOD"] = "POST";
-        $_POST['deck']             = $this->gamePlay->dealer->getDeck();
-        $_POST['player_id']        = $this->player->id;
-        $_POST['table_seat_id']    = 4;
-        $_POST['hand_street_id']   = 1;
-        $_POST['action_id']        = 3;
-        $_POST['bet_amount']       = 50.0;
-        $_POST['active']           = 1;
-        $_POST['player']           = $this->player;
+
+        $requestBody = [
+            'deck'           => $this->gamePlay->dealer->getDeck(),
+            'player_id'      => $this->player->id,
+            'table_seat_id'  => 4,
+            'hand_street_id' => 1,
+            'action_id'      => 3,
+            'bet_amount'     => 50.0,
+            'active'         => 1,
+        ];
+
+        $_POST['body'] = json_encode(serialize($requestBody));
     }
 }

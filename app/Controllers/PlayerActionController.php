@@ -11,23 +11,25 @@ class PlayerActionController
 {
     public function action()
     {
-        return json_encode(['test']);
+        $requestBody = file_get_contents('php://input')
+            ? (array) json_decode(file_get_contents('php://input'))
+            : unserialize(json_decode($_POST['body'], true));
 
         $hand         = Hand::latest();
         $playerAction = PlayerAction::find([
-            'player_id'      =>  $_POST['player_id'],
-            'table_seat_id'  =>  $_POST['table_seat_id'],
-            'hand_street_id' => $_POST['hand_street_id']
+            'player_id'      =>  $requestBody['player_id'],
+            'table_seat_id'  =>  $requestBody['table_seat_id'],
+            'hand_street_id' => $requestBody['hand_street_id']
         ]);
 
         $playerAction->update([
-            'action_id'  => $_POST['action_id'],
-            'bet_amount' => BetHelper::handle($hand, $_POST['player'], $_POST['bet_amount']),
-            'active'     => $_POST['active'],
+            'action_id'  => $requestBody['action_id'],
+            'bet_amount' => BetHelper::handle($hand, $playerAction->player(), $requestBody['bet_amount']),
+            'active'     => $requestBody['active'],
             'updated_at' => date('Y-m-d H:i:s', time())
         ]);
 
-        $gamePlay = (new GamePlay($hand, $_POST['deck']))->play();
+        $gamePlay = (new GamePlay($hand, $requestBody['deck']))->play();
 
         if (!isset($GLOBALS['dev'])) {
             header("Content-Type: application/json");

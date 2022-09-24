@@ -9,7 +9,6 @@ use PDOException;
 
 class Deck extends Database
 {
-
     use Connect;
 
     public $cards = [];
@@ -19,6 +18,27 @@ class Deck extends Database
         parent::__construct();
         $this->setCredentials();
         $this->cards = $this->compileDeck();
+    }
+
+    /**
+     * As this class extends Database,
+     * the connection properties are partially
+     * overridden when serializing.
+     *
+     * @return array
+     */
+    public function __serialize(): array
+    {
+        parent::__serialize();
+        $this->cards = (array) $this->cards;
+        
+        return (array) $this;
+    }
+
+    public function __unserialize(array $data): void
+    {
+        parent::__unserialize($data);
+        $this->cards = $data['cards'];
     }
 
     private function compileDeck()
@@ -55,7 +75,5 @@ class Deck extends Database
         $this->connection = null;
 
         return $rows;
-
     }
-
 }

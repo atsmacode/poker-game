@@ -16,7 +16,7 @@ class CreatePlayers extends Database
 
         $sql = "CREATE TABLE players (
                 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                username VARCHAR(30) NOT NULL,
+                name VARCHAR(30) NOT NULL,
                 email VARCHAR(30) NOT NULL,
                 ai BOOLEAN DEFAULT 0
             )";

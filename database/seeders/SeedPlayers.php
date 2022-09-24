@@ -27,11 +27,11 @@ class SeedPlayers extends Database
             while($inserted < $seats){
 
                 $seatId = $inserted + 1;
-                $username = 'Player ' . $seatId;
+                $name = 'Player ' . $seatId;
                 $email = 'player' . $seatId . '@rrh.com';
 
-                $stmt = $this->connection->prepare("INSERT INTO players (username, email) VALUES (:username, :email)");
-                $stmt->bindParam(':username', $username);
+                $stmt = $this->connection->prepare("INSERT INTO players (name, email) VALUES (:name, :email)");
+                $stmt->bindParam(':name', $name);
                 $stmt->bindParam(':email', $email);
 
                 $stmt->execute();

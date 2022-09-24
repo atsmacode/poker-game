@@ -71,7 +71,7 @@ class DealerTest extends BaseTest
      */
     public function it_can_deal_a_card_to_a_player()
     {
-        $player = Player::find(['username' => 'Player 1']);
+        $player = Player::find(['name' => 'Player 1']);
 
         $this->assertCount(0, $player->wholeCards()->content);
 

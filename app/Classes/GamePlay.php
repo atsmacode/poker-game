@@ -290,7 +290,7 @@ class GamePlay
 
             $playerData[] = [
                 'stack'            => $stack,
-                'name'             => $playerAction->player()->username,
+                'name'             => $playerAction->player()->name,
                 'action_id'        => $playerAction->action_id,
                 'action_name'      => $actionName ,
                 'player_id'        => $playerAction->player_id,
