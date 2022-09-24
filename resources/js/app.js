@@ -1,10 +1,15 @@
+import { createApp } from 'vue'
+import axios from 'axios';
+
+axios.post('/index.php/action', {
+    'player_id': 1
+}).then(response => {
+    console.log(response);
+}).catch(error => {
+    console.log(error);
+});
+
 /**
- * Vue does no longer provide a default export, and instead uses named exports. 
- * 
- * Added 'import * as' to resolve.
+ * Vue3 initialization:
  */
-import * as Vue from 'vue';
-
-const app = new Vue([]);
-
-console.log('hello');
+createApp().mount('#app');

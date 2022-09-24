@@ -11,6 +11,8 @@ class PlayerActionController
 {
     public function action()
     {
+        return json_encode(['test']);
+
         $hand         = Hand::latest();
         $playerAction = PlayerAction::find([
             'player_id'      =>  $_POST['player_id'],
