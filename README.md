@@ -12,6 +12,10 @@ Drop, Create and Seed all tables. '-d true' is required to run this in test DB
 
 > php application.php app:build-env -d true
 
+# Endpoints
+
+http://read-right-hands-vanilla.com/index.php/action
+
 # Todo:
 
 - Set a global root path so I don't have to add conditionals everywhere for testing/prod
