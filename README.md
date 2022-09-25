@@ -19,6 +19,7 @@ http://read-right-hands-vanilla.com/index.php/action
 # Todo:
 
 - Set a global root path so I don't have to add conditionals everywhere for testing/prod
+- look into serialization between PHP/JS - use arrays instead?
 - Review how theplayer after Dealer is retrieved, I suspect it is a bit off
 - Convert GamePlay class into a middleware pipeline
     - Class can be divided into different classes responsible for a different set of actions like:
