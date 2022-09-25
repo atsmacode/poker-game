@@ -21,16 +21,24 @@ class HandController
             //     http_response_code(200);
             // }
 
-            return json_encode([
+            $responseBody = serialize([
                 'deck'           => $gamePlay['deck'],
                 'pot'            => $gamePlay['pot'],
                 'communityCards' => $gamePlay['communityCards'],
                 'players'        => $gamePlay['players'],
                 'winner'         => $gamePlay['winner']
             ]);
+
+            if (isset($GLOBALS['dev'])) {
+                return json_encode(['body' => $responseBody]);
+            } else {
+                echo json_encode(['body' => $responseBody]);
+            }
         }
 
-        return include($GLOBALS['THE_ROOT'] . 'public/index.php'); 
+        if ($_SERVER['REQUEST_METHOD'] == 'GET') { 
+            return include($GLOBALS['THE_ROOT'] . 'public/index.php'); 
+        }
     }
 }
 

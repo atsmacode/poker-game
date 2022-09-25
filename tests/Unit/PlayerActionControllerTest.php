@@ -32,7 +32,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->assertEquals(
             $this->validResponseKeys(),
-            array_keys(json_decode($response, true))
+            array_keys(unserialize(json_decode($response, true)['body']))
         );
     }
 
@@ -61,6 +61,8 @@ class PlayerActionControllerTest extends BaseTest
             'active'         => 1,
         ];
 
-        $_POST['body'] = json_encode(serialize($requestBody));
+        //echo json_encode(serialize($requestBody));
+
+        $_POST['body'] = serialize($requestBody);
     }
 }
