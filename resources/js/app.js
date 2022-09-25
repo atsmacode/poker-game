@@ -53,6 +53,7 @@ createApp({
     methods: {
 		action(action, player){
 
+			console.log('root');
 			let active = 1;
 			if(action.id === 1){
 				active = 0;
@@ -111,8 +112,5 @@ createApp({
 	},
     mounted() {
         this.gameData();
-        // this.$root.$on("action", function(action, player) {
-        //     this.action(action, player);
-        // });
     }
 }).mount('#app');

@@ -320,8 +320,9 @@ class GamePlay
                 $wholeCards[] = [
                     'player_id'        => $wholeCard->player_id,
                     'rank'             => $wholeCard->card()->rank,
+                    'rankAbbreviation' => $wholeCard->card()->rankAbbreviation,
                     'suit'             => $wholeCard->card()->suit,
-                    'suitAbbreviation' => $wholeCard->card()->suit
+                    'suitAbbreviation' => $wholeCard->card()->suitAbbreviation
                 ];
             }
 
@@ -333,8 +334,9 @@ class GamePlay
                 $wholeCards[] = [
                     'player_id'        => $wholeCard->player_id,
                     'rank'             => $wholeCard->card()->rank,
+                    'rankAbbreviation' => $wholeCard->card()->rankAbbreviation,
                     'suit'             => $wholeCard->card()->suit,
-                    'suitAbbreviation' => $wholeCard->card()->suit
+                    'suitAbbreviation' => $wholeCard->card()->suitAbbreviation
                 ];
             }
         }

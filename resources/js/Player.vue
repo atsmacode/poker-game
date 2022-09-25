@@ -12,7 +12,7 @@
             <div v-show="isActive()" class="row mb-2 m-0 p-0 justify-content-center">
                 <div v-for="card in player.whole_cards" class="m-0 me-1 bg-white" v-bind:class="$root.suitColours[card.suit]" style="width:100px;height:130px;">
                     <div class="card-body ps-1 pe-0">
-                        <p class="fs-2"><strong>{{card.rank}}</strong> {{card.suitAbbreviation}}</p>
+                        <p class="fs-2"><strong>{{card.rankAbbreviation}}</strong> {{card.suitAbbreviation}}</p>
                     </div>
                 </div>
             </div>
@@ -72,7 +72,8 @@ export default {
             return this.player.active;
         },
         action(action, player){
-            this.$root.$emit('action', action, player);
+            console.log('player');
+            this.$emit('action', action, player);
         }
     },
 }

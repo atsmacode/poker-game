@@ -19968,7 +19968,8 @@ __webpack_require__.r(__webpack_exports__);
       return this.player.active;
     },
     action: function action(_action, player) {
-      this.$root.$emit('action', _action, player);
+      console.log('player');
+      this.$emit('action', _action, player);
     }
   }
 });
@@ -20056,7 +20057,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "width": "100px",
         "height": "130px"
       }
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("strong", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(card.rank), 1
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("strong", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(card.rankAbbreviation), 1
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(card.suitAbbreviation), 1
     /* TEXT */
@@ -20143,6 +20144,7 @@ __webpack_require__.r(__webpack_exports__);
     action: function action(_action, player) {
       var _this = this;
 
+      console.log('root');
       var active = 1;
 
       if (_action.id === 1) {
@@ -20189,9 +20191,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    this.gameData(); // this.$root.$on("action", function(action, player) {
-    //     this.action(action, player);
-    // });
+    this.gameData();
   }
 }).mount('#app');
 

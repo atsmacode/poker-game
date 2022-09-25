@@ -37,43 +37,42 @@
 
             <div class="col-4 mb-3">
 
-                <player :player="players[0]" :winner="winner"></player>
+                <player @action="action" :player="players[0]" :winner="winner"></player>
 
 
             </div>
 
             <div class="col-4 mb-3">
 
-                <player :player="players[1]" :winner="winner"></player>
+                <player @action="action" @action="action"  :player="players[1]" :winner="winner"></player>
 
             </div>
 
             <div class="col-4 mb-3">
 
-                <player :player="players[2]" :winner="winner"></player>
-
-
-            </div>
+                <player @action="action" :player="players[2]" :winner="winner"></player>
 
             </div>
 
-            <div class="row">
+        </div>
+
+        <div class="row">
 
             <div class="col-4 mb-3">
 
-                <player :player="players[5]" :winner="winner"></player>
-
-            </div>
-
-            <div class="col-4 mb-3">
-
-                <player :player="players[4]" :winner="winner"></player>
+                <player @action="action" :player="players[5]" :winner="winner"></player>
 
             </div>
 
             <div class="col-4 mb-3">
 
-                <player :player="players[3]" :winner="winner"></player>
+                <player @action="action" :player="players[4]" :winner="winner"></player>
+
+            </div>
+
+            <div class="col-4 mb-3">
+
+                <player @action="action" :player="players[3]" :winner="winner"></player>
 
             </div>
 

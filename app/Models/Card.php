@@ -49,6 +49,9 @@ class Card extends Model
         $this->ranking = $result['ranking'];
         $this->id = $result['id'];
 
+        $this->rankAbbreviation = $result['rankAbbreviation'];
+        $this->suitAbbreviation = $result['suitAbbreviation'];
+
         return $this;
 
     }
@@ -59,7 +62,12 @@ class Card extends Model
 
             $stmt = $this->connection->prepare("
                     SELECT 
-                        c.*, r.name AS 'rank', s.name AS suit, r.ranking AS ranking 
+                        c.*,
+                        r.name AS 'rank',
+                        r.abbreviation AS rankAbbreviation,
+                        s.name AS suit,
+                        s.abbreviation AS suitAbbreviation,
+                        r.ranking AS ranking 
                     FROM 
                         cards c
                     LEFT OUTER JOIN 
@@ -88,7 +96,12 @@ class Card extends Model
 
             $stmt = $this->connection->prepare("
                     SELECT
-                        c.*, r.name AS 'rank', s.name suit, r.ranking ranking 
+                        c.*,
+                        r.name AS 'rank',
+                        r.abbreviation AS rankAbbreviation,
+                        s.name AS suit,
+                        s.abbreviation AS suitAbbreviation,
+                        r.ranking AS ranking 
                     FROM 
                         cards c
                     LEFT OUTER JOIN 
