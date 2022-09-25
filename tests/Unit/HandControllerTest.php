@@ -17,7 +17,7 @@ class HandControllerTest extends BaseTest
      */
     public function it_returns_valid_response_keys_on_post_request()
     {
-        $_SERVER["REQUEST_METHOD"] = "POST";
+        $_SERVER['REQUEST_METHOD'] = 'POST';
 
         $controller = new HandController();
         $response   = $controller->play();
@@ -34,7 +34,8 @@ class HandControllerTest extends BaseTest
      */
     public function it_returns_index_on_get_request()
     {
-        $_SERVER["REQUEST_METHOD"] = "GET";
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_URI']    = 'index.php/play';
 
         $controller = new HandController();
         $response   = $controller->play();

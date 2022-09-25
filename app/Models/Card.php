@@ -28,6 +28,27 @@ class Card extends Model
         $this->select();
     }
 
+    public function __serialize(): array
+    {
+        parent::__serialize();
+
+        return (array) $this;
+    }
+
+    public function __unserialize(array $data): void
+    {
+        parent::__unserialize($data);
+
+        $this->rank             = $data['rank'];
+        $this->suit             = $data['suit'];
+        $this->suit_id          = $data['suit_id'];
+        $this->rank_id          = $data['rank_id'];
+        $this->ranking          = $data['ranking'];
+        $this->id               = $data['id'];
+        $this->rankAbbreviation = $data['rankAbbreviation'];
+        $this->suitAbbreviation = $data['suitAbbreviation'];
+    }
+
     public function select()
     {
         if($this->selectedRank && $this->selectedSuit || $this->id){
@@ -42,13 +63,12 @@ class Card extends Model
         $result = array_shift($rows);
         $this->content = $result;
 
-        $this->rank = $result['rank'];
-        $this->suit = $result['suit'];
-        $this->suit_id = $result['suit_id'];
-        $this->rank_id = $result['rank_id'];
-        $this->ranking = $result['ranking'];
-        $this->id = $result['id'];
-
+        $this->rank             = $result['rank'];
+        $this->suit             = $result['suit'];
+        $this->suit_id          = $result['suit_id'];
+        $this->rank_id          = $result['rank_id'];
+        $this->ranking          = $result['ranking'];
+        $this->id               = $result['id'];
         $this->rankAbbreviation = $result['rankAbbreviation'];
         $this->suitAbbreviation = $result['suitAbbreviation'];
 

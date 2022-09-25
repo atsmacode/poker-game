@@ -2,14 +2,6 @@ import { createApp } from 'vue'
 import axios from 'axios';
 import Player from './Player.vue'
 
-// axios.post('/index.php/action', {
-//     'player_id': 1
-// }).then(response => {
-//     console.log(response);
-// }).catch(error => {
-//     console.log(error);
-// });
-
 createApp({
     components: {
         Player

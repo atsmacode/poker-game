@@ -49,7 +49,7 @@ class PlayerActionControllerTest extends BaseTest
 
     private function setPost()
     {
-        $_SERVER["REQUEST_METHOD"] = "POST";
+        $_SERVER['REQUEST_METHOD'] = 'POST';
 
         $requestBody = [
             'deck'           => $this->gamePlay->dealer->getDeck(),
