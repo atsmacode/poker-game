@@ -61,8 +61,6 @@ class PlayerActionControllerTest extends BaseTest
             'active'         => 1,
         ];
 
-        //echo json_encode(serialize($requestBody));
-
         $_POST['body'] = serialize($requestBody);
     }
 }
