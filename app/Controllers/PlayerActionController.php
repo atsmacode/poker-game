@@ -47,7 +47,7 @@ class PlayerActionController
         if (isset($GLOBALS['dev'])) {
             return json_encode(['body' => $responseBody]);
         } else {
-            echo json_encode(['body' => $responseBody]);
+            echo json_encode(['body' => unserialize($responseBody)]);
         }
     }
 }

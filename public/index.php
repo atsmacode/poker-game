@@ -19,4 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-require($GLOBALS['THE_ROOT'] . 'resources/index.php');
+if (str_contains($_SERVER['REQUEST_URI'], 'play')) {
+    require($GLOBALS['THE_ROOT'] . 'resources/play.php');
+} else {
+    require($GLOBALS['THE_ROOT'] . 'resources/index.php');
+}

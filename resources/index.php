@@ -16,7 +16,7 @@
     <p>Read Right Hands is a simple poker game developed in Laravel.</p>
 
     <div class="ms-1 mb-3">
-        <a class="btn btn-primary" href="play.php">Play Now!</a>
+        <a class="btn btn-primary" href="play">Play Now!</a>
     </div>
 
     <div class="bg-primary p-3 rounded mb-1">
