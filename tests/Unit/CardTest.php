@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\Card;
+use App\Constants\Card as Constants;
 
 class CardTest extends BaseTest
 {
@@ -11,10 +12,7 @@ class CardTest extends BaseTest
     {
         parent::setUp();
         
-        $this->card = new Card([
-            'rank' => 'Ace',
-            'suit' => 'Spades'
-        ]);
+        $this->card = new Card(Constants::ACE_SPADES);
     }
 
     /**

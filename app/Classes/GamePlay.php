@@ -311,13 +311,13 @@ class GamePlay
         $wholeCards = [];
 
         if(isset($player)){
-            foreach($player->wholeCards()->collect()->searchMultiple('hand_id', $this->hand->id) as $wholeCard){
+            foreach($player->getWholeCards($this->hand->id) as $wholeCard){
                 $wholeCards[] = [
-                    'player_id'        => $wholeCard->player_id,
-                    'rank'             => $wholeCard->card()->rank,
-                    'rankAbbreviation' => $wholeCard->card()->rankAbbreviation,
-                    'suit'             => $wholeCard->card()->suit,
-                    'suitAbbreviation' => $wholeCard->card()->suitAbbreviation
+                    'player_id'        => $wholeCard['player_id'],
+                    'rank'             => $wholeCard['rank'],
+                    'rankAbbreviation' => $wholeCard['rankAbbreviation'],
+                    'suit'             => $wholeCard['suit'],
+                    'suitAbbreviation' => $wholeCard['suitAbbreviation']
                 ];
             }
 
@@ -325,7 +325,7 @@ class GamePlay
         }
 
         foreach(TableSeat::find(['can_continue' => 1]) as $tableSeat){
-            foreach($tableSeat->player()->collect()->searchMultiple('hand_id', $this->hand->id) as $wholeCard){
+            foreach($tableSeat->player()->getWholeCards($this->hand->id) as $wholeCard){
                 $wholeCards[] = [
                     'player_id'        => $wholeCard->player_id,
                     'rank'             => $wholeCard->card()->rank,
@@ -345,9 +345,9 @@ class GamePlay
         foreach($this->hand->streets()->collect()->content as $street){
             foreach($street->cards()->collect()->content as $streetCard){
                 $cards[] = [
-                    'rank'             => $streetCard->card()->rank,
-                    'suit'             => $streetCard->card()->suit,
-                    'suitAbbreviation' => $streetCard->card()->suit
+                    'rank'             => $streetCard->getCard()['rank'],
+                    'suit'             => $streetCard->getCard()['suit'],
+                    'suitAbbreviation' => $streetCard->getCard()['suit']
                 ];
             }
         }

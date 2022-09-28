@@ -18,130 +18,181 @@ class Card extends Model
     public int $ranking;
     public $content;
 
-    public function __construct(array $data = null)
+    public function __construct(array $card = null)
     {
+        //var_dump($card);
+        if ($card) {
+            $merged = array_merge(
+                $card[0],
+                $card[1]
+            );
+            $merged['id'] = $card['id'];
+    
+            $this->rank             = $merged['rank'];
+            $this->suit             = $merged['suit'];
+            $this->suit_id          = $merged['suit_id'];
+            $this->rank_id          = $merged['rank_id'];
+            $this->ranking          = $merged['ranking'];
+            $this->id               = $merged['id'];
+            $this->rankAbbreviation = $merged['rankAbbreviation'];
+            $this->suitAbbreviation = $merged['suitAbbreviation'];
+        }
+
         parent::__construct();
         $this->setCredentials();
-        $this->selectedRank = array_key_exists('rank', $data)  ? $data['rank'] : null;
-        $this->selectedSuit = array_key_exists('suit', $data)  ? $data['suit'] : null;
-        $this->id = array_key_exists('id', $data) ? $data['id'] : null;
-        $this->select();
+        // $this->selectedRank = array_key_exists('rank', $merged)  ? $merged['rank'] : null;
+        // $this->selectedSuit = array_key_exists('suit', $merged)  ? $merged['suit'] : null;
+        // $this->id = array_key_exists('id', $data) ? $data['id'] : null;
+        // $this->select();
     }
 
-    public function __serialize(): array
+    // public function __serialize(): array
+    // {
+    //     parent::__serialize();
+
+    //     return (array) $this;
+    // }
+
+    // public function __unserialize(array $data): void
+    // {
+    //     parent::__unserialize($data);
+
+    //     $this->rank             = $data['rank'];
+    //     $this->suit             = $data['suit'];
+    //     $this->suit_id          = $data['suit_id'];
+    //     $this->rank_id          = $data['rank_id'];
+    //     $this->ranking          = $data['ranking'];
+    //     $this->id               = $data['id'];
+    //     $this->rankAbbreviation = $data['rankAbbreviation'];
+    //     $this->suitAbbreviation = $data['suitAbbreviation'];
+    // }
+
+    // public function select()
+    // {
+    //     if($this->selectedRank && $this->selectedSuit || $this->id){
+    //         $this->getSelected();
+    //     }
+    // }
+
+    protected function setModelProperties($rows)
     {
-        parent::__serialize();
-
-        return (array) $this;
-    }
-
-    public function __unserialize(array $data): void
-    {
-        parent::__unserialize($data);
-
-        $this->rank             = $data['rank'];
-        $this->suit             = $data['suit'];
-        $this->suit_id          = $data['suit_id'];
-        $this->rank_id          = $data['rank_id'];
-        $this->ranking          = $data['ranking'];
-        $this->id               = $data['id'];
-        $this->rankAbbreviation = $data['rankAbbreviation'];
-        $this->suitAbbreviation = $data['suitAbbreviation'];
-    }
-
-    public function select()
-    {
-        if($this->selectedRank && $this->selectedSuit || $this->id){
-            $this->getSelected();
-        }
-    }
-
-    protected function getSelected($column = null, $value = null)
-    {
-        $rows = $this->id ? $this->getById() : $this->getByNames();
-
-        $result = array_shift($rows);
-        $this->content = $result;
-
-        $this->rank             = $result['rank'];
-        $this->suit             = $result['suit'];
-        $this->suit_id          = $result['suit_id'];
-        $this->rank_id          = $result['rank_id'];
-        $this->ranking          = $result['ranking'];
-        $this->id               = $result['id'];
-        $this->rankAbbreviation = $result['rankAbbreviation'];
-        $this->suitAbbreviation = $result['suitAbbreviation'];
+        $this->rank             = $rows['rank'];
+        $this->suit             = $rows['suit'];
+        $this->suit_id          = $rows['suit_id'];
+        $this->rank_id          = $rows['rank_id'];
+        $this->ranking          = $rows['ranking'];
+        $this->id               = $rows['id'];
+        $this->rankAbbreviation = $rows['rankAbbreviation'];
+        $this->suitAbbreviation = $rows['suitAbbreviation'];
 
         return $this;
 
     }
 
-    private function getByNames()
-    {
-        try {
+    // private function getByNames()
+    // {
+    //     try {
 
-            $stmt = $this->connection->prepare("
-                    SELECT 
-                        c.*,
-                        r.name AS 'rank',
-                        r.abbreviation AS rankAbbreviation,
-                        s.name AS suit,
-                        s.abbreviation AS suitAbbreviation,
-                        r.ranking AS ranking 
-                    FROM 
-                        cards c
-                    LEFT OUTER JOIN 
-                        ranks r ON c.rank_id = r.id
-                    LEFT OUTER JOIN 
-                        suits s ON c.suit_id = s.id
-                    WHERE 
-                        r.name = '{$this->selectedRank}' AND s.name = '{$this->selectedSuit}'
-                ");
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $stmt->execute();
+    //         $stmt = $this->connection->prepare("
+    //                 SELECT 
+    //                     c.*,
+    //                     r.name AS 'rank',
+    //                     r.abbreviation AS rankAbbreviation,
+    //                     s.name AS suit,
+    //                     s.abbreviation AS suitAbbreviation,
+    //                     r.ranking AS ranking 
+    //                 FROM 
+    //                     cards c
+    //                 LEFT OUTER JOIN 
+    //                     ranks r ON c.rank_id = r.id
+    //                 LEFT OUTER JOIN 
+    //                     suits s ON c.suit_id = s.id
+    //                 WHERE 
+    //                     r.name = '{$this->selectedRank}' AND s.name = '{$this->selectedSuit}'
+    //             ");
+    //         $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    //         $stmt->execute();
 
-            $rows = $stmt->fetchAll();
+    //         $rows = $stmt->fetchAll();
 
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-            return null;
-        }
+    //     } catch(PDOException $e) {
+    //         echo $e->getMessage();
+    //         return null;
+    //     }
 
-        return $rows;
-    }
+    //     return $rows;
+    // }
 
-    private function getById()
-    {
-        try {
+    // public static function getById(int $cardId)
+    // {
+    //     return (new static())->getByIdQuery($cardId);
+    // }
 
-            $stmt = $this->connection->prepare("
-                    SELECT
-                        c.*,
-                        r.name AS 'rank',
-                        r.abbreviation AS rankAbbreviation,
-                        s.name AS suit,
-                        s.abbreviation AS suitAbbreviation,
-                        r.ranking AS ranking 
-                    FROM 
-                        cards c
-                    LEFT OUTER JOIN 
-                        ranks r ON c.rank_id = r.id
-                    LEFT OUTER JOIN 
-                        suits s ON c.suit_id = s.id
-                    WHERE 
-                        c.id = {$this->id}
-                ");
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $stmt->execute();
+    // private function getByIdQuery(int $cardId)
+    // {
+    //     try {
 
-            $rows = $stmt->fetchAll();
+    //         $stmt = $this->connection->prepare("
+    //                 SELECT
+    //                     c.*,
+    //                     r.name AS 'rank',
+    //                     r.abbreviation AS rankAbbreviation,
+    //                     s.name AS suit,
+    //                     s.abbreviation AS suitAbbreviation,
+    //                     r.ranking AS ranking 
+    //                 FROM 
+    //                     cards c
+    //                 LEFT OUTER JOIN 
+    //                     ranks r ON c.rank_id = r.id
+    //                 LEFT OUTER JOIN 
+    //                     suits s ON c.suit_id = s.id
+    //                 WHERE 
+    //                     c.id = {$cardId}
+    //             ");
+    //         $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    //         $stmt->execute();
 
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-            return null;
-        }
+    //         $row = $stmt->fetch();
 
-        return $rows;
-    }
+    //     } catch(PDOException $e) {
+    //         echo $e->getMessage();
+    //         return null;
+    //     }
 
+    //     return $this->getSelected($row);
+    // }
+
+    // private function getById()
+    // {
+    //     try {
+
+    //         $stmt = $this->connection->prepare("
+    //                 SELECT
+    //                     c.*,
+    //                     r.name AS 'rank',
+    //                     r.abbreviation AS rankAbbreviation,
+    //                     s.name AS suit,
+    //                     s.abbreviation AS suitAbbreviation,
+    //                     r.ranking AS ranking 
+    //                 FROM 
+    //                     cards c
+    //                 LEFT OUTER JOIN 
+    //                     ranks r ON c.rank_id = r.id
+    //                 LEFT OUTER JOIN 
+    //                     suits s ON c.suit_id = s.id
+    //                 WHERE 
+    //                     c.id = {$this->id}
+    //             ");
+    //         $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    //         $stmt->execute();
+
+    //         $rows = $stmt->fetchAll();
+
+    //     } catch(PDOException $e) {
+    //         echo $e->getMessage();
+    //         return null;
+    //     }
+
+    //     return $rows;
+    // }
 }
