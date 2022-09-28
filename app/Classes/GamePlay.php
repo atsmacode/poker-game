@@ -506,14 +506,12 @@ class GamePlay
 
     protected function thereAreTwoSeatsAfterTheCurrentDealer($currentDealer)
     {
-        return $this->handTable->seats()->search('id', $currentDealer->id + 2) &&
-            $this->handTable->seats()->search('id', $currentDealer->id + 3);
+        return $this->handTable->seats()->search('id', $currentDealer->id + 2);
     }
 
     protected function thereIsOneSeatAfterTheDealer($currentDealer)
     {
-        return $this->handTable->seats()->search('id', $currentDealer->id + 1) &&
-            $this->handTable->seats()->search('id', $currentDealer->id + 2);
+        return $this->handTable->seats()->search('id', $currentDealer->id + 1);
     }
 
     protected function identifyTheNextDealerAndBlindSeats($currentDealer)
@@ -524,29 +522,34 @@ class GamePlay
             $currentDealer = $this->handTable->seats()->search('is_dealer', 1);
         }
 
+        /**
+         * TODO: these methods must currently be called
+         * in order. Consider changing. Also will only
+         * work if all seats have a stack/player.
+         */
         if($this->noDealerIsSetOrThereIsNoSeatAfterTheCurrentDealer($currentDealer)){
-
-            $dealer = $this->handTable->seats()->slice(0, 1);
+            
+            $dealer         = $this->handTable->seats()->slice(0, 1);
             $smallBlindSeat = $this->handTable->seats()->search('id', $dealer->id + 1);
-            $bigBlindSeat = $this->handTable->seats()->search('id', $dealer->id + 2);
+            $bigBlindSeat   = $this->handTable->seats()->search('id', $dealer->id + 2);
 
         } else if($this->thereAreThreeSeatsAfterTheCurrentDealer($currentDealer)) {
 
-            $dealer = $this->handTable->seats()->search('id', $currentDealer->id + 1);
+            $dealer         = $this->handTable->seats()->search('id', $currentDealer->id + 1);
             $smallBlindSeat = $this->handTable->seats()->search('id', $dealer->id + 1);
-            $bigBlindSeat = $this->handTable->seats()->search('id', $dealer->id + 2);
+            $bigBlindSeat   = $this->handTable->seats()->search('id', $dealer->id + 2);
 
         } else if($this->thereAreTwoSeatsAfterTheCurrentDealer($currentDealer)) {
 
-            $dealer = $this->handTable->seats()->search('id', $currentDealer->id + 1);
+            $dealer         = $this->handTable->seats()->search('id', $currentDealer->id + 1);
             $smallBlindSeat = $this->handTable->seats()->search('id', $dealer->id + 1);
-            $bigBlindSeat = $this->handTable->seats()->slice(0, 1);
+            $bigBlindSeat   = $this->handTable->seats()->slice(0, 1);
 
         } else {
 
-            $dealer = $this->handTable->seats()->search('id', $currentDealer->id + 1);
+            $dealer         = $this->handTable->seats()->search('id', $currentDealer->id + 1);
             $smallBlindSeat = $this->handTable->seats()->slice(0, 1);
-            $bigBlindSeat = $this->handTable->seats()->slice(1, 1);
+            $bigBlindSeat   = $this->handTable->seats()->slice(1, 1);
 
         }
 

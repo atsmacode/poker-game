@@ -216,6 +216,86 @@ class GamePlayTest extends BaseTest
      * @test
      * @return void
      */
+    public function four_handed_if_there_is_one_seat_after_current_dealer_big_blind_will_be_seat_two()
+    {
+        $this->gamePlay->start(TableSeat::find([
+            'id' => $this->gamePlay->handTable->seats()->slice(2, 1)->id
+        ]));
+
+        $this->assertCount(1, $this->gamePlay->hand->streets()->content);
+
+        $response = $this->gamePlay->play();
+
+        $this->assertEquals(1, $response['players'][0]['small_blind']);
+        $this->assertEquals(1, $response['players'][1]['big_blind']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function six_handed_if_there_are_two_seats_after_current_dealer_big_blind_will_be_seat_one()
+    {
+        $this->player5 = Player::find(['id' => 5]);
+        $this->player6 = Player::find(['id' => 6]);
+
+        TableSeat::create([
+            'table_id' => $this->gamePlay->handTable->id,
+            'player_id' => $this->player5->id
+        ]);
+
+        TableSeat::create([
+            'table_id' => $this->gamePlay->handTable->id,
+            'player_id' => $this->player6->id
+        ]);
+
+        $this->gamePlay->start(TableSeat::find([
+            'id' => $this->gamePlay->handTable->seats()->slice(3, 1)->id
+        ]));
+
+        $this->assertCount(1, $this->gamePlay->hand->streets()->content);
+
+        $response = $this->gamePlay->play();
+
+        $this->assertEquals(1, $response['players'][5]['small_blind']);
+        $this->assertEquals(1, $response['players'][0]['big_blind']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function six_handed_if_there_is_one_seat_after_current_dealer_big_blind_will_be_seat_two()
+    {
+        $this->player5 = Player::find(['id' => 5]);
+        $this->player6 = Player::find(['id' => 6]);
+
+        TableSeat::create([
+            'table_id' => $this->gamePlay->handTable->id,
+            'player_id' => $this->player5->id
+        ]);
+
+        TableSeat::create([
+            'table_id' => $this->gamePlay->handTable->id,
+            'player_id' => $this->player6->id
+        ]);
+
+        $this->gamePlay->start(TableSeat::find([
+            'id' => $this->gamePlay->handTable->seats()->slice(4, 1)->id
+        ]));
+
+        $this->assertCount(1, $this->gamePlay->hand->streets()->content);
+
+        $response = $this->gamePlay->play();
+
+        $this->assertEquals(1, $response['players'][0]['small_blind']);
+        $this->assertEquals(1, $response['players'][1]['big_blind']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
     // public function with_three_players_if_the_dealer_is_the_first_active_seat_on_a_new_street_the_first_active_seat_after_them_will_be_first_to_act()
     // {
     //     $this->gamePlay->start();
