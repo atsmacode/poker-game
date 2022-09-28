@@ -3,10 +3,10 @@
 namespace Tests\Unit;
 
 use App\Classes\GamePlay;
-use App\Models\Action;
 use App\Models\Hand;
 use App\Models\PlayerAction;
 use App\Models\TableSeat;
+use App\Constants\Action;
 
 class ActionOptionsTest extends BaseTest
 {
@@ -16,12 +16,6 @@ class ActionOptionsTest extends BaseTest
         parent::setUp();
 
         $this->gamePlay = new GamePlay(Hand::create(['table_id' => 1]));
-
-        $this->fold  = $this->gamePlay->fold;
-        $this->check = $this->gamePlay->check;
-        $this->call  = $this->gamePlay->call;
-        $this->bet   = $this->gamePlay->bet;
-        $this->raise = $this->gamePlay->raise;
     }
 
     /**
@@ -34,9 +28,9 @@ class ActionOptionsTest extends BaseTest
 
         $this->assertTrue($gamePlay['players'][3]['action_on']);
 
-        $this->assertContains($this->fold, $gamePlay['players'][3]['availableOptions']);
-        $this->assertContains($this->call, $gamePlay['players'][3]['availableOptions']);
-        $this->assertContains($this->raise, $gamePlay['players'][3]['availableOptions']);
+        $this->assertContains(ACTION::FOLD, $gamePlay['players'][3]['availableOptions']);
+        $this->assertContains(ACTION::CALL, $gamePlay['players'][3]['availableOptions']);
+        $this->assertContains(ACTION::RAISE, $gamePlay['players'][3]['availableOptions']);
     }
 
     /**
@@ -50,7 +44,7 @@ class ActionOptionsTest extends BaseTest
         // Player 1 Raises BB
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(0, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Raise'])->id,
+                'action_id' => Action::RAISE_ID,
                 'bet_amount' => 100.0,
                 'active' => 1,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
@@ -64,7 +58,7 @@ class ActionOptionsTest extends BaseTest
         // Player 2 Folds
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(1, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'action_id' => Action::FOLD_ID,
                 'bet_amount' => null,
                 'active' => 0,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
@@ -75,9 +69,9 @@ class ActionOptionsTest extends BaseTest
         // Action On BB
         $this->assertTrue($gamePlay['players'][2]['action_on']);
 
-        $this->assertContains($this->fold, $gamePlay['players'][2]['availableOptions']);
-        $this->assertContains($this->call, $gamePlay['players'][2]['availableOptions']);
-        $this->assertContains($this->raise, $gamePlay['players'][2]['availableOptions']);
+        $this->assertContains(ACTION::FOLD, $gamePlay['players'][2]['availableOptions']);
+        $this->assertContains(ACTION::CALL, $gamePlay['players'][2]['availableOptions']);
+        $this->assertContains(ACTION::RAISE, $gamePlay['players'][2]['availableOptions']);
     }
 
     /**
@@ -91,7 +85,7 @@ class ActionOptionsTest extends BaseTest
         // Player 1 Raises BB
         PlayerAction::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Raise'])->id,
+                'action_id' => Action::RAISE_ID,
                 'bet_amount' => 100.0,
                 'active' => 1,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
@@ -105,7 +99,7 @@ class ActionOptionsTest extends BaseTest
         // Player 2 Folds
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(1, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'action_id' => Action::FOLD_ID,
                 'bet_amount' => null,
                 'active' => 0,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
@@ -130,7 +124,7 @@ class ActionOptionsTest extends BaseTest
         // Player 1 Calls BB
         PlayerAction::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Call'])->id,
+                'action_id' => Action::CALL_ID,
                 'bet_amount' => 50.0,
                 'active' => 1,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
@@ -144,7 +138,7 @@ class ActionOptionsTest extends BaseTest
         // Player 2 Folds
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(1, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'action_id' => Action::FOLD_ID,
                 'bet_amount' => null,
                 'active' => 0,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
@@ -155,9 +149,9 @@ class ActionOptionsTest extends BaseTest
         // Action On BB
         $this->assertTrue($gamePlay['players'][2]['action_on']);
 
-        $this->assertContains($this->fold, $gamePlay['players'][2]['availableOptions']);
-        $this->assertContains($this->check, $gamePlay['players'][2]['availableOptions']);
-        $this->assertContains($this->raise, $gamePlay['players'][2]['availableOptions']);
+        $this->assertContains(ACTION::FOLD, $gamePlay['players'][2]['availableOptions']);
+        $this->assertContains(ACTION::CHECK, $gamePlay['players'][2]['availableOptions']);
+        $this->assertContains(ACTION::RAISE, $gamePlay['players'][2]['availableOptions']);
     }
 
     /**
@@ -171,7 +165,7 @@ class ActionOptionsTest extends BaseTest
         // Player 1 Calls BB
         PlayerAction::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Call'])->id,
+                'action_id' => Action::CALL_ID,
                 'bet_amount' => 50.0,
                 'active' => 1,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
@@ -182,8 +176,8 @@ class ActionOptionsTest extends BaseTest
         // Action On SB
         $this->assertTrue($gamePlay['players'][1]['action_on']);
 
-        $this->assertContains($this->fold, $gamePlay['players'][1]['availableOptions']);
-        $this->assertContains($this->call, $gamePlay['players'][1]['availableOptions']);
-        $this->assertContains($this->raise, $gamePlay['players'][1]['availableOptions']);
+        $this->assertContains(ACTION::FOLD, $gamePlay['players'][1]['availableOptions']);
+        $this->assertContains(ACTION::CALL, $gamePlay['players'][1]['availableOptions']);
+        $this->assertContains(ACTION::RAISE, $gamePlay['players'][1]['availableOptions']);
     }
 }

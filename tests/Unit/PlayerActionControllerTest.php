@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Classes\GamePlay;
+use App\Constants\Action;
 use App\Controllers\PlayerActionController;
 use App\Models\Hand;
 use App\Models\Player;
@@ -56,7 +57,7 @@ class PlayerActionControllerTest extends BaseTest
             'player_id'      => $this->player->id,
             'table_seat_id'  => 4,
             'hand_street_id' => 1,
-            'action_id'      => 3,
+            'action_id'      => Action::CALL_ID,
             'bet_amount'     => 50.0,
             'active'         => 1,
         ];

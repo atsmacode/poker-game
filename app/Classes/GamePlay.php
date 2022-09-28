@@ -4,11 +4,11 @@ namespace App\Classes;
 
 use App\Helpers\BetHelper;
 use App\Helpers\PotHelper;
-use App\Models\Action;
 use App\Models\HandStreet;
 use App\Models\PlayerAction;
 use App\Models\Street;
 use App\Models\TableSeat;
+use App\Constants\Action;
 
 class GamePlay
 {
@@ -29,11 +29,6 @@ class GamePlay
         $this->hand      = $hand;
         $this->handTable = $hand->table();
         $this->street    = null;
-        $this->fold      = Action::find(['name' =>'Fold']);
-        $this->check     = Action::find(['name' =>'Check']);
-        $this->call      = Action::find(['name' =>'Call']);
-        $this->bet       = Action::find(['name' =>'Bet']);
-        $this->raise     = Action::find(['name' =>'Raise']);
     }
 
     public function play()
@@ -367,38 +362,38 @@ class GamePlay
         /*
          * We only need to update the available actions if a player did something other than fold.
          */
-        $latestAction = $this->hand->actions()->filter('action_id', $this->fold->id)->collect()->latest();
+        $latestAction = $this->hand->actions()->filter('action_id', Action::FOLD['id'])->collect()->latest();
 
         if($playerAction->active === 1){
 
             $options = [
-                $this->fold
+                Action::FOLD
             ];
 
             switch(PlayerAction::find([
                 'table_seat_id' => $latestAction,
                 'hand_id' => $this->hand->id
             ])->action_id){
-                case $this->call->id:
+                case Action::CALL['id']:
                     /*
                      * BB can only check if there were no raises before the latest call action.
                      */
                     if(
                         $playerAction->big_blind === 1 &&
-                        !$this->hand->actions()->search('action_id', $this->raise->id)
+                        !$this->hand->actions()->search('action_id', Action::RAISE['id'])
                     ){
-                        array_push($options, $this->check, $this->raise);
+                        array_push($options, Action::CHECK, Action::RAISE);
                     } else {
-                        array_push($options, $this->call, $this->raise);
+                        array_push($options, Action::CALL, Action::RAISE);
                     }
                     break;
-                case $this->bet->id:
-                case $this->raise->id:
-                    array_push($options, $this->call, $this->raise);
+                case Action::BET['id']:
+                case Action::RAISE['id']:
+                    array_push($options, Action::CALL, Action::RAISE);
                     break;
-                case $this->check->id:
+                case Action::CHECK['id']:
                 default:
-                    array_push($options, $this->check, $this->bet);
+                    array_push($options, Action::CHECK, Action::BET);
                     break;
             }
 
@@ -413,8 +408,8 @@ class GamePlay
 
         // Update the other table seat statuses accordingly
         switch($latestAction->action_id){
-            case $this->bet->id:
-            case $this->raise->id:
+            case Action::BET['id']:
+            case Action::RAISE['id']:
                 $canContinue = 0;
                 break;
             default:
@@ -433,10 +428,10 @@ class GamePlay
 
         // Update the table seat status of the latest action accordingly
         switch($latestAction->action_id){
-            case $this->check->id:
-            case $this->call->id:
-            case $this->bet->id:
-            case $this->raise->id:
+            case Action::CHECK['id']:
+            case Action::CALL['id']:
+            case Action::BET['id']:
+            case Action::RAISE['id']:
                 $canContinue = 1;
                 break;
             default:

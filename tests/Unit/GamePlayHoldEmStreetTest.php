@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use App\Classes\GamePlay;
-use App\Models\Action;
+use App\Constants\Action;
 use App\Models\Hand;
 use App\Models\HandStreet;
 use App\Models\Player;
@@ -164,7 +164,7 @@ class GamePlayHoldEmStreetTest extends BaseTest
         // Player 1 Calls BB
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(0, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Call'])->id,
+                'action_id' => Action::CALL_ID,
                 'bet_amount' => 50.0,
                 'active' => 1,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-3 seconds'))
@@ -178,7 +178,7 @@ class GamePlayHoldEmStreetTest extends BaseTest
         // Player 2 Folds
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(1, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'action_id' => Action::FOLD_ID,
                 'bet_amount' => null,
                 'active' => 0,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
@@ -192,7 +192,7 @@ class GamePlayHoldEmStreetTest extends BaseTest
         // Player 3 Checks
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(2, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Check'])->id,
+                'action_id' => Action::CALL_ID,
                 'bet_amount' => null,
                 'active' => 1,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))

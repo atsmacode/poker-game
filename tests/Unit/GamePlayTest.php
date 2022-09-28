@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use App\Classes\GamePlay;
-use App\Models\Action;
+use App\Constants\Action;
 use App\Models\Hand;
 use App\Models\Player;
 use App\Models\PlayerAction;
@@ -96,7 +96,7 @@ class GamePlayTest extends BaseTest
         // Player 4 Calls
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Call'])->id,
+                'action_id' => Action::CALL_ID,
                 'bet_amount' => 50.00,
                 'active' => 1,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-3 seconds'))
@@ -123,7 +123,7 @@ class GamePlayTest extends BaseTest
         // Player 4 Folds
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'action_id' => Action::FOLD_ID,
                 'bet_amount' => null,
                 'active' => 0,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
@@ -338,7 +338,7 @@ class GamePlayTest extends BaseTest
         // Player 4 Calls
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Call'])->id,
+                'action_id' => Action::CALL_ID,
                 'bet_amount' => 50.00,
                 'active' => 1,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
@@ -355,7 +355,7 @@ class GamePlayTest extends BaseTest
         // Player 4 Folds
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'action_id' => Action::FOLD_ID,
                 'bet_amount' => null,
                 'active' => 0,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
@@ -369,7 +369,7 @@ class GamePlayTest extends BaseTest
         // Player 1 Folds
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(0, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'action_id' => Action::FOLD_ID,
                 'bet_amount' => null,
                 'active' => 0,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
@@ -383,7 +383,7 @@ class GamePlayTest extends BaseTest
         // Player 2 Folds
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(1, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'action_id' => Action::FOLD_ID,
                 'bet_amount' => null,
                 'active' => 0,
                 'updated_at' => date('Y-m-d H:i:s', time())
@@ -395,7 +395,7 @@ class GamePlayTest extends BaseTest
         // Player 4 Calls
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Call'])->id,
+                'action_id' => Action::CALL_ID,
                 'bet_amount' => 50.00,
                 'active' => 1,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-3 seconds'))
@@ -409,7 +409,7 @@ class GamePlayTest extends BaseTest
         // Player 1 Folds
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(0, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'action_id' => Action::FOLD_ID,
                 'bet_amount' => null,
                 'active' => 0,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
@@ -423,7 +423,7 @@ class GamePlayTest extends BaseTest
         // Player 2 Folds
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(1, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'action_id' => Action::FOLD_ID,
                 'bet_amount' => null,
                 'active' => 0,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
@@ -437,7 +437,7 @@ class GamePlayTest extends BaseTest
         // Player 3 Checks
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(2, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Check'])->id,
+                'action_id' => Action::CHECK_ID,
                 'bet_amount' => null,
                 'active' => 1,
                 'updated_at' => date('Y-m-d H:i:s', time())
@@ -449,7 +449,7 @@ class GamePlayTest extends BaseTest
         // Player 1 Calls
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(0, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Call'])->id,
+                'action_id' => Action::CALL_ID,
                 'bet_amount' => 50.00,
                 'active' => 1,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-3 seconds'))
@@ -463,7 +463,7 @@ class GamePlayTest extends BaseTest
         // Player 2 Calls
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(1, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Call'])->id,
+                'action_id' => Action::CALL_ID,
                 'bet_amount' => 50.00,
                 'active' => 1,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
@@ -477,7 +477,7 @@ class GamePlayTest extends BaseTest
         // Player 3 Folds
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(2, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'action_id' => Action::FOLD_ID,
                 'bet_amount' => null,
                 'active' => 0,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
@@ -491,7 +491,7 @@ class GamePlayTest extends BaseTest
         // Player 4 Checks
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Check'])->id,
+                'action_id' => Action::CHECK_ID,
                 'bet_amount' => null,
                 'active' => 1,
                 'updated_at' => date('Y-m-d H:i:s', time())
@@ -503,7 +503,7 @@ class GamePlayTest extends BaseTest
         // Player 4 Calls
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Call'])->id,
+                'action_id' => Action::CALL_ID,
                 'bet_amount' => 50.00,
                 'active' => 1,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-3 seconds'))
@@ -517,7 +517,7 @@ class GamePlayTest extends BaseTest
         // Player 1 Folds
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(0, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'action_id' => Action::FOLD_ID,
                 'bet_amount' => null,
                 'active' => 0,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
@@ -531,7 +531,7 @@ class GamePlayTest extends BaseTest
         // Player 2 Folds
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(1, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Fold'])->id,
+                'action_id' => Action::FOLD_ID,
                 'bet_amount' => null,
                 'active' => 0,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
@@ -545,7 +545,7 @@ class GamePlayTest extends BaseTest
         // Player 3 Raises
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(2, 1)->id])
             ->update([
-                'action_id' => Action::find(['name' => 'Raise'])->id,
+                'action_id' => Action::RAISE_ID,
                 'bet_amount' => 100.00,
                 'active' => 1,
                 'updated_at' => date('Y-m-d H:i:s', time())
