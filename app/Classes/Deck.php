@@ -4,12 +4,9 @@ namespace App\Classes;
 
 use App\Constants\Card as Constants;
 use App\Models\Card;
-use App\Traits\Connect;
 
-class Deck extends Database
+class Deck
 {
-    use Connect;
-
     public $cards = [
         Constants::ACE_CLUBS,
         Constants::DEUCE_CLUBS,
@@ -67,63 +64,15 @@ class Deck extends Database
 
     public function __construct()
     {
-        parent::__construct();
-        $this->setCredentials();
         $this->cards = $this->compileDeck();
     }
-
-    /**
-     * As this class extends Database,
-     * the connection properties are partially
-     * overridden when serializing.
-     *
-     * @return array
-     */
-    // public function __serialize(): array
-    // {
-    //     parent::__serialize();
-    //     $this->cards = (array) $this->cards;
-        
-    //     return (array) $this;
-    // }
-
-    // public function __unserialize(array $data): void
-    // {
-    //     parent::__unserialize($data);
-    //     $this->cards = $data['cards'];
-    // }
 
     private function compileDeck()
     {
         foreach ($this->cards as $key => $card) {
-            $this->cards[$key] = new Card($card);
+            $this->cards[$key] = (array) new Card($card);
         }
 
         return $this->cards;
     }
-
-    // private function selectAllCards()
-    // {
-    //     $rows = null;
-
-    //     try {
-
-    //         $stmt = $this->connection->prepare("
-    //                 SELECT r.name as 'rank', s.name as suit, r.ranking as ranking FROM cards c
-    //                 LEFT OUTER JOIN ranks r ON c.rank_id = r.id
-    //                 LEFT OUTER JOIN suits s ON c.suit_id = s.id
-    //             ");
-    //         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-    //         $stmt->execute();
-
-    //         $rows = $stmt->fetchAll();
-
-    //     } catch(PDOException $e) {
-    //         echo $e->getMessage();
-    //     }
-
-    //     $this->connection = null;
-
-    //     return $rows;
-    // }
 }

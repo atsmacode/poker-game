@@ -16,7 +16,7 @@ class Dealer
             $this->deck = $deck;
         }
 
-        $this->deck = new Deck();
+        $this->deck = (array) (new Deck())->cards;
 
         return $this;
     }
@@ -28,7 +28,7 @@ class Dealer
 
     public function shuffle()
     {
-        shuffle($this->deck->cards);
+        shuffle($this->deck);
 
         return $this;
     }
@@ -36,17 +36,25 @@ class Dealer
     public function pickCard(string $rank = null, string $suit = null)
     {
         if($rank === null && $suit === null){
-            $this->card = array_shift($this->deck->cards);
+            $card = array_shift($this->deck);
+
+            $this->card = $card;
+
+            $reject = array_filter($this->deck, function($value) use($card){
+                return $value !== $card;
+            });
+            $this->deck = array_values($reject);
+
             return $this;
         }
 
-        $filter = array_filter($this->deck->cards, function($value) use($rank, $suit){
-            return $value->rank === $rank && $value->suit === $suit;
+        $filter = array_filter($this->deck, function($value) use($rank, $suit){
+            return $value['rank'] === $rank && $value['suit'] === $suit;
         });
         $this->card = array_values($filter)[0];
 
         $card = $this->card;
-        $reject = array_filter($this->deck->cards, function($value) use($card){
+        $reject = array_filter($this->deck, function($value) use($card){
             return $value !== $card;
         });
         $this->deck = array_values($reject);
@@ -67,7 +75,7 @@ class Dealer
             while($dealtCards < $cardCount){
                 $player->wholeCards()->create([
                     'player_id' => $player->id,
-                    'card_id' => $this->pickCard()->getCard()->id,
+                    'card_id' => $this->pickCard()->getCard()['id'],
                     'hand_id' => $hand ? $hand->id : null
                 ]);
                 $dealtCards++;
@@ -84,7 +92,7 @@ class Dealer
 
         while($dealtCards < $cardCount){
 
-            $cardId = is_object($this->pickCard()->getCard()) ? $this->pickCard()->getCard()->id : $this->pickCard()->getCard()['id'];
+            $cardId = is_object($this->pickCard()->getCard()) ? $this->pickCard()->getCard()['id'] : $this->pickCard()->getCard()['id'];
 
             HandStreetCard::create([
                 'card_id' => $cardId,
@@ -105,7 +113,7 @@ class Dealer
      */
     public function dealThisStreetCard($rank, $suit, $handStreet)
     {
-        $cardId = $this->pickCard($rank, $suit)->getCard()->id;
+        $cardId = $this->pickCard($rank, $suit)->getCard()['id'];
 
         HandStreetCard::create([
             'card_id' => $cardId,

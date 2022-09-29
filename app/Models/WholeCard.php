@@ -10,7 +10,6 @@ class WholeCard extends Model
 
     public function card()
     {
-        //var_dump($this->card_id);
         return Card::getById($this->card_id);
     }
 }

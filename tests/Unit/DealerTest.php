@@ -63,7 +63,7 @@ class DealerTest extends BaseTest
 
         $card = $this->dealer->setDeck()->pickCard()->getCard();
 
-        $this->assertNotContains($card, $this->dealer->getDeck()->cards);
+        $this->assertNotContains($card, $this->dealer->getDeck());
     }
 
     /**
