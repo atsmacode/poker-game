@@ -4,7 +4,7 @@ namespace Tests\Unit;
 
 use App\Classes\GamePlay;
 use App\Constants\Action;
-use App\Models\Card;
+use App\Constants\Card as ConstantsCard;
 use App\Models\Hand;
 use App\Models\HandStreet;
 use App\Models\HandStreetCard;
@@ -60,24 +60,20 @@ class ShowdownKickerAndRankingTest extends BaseTest
 
         $wholeCards = [
             [
-                'player' => $this->player3,
-                'rank' => 'King',
-                'suit' => 'Spades'
+                'player'  => $this->player3,
+                'card_id' => ConstantsCard::KING_SPADES_ID
             ],
             [
-                'player' => $this->player3,
-                'rank' => 'Three',
-                'suit' => 'Diamonds'
+                'player'  => $this->player3,
+                'card_id' => ConstantsCard::THREE_DIAMONDS_ID
             ],
             [
-                'player' => $this->player1,
-                'rank' => 'Queen',
-                'suit' => 'Spades'
+                'player'  => $this->player1,
+                'card_id' => ConstantsCard::QUEEN_SPADES_ID
             ],
             [
-                'player' => $this->player1,
-                'rank' => 'Seven',
-                'suit' => 'Diamonds'
+                'player'  => $this->player1,
+                'card_id' => ConstantsCard::SEVEN_DIAMONDS_ID
             ],
         ];
 
@@ -85,31 +81,26 @@ class ShowdownKickerAndRankingTest extends BaseTest
 
         $flopCards = [
             [
-                'rank' => 'Four',
-                'suit' => 'Clubs'
+                'card_id' => ConstantsCard::FOUR_CLUBS_ID
             ],
             [
-                'rank' => 'Jack',
-                'suit' => 'Spades'
+                'card_id' => ConstantsCard::JACK_SPADES_ID
             ],
             [
-                'rank' => 'Deuce',
-                'suit' => 'Clubs'
+                'card_id' => ConstantsCard::DEUCE_CLUBS_ID
             ]
         ];
 
         $this->setFlop($flopCards);
 
         $turnCard = [
-            'rank' => 'Nine',
-            'suit' => 'Diamonds'
+            'card_id' => ConstantsCard::NINE_DIAMONDS_ID
         ];
 
         $this->setTurn($turnCard);
 
         $riverCard = [
-            'rank' => 'Ten',
-            'suit' => 'Spades'
+            'card_id' => ConstantsCard::TEN_SPADES_ID
         ];
 
         $this->setRiver($riverCard);
@@ -127,11 +118,8 @@ class ShowdownKickerAndRankingTest extends BaseTest
         foreach($wholeCards as $card){
             WholeCard::create([
                 'player_id' => $card['player']->id,
-                'card_id' => (new Card([
-                    'rank' => $card['rank'],
-                    'suit' => $card['suit']
-                ]))->id,
-                'hand_id' => $this->gamePlay->hand->id
+                'card_id'   => $card['card_id'],
+                'hand_id'   => $this->gamePlay->hand->id
             ]);
         }
     }
@@ -146,10 +134,7 @@ class ShowdownKickerAndRankingTest extends BaseTest
         foreach($flopCards as $card){
             HandStreetCard::create([
                 'hand_street_id' => $flop->id,
-                'card_id' => (new Card([
-                    'rank' => $card['rank'],
-                    'suit' => $card['suit']
-                ]))->id
+                'card_id'        => $card['card_id']
             ]);
         }
     }
@@ -163,10 +148,7 @@ class ShowdownKickerAndRankingTest extends BaseTest
 
         HandStreetCard::create([
             'hand_street_id' => $turn->id,
-            'card_id' => (new Card([
-                'rank' => $turnCard['rank'],
-                'suit' => $turnCard['suit']
-            ]))->id
+            'card_id'        => $turnCard['card_id']
         ]);
     }
 
@@ -179,10 +161,7 @@ class ShowdownKickerAndRankingTest extends BaseTest
 
         HandStreetCard::create([
             'hand_street_id' => $river->id,
-            'card_id' => (new Card([
-                'rank' => $riverCard['rank'],
-                'suit' => $riverCard['suit']
-            ]))->id
+            'card_id'        => $riverCard['card_id']
         ]);
     }
 

@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Classes\HandIdentifier;
+use App\Constants\Card as ConstantsCard;
 use App\Models\Card;
 
 class HandIdentifierTest extends BaseTest
@@ -20,41 +21,19 @@ class HandIdentifierTest extends BaseTest
      */
     public function it_can_identify_the_card_with_the_highest_rank()
     {
-
-        $highestCard = new Card([
-            'rank' => 'King',
-            'suit' => 'Spades'
-        ]);
+        $highestCard = new Card(ConstantsCard::KING_SPADES);
 
         $wholeCards = [
-            new Card([
-                'rank' => 'Deuce',
-                'suit' => 'Spades'
-            ]),
+            new Card(ConstantsCard::DEUCE_SPADES),
             $highestCard,
         ];
 
         $communityCards = [
-            new Card([
-                'rank' => 'Queen',
-                'suit' => 'Hearts'
-            ]),
-            new Card([
-                'rank' => 'Seven',
-                'suit' => 'Diamonds'
-            ]),
-            new Card([
-                'rank' => 'Ten',
-                'suit' => 'Clubs'
-            ]),
-            new Card([
-                'rank' => 'Three',
-                'suit' => 'Spades'
-            ]),
-            new Card([
-                'rank' => 'Four',
-                'suit' => 'Diamonds'
-            ]),
+            new Card(ConstantsCard::QUEEN_HEARTS),
+            new Card(ConstantsCard::SEVEN_DIAMONDS),
+            new Card(ConstantsCard::TEN_CLUBS),
+            new Card(ConstantsCard::THREE_SPADES),
+            new Card(ConstantsCard::FOUR_DIAMONDS),
         ];
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
@@ -65,7 +44,6 @@ class HandIdentifierTest extends BaseTest
             $highestCard->ranking,
             $this->handIdentifier->highCard
         );
-
     }
 
     /**
@@ -74,41 +52,19 @@ class HandIdentifierTest extends BaseTest
      */
     public function it_can_identify_an_ace_as_the_card_with_the_highest_rank()
     {
-
-        $highestCard = new Card([
-            'rank' => 'Ace',
-            'suit' => 'Spades'
-        ]);
+        $highestCard = new Card(ConstantsCard::ACE_SPADES);
 
         $wholeCards = [
             $highestCard,
-            new Card([
-                'rank' => 'King',
-                'suit' => 'Diamonds'
-            ])
+            new Card(ConstantsCard::KING_DIAMONDS)
         ];
 
         $communityCards = [
-            new Card([
-                'rank' => 'Queen',
-                'suit' => 'Clubs'
-            ]),
-            new Card([
-                'rank' => 'Four',
-                'suit' => 'Spades'
-            ]),
-            new Card([
-                'rank' => 'Ten',
-                'suit' => 'Diamonds'
-            ]),
-            new Card([
-                'rank' => 'Deuce',
-                'suit' => 'Clubs'
-            ]),
-            new Card([
-                'rank' => 'Eight',
-                'suit' => 'Hearts'
-            ]),
+            new Card(ConstantsCard::QUEEN_CLUBS),
+            new Card(ConstantsCard::FOUR_SPADES),
+            new Card(ConstantsCard::TEN_DIAMONDS),
+            new Card(ConstantsCard::DEUCE_CLUBS),
+            new Card(ConstantsCard::EIGHT_CLUBS),
         ];
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
@@ -119,7 +75,6 @@ class HandIdentifierTest extends BaseTest
             14,
             $this->handIdentifier->highCard
         );
-
     }
 
     /**
@@ -129,43 +84,21 @@ class HandIdentifierTest extends BaseTest
     public function it_can_identify_a_pair()
     {
         $wholeCards = [
-            new Card([
-                'rank' => 'Ace',
-                'suit' => 'Spades'
-            ]),
-            new Card([
-                'rank' => 'King',
-                'suit' => 'Diamonds'
-            ]),
+            new Card(ConstantsCard::ACE_CLUBS),
+            new Card(ConstantsCard::KING_DIAMONDS),
         ];
 
         $communityCards = [
-            new Card([
-                'rank' => 'Ace',
-                'suit' => 'Hearts'
-            ]),
-            new Card([
-                'rank' => 'Jack',
-                'suit' => 'Diamonds'
-            ]),
-            new Card([
-                'rank' => 'Four',
-                'suit' => 'Diamonds'
-            ]),
-            new Card([
-                'rank' => 'Nine',
-                'suit' => 'Clubs'
-            ]),
-            new Card([
-                'rank' => 'Seven',
-                'suit' => 'Diamonds'
-            ]),
+            new Card(ConstantsCard::ACE_HEARTS),
+            new Card(ConstantsCard::JACK_DIAMONDS),
+            new Card(ConstantsCard::FOUR_DIAMONDS),
+            new Card(ConstantsCard::NINE_CLUBS),
+            new Card(ConstantsCard::SEVEN_DIAMONDS),
         ];
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
         $this->assertEquals('Pair', $this->handIdentifier->identifiedHandType['handType']->name);
         $this->assertCount(1, $this->handIdentifier->pairs);
-
     }
 
     /**
@@ -175,42 +108,20 @@ class HandIdentifierTest extends BaseTest
     public function it_can_identify_two_pair()
     {
         $wholeCards = [
-            new Card([
-                'rank' => 'Ace',
-                'suit' => 'Spades'
-            ]),
-            new Card([
-                'rank' => 'King',
-                'suit' => 'Spades'
-            ]),
+            new Card(ConstantsCard::ACE_SPADES),
+            new Card(ConstantsCard::KING_SPADES),
         ];
 
         $communityCards = [
-            new Card([
-                'rank' => 'Ace',
-                'suit' => 'Hearts'
-            ]),
-            new Card([
-                'rank' => 'King',
-                'suit' => 'Hearts'
-            ]),
-            new Card([
-                'rank' => 'Ten',
-                'suit' => 'Diamonds'
-            ]),
-            new Card([
-                'rank' => 'Nine',
-                'suit' => 'Clubs'
-            ]),
-            new Card([
-                'rank' => 'Eight',
-                'suit' => 'Diamonds'
-            ]),
+            new Card(ConstantsCard::ACE_HEARTS),
+            new Card(ConstantsCard::KING_HEARTS),
+            new Card(ConstantsCard::TEN_DIAMONDS),
+            new Card(ConstantsCard::NINE_CLUBS),
+            new Card(ConstantsCard::EIGHT_DIAMONDS),
         ];
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
         $this->assertEquals('Two Pair', $this->handIdentifier->identifiedHandType['handType']->name);
         $this->assertCount(2, $this->handIdentifier->pairs);
     }
-
 }
