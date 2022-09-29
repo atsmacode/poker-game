@@ -20104,13 +20104,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Player_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Player.vue */ "./resources/js/Player.vue");
 
 
- // axios.post('/index.php/action', {
-//     'player_id': 1
-// }).then(response => {
-//     console.log(response);
-// }).catch(error => {
-//     console.log(error);
-// });
 
 (0,vue__WEBPACK_IMPORTED_MODULE_0__.createApp)({
   components: {
@@ -20152,13 +20145,15 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       var payload = {
-        deck: this.deck,
-        player_id: player.player_id,
-        action_id: _action.id,
-        table_seat_id: player.table_seat_id,
-        hand_street_id: player.hand_street_id,
-        active: active,
-        bet_amount: this.actionBetAmounts[_action.name]
+        body: {
+          deck: this.deck,
+          player_id: player.player_id,
+          action_id: _action.id,
+          table_seat_id: player.table_seat_id,
+          hand_street_id: player.hand_street_id,
+          active: active,
+          bet_amount: this.actionBetAmounts[_action.name]
+        }
       };
       this.loading = true;
       axios__WEBPACK_IMPORTED_MODULE_1___default().post('/index.php/action', payload).then(function (response) {

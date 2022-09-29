@@ -52,13 +52,15 @@ createApp({
 			}
 
 			let payload = {
-				deck:           this.deck,
-				player_id:      player.player_id,
-				action_id:      action.id,
-				table_seat_id:  player.table_seat_id,
-				hand_street_id: player.hand_street_id,
-				active:         active,
-				bet_amount:     this.actionBetAmounts[action.name]
+				body: {
+					deck:           this.deck,
+					player_id:      player.player_id,
+					action_id:      action.id,
+					table_seat_id:  player.table_seat_id,
+					hand_street_id: player.hand_street_id,
+					active:         active,
+					bet_amount:     this.actionBetAmounts[action.name]
+				}
 			};
 
 			this.loading = true

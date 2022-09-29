@@ -12,7 +12,7 @@ class PlayerActionController
     public function action()
     {
         $requestBody = file_get_contents('php://input')
-            ? unserialize(json_decode(file_get_contents('php://input'), true)['body'])
+            ? json_decode(file_get_contents('php://input'), true)['body']
             : unserialize($_POST['body']);
 
         $hand         = Hand::latest();
@@ -36,18 +36,18 @@ class PlayerActionController
             http_response_code(200);
         }
 
-        $responseBody = serialize([
+        $responseBody = [
             'deck'           => $gamePlay['deck'],
             'pot'            => $gamePlay['pot'],
             'communityCards' => $gamePlay['communityCards'],
             'players'        => $gamePlay['players'],
             'winner'         => $gamePlay['winner']
-        ]);
+        ];
 
         if (isset($GLOBALS['dev'])) {
             return json_encode(['body' => $responseBody]);
         } else {
-            echo json_encode(['body' => unserialize($responseBody)]);
+            echo json_encode(['body' => $responseBody]);
         }
     }
 }

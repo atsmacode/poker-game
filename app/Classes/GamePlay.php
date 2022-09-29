@@ -424,7 +424,10 @@ class GamePlay
 
     public function updateSeatStatusOfLatestAction()
     {
-        $latestAction = PlayerAction::find(['table_seat_id' => $this->hand->actions()->latest()]);
+        $latestAction = PlayerAction::find([
+            'hand_id'       => $this->hand->id,
+            'table_seat_id' => $this->hand->actions()->latest()
+        ]);
 
         // Update the table seat status of the latest action accordingly
         switch($latestAction->action_id){
