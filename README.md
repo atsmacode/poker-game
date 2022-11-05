@@ -17,7 +17,8 @@ Drop, Create and Seed all tables. '-d true' is required to run this in test DB
 http://read-right-hands-vanilla.com/index.php/action
 
 # Todo:
-
+- Sometimes no player qualifies for action-on, requires recreating specific hand(s) unit tests perhaps
+- Errors during showdown - probably due to that fact it's not yet fully implemented
 - Set a global root path so I don't have to add conditionals everywhere for testing/prod
 - look into serialization between PHP/JS - use arrays instead?
 - Review how theplayer after Dealer is retrieved, I suspect it is a bit off
