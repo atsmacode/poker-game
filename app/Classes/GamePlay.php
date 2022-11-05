@@ -324,6 +324,9 @@ class GamePlay
             return $wholeCards;
         }
 
+        /**
+         * Is this used? TODO
+         */
         foreach(TableSeat::find(['can_continue' => 1]) as $tableSeat){
             foreach($tableSeat->player()->getWholeCards($this->hand->id) as $wholeCard){
                 $wholeCards[] = [
