@@ -344,9 +344,9 @@ class GamePlay
         foreach($this->hand->streets()->collect()->content as $street){
             foreach($street->cards()->collect()->content as $streetCard){
                 $cards[] = [
-                    'rank'             => $streetCard->getCard()['rank'],
+                    'rankAbbreviation' => $streetCard->getCard()['rankAbbreviation'],
                     'suit'             => $streetCard->getCard()['suit'],
-                    'suitAbbreviation' => $streetCard->getCard()['suit']
+                    'suitAbbreviation' => $streetCard->getCard()['suitAbbreviation']
                 ];
             }
         }
