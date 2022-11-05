@@ -225,7 +225,7 @@ class GamePlay
         } else {
             $playerAfterDealer = TableSeat::playerAfterDealer(
                 $this->hand->id,
-                $firstActivePlayer->id
+                $dealer->id
             );
 
             $firstActivePlayer = $playerAfterDealer ? $playerAfterDealer : $firstActivePlayer;

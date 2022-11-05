@@ -296,18 +296,18 @@ class GamePlayTest extends BaseTest
      * @test
      * @return void
      */
-    // public function with_three_players_if_the_dealer_is_the_first_active_seat_on_a_new_street_the_first_active_seat_after_them_will_be_first_to_act()
-    // {
-    //     $this->gamePlay->start();
+    public function if_the_dealer_is_the_first_active_seat_on_a_new_street_the_first_active_seat_after_them_will_be_first_to_act()
+    {
+        $this->gamePlay->start();
 
-    //     $this->assertCount(1, $this->gamePlay->hand->streets()->content);
+        $this->assertCount(1, $this->gamePlay->hand->streets()->content);
 
-    //     $this->givenActionsMeanNewStreetIsDealt();
+        $this->givenActionsMeanNewStreetIsDealt();
 
-    //     $response = $this->gamePlay->play();
+        $response = $this->gamePlay->play();
 
-    //     $this->assertTrue($response['players'][2]['action_on']);
-    // }
+        $this->assertTrue($response['players'][2]['action_on']);
+    }
 
     /**
      * @test
