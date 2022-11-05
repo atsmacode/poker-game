@@ -33,7 +33,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->assertEquals(
             $this->validResponseKeys(),
-            array_keys(unserialize(json_decode($response, true)['body']))
+            array_keys(json_decode($response, true)['body'])
         );
     }
 
