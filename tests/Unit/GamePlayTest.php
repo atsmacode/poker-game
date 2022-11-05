@@ -150,7 +150,7 @@ class GamePlayTest extends BaseTest
 
         $this->gamePlay->play();
 
-        $this->assertCount(2, HandStreet::find(['hand_id' => 1])->content);
+        $this->assertCount(2, HandStreet::find(['hand_id' => $this->gamePlay->handId])->content);
     }
 
     /**
@@ -199,7 +199,7 @@ class GamePlayTest extends BaseTest
     public function if_the_dealer_is_seat_two_and_the_first_active_seat_on_a_new_street_the_first_active_seat_after_them_will_be_first_to_act()
     {
         $this->gamePlay->start(TableSeat::find([
-            'id' => $this->gamePlay->handTable->seats()->slice(1, 1)->id
+            'id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id
         ]));
 
         $this->assertCount(1, $this->gamePlay->hand->streets()->content);
@@ -208,10 +208,7 @@ class GamePlayTest extends BaseTest
 
         $response = $this->gamePlay->play();
 
-        /**
-         * Hard coding hand ID 1, was showing as 9 here, not sure why
-         */
-        $this->assertCount(2, HandStreet::find(['hand_id' => 1])->content);
+        $this->assertCount(2, HandStreet::find(['hand_id' => $this->gamePlay->handId])->content);
 
         $this->assertTrue($response['players'][2]['action_on']);
     }
@@ -464,7 +461,7 @@ class GamePlayTest extends BaseTest
                 'can_continue' => 1
             ]);
 
-        // Player 2 Calls
+        // Player 2 D Calls
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(1, 1)->id])
             ->update([
                 'action_id' => Action::CALL_ID,
@@ -478,25 +475,25 @@ class GamePlayTest extends BaseTest
                 'can_continue' => 1
             ]);
 
-        // Player 3 Folds
+        // Player 3 SB Calls
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(2, 1)->id])
             ->update([
-                'action_id' => Action::FOLD_ID,
-                'bet_amount' => null,
-                'active' => 0,
+                'action_id' => Action::CALL_ID,
+                'bet_amount' => 25.00,
+                'active' => 1,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
             ]);
 
         TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(2, 1)->id])
             ->update([
-                'can_continue' => 0
+                'can_continue' => 1
             ]);
 
-        // Player 4 Calls
+        // Player 4 BB Checks
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
             ->update([
-                'action_id' => Action::CALL_ID,
-                'bet_amount' => 50.00,
+                'action_id' => Action::CHECK_ID,
+                'bet_amount' => null,
                 'active' => 1,
                 'updated_at' => date('Y-m-d H:i:s', time())
             ]);

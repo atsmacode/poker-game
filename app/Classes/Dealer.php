@@ -14,9 +14,9 @@ class Dealer
     {
         if ($deck) {
             $this->deck = $deck;
+        } else {
+            $this->deck = (array) (new Deck())->cards;
         }
-
-        $this->deck = (array) (new Deck())->cards;
 
         return $this;
     }
@@ -70,7 +70,6 @@ class Dealer
     public function dealTo($players, $cardCount, $hand = null)
     {
         foreach($players->collect()->content as $player){
-
             $dealtCards = 0;
             while($dealtCards < $cardCount){
                 $player->wholeCards()->create([
@@ -91,8 +90,7 @@ class Dealer
         $dealtCards = 0;
 
         while($dealtCards < $cardCount){
-
-            $cardId = is_object($this->pickCard()->getCard()) ? $this->pickCard()->getCard()['id'] : $this->pickCard()->getCard()['id'];
+            $cardId = $this->pickCard()->getCard()['id'];
 
             HandStreetCard::create([
                 'card_id' => $cardId,

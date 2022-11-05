@@ -53,8 +53,8 @@ class GamePlayHoldEmStreetTest extends BaseTest
 
         $this->gamePlay->play();
 
-        $this->assertCount(2, $this->gamePlay->hand->streets()->content);
-        $this->assertCount(3, $this->gamePlay->hand->streets()->slice(1, 1)->cards()->content);
+        $this->assertCount(2, HandStreet::find(['hand_id' => $this->gamePlay->handId])->content);
+        $this->assertCount(3, HandStreet::getStreetCards($this->gamePlay->handId, 2));
     }
 
     /**
@@ -71,8 +71,8 @@ class GamePlayHoldEmStreetTest extends BaseTest
 
         $this->gamePlay->play();
 
-        $this->assertCount(3, $this->gamePlay->hand->streets()->content);
-        $this->assertCount(1, $this->gamePlay->hand->streets()->slice(2, 1)->cards()->content);
+        $this->assertCount(3, HandStreet::find(['hand_id' => $this->gamePlay->handId])->content);
+        $this->assertCount(1, HandStreet::getStreetCards($this->gamePlay->handId, 3));
     }
 
     /**
@@ -91,8 +91,8 @@ class GamePlayHoldEmStreetTest extends BaseTest
 
         $this->gamePlay->play();
 
-        $this->assertCount(4, $this->gamePlay->hand->streets()->content);
-        $this->assertCount(1, $this->gamePlay->hand->streets()->slice(3, 1)->cards()->content);
+        $this->assertCount(4, HandStreet::find(['hand_id' => $this->gamePlay->handId])->content);
+        $this->assertCount(1, HandStreet::getStreetCards($this->gamePlay->handId, 4));
     }
 
     /**
