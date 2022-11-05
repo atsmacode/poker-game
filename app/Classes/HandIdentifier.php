@@ -144,7 +144,14 @@ class HandIdentifier
     private function filter(string $hayStack, string $column, $filter)
     {
         return array_filter($this->{$hayStack}, function($value) use($column, $filter){
-            return $value->{$column} === $filter;
+            /**
+             * TODO: Remove temp is_array check
+             */
+            if( is_array($value)) {
+                return $value[$column] === $filter;
+            } else {
+                return $value->{$column} === $filter;
+            }
         });
     }
 
@@ -154,10 +161,20 @@ class HandIdentifier
     private function sortCardsByDescRanking()
     {
         uasort($this->allCards, function ($a, $b){
-            if ($a->ranking == $b->ranking) {
-                return 0;
+            /**
+             * TODO: Remove temp is_array check
+             */
+            if( is_array($a)) { 
+                if ($a['ranking'] == $b['ranking']) {
+                    return 0;
+                }
+                return ($a['ranking'] > $b['ranking']) ? -1 : 1;
+            } else {
+                if ($a->ranking == $b->ranking) {
+                    return 0;
+                }
+                return ($a->ranking > $b->ranking) ? -1 : 1;
             }
-            return ($a->ranking > $b->ranking) ? -1 : 1;
         });
 
         return $this->allCards;

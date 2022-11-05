@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Classes\Dealer;
+use App\Constants\Card as ConstantsCard;
 use App\Models\Card;
 use App\Models\Hand;
 use App\Models\HandStreet;
@@ -62,7 +63,7 @@ class DealerTest extends BaseTest
 
         $card = $this->dealer->setDeck()->pickCard()->getCard();
 
-        $this->assertNotContains($card, $this->dealer->getDeck()->cards);
+        $this->assertNotContains($card, $this->dealer->getDeck());
     }
 
     /**
@@ -134,10 +135,7 @@ class DealerTest extends BaseTest
             'hand_id' => Hand::create(['table_id' => 1])->id
         ]);
 
-        $card = new Card([
-            'rank' => 'Ace',
-            'suit' => 'Hearts'
-        ]);
+        $card = new Card(ConstantsCard::ACE_HEARTS);
 
         $this->dealer->setDeck()->dealThisStreetCard($card->rank, $card->suit, $handStreet);
 

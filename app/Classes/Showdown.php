@@ -106,10 +106,8 @@ class Showdown
             /**
              * TODO: Custom query, too many relations
              */
-            foreach($tableSeat->player()->wholeCards()::find([
-                'hand_id' => $this->hand->id, 'player_id' => $tableSeat->player()->id
-            ])->collect()->content as $wholeCard){
-                $wholeCards[] = $wholeCard->card();
+            foreach($tableSeat->player()->getWholeCards($this->hand->id) as $wholeCard){
+                $wholeCards[] = $wholeCard;
             }
 
             $compileInfo = (new HandIdentifier())->identify($wholeCards, $this->communityCards)->identifiedHandType;
@@ -126,7 +124,7 @@ class Showdown
     {
         foreach($this->hand->streets()->collect()->content as $handStreet){
             foreach($handStreet->cards()->collect()->content as $handStreetCard){
-                $this->communityCards[] = $handStreetCard->card();
+                $this->communityCards[] = $handStreetCard->getCard();
             }
         }
     }

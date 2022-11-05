@@ -4,7 +4,7 @@ namespace Tests\Unit;
 
 use App\Classes\GamePlay;
 use App\Constants\Action;
-use App\Models\Card;
+use App\Constants\Card;
 use App\Models\Hand;
 use App\Models\HandStreet;
 use App\Models\HandStreetCard;
@@ -61,23 +61,19 @@ class ShowdownTest extends BaseTest
         $wholeCards = [
             [
                 'player' => $this->player3,
-                'rank' => 'King',
-                'suit' => 'Spades'
+                'card_id' => Card::KING_SPADES_ID
             ],
             [
                 'player' => $this->player3,
-                'rank' => 'Six',
-                'suit' => 'Diamonds'
+                'card_id' => Card::SIX_DIAMONDS_ID
             ],
             [
                 'player' => $this->player1,
-                'rank' => 'Six',
-                'suit' => 'Hearts'
+                'card_id' => Card::SIX_HEARTS_ID
             ],
             [
                 'player' => $this->player1,
-                'rank' => 'Seven',
-                'suit' => 'Diamonds'
+                'card_id' => Card::SEVEN_DIAMONDS_ID
             ],
         ];
 
@@ -87,31 +83,26 @@ class ShowdownTest extends BaseTest
 
         $flopCards = [
             [
-                'rank' => 'King',
-                'suit' => 'Clubs'
+                'card_id' => Card::KING_CLUBS_ID
             ],
             [
-                'rank' => 'Queen',
-                'suit' => 'Spades'
+                'card_id' => Card::QUEEN_SPADES_ID
             ],
             [
-                'rank' => 'Deuce',
-                'suit' => 'Clubs'
+                'card_id' => Card::DEUCE_CLUBS_ID
             ]
         ];
 
         $this->setFlop($flopCards);
 
         $turnCard = [
-            'rank' => 'Nine',
-            'suit' => 'Diamonds'
+            'card_id' => Card::NINE_DIAMONDS_ID
         ];
 
         $this->setTurn($turnCard);
 
         $riverCard = [
-            'rank' => 'Three',
-            'suit' => 'Spades'
+            'card_id' => Card::THREE_SPADES_ID
         ];
 
         $this->setRiver($riverCard);
@@ -135,23 +126,19 @@ class ShowdownTest extends BaseTest
         $wholeCards = [
             [
                 'player' => $this->player3,
-                'rank' => 'King',
-                'suit' => 'Spades'
+                'card_id' => Card::KING_SPADES_ID
             ],
             [
                 'player' => $this->player3,
-                'rank' => 'Queen',
-                'suit' => 'Diamonds'
+                'card_id' => Card::QUEEN_DIAMONDS_ID
             ],
             [
                 'player' => $this->player1,
-                'rank' => 'King',
-                'suit' => 'Hearts'
+                'card_id' => Card::KING_HEARTS_ID
             ],
             [
                 'player' => $this->player1,
-                'rank' => 'Seven',
-                'suit' => 'Diamonds'
+                'card_id' => Card::SEVEN_DIAMONDS_ID
             ],
         ];
 
@@ -161,31 +148,26 @@ class ShowdownTest extends BaseTest
 
         $flopCards = [
             [
-                'rank' => 'King',
-                'suit' => 'Clubs'
+                'card_id' => Card::KING_CLUBS_ID
             ],
             [
-                'rank' => 'Queen',
-                'suit' => 'Spades'
+                'card_id' => Card::QUEEN_SPADES_ID
             ],
             [
-                'rank' => 'Deuce',
-                'suit' => 'Clubs'
+                'card_id' => Card::DEUCE_CLUBS_ID
             ]
         ];
 
         $this->setFlop($flopCards);
 
         $turnCard = [
-            'rank' => 'Nine',
-            'suit' => 'Diamonds'
+            'card_id' => Card::NINE_DIAMONDS_ID
         ];
 
         $this->setTurn($turnCard);
 
         $riverCard = [
-            'rank' => 'Three',
-            'suit' => 'Spades'
+            'card_id' => Card::THREE_SPADES_ID
         ];
 
         $this->setRiver($riverCard);
@@ -201,11 +183,8 @@ class ShowdownTest extends BaseTest
         foreach($wholeCards as $card){
             WholeCard::create([
                 'player_id' => $card['player']->id,
-                'card_id' => (new Card([
-                    'rank' => $card['rank'],
-                    'suit' => $card['suit']
-                ]))->id,
-                'hand_id' => $this->gamePlay->hand->id
+                'card_id'   => $card['card_id'],
+                'hand_id'   => $this->gamePlay->hand->id
             ]);
         }
     }
@@ -214,16 +193,13 @@ class ShowdownTest extends BaseTest
     {
         $flop = HandStreet::create([
             'street_id' => Street::find(['name' => $this->gamePlay->game->streets[1]['name']])->id,
-            'hand_id' => $this->gamePlay->hand->id
+            'hand_id'   => $this->gamePlay->hand->id
         ]);
 
         foreach($flopCards as $card){
             HandStreetCard::create([
                 'hand_street_id' => $flop->id,
-                'card_id' => (new Card([
-                    'rank' => $card['rank'],
-                    'suit' => $card['suit']
-                ]))->id
+                'card_id'        => $card['card_id']
             ]);
         }
     }
@@ -232,15 +208,12 @@ class ShowdownTest extends BaseTest
     {
         $turn = HandStreet::create([
             'street_id' => Street::find(['name' => $this->gamePlay->game->streets[2]['name']])->id,
-            'hand_id' => $this->gamePlay->hand->id
+            'hand_id'   => $this->gamePlay->hand->id
         ]);
 
         HandStreetCard::create([
             'hand_street_id' => $turn->id,
-            'card_id' => (new Card([
-                'rank' => $turnCard['rank'],
-                'suit' => $turnCard['suit']
-            ]))->id
+            'card_id'        => $turnCard['card_id']
         ]);
     }
 
@@ -248,15 +221,12 @@ class ShowdownTest extends BaseTest
     {
         $river = HandStreet::create([
             'street_id' => Street::find(['name' => $this->gamePlay->game->streets[3]['name']])->id,
-            'hand_id' => $this->gamePlay->hand->id
+            'hand_id'   => $this->gamePlay->hand->id
         ]);
 
         HandStreetCard::create([
             'hand_street_id' => $river->id,
-            'card_id' => (new Card([
-                'rank' => $riverCard['rank'],
-                'suit' => $riverCard['suit']
-            ]))->id
+            'card_id'        => $riverCard['card_id']
         ]);
     }
 

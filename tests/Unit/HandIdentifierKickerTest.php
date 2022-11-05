@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Classes\HandIdentifier;
 use App\Models\Card;
+use App\Constants\Card as ConstantsCard;
 
 class HandIdentifierKickerTest extends BaseTest
 {
@@ -20,56 +21,31 @@ class HandIdentifierKickerTest extends BaseTest
     public function it_can_identify_the_kicker_and_active_ranks_for_a_high_card_hand()
     {
         $wholeCards = [
-            new Card([
-                'rank' => 'Ace',
-                'suit' => 'Spades'
-            ]),
-            new Card([
-                'rank' => 'King',
-                'suit' => 'Spades'
-            ]),
+            new Card(ConstantsCard::KING_SPADES)
         ];
 
         $communityCards = [
-            new Card([
-                'rank' => 'Queen',
-                'suit' => 'Hearts'
-            ]),
-            new Card([
-                'rank' => 'Seven',
-                'suit' => 'Diamonds'
-            ]),
-            new Card([
-                'rank' => 'Ten',
-                'suit' => 'Clubs'
-            ]),
-            new Card([
-                'rank' => 'Three',
-                'suit' => 'Spades'
-            ]),
-            new Card([
-                'rank' => 'Four',
-                'suit' => 'Diamonds'
-            ]),
+            new Card(ConstantsCard::QUEEN_HEARTS),
+            new Card(ConstantsCard::SEVEN_DIAMONDS),
+            new Card(ConstantsCard::TEN_CLUBS),
+            new Card(ConstantsCard::THREE_SPADES),
+            new Card(ConstantsCard::FOUR_DIAMONDS),
         ];
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
         $this->assertEquals(
-            14,
+            13,
             $this->handIdentifier->highCard
         );
 
         $this->assertEquals(
-            (new Card([
-                'rank' => 'King',
-                'suit' => 'Spades'
-            ]))->ranking,
+            (new Card(ConstantsCard::QUEEN_HEARTS))->ranking,
             $this->handIdentifier->identifiedHandType['kicker']
         );
 
         $this->assertContains(
-            14,
+            13,
             $this->handIdentifier->identifiedHandType['activeCards']
         );
     }
@@ -81,56 +57,33 @@ class HandIdentifierKickerTest extends BaseTest
     public function it_can_identify_the_kicker_and_active_ranks_for_a_pair()
     {
         $wholeCards = [
-            new Card([
-                'rank' => 'King',
-                'suit' => 'Spades'
-            ]),
-            new Card([
-                'rank' => 'Nine',
-                'suit' => 'Diamonds'
-            ]),
+            new Card(ConstantsCard::KING_SPADES),
+            new Card(ConstantsCard::NINE_DIAMONDS),
         ];
 
         $communityCards = [
-            new Card([
-                'rank' => 'Queen',
-                'suit' => 'Hearts'
-            ]),
-            new Card([
-                'rank' => 'Jack',
-                'suit' => 'Diamonds'
-            ]),
-            new Card([
-                'rank' => 'Four',
-                'suit' => 'Diamonds'
-            ]),
-            new Card([
-                'rank' => 'Nine',
-                'suit' => 'Clubs'
-            ]),
-            new Card([
-                'rank' => 'Seven',
-                'suit' => 'Diamonds'
-            ]),
+            new Card(ConstantsCard::QUEEN_HEARTS),
+            new Card(ConstantsCard::JACK_DIAMONDS),
+            new Card(ConstantsCard::FOUR_HEARTS),
+            new Card(ConstantsCard::NINE_CLUBS),
+            new Card(ConstantsCard::SEVEN_HEARTS),
         ];
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
         $this->assertEquals(
-            (new Card([
-                'rank' => 'King',
-                'suit' => 'Spades'
-            ]))->ranking,
+            (new Card(ConstantsCard::KING_SPADES))->ranking,
             $this->handIdentifier->identifiedHandType['kicker']
         );
 
         $this->assertContains(
-            (new Card([
-                'rank' => 'Nine',
-                'suit' => 'Diamonds'
-            ]))->ranking,
+            (new Card(ConstantsCard::NINE_DIAMONDS))->ranking,
             $this->handIdentifier->identifiedHandType['activeCards']
         );
 
+        $this->assertContains(
+            (new Card(ConstantsCard::NINE_CLUBS))->ranking,
+            $this->handIdentifier->identifiedHandType['activeCards']
+        );
     }
 }
