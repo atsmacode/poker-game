@@ -60,12 +60,12 @@ class TableSeat extends Model
         }
     }
 
-    public static function firstActivePlayer($handId, $firstActivePlayer)
+    public static function firstActivePlayer($handId, $dealer)
     {
-        return (new static())->firstActivePlayerQuery($handId, $firstActivePlayer);
+        return (new static())->firstActivePlayerQuery($handId, $dealer);
     }
 
-    private function firstActivePlayerQuery($handId, $firstActivePlayer)
+    private function firstActivePlayerQuery($handId, $dealer)
     {
         $query = sprintf("
             SELECT
@@ -79,7 +79,7 @@ class TableSeat extends Model
             AND
                 pa.active = 1
             AND
-                ts.id != :first_active_player
+                ts.id != :dealer
             LIMIT
                 1
         ");
@@ -88,7 +88,7 @@ class TableSeat extends Model
             $stmt = $this->connection->prepare($query);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->bindParam(':hand_id', $handId);
-            $stmt->bindParam(':first_active_player', $firstActivePlayer);
+            $stmt->bindParam(':dealer', $dealer);
             $stmt->execute();
 
             return $stmt->fetch();
@@ -130,4 +130,43 @@ class TableSeat extends Model
             echo $e->getMessage();
         }
     }
+
+    public static function firstPlayer($handId)
+    {
+        return (new static())->firstPlayerQuery($handId);
+    }
+
+    private function firstPlayerQuery($handId)
+    {
+        $query = sprintf("
+            SELECT
+                ts.*
+            FROM
+                table_seats AS ts
+            LEFT JOIN
+                player_actions AS pa ON ts.id = pa.table_seat_id
+            WHERE
+                pa.hand_id = :hand_id
+            AND
+                pa.active = 1
+            LIMIT
+                1
+        ");
+
+        try {
+            $stmt = $this->connection->prepare($query);
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $stmt->bindParam(':hand_id', $handId);
+            $stmt->execute();
+
+            $rows = $stmt->fetchAll();
+
+            $this->setModelProperties($rows);
+
+            return $this;
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
 }

@@ -158,21 +158,21 @@ class GamePlay
     protected function readyForShowdown()
     {
         return count($this->hand->streets()->content) === count($this->game->streets) &&
-            count($this->hand->actions()::find(['active' => 1])->content) ===
-            count($this->handTable->seats()::find(['can_continue' => 1])->content);
+            count($this->hand->getActivePlayers()) ===
+            count($this->hand->getContinuingPlayers());
     }
 
     protected function onePlayerRemainsThatCanContinue()
     {
-        return count($this->hand->actions()::find(['active' => 1])->content)
-            === count($this->handTable->seats()::find(['can_continue' => 1])->content)
-            && count($this->handTable->seats()::find(['can_continue' => 1])->content) === 1;
+        return count($this->hand->getActivePlayers())
+            === count($this->hand->getContinuingPlayers())
+            && count($this->hand->getContinuingPlayers()) === 1;
     }
 
     protected function allActivePlayersCanContinue()
     {
-        return count($this->hand->actions()::find(['active' => 1])->content) ===
-            count($this->handTable->seats()::find(['can_continue' => 1])->content);
+        return count($this->hand->getActivePlayers()) ===
+            count($this->hand->getContinuingPlayers());
     }
 
     protected function theBigBlindIsTheOnlyActivePlayerRemainingPreFlop()
@@ -189,22 +189,18 @@ class GamePlay
     protected function allPlayerActionsAreNullSoANewSreetHasBeenSet()
     {
         return count($this->hand->actions()->content)
-            === count($this->hand->actions()->find(['action_id' => null])->content);
+            === count($this->hand->getNullActions());
     }
 
     /**
      * TODO: the logic in this method needs clarified.
      */
-    protected function getThePlayerActionShouldBeOnForANewStreet($firstActivePlayer)
+    protected function getThePlayerActionShouldBeOnForANewStreet(TableSeat $firstActivePlayer)
     {
-        $dealer = $this->hand->actions()::find([
-            'table_seat_id' => TableSeat::find(['is_dealer' => 1, 'table_id' => $this->handTable->id])->id
-        ]);
+        $dealer = $this->hand->getDealer();
 
-        $dealerIsActive = $dealer->active ? $dealer : false;
-
-        if($dealerIsActive){
-            if($firstActivePlayer->is_dealer){
+        if ($dealer->active) {
+            if ($firstActivePlayer->is_dealer) {
                 $playerAfterDealer = TableSeat::playerAfterDealer(
                     $this->hand->id,
                     $firstActivePlayer->id
@@ -214,10 +210,10 @@ class GamePlay
                     $this->hand->id,
                     $firstActivePlayer->id
                 );
-            } else if($firstActivePlayer->id < $dealerIsActive->table_seat_id){
+            } else if ($firstActivePlayer->id < $dealer->table_seat_id){
                 $playerAfterDealer = TableSeat::playerAfterDealer(
                     $this->hand->id,
-                    $dealerIsActive->table_seat_id
+                    $dealer->table_seat_id
                 );
 
                 $firstActivePlayer = $playerAfterDealer ?: $firstActivePlayer;
@@ -225,7 +221,7 @@ class GamePlay
         } else {
             $playerAfterDealer = TableSeat::playerAfterDealer(
                 $this->hand->id,
-                $dealer->id
+                $dealer->table_seat_id
             );
 
             $firstActivePlayer = $playerAfterDealer ? $playerAfterDealer : $firstActivePlayer;
@@ -234,11 +230,12 @@ class GamePlay
         return $firstActivePlayer;
     }
 
-    public function getActionOn()
+    public function getActionOn(): TableSeat
     {
-        $firstActivePlayer = $this->hand->actions()->search('active', 1)->tableSeat();
+        $firstActivePlayer = TableSeat::firstPlayer($this->hand->id);
 
         if($this->allPlayerActionsAreNullSoANewSreetHasBeenSet()){
+            var_dump('allPlayerActionsAreNullSoANewSreetHasBeenSet');
             return $this->getThePlayerActionShouldBeOnForANewStreet($firstActivePlayer);
         }
 
@@ -259,7 +256,7 @@ class GamePlay
             return $firstActivePlayer;
         }
 
-        return $playerAfterLastToAct;
+        return $playerAfterLastToAct->tableSeat();
 
     }
 
@@ -271,9 +268,7 @@ class GamePlay
             $actionOnGet = $this->getActionOn();
             $actionOn = false;
 
-            if($actionOnGet && 
-            $actionOnGet->player_id 
-            === $playerAction->player_id){
+            if($actionOnGet && $actionOnGet->player_id === $playerAction->player_id){
                 $actionOn = true;
             }
 
@@ -365,16 +360,21 @@ class GamePlay
         /*
          * We only need to update the available actions if a player did something other than fold.
          */
-        $latestAction = $this->hand->actions()->filter('action_id', Action::FOLD['id'])->collect()->latest();
+        $latestAction = $this->hand->getLatestAction();
 
-        if($playerAction->active === 1){
+        if (!$latestAction) {
+            array_push($options, Action::BET, Action::CHECK);
+            return $options;
+        }
+
+        if ($playerAction->active === 1) {
 
             $options = [
                 Action::FOLD
             ];
 
             switch(PlayerAction::find([
-                'table_seat_id' => $latestAction,
+                'table_seat_id' => $latestAction['id'],
                 'hand_id' => $this->hand->id
             ])->action_id){
                 case Action::CALL['id']:
@@ -407,7 +407,10 @@ class GamePlay
 
     public function updateAllOtherSeatsBasedOnLatestAction()
     {
-        $latestAction = PlayerAction::find(['table_seat_id' => $this->hand->actions()->latest()]);
+        $latestAction = PlayerAction::find([
+            'hand_id'       => $this->hand->id,
+            'table_seat_id' => $this->hand->actions()->latest()
+        ]);
 
         // Update the other table seat statuses accordingly
         switch($latestAction->action_id){

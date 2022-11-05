@@ -32,7 +32,6 @@ trait Collection
      */
     public function search($column, $value)
     {
-
         $key = array_search($value,
             array_column($this->content, $column)
         );
