@@ -19,12 +19,27 @@ class GamePlayTest extends BaseTest
         parent::setUp();
 
         $this->table    = Table::create(['name' => 'Table 2', 'seats' => 4]);
-        $this->gamePlay = new GamePlay(Hand::create(['table_id' => 2]));
+        $this->gamePlay = new GamePlay(Hand::create(['table_id' => $this->table ->id]));
 
-        $this->player1 = Player::find(['id' => 1]);
-        $this->player2 = Player::find(['id' => 2]);
-        $this->player3 = Player::find(['id' => 3]);
-        $this->player4 = Player::find(['id' => 4]);
+        $this->player1 = Player::create([
+            'name' => 'Player 1',
+            'email' => 'player1@rrh.com'
+        ]);
+
+        $this->player2 = Player::create([
+            'name' => 'Player 2',
+            'email' => 'player3@rrh.com'
+        ]);
+
+        $this->player3 = Player::create([
+            'name' => 'Player 3',
+            'email' => 'player3@rrh.com'
+        ]);
+
+        $this->player4 = Player::create([
+            'name' => 'Player 4',
+            'email' => 'player4@rrh.com'
+        ]);
 
         TableSeat::create([
             'table_id' => $this->gamePlay->handTable->id,
@@ -132,7 +147,7 @@ class GamePlayTest extends BaseTest
 
         $this->gamePlay->play();
 
-        $this->assertCount(0, $this->gamePlay->handTable->seats()::find(['can_continue' => 1])->content);
+        $this->assertCount(1, $this->gamePlay->handTable->seats()::find(['can_continue' => 1])->content);
         $this->assertEquals(0, $this->gamePlay->handTable->seats()->slice(3, 1)->can_continue);
     }
 
