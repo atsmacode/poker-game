@@ -40,7 +40,7 @@ class Showdown
          * retain only the one with the highest kicker & active cards as appropriate
          * then compare the hand rankings of each remaining player hand.
          */
-        $playerHands = $this->playerHands;
+        $playerHands      = $this->playerHands;
         $playerHandsReset = null;
 
         foreach($this->handIdentifier->handTypes as $handType){
@@ -100,7 +100,7 @@ class Showdown
     {
         $this->getCommunityCards();
 
-        foreach(TableSeat::find(['can_continue' => 1])->collect()->content as $tableSeat){
+        foreach(TableSeat::getContinuingPlayerSeats($this->hand->id)->collect()->content as $tableSeat){
             $wholeCards = [];
 
             /**

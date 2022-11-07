@@ -169,4 +169,39 @@ class TableSeat extends Model
         }
     }
 
+    public static function getContinuingPlayerSeats($handId)
+    {
+        return (new static())->getContinuingPlayerSeatsQuery($handId);
+    }
+
+    private function getContinuingPlayerSeatsQuery($handId)
+    {
+        $query = sprintf("
+            SELECT
+                ts.*
+            FROM
+                player_actions AS pa
+            LEFT JOIN
+                table_seats AS ts ON pa.table_seat_id = ts.id
+            WHERE
+                pa.hand_id = :hand_id
+            AND
+                pa.active = 1
+            AND
+                ts.can_continue = 1
+        ");
+
+        try {
+            $stmt = $this->connection->prepare($query);
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $stmt->bindParam(':hand_id', $handId);
+            $stmt->execute();
+
+            $this->content = $stmt->fetchAll();
+
+            return $this;
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
 }
