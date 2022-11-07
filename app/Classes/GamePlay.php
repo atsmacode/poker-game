@@ -9,6 +9,7 @@ use App\Models\PlayerAction;
 use App\Models\Street;
 use App\Models\TableSeat;
 use App\Constants\Action;
+use App\Models\Player;
 
 class GamePlay
 {
@@ -109,21 +110,21 @@ class GamePlay
 
     public function nextStep()
     {
-        if($this->theBigBlindIsTheOnlyActivePlayerRemainingPreFlop()){
+        if ($this->theBigBlindIsTheOnlyActivePlayerRemainingPreFlop()) {
             TableSeat::bigBlindWins($this->handId);
 
             return $this->showdown();
         }
 
-        if($this->readyForShowdown() || $this->onePlayerRemainsThatCanContinue()){
+        if ($this->readyForShowdown() || $this->onePlayerRemainsThatCanContinue()) {
             return $this->showdown();
         }
 
-        if($this->allActivePlayersCanContinue()){
+        if ($this->allActivePlayersCanContinue()) {
             return $this->continue();
         }
 
-        if($this->theLastHandWasCompleted()){
+        if ($this->theLastHandWasCompleted()) {
             return $this->start();
         }
 

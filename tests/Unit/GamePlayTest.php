@@ -18,7 +18,7 @@ class GamePlayTest extends BaseTest
     {
         parent::setUp();
 
-        $this->table    = Table::create(['name' => 'Table 2', 'seats' => 4]);
+        $this->table    = Table::create(['name' => 'Test Table', 'seats' => 4]);
         $this->gamePlay = new GamePlay(Hand::create(['table_id' => $this->table ->id]));
 
         $this->player1 = Player::create([
@@ -107,8 +107,6 @@ class GamePlayTest extends BaseTest
     {
         $this->gamePlay->start();
 
-        $this->assertCount(0, $this->gamePlay->handTable->seats()::find(['can_continue' => 1])->content);
-
         // Player 4 Calls
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
             ->update([
@@ -120,7 +118,12 @@ class GamePlayTest extends BaseTest
 
         $this->gamePlay->play();
 
-        $this->assertCount(1, $this->gamePlay->handTable->seats()::find(['can_continue' => 1])->content);
+        $canContinue = TableSeat::find([
+            'table_id' => $this->gamePlay->handTable->id,
+            'can_continue' => 1
+        ]);
+
+        $this->assertCount(1, $canContinue->content);
         $this->assertEquals(1, $this->gamePlay->handTable->seats()->slice(3, 1)->can_continue);
     }
 
@@ -132,9 +135,13 @@ class GamePlayTest extends BaseTest
     {
         $this->gamePlay->start();
 
-        $this->assertCount(0, $this->gamePlay->handTable->seats()::find(['can_continue' => 1])->content);
+        $this->givenBigBlindRaisesPreFlopCaller();
 
-        $this->givenPlayerFourPreviouslyCalled();
+        // Mock big blind gets considered can_continue
+        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(2, 1)->id])
+            ->update([
+                'can_continue' => 1
+            ]);
 
         // Player 4 Folds
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
@@ -142,12 +149,17 @@ class GamePlayTest extends BaseTest
                 'action_id' => Action::FOLD_ID,
                 'bet_amount' => null,
                 'active' => 0,
-                'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
+                'updated_at' => date('Y-m-d H:i:s', strtotime('+1 seconds'))
             ]);
 
         $this->gamePlay->play();
 
-        $this->assertCount(1, $this->gamePlay->handTable->seats()::find(['can_continue' => 1])->content);
+        $canContinue = TableSeat::find([
+            'table_id' => $this->gamePlay->handTable->id,
+            'can_continue' => 1
+        ]);
+
+        $this->assertCount(1, $canContinue->content);
         $this->assertEquals(0, $this->gamePlay->handTable->seats()->slice(3, 1)->can_continue);
     }
 
@@ -349,20 +361,30 @@ class GamePlayTest extends BaseTest
 
     // }
 
-    private function givenPlayerFourPreviouslyCalled()
+    private function givenPlayerFourFolds()
     {
-        // Player 4 Calls
         PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
             ->update([
-                'action_id' => Action::CALL_ID,
-                'bet_amount' => 50.00,
-                'active' => 1,
-                'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
+                'action_id' => Action::FOLD_ID,
+                'bet_amount' => null,
+                'active' => 0,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
+            ]);
+    }
+
+    private function givenPlayerFourPreivouslyFolded()
+    {
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
+            ->update([
+                'action_id' => Action::FOLD_ID,
+                'bet_amount' => null,
+                'active' => 0,
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
             ]);
 
         TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(3, 1)->id])
             ->update([
-                'can_continue' => 1
+                'can_continue' => 0
             ]);
     }
 

@@ -15,6 +15,7 @@ testsToRun=(
     'tests/Unit/GamePlayTest.php --filter the_big_blind_will_win_the_pot_if_all_other_players_fold_pre_flop'
     'tests/Unit/GamePlayTest.php --filter six_handed_if_there_are_two_seats_after_current_dealer_big_blind_will_be_seat_one'
     'tests/Unit/GamePlayTest.php --filter six_handed_if_there_is_one_seat_after_current_dealer_big_blind_will_be_seat_two'
+    'tests/Unit/GamePlayTest.php --filter four_handed_if_there_is_one_seat_after_current_dealer_big_blind_will_be_seat_two'
     'tests/Unit/HandIdentifierTest.php'
     'tests/Unit/HandTypeTest.php'
     'tests/Unit/TableSeatTest.php'
