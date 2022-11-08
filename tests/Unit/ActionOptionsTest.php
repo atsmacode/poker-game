@@ -7,6 +7,8 @@ use App\Models\Hand;
 use App\Models\PlayerAction;
 use App\Models\TableSeat;
 use App\Constants\Action;
+use App\Models\Player;
+use App\Models\Table;
 
 class ActionOptionsTest extends BaseTest
 {
@@ -15,22 +17,38 @@ class ActionOptionsTest extends BaseTest
     {
         parent::setUp();
 
-        $this->gamePlay = new GamePlay(Hand::create(['table_id' => 1]));
-    }
+        $this->table    = Table::create(['name' => 'Test Table', 'seats' => 3]);
+        $this->gamePlay = new GamePlay(Hand::create(['table_id' => $this->table->id]));
 
-    /**
-     * @test
-     * @return void
-     */
-    public function a_player_facing_a_bet_can_fold_call_or_raise()
-    {
-        $gamePlay = $this->gamePlay->start();
+        $this->player1 = Player::create([
+            'name' => 'Player 1',
+            'email' => 'player1@rrh.com'
+        ]);
 
-        $this->assertTrue($gamePlay['players'][3]['action_on']);
+        $this->player2 = Player::create([
+            'name' => 'Player 2',
+            'email' => 'player2@rrh.com'
+        ]);
 
-        $this->assertContains(ACTION::FOLD, $gamePlay['players'][3]['availableOptions']);
-        $this->assertContains(ACTION::CALL, $gamePlay['players'][3]['availableOptions']);
-        $this->assertContains(ACTION::RAISE, $gamePlay['players'][3]['availableOptions']);
+        $this->player3 = Player::create([
+            'name' => 'Player 3',
+            'email' => 'player3@rrh.com'
+        ]);
+
+        TableSeat::create([
+            'table_id' => $this->gamePlay->handTable->id,
+            'player_id' => $this->player1->id
+        ]);
+
+        TableSeat::create([
+            'table_id' => $this->gamePlay->handTable->id,
+            'player_id' => $this->player2->id
+        ]);
+
+        TableSeat::create([
+            'table_id' => $this->gamePlay->handTable->id,
+            'player_id' => $this->player3->id
+        ]); 
     }
 
     /**
@@ -83,7 +101,7 @@ class ActionOptionsTest extends BaseTest
         $this->gamePlay->start();
 
         // Player 1 Raises BB
-        PlayerAction::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(0, 1)->id])
             ->update([
                 'action_id' => Action::RAISE_ID,
                 'bet_amount' => 100.0,
@@ -109,7 +127,6 @@ class ActionOptionsTest extends BaseTest
 
         // Action On BB
         $this->assertTrue($gamePlay['players'][2]['action_on']);
-
         $this->assertEmpty($gamePlay['players'][1]['availableOptions']);
     }
 
@@ -122,7 +139,7 @@ class ActionOptionsTest extends BaseTest
         $this->gamePlay->start();
 
         // Player 1 Calls BB
-        PlayerAction::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(0, 1)->id])
             ->update([
                 'action_id' => Action::CALL_ID,
                 'bet_amount' => 50.0,
@@ -163,7 +180,7 @@ class ActionOptionsTest extends BaseTest
         $this->gamePlay->start();
 
         // Player 1 Calls BB
-        PlayerAction::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
+        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(0, 1)->id])
             ->update([
                 'action_id' => Action::CALL_ID,
                 'bet_amount' => 50.0,

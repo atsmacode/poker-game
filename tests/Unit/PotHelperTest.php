@@ -22,10 +22,8 @@ class PotHelperTest extends BaseTest
      */
     public function a_pot_can_be_initiated()
     {
-        $table = Table::find(['id' => 1]);
-        $hand = Hand::create([
-            'table_id' => $table->id
-        ]);
+        $table = Table::create(['name' => 'Test Table', 'seats' => 3]);
+        $hand  = Hand::create(['table_id' => $table->id]);
 
         $this->assertNotInstanceOf(Pot::class, PotHelper::initiatePot($hand));
     }
@@ -37,18 +35,18 @@ class PotHelperTest extends BaseTest
     public function a_pot_can_be_awarded_to_a_player()
     {
 
-        $table = Table::find(['id' => 1]);
-        $player = Player::find(['id' => 1]);
-        $stack = Stack::create([
+        $table  = Table::create(['name' => 'Test Table', 'seats' => 3]);
+        $player = Player::create([
+            'name' => 'Player 1',
+            'email' => 'player1@rrh.com'
+        ]);
+        $stack  = Stack::create([
             'amount' => 1000,
             'table_id' => $table->id,
             'player_id' => $player->id
         ]);
-
-        $hand = Hand::create([
-            'table_id' => $table->id
-        ]);
-        $pot = Pot::create([
+        $hand   = Hand::create(['table_id' => $table->id]);
+        $pot    = Pot::create([
             'amount' => 75,
             'hand_id' => $hand->id
         ]);

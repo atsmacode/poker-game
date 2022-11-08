@@ -10,6 +10,7 @@ use App\Models\HandStreet;
 use App\Models\Player;
 use App\Models\Street;
 use App\Models\Table;
+use App\Models\TableSeat;
 
 class DealerTest extends BaseTest
 {
@@ -72,7 +73,10 @@ class DealerTest extends BaseTest
      */
     public function it_can_deal_a_card_to_a_player()
     {
-        $player = Player::find(['name' => 'Player 1']);
+        $player = Player::create([
+            'name' => 'Player 1',
+            'email' => 'player1@rrh.com'
+        ]);
 
         $this->assertCount(0, $player->wholeCards()->content);
 
@@ -88,20 +92,49 @@ class DealerTest extends BaseTest
      */
     public function it_can_deal_cards_to_multiple_players_at_a_table()
     {
-        $table = Table::find([
-            'name' => 'Table 1'
+
+        $table = Table::create(['name' => 'Test Table', 'seats' => 3]);
+        $hand  = Hand::create(['table_id' => $table->id]);
+
+        $player1 = Player::create([
+            'name' => 'Player 1',
+            'email' => 'player1@rrh.com'
+        ]);
+
+        $player2 = Player::create([
+            'name' => 'Player 2',
+            'email' => 'player2@rrh.com'
+        ]);
+
+        $player3 = Player::create([
+            'name' => 'Player 3',
+            'email' => 'player3@rrh.com'
+        ]);
+
+        TableSeat::create([
+            'table_id' => $table->id,
+            'player_id' => $player1->id
+        ]);
+
+        TableSeat::create([
+            'table_id' => $table->id,
+            'player_id' => $player2->id
+        ]);
+
+        TableSeat::create([
+            'table_id' => $table->id,
+            'player_id' => $player3->id
         ]);
 
         foreach($table->players()->collect()->content as $player){
             $this->assertCount(0, $player->wholeCards()->content);
         }
 
-        $this->dealer->setDeck()->shuffle()->dealTo($table->players(), 1);
+        $this->dealer->setDeck()->shuffle()->dealTo($table->players(), 1, $hand);
 
         foreach($table->players()->collect()->content as $player){
             $this->assertCount(1, $player->wholeCards()->content);
         }
-
     }
 
     /**

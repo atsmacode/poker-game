@@ -18,12 +18,23 @@ class GamePlayHoldEmStreetTest extends BaseTest
     {
         parent::setUp();
 
-        $this->table = Table::create(['name' => 'Table 2', 'seats' => 3]);
-        $this->gamePlay = new GamePlay(Hand::create(['table_id' => 2]));
+        $this->table = Table::create(['name' => 'Test Table', 'seats' => 3]);
+        $this->gamePlay = new GamePlay(Hand::create(['table_id' => $this->table->id]));
 
-        $this->player1 = Player::find(['id' => 1]);
-        $this->player2 = Player::find(['id' => 2]);
-        $this->player3 = Player::find(['id' => 3]);
+        $this->player1 = Player::create([
+            'name' => 'Player 1',
+            'email' => 'player1@rrh.com'
+        ]);
+
+        $this->player2 = Player::create([
+            'name' => 'Player 2',
+            'email' => 'player2@rrh.com'
+        ]);
+
+        $this->player3 = Player::create([
+            'name' => 'Player 3',
+            'email' => 'player3@rrh.com'
+        ]);
 
         TableSeat::create([
             'table_id' => $this->gamePlay->handTable->id,

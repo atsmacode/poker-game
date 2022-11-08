@@ -7,6 +7,8 @@ use App\Constants\Action;
 use App\Controllers\PlayerActionController;
 use App\Models\Hand;
 use App\Models\Player;
+use App\Models\Table;
+use App\Models\TableSeat;
 
 class PlayerActionControllerTest extends BaseTest
 {
@@ -14,8 +16,38 @@ class PlayerActionControllerTest extends BaseTest
     {
         parent::setUp();
 
-        $this->gamePlay = new GamePlay(Hand::create(['table_id' => 1]));
-        $this->player   = Player::find(['id' => 4]);
+        $this->table    = Table::create(['name' => 'Test Table', 'seats' => 3]);
+        $this->gamePlay = new GamePlay(Hand::create(['table_id' => $this->table->id]));
+
+        $this->player1 = Player::create([
+            'name' => 'Player 1',
+            'email' => 'player1@rrh.com'
+        ]);
+
+        $this->player2 = Player::create([
+            'name' => 'Player 2',
+            'email' => 'player2@rrh.com'
+        ]);
+
+        $this->player3 = Player::create([
+            'name' => 'Player 3',
+            'email' => 'player3@rrh.com'
+        ]);
+
+        TableSeat::create([
+            'table_id' => $this->gamePlay->handTable->id,
+            'player_id' => $this->player1->id
+        ]);
+
+        TableSeat::create([
+            'table_id' => $this->gamePlay->handTable->id,
+            'player_id' => $this->player2->id
+        ]);
+
+        TableSeat::create([
+            'table_id' => $this->gamePlay->handTable->id,
+            'player_id' => $this->player3->id
+        ]); 
     }
 
     /**
@@ -54,9 +86,9 @@ class PlayerActionControllerTest extends BaseTest
 
         $requestBody = [
             'deck'           => $this->gamePlay->dealer->getDeck(),
-            'player_id'      => $this->player->id,
-            'table_seat_id'  => 4,
-            'hand_street_id' => 1,
+            'player_id'      => $this->player1->id,
+            'table_seat_id'  => $this->gamePlay->handTable->seats()->slice(0, 1)->id,
+            'hand_street_id' => $this->gamePlay->hand->streets()->slice(0, 1)->id,
             'action_id'      => Action::CALL_ID,
             'bet_amount'     => 50.0,
             'active'         => 1,

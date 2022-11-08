@@ -22,19 +22,35 @@ class BetHelperTest extends BaseTest
      */
     public function a_bet_amount_is_added_to_the_pot_and_subtracted_from_the_player_stack()
     {
-        $table = Table::find(['id' => 1]);
-        $player = Player::find(['id' => 1]);
+        // $table = Table::find(['id' => 1]);
+        // $player = Player::find(['id' => 1]);
 
-        $stack = Stack::create([
+        // $stack = Stack::create([
+        //     'amount' => 1000,
+        //     'table_id' => $table->id,
+        //     'player_id' => $player->id
+        // ]);
+
+        // $hand = Hand::create([
+        //     'table_id' => $table->id
+        // ]);
+        // $pot = Pot::create([
+        //     'amount' => 0,
+        //     'hand_id' => $hand->id
+        // ]);
+
+        $table  = Table::create(['name' => 'Test Table', 'seats' => 3]);
+        $player = Player::create([
+            'name' => 'Player 1',
+            'email' => 'player1@rrh.com'
+        ]);
+        $stack  = Stack::create([
             'amount' => 1000,
             'table_id' => $table->id,
             'player_id' => $player->id
         ]);
-
-        $hand = Hand::create([
-            'table_id' => $table->id
-        ]);
-        $pot = Pot::create([
+        $hand   = Hand::create(['table_id' => $table->id]);
+        $pot    = Pot::create([
             'amount' => 0,
             'hand_id' => $hand->id
         ]);
