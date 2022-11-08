@@ -203,49 +203,25 @@ class GamePlay
             === count($this->hand->getNullActions());
     }
 
-    /**
-     * TODO: the logic in this method needs clarified.
-     */
     protected function getThePlayerActionShouldBeOnForANewStreet(TableSeat $firstActivePlayer)
     {
         $dealer = $this->hand->getDealer();
 
-        if ($dealer->active) {
-            if ($firstActivePlayer->is_dealer) {
-                $playerAfterDealer = TableSeat::playerAfterDealer(
-                    $this->handId,
-                    $firstActivePlayer->id
-                );
+        $playerAfterDealer = TableSeat::playerAfterDealer(
+            $this->handId,
+            $dealer->table_seat_id
+        );
 
-                $playerAfterDealer = $playerAfterDealer ?: TableSeat::firstActivePlayer(
-                    $this->handId,
-                    $firstActivePlayer->id
-                );
-
-                $firstActivePlayer = $playerAfterDealer ?: $firstActivePlayer;
-            } else if ($firstActivePlayer->id < $dealer->table_seat_id){
-                $playerAfterDealer = TableSeat::playerAfterDealer(
-                    $this->handId,
-                    $dealer->table_seat_id
-                );
-
-                $firstActivePlayer = $playerAfterDealer ?: $firstActivePlayer;
-            }
-        } else {
-            $playerAfterDealer = TableSeat::playerAfterDealer(
-                $this->handId,
-                $dealer->table_seat_id
-            );
-
-            $firstActivePlayer = $playerAfterDealer ?: $firstActivePlayer;
+        if (!isset($playerAfterDealer->player_id)) {
+            $playerAfterDealer = null;
         }
 
-        return $firstActivePlayer;
+        return $playerAfterDealer ?: $firstActivePlayer;
     }
 
     public function getActionOn(): TableSeat
     {
-        $firstActivePlayer = TableSeat::firstPlayer($this->handId);
+        $firstActivePlayer = TableSeat::firstActivePlayer($this->handId);
 
         if($this->allPlayerActionsAreNullSoANewSreetHasBeenSet()){
             return $this->getThePlayerActionShouldBeOnForANewStreet($firstActivePlayer);

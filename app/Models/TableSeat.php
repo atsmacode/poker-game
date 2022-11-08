@@ -19,9 +19,9 @@ class TableSeat extends Model
         return Player::find(['id' => $this->player_id]);
     }
 
-    public static function playerAfterDealer($handId, $firstActivePlayer)
+    public static function playerAfterDealer($handId, $dealer)
     {
-        return (new static())->playerAfterDealerQuery($handId, $firstActivePlayer);
+        return (new static())->playerAfterDealerQuery($handId, $dealer);
     }
 
     private function playerAfterDealerQuery($handId, $dealer)
@@ -55,43 +55,6 @@ class TableSeat extends Model
             $this->setModelProperties($rows);
 
             return $this;
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
-
-    public static function firstActivePlayer($handId, $dealer)
-    {
-        return (new static())->firstActivePlayerQuery($handId, $dealer);
-    }
-
-    private function firstActivePlayerQuery($handId, $dealer)
-    {
-        $query = sprintf("
-            SELECT
-                ts.*
-            FROM
-                table_seats AS ts
-            LEFT JOIN
-                player_actions AS pa ON ts.id = pa.table_seat_id
-            WHERE
-                pa.hand_id = :hand_id
-            AND
-                pa.active = 1
-            AND
-                ts.id != :dealer
-            LIMIT
-                1
-        ");
-
-        try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $stmt->bindParam(':hand_id', $handId);
-            $stmt->bindParam(':dealer', $dealer);
-            $stmt->execute();
-
-            return $stmt->fetch();
         } catch(PDOException $e) {
             echo $e->getMessage();
         }
@@ -131,12 +94,12 @@ class TableSeat extends Model
         }
     }
 
-    public static function firstPlayer($handId)
+    public static function firstActivePlayer($handId)
     {
-        return (new static())->firstPlayerQuery($handId);
+        return (new static())->firstActivePlayerQuery($handId);
     }
 
-    private function firstPlayerQuery($handId)
+    private function firstActivePlayerQuery($handId)
     {
         $query = sprintf("
             SELECT
