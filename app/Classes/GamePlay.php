@@ -245,7 +245,6 @@ class GamePlay
         }
 
         return $playerAfterLastToAct->tableSeat();
-
     }
 
     protected function getPlayerData()
@@ -305,21 +304,6 @@ class GamePlay
             }
 
             return $wholeCards;
-        }
-
-        /**
-         * Is this used? TODO
-         */
-        foreach(TableSeat::find(['can_continue' => 1]) as $tableSeat){
-            foreach($tableSeat->player()->getWholeCards($this->handId) as $wholeCard){
-                $wholeCards[] = [
-                    'player_id'        => $wholeCard->player_id,
-                    'rank'             => $wholeCard->card()->rank,
-                    'rankAbbreviation' => $wholeCard->card()->rankAbbreviation,
-                    'suit'             => $wholeCard->card()->suit,
-                    'suitAbbreviation' => $wholeCard->card()->suitAbbreviation
-                ];
-            }
         }
 
         return $wholeCards;
