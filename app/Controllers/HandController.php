@@ -37,7 +37,7 @@ class HandController
         }
 
         if ($_SERVER['REQUEST_METHOD'] == 'GET') { 
-            return include($GLOBALS['THE_ROOT'] . 'public/index.php'); 
+            include($GLOBALS['THE_ROOT'] . 'public/index.php'); 
         }
     }
 }

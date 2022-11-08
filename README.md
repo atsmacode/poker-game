@@ -19,7 +19,6 @@ http://read-right-hands-vanilla.com/index.php/action
 # Todo:
 - Sometimes no player qualifies for action-on, requires recreating specific hand(s) unit tests perhaps
 - Errors during showdown - probably due to that fact it's not yet fully implemented
-- Set a global root path so I don't have to add conditionals everywhere for testing/prod
 - look into serialization between PHP/JS - use arrays instead?
 - Review how theplayer after Dealer is retrieved, I suspect it is a bit off
 - Convert GamePlay class into a middleware pipeline
@@ -28,11 +27,9 @@ http://read-right-hands-vanilla.com/index.php/action
         - What hand stage is next /What stage the hand is in
         - What are the available options for the next player
 - Add custom join queries for relationships
-    - Rather than multiple chained model calls resulting in a lot of queries
+    - Rather than multiple chained model calls resulting in a lot of queries - in progress, requires review of duplicated methods accrosss models - can implement gameSate object that is passed through pipeline
 - Address updated_at reliance
     - Currenly manually setting these values so the expected 'action on' seat can be identified in tests
-    - Could use UNIX timestamp in miliseconds value
-- Use constants for cards, suits, rankings & deck instead of DB
+    - Add new row for each PlayerAction and use incrementing PK ID for latest action
 - Review all TODO comments and implement solution
 - Once everything above is tidied/finalised, add remaining unit tests from original app
-- Also look into proper DB refresh solution as my bash script one does fail sometimes (Symfony component? I want to avoid requiring an entire framework)

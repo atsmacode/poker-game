@@ -29,19 +29,20 @@ class HandControllerTest extends BaseTest
     }
     
     /**
-     * @test
-     * @return void
+     * This test wasn't right, not sure how to
+     * test the GET response as it simply includes
+     * the file. TODO when improving routes & responses.
      */
-    public function it_returns_index_on_get_request()
-    {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['REQUEST_URI']    = 'index.php/play';
+    // public function it_returns_index_on_get_request()
+    // {
+    //     $_SERVER['REQUEST_METHOD'] = 'GET';
+    //     $_SERVER['REQUEST_URI']    = 'index.php/play';
 
-        $controller = new HandController();
-        $response   = $controller->play();
+    //     $controller = new HandController();
+    //     $response   = $controller->play();
 
-        $this->assertEquals(include('resources/index.php'), $response);
-    }
+    //     $this->assertEquals(include('resources/index.php'), $response);
+    // }
 
     public function validResponseKeys()
     {
