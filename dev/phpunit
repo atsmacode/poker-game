@@ -1,2 +1,3 @@
 #!/usr/bin/bash
+php application.php app:build-env -d true
 ./vendor/bin/phpunit --testdox

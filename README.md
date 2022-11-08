@@ -33,3 +33,4 @@ http://read-right-hands-vanilla.com/index.php/action
     - Add new row for each PlayerAction and use incrementing PK ID for latest action
 - Review all TODO comments and implement solution
 - Once everything above is tidied/finalised, add remaining unit tests from original app
+- Add DB indexes, tests get slower once DB gets fuller

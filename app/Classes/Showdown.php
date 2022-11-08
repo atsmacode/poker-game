@@ -155,8 +155,12 @@ class Showdown
         $maxKicker     = max(array_column($playerHandsOfType, 'kicker'));
         $maxActiveCard = max(array_column($playerHandsOfType, 'highestActiveCard'));
 
+        /**
+         * This can result in multiple winners (split pot).
+         */
         return array_filter($playerHandsOfType, function($value) use($maxKicker, $maxActiveCard){
-            return $value['highestActiveCard'] == $maxActiveCard && $value['kicker'] == $maxKicker;
+            return ($value['highestActiveCard'] == $maxActiveCard && $value['kicker'] == $maxKicker)
+                || ($value['highestActiveCard'] == $maxActiveCard);
         });
     }
 
