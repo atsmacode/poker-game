@@ -82,6 +82,10 @@ class HandIdentifier
 
     protected function thereIsNoAceInTheActiveCardsUnlessHandIsFlush($forHandCheck, $activeCards)
     {
+        /**
+         * TODO: Replace 1 & 14 with HIGH_ACE_ID
+         * & LOW_ACE_ID constants.
+         */
         return ($activeCards && count($this->filter('allCards', 'ranking', 1)) > 1
                 && !in_array(1, $activeCards)
                 && !in_array(14, $activeCards))
