@@ -52,7 +52,7 @@ class Showdown
         }
 
         if($this->considerRankings || $this->considerKickers){
-            return $playerHandsReset[0];
+            return array_values($playerHandsReset)[0];
         }
 
         return $this->highestRankedPlayerHand();
