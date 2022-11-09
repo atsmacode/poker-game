@@ -17,6 +17,7 @@ Drop, Create and Seed all tables. '-d true' is required to run this in test DB
 http://read-right-hands-vanilla.com/index.php/action
 
 # Todo:
+- Review Showdown kickers/rankings logic, need to retain all hand types and rank after the highest of each type is included in the array
 - Sometimes no player qualifies for action-on, requires recreating specific hand(s) unit tests perhaps
 - Errors during showdown - probably due to that fact it's not yet fully implemented
 - look into serialization between PHP/JS - use arrays instead?
