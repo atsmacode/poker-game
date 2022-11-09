@@ -41,7 +41,6 @@ class CreateTables extends Database
             number INT(6) UNSIGNED NULL,
             can_continue BOOLEAN DEFAULT 0,
             is_dealer BOOLEAN DEFAULT 0,
-            action_on BOOLEAN DEFAULT 0,
             player_id INT(6) UNSIGNED NULL,
             table_id INT(6) UNSIGNED NOT NULL,
             updated_at DATETIME NULL,
