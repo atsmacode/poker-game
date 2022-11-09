@@ -14,16 +14,19 @@ trait Collection
 
     /**
      * Used when $this->content is an array of the DB properties:
-     * 
-     * array(4) {      
-     *   'id' =>       
-     *   int(11)       
-     *   'amount' =>   
-     *   int(1000)     
-     *   'player_id' =>
-     *   int(1)        
-     *   'table_id' => 
-     *   int(1)        
+     * array(10) {
+     *   [0] => array(4) {      
+     *     'id' =>       
+     *     int(11)       
+     *     'amount' =>   
+     *     int(1000)     
+     *     'player_id' =>
+     *     int(1)        
+     *     'table_id' => 
+     *     int(1)
+     *     ...   
+     *   }
+     *   ...
      * }
      * 
      * And when desired result is a single self instance.
