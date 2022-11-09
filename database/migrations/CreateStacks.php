@@ -14,9 +14,14 @@ class CreateStacks extends Database
     public function createStacksTable($output, $showMessages = true)
     {
 
+        /**
+         * TODO amount is not unsigned to allow negative
+         * values until 'player loses/zero-chips feature
+         * is added.
+         */
         $sql = "CREATE TABLE stacks (
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            amount BIGINT(12) UNSIGNED NULL,
+            amount BIGINT(12) NULL,
             player_id INT(6) UNSIGNED NOT NULL,
             table_id INT(6) UNSIGNED NOT NULL,
             FOREIGN KEY (player_id) REFERENCES players(id),

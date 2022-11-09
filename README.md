@@ -2,7 +2,7 @@
 
 Run the unit test suite on Linux:
 
->./runtests suite
+>dev/phpunit
 
 Run the unit test suite on Windows:
 
