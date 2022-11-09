@@ -6,16 +6,14 @@ use App\Classes\Database;
 
 class CreateCards extends Database
 {
-
     public static array $methods = [
         'createRanksTable',
         'createSuitsTable',
         'createCardsTable'
     ];
 
-    public function createRanksTable($output, $showMessages = true)
+    public function createRanksTable()
     {
-
         $sql = "CREATE TABLE ranks (
                 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(30) NOT NULL,
@@ -25,18 +23,15 @@ class CreateCards extends Database
 
         try {
             $this->connection->exec($sql);
-            if ($showMessages) {
-                $output->writeln("Ranks table created successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            error_log($e->getMessage());
         }
+
         $this->connection = null;
     }
 
-    public function createSuitsTable($output, $showMessages = true)
+    public function createSuitsTable()
     {
-
         $sql = "CREATE TABLE suits (
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(30) NOT NULL,
@@ -45,18 +40,15 @@ class CreateCards extends Database
 
         try {
             $this->connection->exec($sql);
-            if ($showMessages) {
-                $output->writeln("Suits table created successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            error_log($e->getMessage());
         }
+
         $this->connection = null;
     }
 
-    public function createCardsTable($output, $showMessages = true)
+    public function createCardsTable()
     {
-
         $sql = "CREATE TABLE cards (
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             rank_id INT(6) UNSIGNED NOT NULL,
@@ -67,14 +59,10 @@ class CreateCards extends Database
 
         try {
             $this->connection->exec($sql);
-            if ($showMessages) {
-                $output->writeln("Cards table created successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            error_log($e->getMessage());
         }
 
         $this->connection = null;
     }
-
 }

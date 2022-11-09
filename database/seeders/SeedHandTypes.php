@@ -6,14 +6,12 @@ use App\Classes\Database;
 
 class SeedHandTypes extends Database
 {
-
     public static array $methods = [
         'seed'
     ];
 
-    public function seed($output, $showMessages = true)
+    public function seed()
     {
-
         $handTypes = require('config/handtypes.php');
 
         try {
@@ -26,15 +24,11 @@ class SeedHandTypes extends Database
                 $ranking = $handType['ranking'];
                 $stmt->execute();
             }
-
-            if ($showMessages) {
-                $output->writeln("Hand types  seeded successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($e->getMessage());
+            error_log($e->getMessage());
 
         }
-        $conn = null;
+        
+        $this->connection = null;
     }
-
 }

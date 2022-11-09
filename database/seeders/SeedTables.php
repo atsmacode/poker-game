@@ -6,17 +6,16 @@ use App\Classes\Database;
 
 class SeedTables extends Database
 {
-
     public static array $methods = [
         'seed'
     ];
 
-    public function seed($output, $showMessages = true)
+    public function seed()
     {
-        $this->createTable($output, $showMessages)->createTableSeats($output, $showMessages);
+        $this->createTable()->createTableSeats();
     }
 
-    private function createTable($output, $showMessages = true)
+    private function createTable()
     {
         $name = 'Table 1';
         $seats = 6;
@@ -27,18 +26,14 @@ class SeedTables extends Database
             $stmt->bindParam(':seats', $seats);
 
             $stmt->execute();
-
-            if ($showMessages) {
-                $output->writeln("Table seeded successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($e->getMessage());
+            error_log($e->getMessage());
         }
 
         return $this;
     }
 
-    private function createTableSeats($output, $showMessages = true)
+    private function createTableSeats()
     {
         $seats = 6;
 
@@ -54,13 +49,10 @@ class SeedTables extends Database
 
                 $inserted++;
             }
-
-            if ($showMessages) {
-                $output->writeln("Table seats seeded successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($e->getMessage());
+            error_log($e->getMessage());;
         }
+
         $this->connection = null;
 
         return $this;

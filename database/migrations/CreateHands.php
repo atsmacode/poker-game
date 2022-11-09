@@ -6,16 +6,14 @@ use App\Classes\Database;
 
 class CreateHands extends Database
 {
-
     public static array $methods = [
         'createHandsTable',
         'createHandStreetsTable',
         'createHandStreetCardsTable'
     ];
 
-    public function createHandsTable($output, $showMessages = true)
+    public function createHandsTable()
     {
-
         $sql = "CREATE TABLE hands (
                 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 game_type_id int(6) NULL,
@@ -26,19 +24,15 @@ class CreateHands extends Database
 
         try {
             $this->connection->exec($sql);
-
-            if ($showMessages) {
-                $output->writeln("Hands table created successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            error_log($e->getMessage());
         }
+
         $this->connection = null;
     }
 
-    public function createHandStreetsTable($output, $showMessages = true)
+    public function createHandStreetsTable()
     {
-
         $sql = "CREATE TABLE hand_streets (
                 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 street_id int(6) UNSIGNED NOT NULL,
@@ -49,19 +43,15 @@ class CreateHands extends Database
 
         try {
             $this->connection->exec($sql);
-
-            if ($showMessages) {
-                $output->writeln("Hand streets table created successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            error_log($e->getMessage());
         }
+
         $this->connection = null;
     }
 
-    public function createHandStreetCardsTable($output, $showMessages = true)
+    public function createHandStreetCardsTable()
     {
-
         $sql = "CREATE TABLE hand_street_cards (
                 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 hand_street_id INT(6) UNSIGNED NOT NULL,
@@ -72,14 +62,10 @@ class CreateHands extends Database
 
         try {
             $this->connection->exec($sql);
-
-            if ($showMessages) {
-                $output->writeln("Hand street cards table created successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            error_log($e->getMessage());
         }
+
         $this->connection = null;
     }
-
 }

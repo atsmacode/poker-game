@@ -20,37 +20,29 @@ class CreateDatabase
         $this->setCredentials();
     }
 
-    public function dropDatabase($output, $showMessages = true)
+    public function dropDatabase()
     {
         $sql = "DROP DATABASE IF EXISTS `{$this->database}`";
 
         try {
             $this->connection = new PDO("mysql:host=$this->servername;", $this->username, $this->password);
             $this->connection->exec($sql);
-
-            if ($showMessages) {
-                $output->writeln("Database dropped successfully");
-            }
         } catch(PDOException $e) {
-            echo $sql . $e->getMessage();
+            error_log($e->getMessage());
         }
 
         return $this;
     }
 
-    public function createDatabase($output, $showMessages = true)
+    public function createDatabase()
     {
         $sql = "CREATE DATABASE `{$this->database}`";
 
         try {
             $this->connection = new PDO("mysql:host=$this->servername;", $this->username, $this->password);
             $this->connection->exec($sql);
-
-            if ($showMessages) {
-                $output->writeln("Database created successfully");
-            }
         } catch(PDOException $e) {
-            $this->output->writeln($sql . "<br>" . $e->getMessage());
+            error_log($e->getMessage());
         }
 
         return $this;

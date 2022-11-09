@@ -6,14 +6,12 @@ use App\Classes\Database;
 
 class CreateActions extends Database
 {
-
     public static array $methods = [
         'createActionsTable',
     ];
 
-    public function createActionsTable($output, $showMessages = true)
+    public function createActionsTable()
     {
-
         $sql = "CREATE TABLE actions (
                 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(30) NOT NULL
@@ -21,15 +19,10 @@ class CreateActions extends Database
 
         try {
             $this->connection->exec($sql);
-
-            if($showMessages){
-                $output->writeln("Actions table created successfully");
-            }
         } catch(PDOException $e) {
-            $this->output->writeln($sql . "<br>" . $e->getMessage());
+            error_log($e->getMessage());
         }
 
         $this->connection = null;
     }
-
 }

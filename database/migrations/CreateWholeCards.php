@@ -6,14 +6,12 @@ use App\Classes\Database;
 
 class CreateWholeCards extends Database
 {
-
     public static array $methods = [
         'createWholeCardsTable',
     ];
 
-    public function createWholeCardsTable($output, $showMessages = true)
+    public function createWholeCardsTable()
     {
-
         $sql = "CREATE TABLE whole_cards (
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             card_id INT(6) UNSIGNED NOT NULL,
@@ -26,15 +24,10 @@ class CreateWholeCards extends Database
 
         try {
             $this->connection->exec($sql);
-
-            if ($showMessages) {
-                $output->writeln("Whole cards table created successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            error_log($e->getMessage());
         }
 
         $this->connection = null;
     }
-
 }

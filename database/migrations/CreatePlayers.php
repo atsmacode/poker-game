@@ -6,14 +6,12 @@ use App\Classes\Database;
 
 class CreatePlayers extends Database
 {
-
     public static array $methods = [
         'createPlayersTable',
     ];
 
-    public function createPlayersTable($output, $showMessages = true)
+    public function createPlayersTable()
     {
-
         $sql = "CREATE TABLE players (
                 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(30) NOT NULL,
@@ -23,14 +21,10 @@ class CreatePlayers extends Database
 
         try {
             $this->connection->exec($sql);
-
-            if ($showMessages) {
-                $output->writeln("Players table created successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            error_log($e->getMessage());
         }
+
         $this->connection = null;
     }
-
 }

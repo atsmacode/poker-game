@@ -6,14 +6,12 @@ use App\Classes\Database;
 
 class CreateStacks extends Database
 {
-
     public static array $methods = [
         'createStacksTable',
     ];
 
-    public function createStacksTable($output, $showMessages = true)
+    public function createStacksTable()
     {
-
         /**
          * TODO amount is not unsigned to allow negative
          * values until 'player loses/zero-chips feature
@@ -30,15 +28,10 @@ class CreateStacks extends Database
 
         try {
             $this->connection->exec($sql);
-
-            if ($showMessages) {
-                $output->writeln("Stacks table created successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            error_log($e->getMessage());
         }
+
         $this->connection = null;
     }
-
-
 }

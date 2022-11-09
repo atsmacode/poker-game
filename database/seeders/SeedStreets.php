@@ -6,18 +6,15 @@ use App\Classes\Database;
 
 class SeedStreets extends Database
 {
-
     public static array $methods = [
         'seed'
     ];
 
-    public function seed($output, $showMessages = true)
+    public function seed()
     {
-
         $streets = require('config/streets.php');
 
         try {
-
             $stmt = $this->connection->prepare("INSERT INTO streets (name) VALUES (:name)");
             $stmt->bindParam(':name', $name);
 
@@ -25,15 +22,10 @@ class SeedStreets extends Database
                 $name = $street['name'];
                 $stmt->execute();
             }
-
-            if ($showMessages) {
-                $output->writeln("Streets seeded successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($e->getMessage());
-
+            error_log($e->getMessage());
         }
-        $conn = null;
-    }
 
+        $this->connection = null;
+    }
 }

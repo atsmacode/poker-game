@@ -6,14 +6,12 @@ use App\Classes\Database;
 
 class SeedActions extends Database
 {
-
     public static array $methods = [
         'seed'
     ];
 
-    public function seed($output, $showMessages = true)
+    public function seed()
     {
-
         $actions = require('config/actions.php');
 
         try {
@@ -24,15 +22,10 @@ class SeedActions extends Database
                 $name = $action['name'];
                 $stmt->execute();
             }
-
-            if ($showMessages) {
-                $output->writeln("Actions seeded successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($e->getMessage());
-
+            error_log($e->getMessage());
         }
+
         $this->connection = null;
     }
-
 }

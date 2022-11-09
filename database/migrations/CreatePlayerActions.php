@@ -6,14 +6,12 @@ use App\Classes\Database;
 
 class CreatePlayerActions extends Database
 {
-
     public static array $methods = [
         'createPlayerActionsTable',
     ];
 
-    public function createPlayerActionsTable($output, $showMessages = true)
+    public function createPlayerActionsTable()
     {
-
         $sql = "CREATE TABLE player_actions (
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             bet_amount INT(6) UNSIGNED NULL,
@@ -35,15 +33,10 @@ class CreatePlayerActions extends Database
 
         try {
             $this->connection->exec($sql);
-
-            if ($showMessages) {
-                $output->writeln("Player actions table created successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            error_log($e->getMessage());
         }
+
         $this->connection = null;
     }
-
-
 }

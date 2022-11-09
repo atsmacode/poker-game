@@ -7,15 +7,13 @@ use App\Helpers\QueryHelper;
 
 class SeedCards extends Database
 {
-
     public static array $methods = [
         'seedRanks',
         'seedSuits',
         'seedCards'
     ];
-    public function seedRanks($output, $showMessages = true)
+    public function seedRanks()
     {
-
         $ranks = require('config/ranks.php');
 
         try {
@@ -30,20 +28,15 @@ class SeedCards extends Database
                 $ranking = $rank['ranking'];
                 $stmt->execute();
             }
-
-            if ($showMessages) {
-                $output->writeln("Ranks seeded successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($e->getMessage());
+            error_log($e->getMessage());
 
         }
         $this->connection = null;
     }
 
-    public function seedSuits($output, $showMessages = true)
+    public function seedSuits()
     {
-
         $suits = require('config/suits.php');
 
         try {
@@ -56,21 +49,16 @@ class SeedCards extends Database
                 $abbreviation = $suit['abbreviation'];
                 $stmt->execute();
             }
-
-            if ($showMessages) {
-                $output->writeln("Suits seeded successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($e->getMessage());
+            error_log($e->getMessage());
         }
         $this->connection = null;
     }
 
-    public function seedCards($output, $showMessages = true)
+    public function seedCards()
     {
-
-        $ranks = QueryHelper::selectRanks($output);
-        $suits = QueryHelper::selectSuits($output);
+        $ranks = QueryHelper::selectRanks();
+        $suits = QueryHelper::selectSuits();
 
         try {
             $stmt = $this->connection->prepare("INSERT INTO cards (rank_id, suit_id) VALUES (:rank_id, :suit_id)");
@@ -84,16 +72,10 @@ class SeedCards extends Database
                     $stmt->execute();
                 }
             }
-
-            if ($showMessages) {
-                $output->writeln("Cards seeded successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($e->getMessage());
+            error_log($e->getMessage());
         }
 
         $this->connection = null;
-
     }
-
 }

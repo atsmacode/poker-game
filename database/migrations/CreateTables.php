@@ -6,15 +6,13 @@ use App\Classes\Database;
 
 class CreateTables extends Database
 {
-
     public static array $methods = [
         'createTablesTable',
         'createTableSeatsTable'
     ];
 
-    public function createTablesTable($output, $showMessages = true)
+    public function createTablesTable()
     {
-
         $sql = "CREATE TABLE tables (
                 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(30) NOT NULL,
@@ -23,19 +21,15 @@ class CreateTables extends Database
 
         try {
             $this->connection->exec($sql);
-
-            if ($showMessages) {
-                $output->writeln("Tables table created successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            error_log($e->getMessage());
         }
+
         $this->connection = null;
     }
 
-    public function createTableSeatsTable($output, $showMessages = true)
+    public function createTableSeatsTable()
     {
-
         $sql = "CREATE TABLE table_seats (
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             number INT(6) UNSIGNED NULL,
@@ -50,16 +44,10 @@ class CreateTables extends Database
 
         try {
             $this->connection->exec($sql);
-
-            if ($showMessages) {
-                $output->writeln("Table seats table created successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            error_log($e->getMessage());
         }
 
         $this->connection = null;
     }
-
-
 }

@@ -73,15 +73,12 @@ class BuildEnvironment extends Command
         $GLOBALS['THE_ROOT'] = '';
         
         unset($GLOBALS['dev']);
-        $showMessages   = $input->getArgument('-v') === 'yes' ?: false;
-        $dev            = $input->getOption('-d') === 'true' ?: false;
-        if ($dev) {
-            $GLOBALS['dev'] = $dev;
-        }
+        $dev    = $input->getOption('-d') === 'true' ?: false;
+        $GLOBALS['dev'] = $dev ? $dev : null; 
 
         foreach($this->buildClasses as $class){
             foreach($class::$methods as $method){
-                (new $class())->{$method}($output, $showMessages);
+                (new $class())->{$method}();
             }
         }
 

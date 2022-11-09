@@ -6,17 +6,16 @@ use App\Classes\Database;
 
 class SeedPlayers extends Database
 {
-
     public static array $methods = [
         'seed'
     ];
 
-    public function seed($output, $showMessages = true)
+    public function seed()
     {
-        $this->createPlayers($output, $showMessages);
+        $this->createPlayers();
     }
 
-    private function createPlayers($output, $showMessages = true)
+    private function createPlayers()
     {
         $seats = 6;
 
@@ -42,13 +41,8 @@ class SeedPlayers extends Database
 
                 $inserted++;
             }
-
-            if ($showMessages) {
-                $output->writeln("Players seeded successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($e->getMessage());
-
+            error_log($e->getMessage());
         }
         $this->connection = null;
 
@@ -68,11 +62,9 @@ class SeedPlayers extends Database
             $stmt->execute();
 
         } catch(PDOException $e) {
-            echo $e->getMessage();
-
+            error_log($e->getMessage());
         }
 
         return $this;
     }
-
 }

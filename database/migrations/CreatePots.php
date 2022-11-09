@@ -6,14 +6,12 @@ use App\Classes\Database;
 
 class CreatePots extends Database
 {
-
     public static array $methods = [
         'createPotsTable',
     ];
 
-    public function createPotsTable($output, $showMessages = true)
+    public function createPotsTable()
     {
-
         $sql = "CREATE TABLE pots (
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             amount INT(12) UNSIGNED NULL,
@@ -23,15 +21,10 @@ class CreatePots extends Database
 
         try {
             $this->connection->exec($sql);
-
-            if ($showMessages) {
-                $output->writeln("Pots table created successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            error_log($e->getMessage());
         }
+
         $this->connection = null;
     }
-
-
 }

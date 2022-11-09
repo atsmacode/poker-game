@@ -6,14 +6,12 @@ use App\Classes\Database;
 
 class CreateHandTypes extends Database
 {
-
     public static array $methods = [
         'createHandTypesTable',
     ];
 
-    public function createHandTypesTable($output, $showMessages = true)
+    public function createHandTypesTable()
     {
-
         $sql = "CREATE TABLE hand_types (
                 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(30) NOT NULL,
@@ -22,14 +20,10 @@ class CreateHandTypes extends Database
 
         try {
             $this->connection->exec($sql);
-
-            if ($showMessages) {
-                $output->writeln("Hand types table created successfully");
-            }
         } catch(PDOException $e) {
-            $output->writeln($sql . "<br>" . $e->getMessage());
+            error_log($e->getMessage());
         }
+
         $this->connection = null;
     }
-
 }
