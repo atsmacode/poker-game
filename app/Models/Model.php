@@ -153,11 +153,6 @@ class Model extends Database
             foreach($data as $column => &$value){
                 $stmt->bindParam(':'.$column, $value);
             }
-            
-            // if ($this->table == 'player_actions' || $this->table == 'table_seats') {
-            //     $now = date('Y-m-d H:i:s');
-            //     $stmt->bindParam(':updated_at', $now);
-            // }
 
             $stmt->execute();
         } catch(PDOException $e) {
@@ -241,10 +236,6 @@ class Model extends Database
             }
             $pointer++;
         }
-
-        // if ($this->table == 'player_actions' || $this->table == 'table_seats') {
-        //     $properties .= ', updated_at = :updated_at';
-        // }
     
         $properties .= " WHERE id = {$this->id}";
 
@@ -265,21 +256,9 @@ class Model extends Database
             $pointer++;
         };
 
-        // if ($this->table == 'player_actions' || $this->table == 'table_seats') {
-        //     $properties .= ', updated_at = :updated_at';
-        // }
         if ($where) {
             $properties .= " WHERE {$where}";
         }
-
-        return $properties;
-    }
-
-    private function compileWhereIdStatement($data)
-    {
-        $properties = "WHERE ";
-
-        $properties .= " id = '". $data['id'] . "'";
 
         return $properties;
     }
