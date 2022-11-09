@@ -11,8 +11,6 @@ class Showdown
     public $handIdentifier;
     public $hand;
     public $winner;
-    protected $considerKickers = false;
-    protected $considerRankings = false;
 
     /**
      * @var array<Card>
@@ -40,19 +38,16 @@ class Showdown
          * retain only the one with the highest kicker & active cards as appropriate
          * then compare the hand rankings of each remaining player hand.
          */
-        $playerHands      = $this->playerHands;
-        $playerHandsReset = null;
-
         foreach($this->handIdentifier->handTypes as $handType){
             $playerHandsOfType = $this->filter('playerHands', 'handType', 'id', $handType->id);
 
             if(count($playerHandsOfType) > 1){
-                $playerHandsReset = $this->identifyHighestRankedHandAndKickerOfThisType($playerHands, $playerHandsOfType, $handType);
+                $this->identifyHighestRankedHandAndKickerOfThisType(
+                    $this->playerHands,
+                    $playerHandsOfType,
+                    $handType
+                );
             }
-        }
-
-        if($this->considerRankings || $this->considerKickers){
-            return array_values($playerHandsReset)[0];
         }
 
         return $this->highestRankedPlayerHand();
@@ -62,38 +57,34 @@ class Showdown
         array $playerHands,
         array $playerHandsOfType,
         HandType $handType
-    ): array
-    {
-        $this->considerRankings = true;
-
+    ): void {
         /**
          * Remove hands of this type from the array. That way we can only 
          * retain the highest rank/kicker-ed hand and put it back in to be 
          * compared against the other highest ranked/kicker-ed hand types.
          */
-        $playerHandsReset = array_filter($playerHands, function($value) use($handType){
+        $this->playerHands = array_filter($playerHands, function($value) use($handType){
             return $value['handType']->id !== $handType->id;
         });
 
-        $handsOfThisTypeRanked = $this->getBestHandByHighestActiveCardRanksAndKickers(
+        $handsOfThisTypeRanked = $this->getBestHandByHighestActiveCardRank(
             $playerHandsOfType
         );
 
         if(count($handsOfThisTypeRanked) > 1){
-
-            $this->considerKickers = true;
             /*
-             * TODO: split pots & kickers, this functionality is currently
+             * TODO: split pots, this functionality is currently
              * set to only return the first one even if multiple players
              * share the same best active cards and kickers.
              */
+            $handsOfThisTypeRanked = $this->getBestHandByHighestKicker(
+                $playerHandsOfType
+            );
         }
 
         $highestRankedHandOfType = $handsOfThisTypeRanked[array_key_first($handsOfThisTypeRanked)];
 
-        array_push($playerHandsReset, $highestRankedHandOfType);
-
-        return $playerHandsReset;
+        array_push($this->playerHands, $highestRankedHandOfType);
     }
 
     public function compileHands(): self
@@ -122,6 +113,9 @@ class Showdown
 
     public function getCommunityCards(): void
     {
+        /**
+         * TODO: Custom query, too many relations
+         */
         foreach($this->hand->streets()->collect()->content as $handStreet){
             foreach($handStreet->cards()->collect()->content as $handStreetCard){
                 $this->communityCards[] = $handStreetCard->getCard();
@@ -150,17 +144,24 @@ class Showdown
     /**
      * @param array $hayStack
      */
-    private function getBestHandByHighestActiveCardRanksAndKickers(array $playerHandsOfType): array
+    private function getBestHandByHighestActiveCardRank(array $playerHandsOfType): array
     {
-        $maxKicker     = max(array_column($playerHandsOfType, 'kicker'));
         $maxActiveCard = max(array_column($playerHandsOfType, 'highestActiveCard'));
 
-        /**
-         * This can result in multiple winners (split pot).
-         */
-        return array_filter($playerHandsOfType, function($value) use($maxKicker, $maxActiveCard){
-            return ($value['highestActiveCard'] == $maxActiveCard && $value['kicker'] == $maxKicker)
-                || ($value['highestActiveCard'] == $maxActiveCard);
+        return array_filter($playerHandsOfType, function($value) use($maxActiveCard){
+            return $value['highestActiveCard'] == $maxActiveCard;
+        });
+    }
+
+    /**
+     * @param array $hayStack
+     */
+    private function getBestHandByHighestKicker(array $playerHandsOfType): array
+    {
+        $maxKicker = max(array_column($playerHandsOfType, 'kicker'));
+
+        return array_filter($playerHandsOfType, function($value) use($maxKicker){
+            return $value['kicker'] == $maxKicker;
         });
     }
 
@@ -170,6 +171,9 @@ class Showdown
     private function highestRankedPlayerHand(): array
     {
         uasort($this->playerHands, function ($a, $b){
+            /**
+             * Why was this if statement added? TODO
+             */
             if ($a['handType']->ranking == $b['handType']->ranking) {
                 return 0;
             }

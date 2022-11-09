@@ -124,6 +124,71 @@ class ShowdownKickerAndRankingTest extends BaseTest
         $this->assertEquals($this->handTypes->find(['name' => 'High Card'])->id, $gamePlay['winner']['handType']->id);
     }
 
+    /**
+     * @test
+     * @return void
+     */
+    public function ace_king_beats_king_queen()
+    {
+        $this->gamePlay->initiateStreetActions()
+            ->initiatePlayerStacks()
+            ->setDealerAndBlindSeats();
+
+        $wholeCards = [
+            [
+                'player'  => $this->player3,
+                'card_id' => ConstantsCard::KING_SPADES_ID
+            ],
+            [
+                'player'  => $this->player3,
+                'card_id' => ConstantsCard::ACE_DIAMONDS_ID
+            ],
+            [
+                'player'  => $this->player1,
+                'card_id' => ConstantsCard::QUEEN_SPADES_ID
+            ],
+            [
+                'player'  => $this->player1,
+                'card_id' => ConstantsCard::KING_DIAMONDS_ID
+            ],
+        ];
+
+        $this->setWholeCards($wholeCards);
+
+        $flopCards = [
+            [
+                'card_id' => ConstantsCard::FOUR_CLUBS_ID
+            ],
+            [
+                'card_id' => ConstantsCard::JACK_SPADES_ID
+            ],
+            [
+                'card_id' => ConstantsCard::DEUCE_CLUBS_ID
+            ]
+        ];
+
+        $this->setFlop($flopCards);
+
+        $turnCard = [
+            'card_id' => ConstantsCard::NINE_DIAMONDS_ID
+        ];
+
+        $this->setTurn($turnCard);
+
+        $riverCard = [
+            'card_id' => ConstantsCard::THREE_HEARTS_ID
+        ];
+
+        $this->setRiver($riverCard);
+
+        $this->executeActions();
+
+        $gamePlay = $this->gamePlay->play();
+
+        $this->assertEquals($this->player3->id, $gamePlay['winner']['player']->id);
+        $this->assertEquals($this->handTypes->find(['name' => 'High Card'])->id, $gamePlay['winner']['handType']->id);
+    }
+
     protected function setWholeCards($wholeCards)
     {
         foreach($wholeCards as $card){
