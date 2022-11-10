@@ -138,28 +138,28 @@ class ActionOptionsTest extends BaseTest
     {
         $this->gamePlay->start();
 
-        // Player 1 Calls BB
-        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(0, 1)->id])
-            ->update([
+        // Player 2 SB Calls
+        $lastToAct = PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(1, 1)->id]);
+
+        $lastToAct->update([
                 'action_id' => Action::CALL_ID,
-                'bet_amount' => 50.0,
+                'bet_amount' => 25.00,
                 'active' => 1,
-                'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
-            ]);
-
-        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
-            ->update([
-                'can_continue' => 1
-            ]);
-
-        // Player 2 Folds
-        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(1, 1)->id])
-            ->update([
-                'action_id' => Action::FOLD_ID,
-                'bet_amount' => null,
-                'active' => 0,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
             ]);
+
+        PlayerActionLog::create([
+            'player_status_id' => $lastToAct->id,
+            'bet_amount'       => $lastToAct->bet_amount,
+            'big_blind'        => $lastToAct->big_blind,
+            'small_blind'      => $lastToAct->small_blind,
+            'player_id'        => $lastToAct->player_id,
+            'action_id'        => $lastToAct->action_id,
+            'hand_id'          => $this->gamePlay->handId,
+            'hand_street_id'   => $lastToAct->hand_street_id,
+            'table_seat_id'    => $lastToAct->table_seat_id,
+            'created_at'       => date('Y-m-d H:i:s', time())
+        ]);
 
         $gamePlay = $this->gamePlay->play();
 
