@@ -195,14 +195,14 @@ class Hand extends Model
                 FROM
                     player_actions AS pa
                 LEFT JOIN
+                    player_action_logs AS pal ON pa.id = pal.player_status_id
+                LEFT JOIN
                     table_seats AS ts ON pa.table_seat_id = ts.id
                 WHERE
-                    hand_id = :hand_id
+                    pa.hand_id = :hand_id
                 AND
-                    active = 1
-                AND
-                    action_id != 1
-                ORDER BY pa.updated_at DESC
+                    pa.active = 1
+                ORDER BY pal.id DESC
                 LIMIT 1
         ");
 

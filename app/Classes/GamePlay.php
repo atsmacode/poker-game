@@ -9,6 +9,7 @@ use App\Models\PlayerAction;
 use App\Models\Street;
 use App\Models\TableSeat;
 use App\Constants\Action;
+use App\Models\PlayerActionLog;
 
 class GamePlay
 {
@@ -205,6 +206,7 @@ class GamePlay
 
     protected function getThePlayerActionShouldBeOnForANewStreet(TableSeat $firstActivePlayer)
     {
+        syslog(LOG_DEBUG, 'getThePlayerActionShouldBeOnForANewStreet');
         $dealer = $this->hand->getDealer();
 
         $playerAfterDealer = TableSeat::playerAfterDealer(
@@ -227,7 +229,9 @@ class GamePlay
             return $this->getThePlayerActionShouldBeOnForANewStreet($firstActivePlayer);
         }
 
-        $lastToAct = $this->hand->actions()->latest();
+        $lastToAct = $this->hand->getLatestAction()['id'];
+
+        syslog(LOG_DEBUG, $lastToAct);
 
         $activePlayersAfterLastToAct = array_filter(
             PlayerAction::find(['active' => 1, 'hand_id' => $this->handId])->collect()->content,
@@ -251,6 +255,8 @@ class GamePlay
     {
         $playerData  = [];
         $actionOnGet = $this->getActionOn();
+
+        syslog(LOG_DEBUG, json_encode($actionOnGet));
 
         foreach(PlayerAction::find(['hand_id' => $this->handId])->collect()->content as $playerAction){
             $actionOn = false;
@@ -381,7 +387,7 @@ class GamePlay
     {
         $latestAction = PlayerAction::find([
             'hand_id'       => $this->handId,
-            'table_seat_id' => $this->hand->actions()->latest()
+            'table_seat_id' => $this->hand->getLatestAction()['id']
         ]);
 
         // Update the other table seat statuses accordingly
@@ -404,7 +410,7 @@ class GamePlay
     {
         $latestAction = PlayerAction::find([
             'hand_id'       => $this->handId,
-            'table_seat_id' => $this->hand->actions()->latest()
+            'table_seat_id' => $this->hand->getLatestAction()['id']
         ]);
 
         // Update the table seat status of the latest action accordingly
@@ -442,13 +448,13 @@ class GamePlay
                 'active'         => 1
             ]);
 
-            PlayerAction::find([
-                'hand_street_id' => $this->street->id,
-                'table_seat_id'  => $seat->id,
-                'hand_id'        => $this->handId,
-            ])->update([
-                'updated_at' => date('Y-m-d H:i:s', strtotime('-15 seconds')) // For testing so I can get the latest action, otherwise they are all the same
-            ]);
+            // PlayerAction::find([
+            //     'hand_street_id' => $this->street->id,
+            //     'table_seat_id'  => $seat->id,
+            //     'hand_id'        => $this->handId,
+            // ])->update([
+            //     'updated_at' => date('Y-m-d H:i:s', strtotime('-15 seconds')) // For testing so I can get the latest action, otherwise they are all the same
+            // ]);
 
         }
 
@@ -560,43 +566,42 @@ class GamePlay
         ] = $this->identifyTheNextDealerAndBlindSeats($currentDealer);
 
         if($currentDealer){
-            $tableSeat     = TableSeat::find([
+            $currentDealerSeat = TableSeat::find([
                 'id'       =>  $currentDealer->id,
                 'table_id' => $this->handTable->id
             ]);
 
-            $tableSeat->update([
+            $currentDealerSeat->update([
                 'is_dealer'  => 0,
                 'updated_at' => date('Y-m-d H:i:s', strtotime('- 20 seconds'))
             ]);
         }
         
-        $tableSeat = TableSeat::find([
+        $newDealerSeat = TableSeat::find([
             'id'       =>  $dealer->id,
             'table_id' => $this->handTable->id
         ]);
 
-        $tableSeat->update([
+        $newDealerSeat->update([
             'is_dealer'  => 1,
             'updated_at' => date('Y-m-d H:i:s', strtotime('- 18 seconds'))
         ]);
 
+        $handStreetId = HandStreet::find([
+            'street_id'  => Street::find(['name' => $this->game->streets[0]['name']])->id,
+            'hand_id' => $this->handId
+        ])->id;
+
         $smallBlind = PlayerAction::find([
-            'player_id'      =>  $smallBlindSeat->player()->id,
-            'table_seat_id'  =>  $smallBlindSeat->id,
-            'hand_street_id' => HandStreet::find([
-                'street_id'  => Street::find(['name' => $this->game->streets[0]['name']])->id,
-                'hand_id' => $this->handId
-            ])->id
+            'player_id'      => $smallBlindSeat->player()->id,
+            'table_seat_id'  => $smallBlindSeat->id,
+            'hand_street_id' => $handStreetId,
         ]);
 
         $bigBlind = PlayerAction::find([
-            'player_id'      =>  $bigBlindSeat->player()->id,
-            'table_seat_id'  =>  $bigBlindSeat->id,
-            'hand_street_id' => HandStreet::find([
-                'street_id'  => Street::find(['name' => $this->game->streets[0]['name']])->id,
-                'hand_id' => $this->handId
-            ])->id
+            'player_id'      => $bigBlindSeat->player()->id,
+            'table_seat_id'  => $bigBlindSeat->id,
+            'hand_street_id' => $handStreetId,
         ]);
 
         BetHelper::postBlinds($this->hand, $smallBlind, $bigBlind);

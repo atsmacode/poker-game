@@ -8,6 +8,7 @@ use App\Models\Hand;
 use App\Models\HandStreet;
 use App\Models\Player;
 use App\Models\PlayerAction;
+use App\Models\PlayerActionLog;
 use App\Models\Table;
 use App\Models\TableSeat;
 
@@ -108,13 +109,27 @@ class GamePlayFourHandedTest extends BaseTest
         $this->gamePlay->start();
 
         // Player 4 Calls
-        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id])
-            ->update([
+        $lastToAct = PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(3, 1)->id]);
+
+        $lastToAct->update([
                 'action_id' => Action::CALL_ID,
-                'bet_amount' => 50.00,
+                'bet_amount' => 50.0,
                 'active' => 1,
-                'updated_at' => date('Y-m-d H:i:s', strtotime('-3 seconds'))
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
             ]);
+
+        PlayerActionLog::create([
+            'player_status_id' => $lastToAct->id,
+            'bet_amount'       => $lastToAct->bet_amount,
+            'big_blind'        => $lastToAct->big_blind,
+            'small_blind'      => $lastToAct->small_blind,
+            'player_id'        => $lastToAct->player_id,
+            'action_id'        => $lastToAct->action_id,
+            'hand_id'          => $this->gamePlay->handId,
+            'hand_street_id'   => $lastToAct->hand_street_id,
+            'table_seat_id'    => $lastToAct->table_seat_id,
+            'created_at'       => date('Y-m-d H:i:s', time())
+        ]);
 
         $this->gamePlay->play();
 

@@ -4,19 +4,18 @@ namespace Database\Migrations;
 
 use App\Classes\Database;
 
-class CreatePlayerActions extends Database
+class CreatePlayerActionLogs extends Database
 {
     public static array $methods = [
-        'createPlayerActionsTable',
+        'createPlayerActionLogsTable',
     ];
 
-    public function createPlayerActionsTable()
+    public function createPlayerActionLogsTable()
     {
-        $sql = "CREATE TABLE player_actions (
+        $sql = "CREATE TABLE player_action_logs (
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            player_status_id INT(6) UNSIGNED NOT NULL,
             bet_amount INT(6) UNSIGNED NULL,
-            active BOOLEAN DEFAULT 0,
-            has_acted BOOLEAN DEFAULT 0,
             big_blind BOOLEAN DEFAULT 0,
             small_blind BOOLEAN DEFAULT 0,
             player_id INT(6) UNSIGNED NOT NULL,
@@ -24,7 +23,8 @@ class CreatePlayerActions extends Database
             hand_id INT(6) UNSIGNED NOT NULL,
             hand_street_id INT(6) UNSIGNED NOT NULL,
             table_seat_id INT(6) UNSIGNED NOT NULL,
-            updated_at DATETIME NULL,
+            created_at DATETIME NOT NULL,
+            FOREIGN KEY (player_status_id) REFERENCES player_actions(id),
             FOREIGN KEY (action_id) REFERENCES actions(id),
             FOREIGN KEY (player_id) REFERENCES players(id),
             FOREIGN KEY (hand_id) REFERENCES hands(id),

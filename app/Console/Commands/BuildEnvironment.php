@@ -7,6 +7,7 @@ use Database\Migrations\CreateCards;
 use Database\Migrations\CreateDatabase;
 use Database\Migrations\CreateHands;
 use Database\Migrations\CreateHandTypes;
+use Database\Migrations\CreatePlayerActionLogs;
 use Database\Migrations\CreatePlayerActions;
 use Database\Migrations\CreatePlayers;
 use Database\Migrations\CreatePots;
@@ -53,7 +54,8 @@ class BuildEnvironment extends Command
         SeedTables::class,
         SeedPlayers::class,
         SeedStreets::class,
-        SeedActions::class
+        SeedActions::class,
+        CreatePlayerActionLogs::class
     ];
     protected static $defaultName = 'app:build-env';
 

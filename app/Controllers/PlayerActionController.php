@@ -6,6 +6,7 @@ use App\Classes\GamePlay;
 use App\Helpers\BetHelper;
 use App\Models\Hand;
 use App\Models\PlayerAction;
+use App\Models\PlayerActionLog;
 
 class PlayerActionController
 {
@@ -27,6 +28,19 @@ class PlayerActionController
             'bet_amount' => BetHelper::handle($hand, $playerAction->player(), $requestBody['bet_amount']),
             'active'     => $requestBody['active'],
             'updated_at' => date('Y-m-d H:i:s', time())
+        ]);
+
+        PlayerActionLog::create([
+            'player_status_id' => $playerAction->id,
+            'bet_amount'       => BetHelper::handle($hand, $playerAction->player(), $requestBody['bet_amount']),
+            'big_blind'        => $playerAction->big_blind,
+            'small_blind'      => $playerAction->small_blind,
+            'player_id'        => $requestBody['player_id'],
+            'action_id'        => $requestBody['action_id'],
+            'hand_id'          => $hand->id,
+            'hand_street_id'   => $requestBody['hand_street_id'],
+            'table_seat_id'    => $requestBody['table_seat_id'],
+            'created_at'       => date('Y-m-d H:i:s', time())
         ]);
 
         $gamePlay = (new GamePlay($hand, $requestBody['deck']))->play();
