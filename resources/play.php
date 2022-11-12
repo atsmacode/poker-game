@@ -3,17 +3,13 @@
 <header>
     <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,300;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
 
-    <title>Read Right Hands - Vanilla</title>
+    <title>Get In Poker</title>
 </header>
 <body class="bg-dark text-white">
 
 <div id="app" class="container-sm">
 
     <?php require('nav.php'); ?>
-
-    <h1>Welcome</h1>
-
-    <p>Read Right Hands is a simple poker game developed in Laravel.</p>
 
     <div class="bg-primary p-3 rounded mb-1">
 

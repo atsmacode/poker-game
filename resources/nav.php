@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid ps-0">
 
-        <a class="navbar-brand" href="/"><strong><span class="text-danger">Read</span></strong> Right Hands - <span class="text-warning">Vanilla</span></a>
+        <a class="navbar-brand" href="/">Get In <strong><span class="text-danger">Poker</span></strong></a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
