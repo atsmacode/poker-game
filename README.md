@@ -19,11 +19,17 @@ Run the unit test suite on Linux:
 
 Run the unit test suite on Windows:
 
->./runtests.bat
+>.\dev\runtests.batt
 
 Drop, Create and Seed all tables. '-d true' is required to run this in test DB
 
-> php application.php app:build-env -d true
+Linux:
+
+> php dev/SymfonyApplication.php app:build-env -d true
+
+Windows:
+
+> php .\dev\SymfonyApplication.php app:build-env -d true
 
 # Endpoints
 
