@@ -1,5 +1,18 @@
 # Commands
 
+Configs:
+
+You need to add db.php and db-test.php to configure your local DB credentials, like so:
+
+<?php
+
+return [
+    'servername' => "localhost",
+    'username' => "DB_USER",
+    'password' => "DB_PASSWORD",
+    'database' => "poker-game-test"
+];
+
 Run the unit test suite on Linux:
 
 >dev/phpunit
