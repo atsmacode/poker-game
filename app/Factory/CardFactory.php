@@ -4,7 +4,7 @@ namespace App\Factory;
 
 /**
  * Factory class suing Card constants as a reference
- * to create test scenarios without calling models#
+ * to create test scenarios without calling models
  * and DB to generate Card objects/data.
  */
 class CardFactory
