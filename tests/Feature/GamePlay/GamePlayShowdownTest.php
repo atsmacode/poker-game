@@ -15,7 +15,7 @@ use App\Models\TableSeat;
 use App\Models\WholeCard;
 use Tests\BaseTest;
 
-class ShowdownTest extends BaseTest
+class GamePlayShowdownTest extends BaseTest
 {
     use HasGamePlay;
 

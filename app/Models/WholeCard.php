@@ -7,9 +7,4 @@ class WholeCard extends Model
     use Collection;
 
     protected $table = 'whole_cards';
-
-    public function card()
-    {
-        return Card::getById($this->card_id);
-    }
 }

@@ -149,7 +149,8 @@ class HandIdentifier
     {
         return array_filter($this->allCards, function($value) use($column, $filter){
             /**
-             * TODO: Remove temp is_array check
+             * TODO: Remove temp is_array check, using Card objects in
+             * tests and arrays in actual GamePlay/Showdown.
              */
             if( is_array($value)) {
                 return $value[$column] === $filter;
@@ -166,7 +167,8 @@ class HandIdentifier
     {
         uasort($this->allCards, function ($a, $b){
             /**
-             * TODO: Remove temp is_array check
+             * TODO: Remove temp is_array check, using Card objects in
+             * tests and arrays in actual GamePlay/Showdown.
              */
             if( is_array($a)) { 
                 if ($a['ranking'] == $b['ranking']) {

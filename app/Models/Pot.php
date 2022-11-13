@@ -4,7 +4,6 @@ namespace App\Models;
 
 class Pot extends Model
 {
-
     use Collection;
 
     public $table = 'pots';

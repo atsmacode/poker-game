@@ -4,7 +4,6 @@ namespace App\Models;
 
 class Table extends Model
 {
-
     use Collection;
 
     protected $table = 'tables';

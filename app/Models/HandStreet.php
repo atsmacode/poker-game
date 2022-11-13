@@ -7,7 +7,6 @@ use PDOException;
 
 class HandStreet extends Model
 {
-
     use Collection;
 
     protected $table = 'hand_streets';

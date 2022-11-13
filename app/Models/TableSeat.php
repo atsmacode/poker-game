@@ -7,7 +7,6 @@ use PDOException;
 
 class TableSeat extends Model
 {
-
     use Collection;
 
     protected $table = 'table_seats';

@@ -4,7 +4,6 @@ namespace App\Classes\Showdown;
 
 use App\Classes\HandIdentifier\HandIdentifier;
 use App\Models\Hand;
-use App\Models\HandType;
 use App\Models\TableSeat;
 
 class Showdown
