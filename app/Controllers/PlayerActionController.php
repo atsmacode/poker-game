@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Classes\GamePlay;
+use App\Classes\GamePlay\GamePlay;
 use App\Helpers\BetHelper;
 use App\Models\Hand;
 use App\Models\PlayerAction;

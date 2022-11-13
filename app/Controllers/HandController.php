@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Classes\GamePlay;
+use App\Classes\GamePlay\GamePlay;
 use App\Models\Hand;
 
 class HandController
