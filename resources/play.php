@@ -3,7 +3,7 @@
 <header>
     <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,300;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
 
-    <title>Get In Poker</title>
+    <title>Aye Poker</title>
 </header>
 <body class="bg-dark text-white">
 

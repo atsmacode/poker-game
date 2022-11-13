@@ -3,7 +3,7 @@
 <header>
     <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,300;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
 
-    <title>Get In Poker</title>
+    <title>Aye Poker</title>
 </header>
 <body class="bg-dark text-white">
 
@@ -13,7 +13,7 @@
 
     <h1>Welcome</h1>
 
-    <p>Get In poker is a simple poker game developed in PHP & Vue JS.</p>
+    <p>Aye poker is a simple poker game developed in PHP & Vue JS.</p>
 
     <div class="ms-1 mb-3">
         <a class="btn btn-primary" href="index.php/play">Play Now!</a>
