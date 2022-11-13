@@ -15,7 +15,6 @@ use App\Constants\Action;
 
 class GamePlay
 {
-
     public $game;
     public $dealer;
     protected $actionOn;
@@ -41,7 +40,6 @@ class GamePlay
         $this->updateAllOtherSeatsBasedOnLatestAction();
 
         return $this->nextStep();
-
     }
 
     public function showdown()
@@ -141,17 +139,11 @@ class GamePlay
 
     protected function updatePlayerStatusesOnNewStreet()
     {
-        /*
-         * Reset can_continue & BB status once pre-flop action and/or previous street is finished.
-         */
         TableSeat::find(['table_id' => $this->handTable->id])
             ->updateBatch([
                 'can_continue' => 0
             ], 'table_id = ' . $this->handTable->id);
 
-        /*
-         * Always reset action_id.
-         */
         PlayerAction::find(['hand_id' => $this->handId])
             ->updateBatch([
                 'action_id' => null
@@ -387,7 +379,6 @@ class GamePlay
             'table_seat_id' => $this->hand->getLatestAction()['id']
         ]);
 
-        // Update the other table seat statuses accordingly
         switch($latestAction->action_id){
             case Action::BET['id']:
             case Action::RAISE['id']:
@@ -410,7 +401,6 @@ class GamePlay
             'table_seat_id' => $this->hand->getLatestAction()['id']
         ]);
 
-        // Update the table seat status of the latest action accordingly
         switch($latestAction->action_id){
             case Action::CHECK['id']:
             case Action::CALL['id']:

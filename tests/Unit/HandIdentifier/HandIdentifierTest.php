@@ -3,9 +3,9 @@
 namespace Tests\Unit\HandIdentifier;
 
 use App\Classes\HandIdentifier\HandIdentifier;
-use App\Constants\Card as ConstantsCard;
+use App\Constants\Card;
 use App\Constants\HandType;
-use App\Models\Card;
+use App\Factory\CardFactory;
 use Tests\BaseTest;
 
 class HandIdentifierTest extends BaseTest
@@ -23,19 +23,19 @@ class HandIdentifierTest extends BaseTest
      */
     public function it_can_identify_the_card_with_the_highest_rank()
     {
-        $highestCard = new Card(ConstantsCard::KING_SPADES);
+        $highestCard = CardFactory::create(Card::KING_SPADES);
 
         $wholeCards = [
-            new Card(ConstantsCard::DEUCE_SPADES),
+            CardFactory::create(Card::DEUCE_SPADES),
             $highestCard,
         ];
 
         $communityCards = [
-            new Card(ConstantsCard::QUEEN_HEARTS),
-            new Card(ConstantsCard::SEVEN_DIAMONDS),
-            new Card(ConstantsCard::TEN_CLUBS),
-            new Card(ConstantsCard::THREE_SPADES),
-            new Card(ConstantsCard::FOUR_DIAMONDS),
+            CardFactory::create(Card::QUEEN_HEARTS),
+            CardFactory::create(Card::SEVEN_DIAMONDS),
+            CardFactory::create(Card::TEN_CLUBS),
+            CardFactory::create(Card::THREE_SPADES),
+            CardFactory::create(Card::FOUR_DIAMONDS),
         ];
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
@@ -43,7 +43,7 @@ class HandIdentifierTest extends BaseTest
         $this->assertEquals('High Card', $this->handIdentifier->identifiedHandType['handType']['name']);
 
         $this->assertEquals(
-            $highestCard->ranking,
+            $highestCard['ranking'],
             $this->handIdentifier->highCard
         );
     }
@@ -54,19 +54,19 @@ class HandIdentifierTest extends BaseTest
      */
     public function it_can_identify_an_ace_as_the_card_with_the_highest_rank()
     {
-        $highestCard = new Card(ConstantsCard::ACE_SPADES);
+        $highestCard = CardFactory::create(Card::ACE_SPADES);
 
         $wholeCards = [
             $highestCard,
-            new Card(ConstantsCard::KING_DIAMONDS)
+            CardFactory::create(Card::KING_DIAMONDS)
         ];
 
         $communityCards = [
-            new Card(ConstantsCard::QUEEN_CLUBS),
-            new Card(ConstantsCard::FOUR_SPADES),
-            new Card(ConstantsCard::TEN_DIAMONDS),
-            new Card(ConstantsCard::DEUCE_CLUBS),
-            new Card(ConstantsCard::EIGHT_CLUBS),
+            CardFactory::create(Card::QUEEN_CLUBS),
+            CardFactory::create(Card::FOUR_SPADES),
+            CardFactory::create(Card::TEN_DIAMONDS),
+            CardFactory::create(Card::DEUCE_CLUBS),
+            CardFactory::create(Card::EIGHT_CLUBS),
         ];
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
@@ -86,16 +86,16 @@ class HandIdentifierTest extends BaseTest
     public function it_can_identify_a_pair()
     {
         $wholeCards = [
-            new Card(ConstantsCard::ACE_CLUBS),
-            new Card(ConstantsCard::KING_DIAMONDS),
+            CardFactory::create(Card::ACE_CLUBS),
+            CardFactory::create(Card::KING_DIAMONDS),
         ];
 
         $communityCards = [
-            new Card(ConstantsCard::ACE_HEARTS),
-            new Card(ConstantsCard::JACK_DIAMONDS),
-            new Card(ConstantsCard::FOUR_DIAMONDS),
-            new Card(ConstantsCard::NINE_CLUBS),
-            new Card(ConstantsCard::SEVEN_DIAMONDS),
+            CardFactory::create(Card::ACE_HEARTS),
+            CardFactory::create(Card::JACK_DIAMONDS),
+            CardFactory::create(Card::FOUR_DIAMONDS),
+            CardFactory::create(Card::NINE_CLUBS),
+            CardFactory::create(Card::SEVEN_DIAMONDS),
         ];
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
@@ -110,16 +110,16 @@ class HandIdentifierTest extends BaseTest
     public function it_can_identify_two_pair()
     {
         $wholeCards = [
-            new Card(ConstantsCard::ACE_SPADES),
-            new Card(ConstantsCard::KING_SPADES),
+            CardFactory::create(Card::ACE_SPADES),
+            CardFactory::create(Card::KING_SPADES),
         ];
 
         $communityCards = [
-            new Card(ConstantsCard::ACE_HEARTS),
-            new Card(ConstantsCard::KING_HEARTS),
-            new Card(ConstantsCard::TEN_DIAMONDS),
-            new Card(ConstantsCard::NINE_CLUBS),
-            new Card(ConstantsCard::EIGHT_DIAMONDS),
+            CardFactory::create(Card::ACE_HEARTS),
+            CardFactory::create(Card::KING_HEARTS),
+            CardFactory::create(Card::TEN_DIAMONDS),
+            CardFactory::create(Card::NINE_CLUBS),
+            CardFactory::create(Card::EIGHT_DIAMONDS),
         ];
 
         $this->handIdentifier->identify($wholeCards, $communityCards);

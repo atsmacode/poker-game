@@ -61,314 +61,314 @@ class Card
     const KING_SPADES_ID  = 52;
 
     const ACE_CLUBS = [
-        'id' => self::ACE_CLUBS_ID,
-        Rank::ACE,
-        Suit::CLUBS
+        'id'   => self::ACE_CLUBS_ID,
+        'rank' => Rank::ACE,
+        'suit' => Suit::CLUBS
     ];
 
     const DEUCE_CLUBS = [
-        'id' => self::DEUCE_CLUBS_ID,
-        Rank::DEUCE,
-        Suit::CLUBS
+        'id'   => self::DEUCE_CLUBS_ID,
+        'rank' => Rank::DEUCE,
+        'suit' => Suit::CLUBS
     ];
 
     const THREE_CLUBS = [
-        'id' => self::THREE_CLUBS_ID,
-        Rank::THREE,
-        Suit::CLUBS
+        'id'   => self::THREE_CLUBS_ID,
+        'rank' => Rank::THREE,
+        'suit' => Suit::CLUBS
     ];
 
     const FOUR_CLUBS = [
-        'id' => self::FOUR_CLUBS_ID,
-        Rank::FOUR,
-        Suit::CLUBS
+        'id'   => self::FOUR_CLUBS_ID,
+        'rank' => Rank::FOUR,
+        'suit' => Suit::CLUBS
     ];
 
     const FIVE_CLUBS = [
-        'id' => self::FIVE_CLUBS_ID,
-        Rank::FIVE,
-        Suit::CLUBS
+        'id'   => self::FIVE_CLUBS_ID,
+        'rank' => Rank::FIVE,
+        'suit' => Suit::CLUBS
     ];
 
     const SIX_CLUBS = [
-        'id' => self::SIX_CLUBS_ID,
-        Rank::SIX,
-        Suit::CLUBS
+        'id'   => self::SIX_CLUBS_ID,
+        'rank' => Rank::SIX,
+        'suit' => Suit::CLUBS
     ];
 
     const SEVEN_CLUBS = [
-        'id' => self::SEVEN_CLUBS_ID,
-        Rank::SEVEN,
-        Suit::CLUBS
+        'id'   => self::SEVEN_CLUBS_ID,
+        'rank' => Rank::SEVEN,
+        'suit' => Suit::CLUBS
     ];
 
     const EIGHT_CLUBS = [
-        'id' => self::EIGHT_CLUBS_ID,
-        Rank::EIGHT,
-        Suit::CLUBS
+        'id'   => self::EIGHT_CLUBS_ID,
+        'rank' => Rank::EIGHT,
+        'suit' => Suit::CLUBS
     ];
 
     const NINE_CLUBS = [
-        'id' => self::NINE_CLUBS_ID,
-        Rank::NINE,
-        Suit::CLUBS
+        'id'   => self::NINE_CLUBS_ID,
+        'rank' => Rank::NINE,
+        'suit' => Suit::CLUBS
     ];
 
     const TEN_CLUBS = [
-        'id' => self::TEN_CLUBS_ID,
-        Rank::TEN,
-        Suit::CLUBS
+        'id'   => self::TEN_CLUBS_ID,
+        'rank' => Rank::TEN,
+        'suit' => Suit::CLUBS
     ];
 
     const JACK_CLUBS = [
-        'id' => self::JACK_CLUBS_ID,
-        Rank::JACK,
-        Suit::CLUBS
+        'id'   => self::JACK_CLUBS_ID,
+        'rank' => Rank::JACK,
+        'suit' => Suit::CLUBS
     ];
 
     const QUEEN_CLUBS = [
-        'id' => self::QUEEN_CLUBS_ID,
-        Rank::QUEEN,
-        Suit::CLUBS
+        'id'   => self::QUEEN_CLUBS_ID,
+        'rank' => Rank::QUEEN,
+        'suit' => Suit::CLUBS
     ];
 
     const KING_CLUBS = [
-        'id' => self::KING_CLUBS_ID,
-        Rank::KING,
-        Suit::CLUBS
+        'id'   => self::KING_CLUBS_ID,
+        'rank' => Rank::KING,
+        'suit' => Suit::CLUBS
     ];
     
     const ACE_DIAMONDS = [
-        'id' => self::ACE_DIAMONDS_ID,
-        Rank::ACE,
-        Suit::DIAMONDS
+        'id'   => self::ACE_DIAMONDS_ID,
+        'rank' => Rank::ACE,
+        'suit' => Suit::DIAMONDS
     ];
 
     const DEUCE_DIAMONDS = [
-        'id' => self::DEUCE_DIAMONDS_ID,
-        Rank::DEUCE,
-        Suit::DIAMONDS
+        'id'   => self::DEUCE_DIAMONDS_ID,
+        'rank' => Rank::DEUCE,
+        'suit' => Suit::DIAMONDS
     ];
 
     const THREE_DIAMONDS = [
-        'id' => self::THREE_DIAMONDS_ID,
-        Rank::THREE,
-        Suit::DIAMONDS
+        'id'   => self::THREE_DIAMONDS_ID,
+        'rank' => Rank::THREE,
+        'suit' => Suit::DIAMONDS
     ];
 
     const FOUR_DIAMONDS = [
-        'id' => self::FOUR_DIAMONDS_ID,
-        Rank::FOUR,
-        Suit::DIAMONDS
+        'id'   => self::FOUR_DIAMONDS_ID,
+        'rank' => Rank::FOUR,
+        'suit' => Suit::DIAMONDS
     ];
 
     const FIVE_DIAMONDS = [
-        'id' => self::FIVE_DIAMONDS_ID,
-        Rank::FIVE,
-        Suit::DIAMONDS
+        'id'   => self::FIVE_DIAMONDS_ID,
+        'rank' => Rank::FIVE,
+        'suit' => Suit::DIAMONDS
     ];
 
     const SIX_DIAMONDS = [
-        'id' => self::SIX_DIAMONDS_ID,
-        Rank::SIX,
-        Suit::DIAMONDS
+        'id'   => self::SIX_DIAMONDS_ID,
+        'rank' => Rank::SIX,
+        'suit' => Suit::DIAMONDS
     ];
 
     const SEVEN_DIAMONDS = [
-        'id' => self::SEVEN_DIAMONDS_ID,
-        Rank::SEVEN,
-        Suit::DIAMONDS
+        'id'   => self::SEVEN_DIAMONDS_ID,
+        'rank' => Rank::SEVEN,
+        'suit' => Suit::DIAMONDS
     ];
 
     const EIGHT_DIAMONDS = [
-        'id' => self::EIGHT_DIAMONDS_ID,
-        Rank::EIGHT,
-        Suit::DIAMONDS
+        'id'   => self::EIGHT_DIAMONDS_ID,
+        'rank' => Rank::EIGHT,
+        'suit' => Suit::DIAMONDS
     ];
 
     const NINE_DIAMONDS = [
-        'id' => self::NINE_DIAMONDS_ID,
-        Rank::NINE,
-        Suit::DIAMONDS
+        'id'   => self::NINE_DIAMONDS_ID,
+        'rank' => Rank::NINE,
+        'suit' => Suit::DIAMONDS
     ];
 
     const TEN_DIAMONDS = [
-        'id' => self::TEN_DIAMONDS_ID,
-        Rank::TEN,
-        Suit::DIAMONDS
+        'id'   => self::TEN_DIAMONDS_ID,
+        'rank' => Rank::TEN,
+        'suit' => Suit::DIAMONDS
     ];
 
     const JACK_DIAMONDS = [
-        'id' => self::JACK_DIAMONDS_ID,
-        Rank::JACK,
-        Suit::DIAMONDS
+        'id'   => self::JACK_DIAMONDS_ID,
+        'rank' => Rank::JACK,
+        'suit' => Suit::DIAMONDS
     ];
 
     const QUEEN_DIAMONDS = [
-        'id' => self::QUEEN_DIAMONDS_ID,
-        Rank::QUEEN,
-        Suit::DIAMONDS
+        'id'   => self::QUEEN_DIAMONDS_ID,
+        'rank' => Rank::QUEEN,
+        'suit' => Suit::DIAMONDS
     ];
 
     const KING_DIAMONDS = [
-        'id' => self::KING_DIAMONDS_ID,
-        Rank::KING,
-        Suit::DIAMONDS
+        'id'   => self::KING_DIAMONDS_ID,
+        'rank' => Rank::KING,
+        'suit' => Suit::DIAMONDS
     ];
     
     const ACE_HEARTS = [
-        'id' => self::ACE_HEARTS_ID,
-        Rank::ACE,
-        Suit::HEARTS
+        'id'   => self::ACE_HEARTS_ID,
+        'rank' => Rank::ACE,
+        'suit' => Suit::HEARTS
     ];
 
     const DEUCE_HEARTS = [
-        'id' => self::DEUCE_HEARTS_ID,
-        Rank::DEUCE,
-        Suit::HEARTS
+        'id'   => self::DEUCE_HEARTS_ID,
+        'rank' => Rank::DEUCE,
+        'suit' => Suit::HEARTS
     ];
 
     const THREE_HEARTS = [
-        'id' => self::THREE_HEARTS_ID,
-        Rank::THREE,
-        Suit::HEARTS
+        'id'   => self::THREE_HEARTS_ID,
+        'rank' => Rank::THREE,
+        'suit' => Suit::HEARTS
     ];
 
     const FOUR_HEARTS = [
-        'id' => self::FOUR_HEARTS_ID,
-        Rank::FOUR,
-        Suit::HEARTS
+        'id'   => self::FOUR_HEARTS_ID,
+        'rank' => Rank::FOUR,
+        'suit' => Suit::HEARTS
     ];
 
     const FIVE_HEARTS = [
-        'id' => self::FIVE_HEARTS_ID,
-        Rank::FIVE,
-        Suit::HEARTS
+        'id'   => self::FIVE_HEARTS_ID,
+        'rank' => Rank::FIVE,
+        'suit' => Suit::HEARTS
     ];
 
     const SIX_HEARTS = [
-        'id' => self::SIX_HEARTS_ID,
-        Rank::SIX,
-        Suit::HEARTS
+        'id'   => self::SIX_HEARTS_ID,
+        'rank' => Rank::SIX,
+        'suit' => Suit::HEARTS
     ];
 
     const SEVEN_HEARTS = [
-        'id' => self::SEVEN_HEARTS_ID,
-        Rank::SEVEN,
-        Suit::HEARTS
+        'id'   => self::SEVEN_HEARTS_ID,
+        'rank' => Rank::SEVEN,
+        'suit' => Suit::HEARTS
     ];
 
     const EIGHT_HEARTS = [
-        'id' => self::EIGHT_HEARTS_ID,
-        Rank::EIGHT,
-        Suit::HEARTS
+        'id'   => self::EIGHT_HEARTS_ID,
+        'rank' => Rank::EIGHT,
+        'suit' => Suit::HEARTS
     ];
 
     const NINE_HEARTS = [
-        'id' => self::NINE_HEARTS_ID,
-        Rank::NINE,
-        Suit::HEARTS
+        'id'   => self::NINE_HEARTS_ID,
+        'rank' => Rank::NINE,
+        'suit' => Suit::HEARTS
     ];
 
     const TEN_HEARTS = [
-        'id' => self::TEN_HEARTS_ID,
-        Rank::TEN,
-        Suit::HEARTS
+        'id'   => self::TEN_HEARTS_ID,
+        'rank' => Rank::TEN,
+        'suit' => Suit::HEARTS
     ];
 
     const JACK_HEARTS = [
-        'id' => self::JACK_HEARTS_ID,
-        Rank::JACK,
-        Suit::HEARTS
+        'id'   => self::JACK_HEARTS_ID,
+        'rank' => Rank::JACK,
+        'suit' => Suit::HEARTS
     ];
 
     const QUEEN_HEARTS = [
-        'id' => self::QUEEN_HEARTS_ID,
-        Rank::QUEEN,
-        Suit::HEARTS
+        'id'   => self::QUEEN_HEARTS_ID,
+        'rank' => Rank::QUEEN,
+        'suit' => Suit::HEARTS
     ];
 
     const KING_HEARTS = [
-        'id' => self::KING_HEARTS_ID,
-        Rank::KING,
-        Suit::HEARTS
+        'id'   => self::KING_HEARTS_ID,
+        'rank' => Rank::KING,
+        'suit' => Suit::HEARTS
     ];
     
     const ACE_SPADES = [
-        'id' => self::ACE_SPADES_ID,
-        Rank::ACE,
-        Suit::SPADES
+        'id'   => self::ACE_SPADES_ID,
+        'rank' => Rank::ACE,
+        'suit' => Suit::SPADES
     ];
 
     const DEUCE_SPADES = [
-        'id' => self::DEUCE_SPADES_ID,
-        Rank::DEUCE,
-        Suit::SPADES
+        'id'   => self::DEUCE_SPADES_ID,
+        'rank' => Rank::DEUCE,
+        'suit' => Suit::SPADES
     ];
 
     const THREE_SPADES = [
-        'id' => self::THREE_SPADES_ID,
-        Rank::THREE,
-        Suit::SPADES
+        'id'   => self::THREE_SPADES_ID,
+        'rank' => Rank::THREE,
+        'suit' => Suit::SPADES
     ];
 
     const FOUR_SPADES = [
-        'id' => self::FOUR_SPADES_ID,
-        Rank::FOUR,
-        Suit::SPADES
+        'id'   => self::FOUR_SPADES_ID,
+        'rank' => Rank::FOUR,
+        'suit' => Suit::SPADES
     ];
 
     const FIVE_SPADES = [
-        'id' => self::FIVE_SPADES_ID,
-        Rank::FIVE,
-        Suit::SPADES
+        'id'   => self::FIVE_SPADES_ID,
+        'rank' => Rank::FIVE,
+        'suit' => Suit::SPADES
     ];
 
     const SIX_SPADES = [
-        'id' => self::SIX_SPADES_ID,
-        Rank::SIX,
-        Suit::SPADES
+        'id'   => self::SIX_SPADES_ID,
+        'rank' => Rank::SIX,
+        'suit' => Suit::SPADES
     ];
 
     const SEVEN_SPADES = [
-        'id' => self::SEVEN_SPADES_ID,
-        Rank::SEVEN,
-        Suit::SPADES
+        'id'   => self::SEVEN_SPADES_ID,
+        'rank' => Rank::SEVEN,
+        'suit' => Suit::SPADES
     ];
 
     const EIGHT_SPADES = [
-        'id' => self::EIGHT_SPADES_ID,
-        Rank::EIGHT,
-        Suit::SPADES
+        'id'   => self::EIGHT_SPADES_ID,
+        'rank' => Rank::EIGHT,
+        'suit' => Suit::SPADES
     ];
 
     const NINE_SPADES = [
-        'id' => self::NINE_SPADES_ID,
-        Rank::NINE,
-        Suit::SPADES
+        'id'   => self::NINE_SPADES_ID,
+        'rank' => Rank::NINE,
+        'suit' => Suit::SPADES
     ];
 
     const TEN_SPADES = [
-        'id' => self::TEN_SPADES_ID,
-        Rank::TEN,
-        Suit::SPADES
+        'id'   => self::TEN_SPADES_ID,
+        'rank' => Rank::TEN,
+        'suit' => Suit::SPADES
     ];
 
     const JACK_SPADES = [
-        'id' => self::JACK_SPADES_ID,
-        Rank::JACK,
-        Suit::SPADES
+        'id'   => self::JACK_SPADES_ID,
+        'rank' => Rank::JACK,
+        'suit' => Suit::SPADES
     ];
 
     const QUEEN_SPADES = [
-        'id' => self::QUEEN_SPADES_ID,
-        Rank::QUEEN,
-        Suit::SPADES
+        'id'   => self::QUEEN_SPADES_ID,
+        'rank' => Rank::QUEEN,
+        'suit' => Suit::SPADES
     ];
 
     const KING_SPADES = [
-        'id' => self::KING_SPADES_ID,
-        Rank::KING,
-        Suit::SPADES
+        'id'   => self::KING_SPADES_ID,
+        'rank' => Rank::KING,
+        'suit' => Suit::SPADES
     ];
 }

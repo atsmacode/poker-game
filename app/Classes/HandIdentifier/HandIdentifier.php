@@ -8,21 +8,24 @@ use App\Constants\Rank;
 class HandIdentifier
 {
     public $handTypes;
+
     public $identifiedHandType = [
-        'handType' => null,
+        'handType'    => null,
         'activeCards' => [0],
-        'kicker' => null
+        'kicker'      => null
     ];
+
     public $allCards;
     public $highCard;
-    public $pairs = [];
-    public $threeOfAKind = false;
-    public $straight = false;
-    public $flush = false;
-    public $fullHouse = false;
-    public $fourOfAKind = false;
-    public $straightFlush = false;
-    public $royalFlush = false;
+    public $pairs          = [];
+    public $threeOfAKind   = false;
+    public $straight       = false;
+    public $flush          = false;
+    public $fullHouse      = false;
+    public $fourOfAKind    = false;
+    public $straightFlush  = false;
+    public $royalFlush     = false;
+    
     protected $handMethods = [
         /*'hasRoyalFlush',
         'hasStraightFlush',
@@ -86,10 +89,11 @@ class HandIdentifier
          * TODO: Replace 1 & 14 with HIGH_ACE_ID
          * & LOW_ACE_ID constants.
          */
-        return ($activeCards && count($this->filterAllCards('ranking', 1)) > 1
-                && !in_array(1, $activeCards)
-                && !in_array(14, $activeCards))
-            || (in_array(1, $activeCards) && $forHandCheck === 'hasFlush');
+        return (
+            $activeCards && count($this->filterAllCards('ranking', 1)) > 1
+            && !in_array(1, $activeCards)
+            && !in_array(14, $activeCards)
+        ) || (in_array(1, $activeCards) && $forHandCheck === 'hasFlush');
     }
 
     /**
@@ -148,15 +152,7 @@ class HandIdentifier
     private function filterAllCards(string $column, $filter)
     {
         return array_filter($this->allCards, function($value) use($column, $filter){
-            /**
-             * TODO: Remove temp is_array check, using Card objects in
-             * tests and arrays in actual GamePlay/Showdown.
-             */
-            if( is_array($value)) {
-                return $value[$column] === $filter;
-            } else {
-                return $value->{$column} === $filter;
-            }
+            return $value[$column] === $filter;
         });
     }
 
@@ -166,21 +162,10 @@ class HandIdentifier
     private function sortCardsByDescRanking()
     {
         uasort($this->allCards, function ($a, $b){
-            /**
-             * TODO: Remove temp is_array check, using Card objects in
-             * tests and arrays in actual GamePlay/Showdown.
-             */
-            if( is_array($a)) { 
-                if ($a['ranking'] == $b['ranking']) {
-                    return 0;
-                }
-                return ($a['ranking'] > $b['ranking']) ? -1 : 1;
-            } else {
-                if ($a->ranking == $b->ranking) {
-                    return 0;
-                }
-                return ($a->ranking > $b->ranking) ? -1 : 1;
+            if ($a['ranking'] == $b['ranking']) {
+                return 0;
             }
+            return ($a['ranking'] > $b['ranking']) ? -1 : 1;
         });
 
         return $this->allCards;

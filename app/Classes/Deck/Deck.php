@@ -2,64 +2,64 @@
 
 namespace App\Classes\Deck;
 
-use App\Constants\Card as Constants;
-use App\Models\Card;
+use App\Constants\Card;
+use App\Factory\CardFactory;
 
 class Deck
 {
     public $cards = [
-        Constants::ACE_CLUBS,
-        Constants::DEUCE_CLUBS,
-        Constants::THREE_CLUBS,
-        Constants::FOUR_CLUBS,
-        Constants::FIVE_CLUBS,
-        Constants::SIX_CLUBS,
-        Constants::SEVEN_CLUBS,
-        Constants::EIGHT_CLUBS,
-        Constants::NINE_CLUBS,
-        Constants::TEN_CLUBS,
-        Constants::JACK_CLUBS,
-        Constants::QUEEN_CLUBS,
-        Constants::KING_CLUBS,
-        Constants::ACE_DIAMONDS,
-        Constants::DEUCE_DIAMONDS,
-        Constants::THREE_DIAMONDS,
-        Constants::FOUR_DIAMONDS,
-        Constants::FIVE_DIAMONDS,
-        Constants::SIX_DIAMONDS,
-        Constants::SEVEN_DIAMONDS,
-        Constants::EIGHT_DIAMONDS,
-        Constants::NINE_DIAMONDS,
-        Constants::TEN_DIAMONDS,
-        Constants::JACK_DIAMONDS,
-        Constants::QUEEN_DIAMONDS,
-        Constants::KING_DIAMONDS,
-        Constants::ACE_HEARTS,
-        Constants::DEUCE_HEARTS,
-        Constants::THREE_HEARTS,
-        Constants::FOUR_HEARTS,
-        Constants::FIVE_HEARTS,
-        Constants::SIX_HEARTS,
-        Constants::SEVEN_HEARTS,
-        Constants::EIGHT_HEARTS,
-        Constants::NINE_HEARTS,
-        Constants::TEN_HEARTS,
-        Constants::JACK_HEARTS,
-        Constants::QUEEN_HEARTS,
-        Constants::KING_HEARTS,
-        Constants::ACE_SPADES,
-        Constants::DEUCE_SPADES,
-        Constants::THREE_SPADES,
-        Constants::FOUR_SPADES,
-        Constants::FIVE_SPADES,
-        Constants::SIX_SPADES,
-        Constants::SEVEN_SPADES,
-        Constants::EIGHT_SPADES,
-        Constants::NINE_SPADES,
-        Constants::TEN_SPADES,
-        Constants::JACK_SPADES,
-        Constants::QUEEN_SPADES,
-        Constants::KING_SPADES
+        Card::ACE_CLUBS,
+        Card::DEUCE_CLUBS,
+        Card::THREE_CLUBS,
+        Card::FOUR_CLUBS,
+        Card::FIVE_CLUBS,
+        Card::SIX_CLUBS,
+        Card::SEVEN_CLUBS,
+        Card::EIGHT_CLUBS,
+        Card::NINE_CLUBS,
+        Card::TEN_CLUBS,
+        Card::JACK_CLUBS,
+        Card::QUEEN_CLUBS,
+        Card::KING_CLUBS,
+        Card::ACE_DIAMONDS,
+        Card::DEUCE_DIAMONDS,
+        Card::THREE_DIAMONDS,
+        Card::FOUR_DIAMONDS,
+        Card::FIVE_DIAMONDS,
+        Card::SIX_DIAMONDS,
+        Card::SEVEN_DIAMONDS,
+        Card::EIGHT_DIAMONDS,
+        Card::NINE_DIAMONDS,
+        Card::TEN_DIAMONDS,
+        Card::JACK_DIAMONDS,
+        Card::QUEEN_DIAMONDS,
+        Card::KING_DIAMONDS,
+        Card::ACE_HEARTS,
+        Card::DEUCE_HEARTS,
+        Card::THREE_HEARTS,
+        Card::FOUR_HEARTS,
+        Card::FIVE_HEARTS,
+        Card::SIX_HEARTS,
+        Card::SEVEN_HEARTS,
+        Card::EIGHT_HEARTS,
+        Card::NINE_HEARTS,
+        Card::TEN_HEARTS,
+        Card::JACK_HEARTS,
+        Card::QUEEN_HEARTS,
+        Card::KING_HEARTS,
+        Card::ACE_SPADES,
+        Card::DEUCE_SPADES,
+        Card::THREE_SPADES,
+        Card::FOUR_SPADES,
+        Card::FIVE_SPADES,
+        Card::SIX_SPADES,
+        Card::SEVEN_SPADES,
+        Card::EIGHT_SPADES,
+        Card::NINE_SPADES,
+        Card::TEN_SPADES,
+        Card::JACK_SPADES,
+        Card::QUEEN_SPADES,
+        Card::KING_SPADES
     ];
 
     public function __construct()
@@ -70,7 +70,7 @@ class Deck
     private function compileDeck()
     {
         foreach ($this->cards as $key => $card) {
-            $this->cards[$key] = (array) new Card($card);
+            $this->cards[$key] = CardFactory::create($card);
         }
 
         return $this->cards;

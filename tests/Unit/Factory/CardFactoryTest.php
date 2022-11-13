@@ -1,19 +1,19 @@
 <?php
 
-namespace Tests\Unit\Models;
+namespace Tests\Unit\Factory;
 
-use App\Models\Card;
-use App\Constants\Card as Constants;
+use App\Constants\Card;
+use App\Factory\CardFactory;
 use Tests\BaseTest;
 
-class CardTest extends BaseTest
+class CardFactoryTest extends BaseTest
 {
 
     public function setUp(): void
     {
         parent::setUp();
         
-        $this->card = new Card(Constants::ACE_SPADES);
+        $this->card = CardFactory::create(Card::ACE_SPADES);
     }
 
     /**
@@ -22,7 +22,7 @@ class CardTest extends BaseTest
      */
     public function a_card_has_a_suit()
     {
-        $this->assertEquals('Spades', $this->card->suit);
+        $this->assertEquals('Spades', $this->card['suit']);
     }
 
     /**
@@ -31,7 +31,7 @@ class CardTest extends BaseTest
      */
     public function a_card_has_a_rank()
     {
-        $this->assertEquals('Ace', $this->card->rank);
+        $this->assertEquals('Ace', $this->card['rank']);
     }
 
     /**
@@ -40,7 +40,7 @@ class CardTest extends BaseTest
      */
     public function a_card_has_a_ranking()
     {
-        $this->assertEquals(1, $this->card->ranking);
+        $this->assertEquals(1, $this->card['ranking']);
     }
 
 }

@@ -3,8 +3,8 @@
 namespace Tests\Unit\Dealer;
 
 use App\Classes\Dealer\Dealer;
-use App\Constants\Card as ConstantsCard;
-use App\Models\Card;
+use App\Constants\Card;
+use App\Factory\CardFactory;
 use App\Models\Hand;
 use App\Models\HandStreet;
 use App\Models\Player;
@@ -169,10 +169,10 @@ class DealerTest extends BaseTest
             'hand_id' => Hand::create(['table_id' => 1])->id
         ]);
 
-        $card = new Card(ConstantsCard::ACE_HEARTS);
+        $card = CardFactory::create(Card::ACE_HEARTS);
 
-        $this->dealer->setDeck()->dealThisStreetCard($card->rank, $card->suit, $handStreet);
+        $this->dealer->setDeck()->dealThisStreetCard($card['rank'], $card['suit'], $handStreet);
 
-        $this->assertNotEmpty($handStreet->cards()->collect()->searchMultiple('card_id', $card->id));
+        $this->assertNotEmpty($handStreet->cards()->collect()->searchMultiple('card_id', $card['id']));
     }
 }

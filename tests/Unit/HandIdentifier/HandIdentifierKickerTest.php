@@ -3,8 +3,8 @@
 namespace Tests\Unit\HandIdentifier;
 
 use App\Classes\HandIdentifier\HandIdentifier;
-use App\Models\Card;
-use App\Constants\Card as ConstantsCard;
+use App\Constants\Card;
+use App\Factory\CardFactory;
 use Tests\BaseTest;
 
 class HandIdentifierKickerTest extends BaseTest
@@ -22,15 +22,15 @@ class HandIdentifierKickerTest extends BaseTest
     public function it_can_identify_the_kicker_and_active_ranks_for_a_high_card_hand()
     {
         $wholeCards = [
-            new Card(ConstantsCard::KING_SPADES)
+            CardFactory::create(Card::KING_SPADES)
         ];
 
         $communityCards = [
-            new Card(ConstantsCard::QUEEN_HEARTS),
-            new Card(ConstantsCard::SEVEN_DIAMONDS),
-            new Card(ConstantsCard::TEN_CLUBS),
-            new Card(ConstantsCard::THREE_SPADES),
-            new Card(ConstantsCard::FOUR_DIAMONDS),
+            CardFactory::create(Card::QUEEN_HEARTS),
+            CardFactory::create(Card::SEVEN_DIAMONDS),
+            CardFactory::create(Card::TEN_CLUBS),
+            CardFactory::create(Card::THREE_SPADES),
+            CardFactory::create(Card::FOUR_DIAMONDS),
         ];
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
@@ -41,7 +41,7 @@ class HandIdentifierKickerTest extends BaseTest
         );
 
         $this->assertEquals(
-            (new Card(ConstantsCard::QUEEN_HEARTS))->ranking,
+            CardFactory::create(Card::QUEEN_HEARTS)['ranking'],
             $this->handIdentifier->identifiedHandType['kicker']
         );
 
@@ -58,32 +58,32 @@ class HandIdentifierKickerTest extends BaseTest
     public function it_can_identify_the_kicker_and_active_ranks_for_a_pair()
     {
         $wholeCards = [
-            new Card(ConstantsCard::KING_SPADES),
-            new Card(ConstantsCard::NINE_DIAMONDS),
+            CardFactory::create(Card::KING_SPADES),
+            CardFactory::create(Card::NINE_DIAMONDS),
         ];
 
         $communityCards = [
-            new Card(ConstantsCard::QUEEN_HEARTS),
-            new Card(ConstantsCard::JACK_DIAMONDS),
-            new Card(ConstantsCard::FOUR_HEARTS),
-            new Card(ConstantsCard::NINE_CLUBS),
-            new Card(ConstantsCard::SEVEN_HEARTS),
+            CardFactory::create(Card::QUEEN_HEARTS),
+            CardFactory::create(Card::JACK_DIAMONDS),
+            CardFactory::create(Card::FOUR_HEARTS),
+            CardFactory::create(Card::NINE_CLUBS),
+            CardFactory::create(Card::SEVEN_HEARTS),
         ];
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
         $this->assertEquals(
-            (new Card(ConstantsCard::KING_SPADES))->ranking,
+            CardFactory::create(Card::KING_SPADES)['ranking'],
             $this->handIdentifier->identifiedHandType['kicker']
         );
 
         $this->assertContains(
-            (new Card(ConstantsCard::NINE_DIAMONDS))->ranking,
+            CardFactory::create(Card::NINE_DIAMONDS)['ranking'],
             $this->handIdentifier->identifiedHandType['activeCards']
         );
 
         $this->assertContains(
-            (new Card(ConstantsCard::NINE_CLUBS))->ranking,
+            CardFactory::create(Card::NINE_CLUBS)['ranking'],
             $this->handIdentifier->identifiedHandType['activeCards']
         );
     }

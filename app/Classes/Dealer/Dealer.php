@@ -16,7 +16,7 @@ class Dealer
         if ($deck) {
             $this->deck = $deck;
         } else {
-            $this->deck = (array) (new Deck())->cards;
+            $this->deck = (new Deck())->cards;
         }
 
         return $this;
