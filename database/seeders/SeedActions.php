@@ -14,11 +14,10 @@ class SeedActions extends Database
     public function seed()
     {
         try {
-            $stmt = $this->connection->prepare("INSERT INTO actions (name) VALUES (:name)");
-            $stmt->bindParam(':name', $name);
-
             foreach(Action::ALL as $action) {
                 $name = $action['name'];
+                $stmt = $this->connection->prepare("INSERT INTO actions (name) VALUES (:name)");
+                $stmt->bindParam(':name', $name);
                 $stmt->execute();
             }
         } catch(\PDOException $e) {

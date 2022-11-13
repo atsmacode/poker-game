@@ -15,11 +15,11 @@ class SeedStreets extends Database
         $streets = require('config/streets.php');
 
         try {
-            $stmt = $this->connection->prepare("INSERT INTO streets (name) VALUES (:name)");
-            $stmt->bindParam(':name', $name);
-
             foreach($streets as $street) {
                 $name = $street['name'];
+                $stmt = $this->connection->prepare("INSERT INTO streets (name) VALUES (:name)");
+                
+                $stmt->bindParam(':name', $name);
                 $stmt->execute();
             }
         } catch(\PDOException $e) {

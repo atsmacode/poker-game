@@ -14,13 +14,13 @@ class SeedHandTypes extends Database
     public function seed()
     {
         try {
-            $stmt = $this->connection->prepare("INSERT INTO hand_types (name, ranking) VALUES (:name, :ranking)");
-            $stmt->bindParam(':name', $name);
-            $stmt->bindParam(':ranking', $ranking);
-
             foreach(HandType::ALL as $handType) {
-                $name = $handType['name'];
+                $name    = $handType['name'];
                 $ranking = $handType['ranking'];
+                $stmt    = $this->connection->prepare("INSERT INTO hand_types (name, ranking) VALUES (:name, :ranking)");
+                
+                $stmt->bindParam(':name', $name);
+                $stmt->bindParam(':ranking', $ranking);
                 $stmt->execute();
             }
         } catch(\PDOException $e) {
