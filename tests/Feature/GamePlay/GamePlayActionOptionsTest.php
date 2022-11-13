@@ -4,16 +4,15 @@ namespace Tests\Feature\GamePlay;
 
 use App\Classes\GamePlay\GamePlay;
 use App\Models\Hand;
-use App\Models\PlayerAction;
 use App\Models\TableSeat;
 use App\Constants\Action;
 use App\Models\Player;
-use App\Models\PlayerActionLog;
 use App\Models\Table;
 use Tests\BaseTest;
 
 class GamePlayActionOptionsTest extends BaseTest
 {
+    use HasGamePlay;
 
     protected function setUp(): void
     {
@@ -61,32 +60,10 @@ class GamePlayActionOptionsTest extends BaseTest
     {
         $this->gamePlay->start();
 
-        // Player 1 Raises BB
-        $lastToAct = PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(0, 1)->id]);
-
-        $lastToAct->update([
-                'action_id' => Action::RAISE_ID,
-                'bet_amount' => 100.0,
-                'active' => 1,
-                'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
-            ]);
-
-        PlayerActionLog::create([
-            'player_status_id' => $lastToAct->id,
-            'bet_amount'       => $lastToAct->bet_amount,
-            'big_blind'        => $lastToAct->big_blind,
-            'small_blind'      => $lastToAct->small_blind,
-            'player_id'        => $lastToAct->player_id,
-            'action_id'        => $lastToAct->action_id,
-            'hand_id'          => $this->gamePlay->handId,
-            'hand_street_id'   => $lastToAct->hand_street_id,
-            'table_seat_id'    => $lastToAct->table_seat_id,
-            'created_at'       => date('Y-m-d H:i:s', time())
-        ]);
+        $this->givenPlayerOneRaisesBigBlind();
 
         $gamePlay = $this->gamePlay->play();
 
-        // Action On SB
         $this->assertTrue($gamePlay['players'][1]['action_on']);
 
         $this->assertContains(ACTION::FOLD, $gamePlay['players'][1]['availableOptions']);
@@ -102,31 +79,10 @@ class GamePlayActionOptionsTest extends BaseTest
     {
         $this->gamePlay->start();
 
-        $lastToAct = PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(0, 1)->id]);
-
-        $lastToAct->update([
-                'action_id' => Action::FOLD_ID,
-                'bet_amount' => null,
-                'active' => 0,
-                'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
-            ]);
-
-        PlayerActionLog::create([
-            'player_status_id' => $lastToAct->id,
-            'bet_amount'       => $lastToAct->bet_amount,
-            'big_blind'        => $lastToAct->big_blind,
-            'small_blind'      => $lastToAct->small_blind,
-            'player_id'        => $lastToAct->player_id,
-            'action_id'        => $lastToAct->action_id,
-            'hand_id'          => $this->gamePlay->handId,
-            'hand_street_id'   => $lastToAct->hand_street_id,
-            'table_seat_id'    => $lastToAct->table_seat_id,
-            'created_at'       => date('Y-m-d H:i:s', time())
-        ]);
+        $this->givenPlayerOneFolds();
 
         $gamePlay = $this->gamePlay->play();
 
-        // Action On BB
         $this->assertTrue($gamePlay['players'][1]['action_on']);
         $this->assertEmpty($gamePlay['players'][0]['availableOptions']);
     }
@@ -139,32 +95,10 @@ class GamePlayActionOptionsTest extends BaseTest
     {
         $this->gamePlay->start();
 
-        // Player 2 SB Calls
-        $lastToAct = PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(1, 1)->id]);
-
-        $lastToAct->update([
-                'action_id' => Action::CALL_ID,
-                'bet_amount' => 25.00,
-                'active' => 1,
-                'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
-            ]);
-
-        PlayerActionLog::create([
-            'player_status_id' => $lastToAct->id,
-            'bet_amount'       => $lastToAct->bet_amount,
-            'big_blind'        => $lastToAct->big_blind,
-            'small_blind'      => $lastToAct->small_blind,
-            'player_id'        => $lastToAct->player_id,
-            'action_id'        => $lastToAct->action_id,
-            'hand_id'          => $this->gamePlay->handId,
-            'hand_street_id'   => $lastToAct->hand_street_id,
-            'table_seat_id'    => $lastToAct->table_seat_id,
-            'created_at'       => date('Y-m-d H:i:s', time())
-        ]);
+        $this->givenPlayerTwoCalls();
 
         $gamePlay = $this->gamePlay->play();
 
-        // Action On BB
         $this->assertTrue($gamePlay['players'][2]['action_on']);
 
         $this->assertContains(ACTION::FOLD, $gamePlay['players'][2]['availableOptions']);
@@ -180,32 +114,10 @@ class GamePlayActionOptionsTest extends BaseTest
     {
         $this->gamePlay->start();
 
-        // Player 1 Calls BB
-        $lastToAct = PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(0, 1)->id]);
-
-        $lastToAct->update([
-                'action_id' => Action::CALL_ID,
-                'bet_amount' => 50.0,
-                'active' => 1,
-                'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
-            ]);
-
-        PlayerActionLog::create([
-            'player_status_id' => $lastToAct->id,
-            'bet_amount'       => $lastToAct->bet_amount,
-            'big_blind'        => $lastToAct->big_blind,
-            'small_blind'      => $lastToAct->small_blind,
-            'player_id'        => $lastToAct->player_id,
-            'action_id'        => $lastToAct->action_id,
-            'hand_id'          => $this->gamePlay->handId,
-            'hand_street_id'   => $lastToAct->hand_street_id,
-            'table_seat_id'    => $lastToAct->table_seat_id,
-            'created_at'       => date('Y-m-d H:i:s', time())
-        ]);
+        $this->givenPlayerOneCalls();
 
         $gamePlay = $this->gamePlay->play();
 
-        // Action On SB
         $this->assertTrue($gamePlay['players'][1]['action_on']);
 
         $this->assertContains(ACTION::FOLD, $gamePlay['players'][1]['availableOptions']);

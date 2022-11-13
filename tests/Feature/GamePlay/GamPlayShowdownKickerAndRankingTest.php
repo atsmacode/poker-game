@@ -3,14 +3,12 @@
 namespace Tests\Feature\GamePlay;
 
 use App\Classes\GamePlay\GamePlay;
-use App\Constants\Action;
 use App\Constants\Card as ConstantsCard;
 use App\Models\Hand;
 use App\Models\HandStreet;
 use App\Models\HandStreetCard;
 use App\Models\HandType;
 use App\Models\Player;
-use App\Models\PlayerAction;
 use App\Models\Street;
 use App\Models\Table;
 use App\Models\TableSeat;
@@ -19,6 +17,7 @@ use Tests\BaseTest;
 
 class GamePlayShowdownKickerAndRankingTest extends BaseTest
 {
+    use HasGamePlay;
 
     protected function setUp(): void
     {
@@ -117,7 +116,7 @@ class GamePlayShowdownKickerAndRankingTest extends BaseTest
 
         $this->setRiver($riverCard);
 
-        $this->executeActions();
+        $this->executeActionsToContinue();
 
         $gamePlay = $this->gamePlay->play();
 
@@ -182,7 +181,7 @@ class GamePlayShowdownKickerAndRankingTest extends BaseTest
 
         $this->setRiver($riverCard);
 
-        $this->executeActions();
+        $this->executeActionsToContinue();
 
         $gamePlay = $this->gamePlay->play();
 
@@ -240,50 +239,5 @@ class GamePlayShowdownKickerAndRankingTest extends BaseTest
             'hand_street_id' => $river->id,
             'card_id'        => $riverCard['card_id']
         ]);
-    }
-
-    protected function executeActions()
-    {
-        // Player 1 Calls BB
-        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(0, 1)->id])
-            ->update([
-                'action_id' => Action::CALL_ID,
-                'bet_amount' => 50.0,
-                'active' => 1,
-                'updated_at' => date('Y-m-d H:i:s', strtotime('-3 seconds'))
-            ]);
-
-        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
-            ->update([
-                'can_continue' => 1
-            ]);
-
-        // Player 2 Folds
-        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(1, 1)->id])
-            ->update([
-                'action_id' => Action::FOLD_ID,
-                'bet_amount' => null,
-                'active' => 0,
-                'updated_at' => date('Y-m-d H:i:s', strtotime('-2 seconds'))
-            ]);
-
-        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(1, 1)->id])
-            ->update([
-                'can_continue' => 0
-            ]);
-
-        // Player 3 Checks
-        PlayerAction::find(['id' => $this->gamePlay->hand->actions()->slice(2, 1)->id])
-            ->update([
-                'action_id' => Action::CHECK_ID,
-                'bet_amount' => null,
-                'active' => 1,
-                'updated_at' => date('Y-m-d H:i:s', strtotime('-1 seconds'))
-            ]);
-
-        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(2, 1)->id])
-            ->update([
-                'can_continue' => 1
-            ]);
     }
 }
