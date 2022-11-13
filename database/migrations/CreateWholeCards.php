@@ -26,7 +26,7 @@ class CreateWholeCards extends Database
 
         try {
             $this->connection->exec($sql);
-        } catch(PDOException $e) {
+        } catch(\PDOException $e) {
             error_log($e->getMessage());
         }
 
