@@ -41,7 +41,7 @@ class SeedPlayers extends Database
 
                 $inserted++;
             }
-        } catch(PDOException $e) {
+        } catch(\PDOException $e) {
             error_log($e->getMessage());
         }
         $this->connection = null;
@@ -61,7 +61,7 @@ class SeedPlayers extends Database
 
             $stmt->execute();
 
-        } catch(PDOException $e) {
+        } catch(\PDOException $e) {
             error_log($e->getMessage());
         }
 

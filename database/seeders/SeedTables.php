@@ -17,7 +17,10 @@ class SeedTables extends Database
 
     private function createTable()
     {
-        $name = 'Table 1';
+        /**
+         * TODO: only supporting 1 table for the time being.
+         */
+        $name  = 'Table 1';
         $seats = 6;
 
         try {
@@ -26,7 +29,7 @@ class SeedTables extends Database
             $stmt->bindParam(':seats', $seats);
 
             $stmt->execute();
-        } catch(PDOException $e) {
+        } catch(\PDOException $e) {
             error_log($e->getMessage());
         }
 
@@ -49,7 +52,7 @@ class SeedTables extends Database
 
                 $inserted++;
             }
-        } catch(PDOException $e) {
+        } catch(\PDOException $e) {
             error_log($e->getMessage());;
         }
 

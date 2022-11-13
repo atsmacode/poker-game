@@ -40,7 +40,7 @@ class Showdown
          * then compare the hand rankings of each remaining player hand.
          */
         foreach($this->handIdentifier->handTypes as $handType){
-            $playerHandsOfType = $this->filter('playerHands', 'handType', 'id', $handType->id);
+            $playerHandsOfType = $this->getPlayerhandsOfType($handType['id']);
 
             if(count($playerHandsOfType) > 1){
                 $this->identifyHighestRankedHandAndKickerOfThisType(
@@ -57,7 +57,7 @@ class Showdown
     protected function identifyHighestRankedHandAndKickerOfThisType(
         array $playerHands,
         array $playerHandsOfType,
-        HandType $handType
+        array $handType
     ): void {
         /**
          * Remove hands of this type from the array. That way we can only 
@@ -65,7 +65,7 @@ class Showdown
          * compared against the other highest ranked/kicker-ed hand types.
          */
         $this->playerHands = array_filter($playerHands, function($value) use($handType){
-            return $value['handType']->id !== $handType->id;
+            return $value['handType']['id'] !== $handType['id'];
         });
 
         $handsOfThisTypeRanked = $this->getBestHandByHighestActiveCardRank(
@@ -125,20 +125,13 @@ class Showdown
     }
 
     /**
-     * To filter an array of objects, specifying the $column where
-     * the object resides in the array, and the $objProperty to 
-     * filter by. $hayStack must be a property in this class.
-     *
-     * @param array $hayStack
-     * @param $column
-     * @param $objProperty
-     * @param string|int $filter
+     * @param int $handTypeId
      * @return array
      */
-    private function filter(string $hayStack, string $column, string $objProperty, $filter): array
+    private function getPlayerhandsOfType(int $handTypeId): array
     {
-        return array_filter($this->{$hayStack}, function($value) use($column, $objProperty, $filter){
-            return $value[$column]->{$objProperty} == $filter;
+        return array_filter($this->playerHands, function($value) use($handTypeId){
+            return $value['handType']['id'] == $handTypeId;
         });
     }
 
@@ -175,10 +168,10 @@ class Showdown
             /**
              * Why was this if statement added? TODO
              */
-            if ($a['handType']->ranking == $b['handType']->ranking) {
+            if ($a['handType']['ranking'] == $b['handType']['ranking']) {
                 return 0;
             }
-            return ($a['handType']->ranking > $b['handType']->ranking) ? 1 : -1;
+            return ($a['handType']['ranking'] > $b['handType']['ranking']) ? 1 : -1;
         });
 
         return $this->playerHands[array_key_first($this->playerHands)];

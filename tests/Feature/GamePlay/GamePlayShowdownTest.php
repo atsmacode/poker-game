@@ -4,10 +4,10 @@ namespace Tests\Feature\GamePlay;
 
 use App\Classes\GamePlay\GamePlay;
 use App\Constants\Card;
+use App\Constants\HandType;
 use App\Models\Hand;
 use App\Models\HandStreet;
 use App\Models\HandStreetCard;
-use App\Models\HandType;
 use App\Models\Player;
 use App\Models\Street;
 use App\Models\Table;
@@ -55,8 +55,6 @@ class ShowdownTest extends BaseTest
             'table_id' => $this->gamePlay->handTable->id,
             'player_id' => $this->player3->id
         ]); 
-
-        $this->handTypes = (new HandType())->all();
     }
 
     /**
@@ -121,7 +119,7 @@ class ShowdownTest extends BaseTest
         $gamePlay = $this->gamePlay->play();
 
         $this->assertEquals($this->player3->id, $gamePlay['winner']['player']->id);
-        $this->assertEquals($this->handTypes->find(['name' => 'Pair'])->id, $gamePlay['winner']['handType']->id);
+        $this->assertEquals(HandType::PAIR['id'], $gamePlay['winner']['handType']['id']);
     }
 
     /**
@@ -186,7 +184,7 @@ class ShowdownTest extends BaseTest
         $gamePlay = $this->gamePlay->play();
 
         $this->assertEquals($this->player3->id, $gamePlay['winner']['player']->id);
-        $this->assertEquals($this->handTypes->find(['name' => 'Two Pair'])->id, $gamePlay['winner']['handType']->id);
+        $this->assertEquals(HandType::TWO_PAIR['id'], $gamePlay['winner']['handType']['id']);
     }
 
     protected function setWholeCards($wholeCards)

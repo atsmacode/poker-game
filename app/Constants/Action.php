@@ -34,4 +34,12 @@ class Action
         'id'   => self::RAISE_ID,
         'name' => 'Raise'
     ];
+
+    const ALL = [
+        self::FOLD,
+        self::CHECK,
+        self::CALL,
+        self::BET,
+        self::RAISE,
+    ];
 }

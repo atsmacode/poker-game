@@ -3,7 +3,8 @@
 namespace Database\Seeders;
 
 use App\Classes\Database;
-use App\Helpers\QueryHelper;
+use App\Constants\Rank;
+use App\Constants\Suit;
 
 class SeedCards extends Database
 {
@@ -14,21 +15,19 @@ class SeedCards extends Database
     ];
     public function seedRanks()
     {
-        $ranks = require('config/ranks.php');
-
         try {
-            $stmt = $this->connection->prepare("INSERT INTO ranks (name, abbreviation, ranking) VALUES (:name, :abbreviation, :ranking)");
-            $stmt->bindParam(':name', $name);
-            $stmt->bindParam(':abbreviation', $abbreviation);
-            $stmt->bindParam(':ranking', $ranking);
+            foreach(Rank::ALL as $rank) {
+                $stmt         = $this->connection->prepare("INSERT INTO ranks (name, abbreviation, ranking) VALUES (:name, :rankAbbreviation, :ranking)");
+                $name         = $rank['rank'];
+                $abbreviation = $rank['rankAbbreviation'];
+                $ranking      = $rank['ranking'];
 
-            foreach($ranks as $rank) {
-                $name = $rank['name'];
-                $abbreviation = $rank['abbreviation'];
-                $ranking = $rank['ranking'];
+                $stmt->bindParam(':name', $name);
+                $stmt->bindParam(':rankAbbreviation', $abbreviation);
+                $stmt->bindParam(':ranking', $ranking);
                 $stmt->execute();
             }
-        } catch(PDOException $e) {
+        } catch(\PDOException $e) {
             error_log($e->getMessage());
 
         }
@@ -37,19 +36,17 @@ class SeedCards extends Database
 
     public function seedSuits()
     {
-        $suits = require('config/suits.php');
-
         try {
-            $stmt = $this->connection->prepare("INSERT INTO suits (name, abbreviation) VALUES (:name, :abbreviation)");
-            $stmt->bindParam(':name', $name);
-            $stmt->bindParam(':abbreviation', $abbreviation);
+            foreach(Suit::ALL as $suit) {
+                $stmt         = $this->connection->prepare("INSERT INTO suits (name, abbreviation) VALUES (:name, :suitAbbreviation)");
+                $name         = $suit['suit'];
+                $abbreviation = $suit['suitAbbreviation'];
 
-            foreach($suits as $suit) {
-                $name = $suit['name'];
-                $abbreviation = $suit['abbreviation'];
+                $stmt->bindParam(':name', $name);
+                $stmt->bindParam(':suitAbbreviation', $abbreviation);
                 $stmt->execute();
             }
-        } catch(PDOException $e) {
+        } catch(\PDOException $e) {
             error_log($e->getMessage());
         }
         $this->connection = null;
@@ -57,22 +54,19 @@ class SeedCards extends Database
 
     public function seedCards()
     {
-        $ranks = QueryHelper::selectRanks();
-        $suits = QueryHelper::selectSuits();
-
         try {
-            $stmt = $this->connection->prepare("INSERT INTO cards (rank_id, suit_id) VALUES (:rank_id, :suit_id)");
-            $stmt->bindParam(':rank_id', $rank_id);
-            $stmt->bindParam(':suit_id', $suit_id);
-
-            foreach($suits as $suit){
-                foreach($ranks as $rank){
-                    $rank_id = $rank['id'];
-                    $suit_id = $suit['id'];
+            foreach(Suit::ALL as $suit){
+                foreach(Rank::ALL as $rank){
+                    $stmt    = $this->connection->prepare("INSERT INTO cards (rank_id, suit_id) VALUES (:rank_id, :suit_id)");
+                    $rank_id = $rank['rank_id'];
+                    $suit_id = $suit['suit_id'];
+                    
+                    $stmt->bindParam(':rank_id', $rank_id);
+                    $stmt->bindParam(':suit_id', $suit_id);
                     $stmt->execute();
                 }
             }
-        } catch(PDOException $e) {
+        } catch(\PDOException $e) {
             error_log($e->getMessage());
         }
 

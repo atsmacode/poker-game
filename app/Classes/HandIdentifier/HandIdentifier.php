@@ -2,8 +2,8 @@
 
 namespace App\Classes\HandIdentifier;
 
-use App\Helpers\QueryHelper;
-use App\Models\HandType;
+use App\Constants\HandType;
+use App\Constants\Rank;
 
 class HandIdentifier
 {
@@ -38,7 +38,7 @@ class HandIdentifier
 
     public function __construct()
     {
-        $this->handTypes = (new HandType())->all()->collect()->content;
+        $this->handTypes = HandType::ALL;
     }
 
     public function identify(array $wholeCards, array $communityCards): self
@@ -86,7 +86,7 @@ class HandIdentifier
          * TODO: Replace 1 & 14 with HIGH_ACE_ID
          * & LOW_ACE_ID constants.
          */
-        return ($activeCards && count($this->filter('allCards', 'ranking', 1)) > 1
+        return ($activeCards && count($this->filterAllCards('ranking', 1)) > 1
                 && !in_array(1, $activeCards)
                 && !in_array(14, $activeCards))
             || (in_array(1, $activeCards) && $forHandCheck === 'hasFlush');
@@ -132,22 +132,22 @@ class HandIdentifier
         }
     }
 
-    private function search(string $hayStack, string $column, $value)
+    private function getHandType(string $name)
     {
-        $key = array_search($value,
-            array_column($this->{$hayStack}, $column)
+        $key = array_search($name,
+            array_column($this->handTypes, 'name')
         );
 
-        if (array_key_exists($key, $this->{$hayStack})) {
-            return $this->{$hayStack}[$key];
+        if (array_key_exists($key, $this->handTypes)) {
+            return $this->handTypes[$key];
         }
 
         return false;
     }
 
-    private function filter(string $hayStack, string $column, $filter)
+    private function filterAllCards(string $column, $filter)
     {
-        return array_filter($this->{$hayStack}, function($value) use($column, $filter){
+        return array_filter($this->allCards, function($value) use($column, $filter){
             /**
              * TODO: Remove temp is_array check
              */
@@ -192,7 +192,7 @@ class HandIdentifier
             $this->highCard = $this->getMax($this->allCards, 'ranking');
         }
 
-        $this->identifiedHandType['handType']      = $this->search('handTypes', 'name', 'High Card');
+        $this->identifiedHandType['handType']      = $this->getHandType('High Card');
         $this->identifiedHandType['activeCards'][] = $this->highCard;
         $this->identifiedHandType['kicker']        = $this->getKicker();
 
@@ -201,8 +201,8 @@ class HandIdentifier
 
     public function hasPair(): bool|self
     {
-        foreach (QueryHelper::selectRanks() as $rank) {
-            if (count($this->filter('allCards', 'rank_id', $rank['id'])) === 2) {
+        foreach (Rank::ALL as $rank) {
+            if (count($this->filterAllCards('rank_id', $rank['rank_id'])) === 2) {
                 $this->pairs[] = $rank;
                 $this->identifiedHandType['activeCards'][] = $this->checkForHighAceActiveCardRanking($rank) ?: $rank['ranking'];
                 /*
@@ -219,7 +219,7 @@ class HandIdentifier
         }
 
         if (count($this->pairs) === 1) {
-            $this->identifiedHandType['handType'] = $this->search('handTypes', 'name', 'Pair');
+            $this->identifiedHandType['handType'] = $this->getHandType('Pair');
             return true;
         }
 
@@ -228,8 +228,8 @@ class HandIdentifier
 
     public function hasTwoPair(): bool|self
     {
-        foreach(QueryHelper::selectRanks() as $rank){
-            if (count($this->filter('allCards', 'rank_id', $rank['id'])) === 2) {
+        foreach(Rank::ALL as $rank){
+            if (count($this->filterAllCards('rank_id', $rank['rank_id'])) === 2) {
                 $this->pairs[]                             = $rank;
                 $this->identifiedHandType['activeCards'][] = $this->checkForHighAceActiveCardRanking($rank) ?: $rank['ranking'];
                 /*
@@ -246,7 +246,7 @@ class HandIdentifier
         }
 
         if (count($this->pairs) >= 2) {
-            $this->identifiedHandType['handType'] = $this->search('handTypes', 'name', 'Two Pair');
+            $this->identifiedHandType['handType'] = $this->getHandType('Two Pair');
             return true;
         }
 

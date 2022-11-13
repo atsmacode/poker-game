@@ -115,18 +115,6 @@ class Model extends Database
                 }
             }
 
-            /**
-             * TODO: not all models have updated_at.
-             *
-             * & A better way to keep track of timings so I don't have
-             * to manually set updated_at for testing. A more precise
-             * time measurement including miliseconds perhaps.
-             */
-            // if ($this->table == 'player_actions' || $this->table == 'table_seats') {
-            //     $now = date('Y-m-d H:i:s');
-            //     $stmt->bindParam(':updated_at', $now);
-            // }
-
             $stmt->execute();
         } catch(PDOException $e) {
             echo $this->table . ' ->' . 'update() ' . $e->getMessage();

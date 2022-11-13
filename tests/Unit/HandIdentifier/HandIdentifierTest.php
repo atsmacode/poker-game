@@ -4,6 +4,7 @@ namespace Tests\Unit\HandIdentifier;
 
 use App\Classes\HandIdentifier\HandIdentifier;
 use App\Constants\Card as ConstantsCard;
+use App\Constants\HandType;
 use App\Models\Card;
 use Tests\BaseTest;
 
@@ -39,7 +40,7 @@ class HandIdentifierTest extends BaseTest
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
-        $this->assertEquals('High Card', $this->handIdentifier->identifiedHandType['handType']->name);
+        $this->assertEquals('High Card', $this->handIdentifier->identifiedHandType['handType']['name']);
 
         $this->assertEquals(
             $highestCard->ranking,
@@ -70,7 +71,7 @@ class HandIdentifierTest extends BaseTest
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
-        $this->assertEquals('High Card', $this->handIdentifier->identifiedHandType['handType']->name);
+        $this->assertEquals('High Card', $this->handIdentifier->identifiedHandType['handType']['name']);
 
         $this->assertEquals(
             14,
@@ -98,7 +99,7 @@ class HandIdentifierTest extends BaseTest
         ];
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
-        $this->assertEquals('Pair', $this->handIdentifier->identifiedHandType['handType']->name);
+        $this->assertEquals(HandType::PAIR['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
         $this->assertCount(1, $this->handIdentifier->pairs);
     }
 
@@ -122,7 +123,7 @@ class HandIdentifierTest extends BaseTest
         ];
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
-        $this->assertEquals('Two Pair', $this->handIdentifier->identifiedHandType['handType']->name);
+        $this->assertEquals(HandType::TWO_PAIR['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
         $this->assertCount(2, $this->handIdentifier->pairs);
     }
 }

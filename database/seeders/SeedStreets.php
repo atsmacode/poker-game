@@ -22,7 +22,7 @@ class SeedStreets extends Database
                 $name = $street['name'];
                 $stmt->execute();
             }
-        } catch(PDOException $e) {
+        } catch(\PDOException $e) {
             error_log($e->getMessage());
         }
 
