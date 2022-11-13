@@ -1,9 +1,46 @@
+# Environment
+
+## PHP
+
+8.1.3
+
+## MySQL
+
+8.0.13
+
+## Vue.Js
+
+^3.2.39
+
+## Node.Js
+
+18.12.1
+
 # Commands
 
-Configs:
+## Linux
+Run the unit test suite:
+
+>dev/phpunit
+
+Drop, Create and Seed all tables. '-d true' is required to run this in test DB:
+
+> php dev/SymfonyApplication.php app:build-env -d true
+
+## Windows
+Run the unit test suite:
+
+>.\dev\runtests.bat
+
+Drop, Create and Seed all tables. '-d true' is required to run this in test DB
+
+> php .\dev\SymfonyApplication.php app:build-env -d true
+
+# Configs
 
 You need to add db.php and db-test.php to configure your local DB credentials, like so:
 
+```
 <?php
 
 return [
@@ -12,24 +49,7 @@ return [
     'password' => "DB_PASSWORD",
     'database' => "poker-game-test"
 ];
-
-Run the unit test suite on Linux:
-
->dev/phpunit
-
-Run the unit test suite on Windows:
-
->.\dev\runtests.bat
-
-Drop, Create and Seed all tables. '-d true' is required to run this in test DB
-
-Linux:
-
-> php dev/SymfonyApplication.php app:build-env -d true
-
-Windows:
-
-> php .\dev\SymfonyApplication.php app:build-env -d true
+```
 
 # Endpoints
 
