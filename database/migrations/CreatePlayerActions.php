@@ -29,7 +29,11 @@ class CreatePlayerActions extends Database
             FOREIGN KEY (player_id) REFERENCES players(id),
             FOREIGN KEY (hand_id) REFERENCES hands(id),
             FOREIGN KEY (hand_street_id) REFERENCES hand_streets(id),
-            FOREIGN KEY (table_seat_id) REFERENCES table_seats(id)
+            FOREIGN KEY (table_seat_id) REFERENCES table_seats(id),
+            INDEX (player_id),
+            INDEX (hand_id),
+            INDEX (hand_street_id),
+            INDEX (table_seat_id)
         )";
 
         try {

@@ -16,7 +16,8 @@ class CreatePots extends Database
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             amount INT(12) UNSIGNED NULL,
             hand_id INT(6) UNSIGNED NOT NULL,
-            FOREIGN KEY (hand_id) REFERENCES hands(id)
+            FOREIGN KEY (hand_id) REFERENCES hands(id),
+            INDEX (hand_id)
         )";
 
         try {

@@ -19,7 +19,8 @@ class CreateHands extends Database
                 game_type_id int(6) NULL,
                 table_id INT(6) UNSIGNED NULL,
                 completed_on DATETIME NULL,
-                FOREIGN KEY (table_id) REFERENCES tables(id)
+                FOREIGN KEY (table_id) REFERENCES tables(id),
+                INDEX (table_id)
             )";
 
         try {
@@ -38,7 +39,8 @@ class CreateHands extends Database
                 street_id int(6) UNSIGNED NOT NULL,
                 hand_id INT(6) UNSIGNED NOT NULL,
                 FOREIGN KEY (hand_id) REFERENCES hands(id),
-                FOREIGN KEY (street_id) REFERENCES streets(id)
+                FOREIGN KEY (street_id) REFERENCES streets(id),
+                INDEX (hand_id)
             )";
 
         try {
@@ -57,7 +59,8 @@ class CreateHands extends Database
                 hand_street_id INT(6) UNSIGNED NOT NULL,
                 card_id INT(6) UNSIGNED NOT NULL,
                 FOREIGN KEY (hand_street_id) REFERENCES hand_streets(id),
-                FOREIGN KEY (card_id) REFERENCES cards(id)
+                FOREIGN KEY (card_id) REFERENCES cards(id),
+                INDEX (hand_street_id)
             )";
 
         try {

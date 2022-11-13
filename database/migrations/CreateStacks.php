@@ -23,7 +23,9 @@ class CreateStacks extends Database
             player_id INT(6) UNSIGNED NOT NULL,
             table_id INT(6) UNSIGNED NOT NULL,
             FOREIGN KEY (player_id) REFERENCES players(id),
-            FOREIGN KEY (table_id) REFERENCES tables(id)
+            FOREIGN KEY (table_id) REFERENCES tables(id),
+            INDEX (player_id),
+            INDEX (table_id)
         )";
 
         try {

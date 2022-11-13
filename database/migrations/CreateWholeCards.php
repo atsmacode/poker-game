@@ -19,7 +19,9 @@ class CreateWholeCards extends Database
             player_id INT(6) UNSIGNED NOT NULL,
             FOREIGN KEY (card_id) REFERENCES cards(id),
             FOREIGN KEY (hand_id) REFERENCES hands(id),
-            FOREIGN KEY (player_id) REFERENCES players(id)
+            FOREIGN KEY (player_id) REFERENCES players(id),
+            INDEX (hand_id),
+            INDEX (player_id)
         )";
 
         try {
