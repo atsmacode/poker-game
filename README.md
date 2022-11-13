@@ -19,7 +19,7 @@ Run the unit test suite on Linux:
 
 Run the unit test suite on Windows:
 
->.\dev\runtests.batt
+>.\dev\runtests.bat
 
 Drop, Create and Seed all tables. '-d true' is required to run this in test DB
 
