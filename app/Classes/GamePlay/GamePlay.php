@@ -4,6 +4,7 @@ namespace App\Classes\GamePlay;
 
 use App\Classes\Dealer\Dealer;
 use App\Classes\Game\PotLimitHoldEm;
+use App\Classes\GameState\GameState;
 use App\Classes\Showdown\Showdown;
 use App\Helpers\BetHelper;
 use App\Helpers\PotHelper;
@@ -23,6 +24,7 @@ class GamePlay
     public $call;
     public $bet;
     public $raise;
+    private ?GameState $gameState;
 
     public function __construct($hand, $deck = null)
     {
@@ -34,8 +36,10 @@ class GamePlay
         $this->street    = null;
     }
 
-    public function play()
+    public function play(GameState $gameState = null)
     {
+        $this->gameState = $gameState;
+
         $this->updateSeatStatusOfLatestAction();
         $this->updateAllOtherSeatsBasedOnLatestAction();
 
@@ -83,8 +87,12 @@ class GamePlay
         ];
     }
 
-    public function start($currentDealer = null)
-    {
+    public function start(
+        $currentDealer = null,
+        GameState $gameState = null
+    ) {
+        $this->gameState = $gameState;
+
         $this->initiateStreetActions();
         $this->initiatePlayerStacks();
         $this->setDealerAndBlindSeats($currentDealer);
@@ -327,7 +335,7 @@ class GamePlay
         /*
          * We only need to update the available actions if a player did something other than fold.
          */
-        $latestAction = $this->hand->getLatestAction();
+        $latestAction = $this->gameState->getLatestAction();
 
         if (!$latestAction) {
             array_push($options, Action::FOLD, Action::CHECK, Action::BET);
@@ -340,10 +348,7 @@ class GamePlay
                 Action::FOLD
             ];
 
-            switch(PlayerAction::find([
-                'table_seat_id' => $latestAction['id'],
-                'hand_id' => $this->handId
-            ])->action_id){
+            switch($latestAction->action_id){
                 case Action::CALL['id']:
                     /*
                      * BB can only check if there were no raises before the latest call action.
@@ -374,10 +379,7 @@ class GamePlay
 
     public function updateAllOtherSeatsBasedOnLatestAction()
     {
-        $latestAction = PlayerAction::find([
-            'hand_id'       => $this->handId,
-            'table_seat_id' => $this->hand->getLatestAction()['id']
-        ]);
+        $latestAction = $this->gameState->getLatestAction();
 
         switch($latestAction->action_id){
             case Action::BET['id']:
@@ -396,10 +398,7 @@ class GamePlay
 
     public function updateSeatStatusOfLatestAction()
     {
-        $latestAction = PlayerAction::find([
-            'hand_id'       => $this->handId,
-            'table_seat_id' => $this->hand->getLatestAction()['id']
-        ]);
+        $latestAction = $this->gameState->getLatestAction();
 
         switch($latestAction->action_id){
             case Action::CHECK['id']:
@@ -581,6 +580,8 @@ class GamePlay
             'table_seat_id'  => $bigBlindSeat->id,
             'hand_street_id' => $handStreetId,
         ]);
+        
+        $this->gameState->setLatestAction($bigBlind);
 
         BetHelper::postBlinds($this->hand, $smallBlind, $bigBlind);
     }

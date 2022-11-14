@@ -23,7 +23,7 @@ class PlayerActionFactory
         $actionId,
         $betAmount,
         $active
-    ) {
+    ): PlayerAction {
         $playerAction = PlayerAction::find(['id' => $playerActionId]);
 
         $playerAction->update([
@@ -44,5 +44,7 @@ class PlayerActionFactory
             'table_seat_id'    => $playerAction->table_seat_id,
             'created_at'       => date('Y-m-d H:i:s', time())
         ]);
+
+        return $playerAction;
     }
 }

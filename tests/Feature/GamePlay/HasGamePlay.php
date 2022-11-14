@@ -10,24 +10,28 @@ trait HasGamePlay
 {
     private function givenPlayerOneRaisesBigBlind()
     {
-        PlayerActionFactory::create(
+        $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(0, 1)->id,
             handId:         $this->gamePlay->handId,
             actionId:       Action::RAISE_ID,
             betAmount:      100.0,
             active:         1,
         );
+
+        $this->gameState->setLatestAction($playerAction);
     }
 
     private function givenPlayerOneFolds()
     {
-        PlayerActionFactory::create(
+        $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(0, 1)->id,
             handId:         $this->gamePlay->handId,
             actionId:       Action::FOLD_ID,
             betAmount:      null,
             active:         0,
         );
+
+        $this->gameState->setLatestAction($playerAction);
     }
 
     private function givenPlayerOneCanNotContinue()
@@ -48,35 +52,41 @@ trait HasGamePlay
 
     private function givenPlayerOneCalls()
     {
-        PlayerActionFactory::create(
+        $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(0, 1)->id,
             handId:         $this->gamePlay->handId,
             actionId:       Action::CALL_ID,
             betAmount:      50.00,
             active:         1,
         );
+
+        $this->gameState->setLatestAction($playerAction);
     }
 
     private function givenPlayerTwoCalls()
     {
-        PlayerActionFactory::create(
+        $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(1, 1)->id,
             handId:         $this->gamePlay->handId,
             actionId:       Action::CALL_ID,
             betAmount:      50.00,
             active:         1,
         );
+
+        $this->gameState->setLatestAction($playerAction);
     }
 
     private function givenPlayerTwoFolds()
     {
-        PlayerActionFactory::create(
+        $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(1, 1)->id,
             handId:         $this->gamePlay->handId,
             actionId:       Action::FOLD_ID,
             betAmount:      null,
             active:         0,
         );
+
+        $this->gameState->setLatestAction($playerAction);
     }
 
     private function givenPlayerTwoCanNotContinue()
@@ -97,35 +107,41 @@ trait HasGamePlay
 
     private function givenPlayerThreeChecks()
     {
-        PlayerActionFactory::create(
+        $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(2, 1)->id,
             handId:         $this->gamePlay->handId,
             actionId:       Action::CHECK_ID,
             betAmount:      null,
             active:         1,
         );
+
+        $this->gameState->setLatestAction($playerAction);
     }
 
     private function givenPlayerThreeCallsSmallBlind()
     {
-        PlayerActionFactory::create(
+        $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(2, 1)->id,
             handId:         $this->gamePlay->handId,
             actionId:       Action::CALL_ID,
             betAmount:      25.00,
             active:         1,
         );
+
+        $this->gameState->setLatestAction($playerAction);
     }
 
     private function givenPlayerThreeRaises()
     {
-        PlayerActionFactory::create(
+        $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(2, 1)->id,
             handId:         $this->gamePlay->handId,
             actionId:       Action::RAISE_ID,
             betAmount:      100.00,
             active:         1,
         );
+
+        $this->gameState->setLatestAction($playerAction);
     }
 
     private function givenPlayerThreeCanContinue()
@@ -138,35 +154,41 @@ trait HasGamePlay
 
     private function givenPlayerFourFolds()
     {
-        PlayerActionFactory::create(
+        $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(3, 1)->id,
             handId:         $this->gamePlay->handId,
             actionId:       Action::FOLD_ID,
             betAmount:      null,
             active:         0,
         );
+
+        $this->gameState->setLatestAction($playerAction);
     }
 
     private function givenPlayerFourCalls()
     {
-        PlayerActionFactory::create(
+        $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(3, 1)->id,
             handId:         $this->gamePlay->handId,
             actionId:       Action::CALL_ID,
             betAmount:      50.00,
             active:         1,
         );
+
+        $this->gameState->setLatestAction($playerAction);
     }
 
     private function givenPlayerFourChecks()
     {
-        PlayerActionFactory::create(
+        $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(3, 1)->id,
             handId:         $this->gamePlay->handId,
             actionId:       Action::CHECK_ID,
             betAmount:      null,
             active:         1,
         );
+
+        $this->gameState->setLatestAction($playerAction);
     }
 
     private function givenPlayerFourCanContinue()
