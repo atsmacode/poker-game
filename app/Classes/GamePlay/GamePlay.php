@@ -40,9 +40,6 @@ class GamePlay
     {
         $this->gameState = $gameState;
 
-        $this->updateSeatStatusOfLatestAction();
-        $this->updateAllOtherSeatsBasedOnLatestAction();
-
         return $this->nextStep();
     }
 
@@ -375,47 +372,6 @@ class GamePlay
         }
 
         return $options;
-    }
-
-    public function updateAllOtherSeatsBasedOnLatestAction()
-    {
-        $latestAction = $this->gameState->getLatestAction();
-
-        switch($latestAction->action_id){
-            case Action::BET['id']:
-            case Action::RAISE['id']:
-                $canContinue = 0;
-                break;
-            default:
-                break;
-        }
-
-        if(isset($canContinue)){
-            $tableSeats = TableSeat::find(['table_id' => $this->handTable->id]);
-            $tableSeats->updateBatch(['can_continue' => $canContinue], 'id != ' . $latestAction->table_seat_id);
-        }
-    }
-
-    public function updateSeatStatusOfLatestAction()
-    {
-        $latestAction = $this->gameState->getLatestAction();
-
-        switch($latestAction->action_id){
-            case Action::CHECK['id']:
-            case Action::CALL['id']:
-            case Action::BET['id']:
-            case Action::RAISE['id']:
-                $canContinue = 1;
-                break;
-            default:
-                $canContinue = 0;
-                break;
-        }
-
-        TableSeat::find(['id' => $latestAction->table_seat_id])
-            ->update([
-                'can_continue' => $canContinue
-            ]);
     }
 
     public function initiateStreetActions()

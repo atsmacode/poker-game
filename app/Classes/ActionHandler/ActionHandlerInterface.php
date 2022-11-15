@@ -7,13 +7,16 @@ use App\Models\Hand;
 
 interface ActionHandlerInterface
 {
+    /**
+     * @param $int|null $betAmount
+     */
     public function handle(
         Hand $hand,
         int  $playerId,
         int  $tableSeatId,
         int  $handStreetId,
-        int  $betAmount,
+             $betAmount,
         int  $actionId,
-        bool $active
+        int  $active
     ): GameState;
 }
