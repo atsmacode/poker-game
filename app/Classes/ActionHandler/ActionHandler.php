@@ -37,7 +37,7 @@ class ActionHandler implements ActionHandlerInterface
             'hand_street_id' => $handStreetId
         ]);
 
-        $player = $playerAction->player();
+        $player    = $playerAction->player();
         $betAmount = BetHelper::handle($hand, $player, $betAmount);
 
         $playerAction->update([

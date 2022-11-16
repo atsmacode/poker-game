@@ -191,6 +191,19 @@ trait HasGamePlay
         $this->gameState->setLatestAction($playerAction);
     }
 
+    private function givenPlayerFourRaises()
+    {
+        $playerAction = PlayerActionFactory::create(
+            playerActionId: $this->gamePlay->hand->actions()->slice(3, 1)->id,
+            handId:         $this->gamePlay->handId,
+            actionId:       Action::RAISE_ID,
+            betAmount:      100.00,
+            active:         1,
+        );
+
+        $this->gameState->setLatestAction($playerAction);
+    }
+
     private function givenPlayerFourCanContinue()
     {
         TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(3, 1)->id])

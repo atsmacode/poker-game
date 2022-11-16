@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Constants\Action;
 use PDO;
 use PDOException;
 
@@ -160,6 +161,51 @@ class TableSeat extends Model
             $stmt->execute();
 
             $this->content = $stmt->fetchAll();
+
+            return $this;
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public static function getContinuingBetter($handId)
+    {
+        return (new static())->getContinuingBetterQuery($handId);
+    }
+
+    private function getContinuingBetterQuery($handId)
+    {
+        $raiseId = Action::RAISE_ID;
+        $betId = Action::BET_ID;
+        $callId = Action::CALL_ID;
+
+        $query = sprintf("
+            SELECT
+                ts.*
+            FROM
+                player_actions AS pa
+            LEFT JOIN
+                table_seats AS ts ON pa.table_seat_id = ts.id
+            WHERE
+                pa.hand_id = :hand_id
+            AND
+                ts.can_continue = 1
+            AND
+                pa.action_id IN (:raise_id, :bet_id, :call_id)
+        ");
+
+        try {
+            $stmt = $this->connection->prepare($query);
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $stmt->bindParam(':hand_id', $handId);
+            $stmt->bindParam(':raise_id', $raiseId);
+            $stmt->bindParam(':bet_id', $betId);
+            $stmt->bindParam(':call_id', $callId);
+            $stmt->execute();
+
+            $rows = $stmt->fetchAll();
+
+            $this->setModelProperties($rows);
 
             return $this;
         } catch(PDOException $e) {

@@ -25,6 +25,7 @@ class GamePlay
     public $bet;
     public $raise;
     private ?GameState $gameState;
+    private bool $newStreet = false;
 
     public function __construct($hand, $deck = null)
     {
@@ -153,6 +154,13 @@ class GamePlay
             ->updateBatch([
                 'action_id' => null
             ], 'hand_id = ' . $this->handId);
+
+        /**
+         * Added flag for new street as preceeding action
+         * updates were not being picked up when setting
+         * action options.
+         */
+        $this->newStreet = true;
     }
 
     protected function readyForShowdown()
@@ -197,12 +205,6 @@ class GamePlay
         return $this->hand->completed_on;
     }
 
-    protected function allPlayerActionsAreNullSoANewSreetHasBeenSet()
-    {
-        return count($this->hand->actions()->content)
-            === count($this->hand->getNullActions());
-    }
-
     protected function getThePlayerActionShouldBeOnForANewStreet(TableSeat $firstActivePlayer)
     {
         $dealer = $this->hand->getDealer();
@@ -223,7 +225,7 @@ class GamePlay
     {
         $firstActivePlayer = TableSeat::firstActivePlayer($this->handId);
 
-        if($this->allPlayerActionsAreNullSoANewSreetHasBeenSet()){
+        if($this->newStreet){
             return $this->getThePlayerActionShouldBeOnForANewStreet($firstActivePlayer);
         }
 
@@ -281,7 +283,7 @@ class GamePlay
                 'small_blind'      => $playerAction->small_blind,
                 'whole_cards'      => $this->getWholeCards($playerAction->player()),
                 'action_on'        => $actionOn,
-                'availableOptions' => $this->getAvailableOptionsBasedOnLatestAction($playerAction)
+                'availableOptions' => $actionOn ? $this->getAvailableOptionsBasedOnLatestAction($playerAction) : []
             ];
         }
 
@@ -327,48 +329,53 @@ class GamePlay
 
     public function getAvailableOptionsBasedOnLatestAction($playerAction)
     {
-        $options = [];
-
-        /*
-         * We only need to update the available actions if a player did something other than fold.
-         */
-        $latestAction = $this->gameState->getLatestAction();
-
-        if (!$latestAction) {
-            array_push($options, Action::FOLD, Action::CHECK, Action::BET);
-            return $options;
+        if ($this->newStreet) {
+            return [Action::FOLD, Action::CHECK, Action::BET];
         }
 
-        if ($playerAction->active === 1) {
+        $options      = [Action::FOLD];
+        $latestAction = $this->gameState->getLatestAction();
 
-            $options = [
-                Action::FOLD
-            ];
+        /**
+         * BB is the only player that can fold / check / raise pre-flop
+         */
+        if (count($this->hand->streets()->content) === 1 && !$playerAction->big_blind) {
+            return [Action::FOLD, Action::CALL, Action::RAISE];
+        }
 
-            switch($latestAction->action_id){
-                case Action::CALL['id']:
-                    /*
-                     * BB can only check if there were no raises before the latest call action.
-                     */
-                    if(
-                        $playerAction->big_blind === 1 &&
-                        !$this->hand->actions()->search('action_id', Action::RAISE['id'])
-                    ){
-                        array_push($options, Action::CHECK, Action::RAISE);
-                    } else {
-                        array_push($options, Action::CALL, Action::RAISE);
-                    }
-                    break;
-                case Action::BET['id']:
-                case Action::RAISE['id']:
-                    array_push($options, Action::CALL, Action::RAISE);
-                    break;
-                case Action::CHECK['id']:
-                default:
-                    array_push($options, Action::CHECK, Action::BET);
-                    break;
-            }
+        switch($latestAction->action_id){
+            case Action::CALL['id']:
+                /**
+                 * BB can only check if there were no raises before the latest call action.
+                 */
+                if ($playerAction->big_blind && !$this->hand->actions()->search('action_id', Action::RAISE['id'])) {
+                    return [Action::FOLD, Action::CHECK, Action::RAISE];
+                } else {
+                    return [Action::FOLD, Action::CALL, Action::RAISE];
+                }
+                break;
+            case Action::BET['id']:
+            case Action::RAISE['id']:
+                return [Action::FOLD, Action::CALL, Action::RAISE];
+                break;
+            case Action::CHECK['id']:
+                return [Action::FOLD, Action::CHECK, Action::BET];
+                break;
+            default:
+                /**
+                 * The latest action may be a fold, so we need
+                 * to check if anyone has raised, called or bet
+                 * before the folder.
+                 */
+                $continuingBetter = TableSeat::getContinuingBetter($this->gameState->getHand()->id);
 
+                if (isset($continuingBetter->id) && $continuingBetter->player_id != $playerAction->player_id) {
+                    return [Action::FOLD, Action::CALL, Action::RAISE];
+                    break;
+                }
+
+                return [Action::FOLD, Action::CHECK, Action::BET];
+                break;
         }
 
         return $options;
