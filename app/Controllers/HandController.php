@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Classes\GamePlay\GamePlay;
+use App\Classes\GameState\GameState;
 use App\Models\Hand;
 
 class HandController
@@ -10,16 +11,12 @@ class HandController
     public function play()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $gamePlay = (new GamePlay(Hand::create(['table_id' => 1])))->start();
+            $gamePlay  = (new GamePlay(Hand::create(['table_id' => 1])))->start(null, new GameState());
 
-            /**
-             * Results in headers already sent message
-             * due to require() dumping out data: TODO
-             */
-            // if (!isset($GLOBALS['dev'])) {
-            //     header("Content-Type: application/json");
-            //     http_response_code(200);
-            // }
+            if (!isset($GLOBALS['dev'])) {
+                header("Content-Type: application/json");
+                http_response_code(200);
+            }
 
             $responseBody = serialize([
                 'deck'           => $gamePlay['deck'],
@@ -41,5 +38,3 @@ class HandController
         }
     }
 }
-
-return (new HandController())->play();

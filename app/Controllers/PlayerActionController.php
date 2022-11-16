@@ -56,7 +56,3 @@ class PlayerActionController
         }
     }
 }
-
-if (!isset($GLOBALS['dev'])) {
-    return (new PlayerActionController(new ActionHandler()))->action();
-}
