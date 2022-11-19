@@ -1,7 +1,8 @@
 <?php
 
-namespace Tests\Feature\GamePlay;
+namespace Tests\Feature\Controllers\PlayerActionController\FourHanded;
 
+use App\Classes\ActionHandler\ActionHandler;
 use App\Classes\GamePlay\GamePlay;
 use App\Classes\GameState\GameState;
 use App\Models\Hand;
@@ -10,18 +11,22 @@ use App\Models\Player;
 use App\Models\Table;
 use App\Models\TableSeat;
 use Tests\BaseTest;
+use Tests\Feature\HasActionPosts;
+use Tests\Feature\HasGamePlay;
 
-class GamePlayFourHandedTest extends BaseTest
+class PlayerActionControllerTest extends BaseTest
 {
     use HasGamePlay;
+    use HasActionPosts;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->table     = Table::create(['name' => 'Test Table', 'seats' => 4]);
-        $this->gamePlay  = new GamePlay(Hand::create(['table_id' => $this->table ->id]));
-        $this->gameState = new GameState();
+        $this->table         = Table::create(['name' => 'Test Table', 'seats' => 3]);
+        $this->gamePlay      = new GamePlay(Hand::create(['table_id' => $this->table->id]));
+        $this->gameState     = new GameState();
+        $this->actionHandler = new ActionHandler($this->gameState);
 
         $this->player1 = Player::create([
             'name' => 'Player 1',
@@ -30,7 +35,7 @@ class GamePlayFourHandedTest extends BaseTest
 
         $this->player2 = Player::create([
             'name' => 'Player 2',
-            'email' => 'player3@rrh.com'
+            'email' => 'player2@rrh.com'
         ]);
 
         $this->player3 = Player::create([
@@ -61,88 +66,41 @@ class GamePlayFourHandedTest extends BaseTest
         TableSeat::create([
             'table_id' => $this->gamePlay->handTable->id,
             'player_id' => $this->player4->id
-        ]);
+        ]); 
     }
 
     /**
      * @test
      * @return void
      */
-    public function it_can_start_the_game()
+    public function it_adds_a_player_that_calls_the_big_blind_to_the_list_of_table_seats_that_can_continue()
     {
         $this->gamePlay->start(null, $this->gameState);
 
-        // The small blind was posted
-        $this->assertEquals(25.0, $this->gamePlay->hand->actions()->slice(1, 1)->bet_amount);
-        $this->assertEquals('Bet', $this->gamePlay->hand->actions()->slice(1, 1)->action()->name);
+        $this->setPlayerFourCallsPost();
 
-        // The big blind was posted
-        $this->assertEquals(50.0, $this->gamePlay->hand->actions()->slice(2, 1)->bet_amount);
-        $this->assertEquals('Bet', $this->gamePlay->hand->actions()->slice(2, 1)->action()->name);
+        $response = $this->jsonResponse();
 
-        // The dealer, seat 1, has not acted yet
-        $this->assertEquals(null, $this->gamePlay->hand->actions()->slice(0, 1)->bet_amount);
-        $this->assertEquals(null, $this->gamePlay->hand->actions()->slice(0, 1)->action_id);
-
-        // Each player in the hand has 2 whole cards
-        foreach($this->gamePlay->handTable->players()->collect()->content as $player){
-            $this->assertCount(2, $player->wholeCards()->searchMultiple('hand_id', $this->gamePlay->hand->id));
-        }
+        $this->assertEquals(1, $response['players'][3]['can_continue']);
     }
 
     /**
      * @test
      * @return void
      */
-    public function the_pre_flop_action_will_initially_be_on_the_player_after_big_blind()
+    public function it_removes_a_folded_player_from_the_list_of_seats_that_can_continue()
     {
-        $response = $this->gamePlay->start(null, $this->gameState);
+        $this->gamePlay->start(null, $this->gameState);
 
-        $this->assertTrue($response['players'][3]['action_on']);
+        $this->givenBigBlindRaisesPreFlopCaller();
+
+        $this->givenPlayerThreeCanContinue();
+        $this->setPlayerFourFoldsPost();
+
+        $response = $this->jsonResponse();
+
+        $this->assertEquals(0, $response['players'][3]['can_continue']);
     }
-
-    /**
-     * @return void
-     */
-    // public function it_adds_a_player_that_calls_the_big_blind_to_the_list_of_table_seats_that_can_continue()
-    // {
-    //     $this->gamePlay->start(null, $this->gameState);
-
-    //     $this->givenPlayerFourCalls();
-
-    //     $this->gamePlay->play($this->gameState);
-
-    //     $canContinue = TableSeat::find([
-    //         'table_id' => $this->gameState->getHand()->table()->id,
-    //         'can_continue' => 1
-    //     ]);
-
-    //     $this->assertCount(1, $canContinue->content);
-    //     $this->assertEquals(1, $this->gamePlay->handTable->seats()->slice(3, 1)->can_continue);
-    // }
-
-    /**
-     * @return void
-     */
-    // public function it_removes_a_folded_player_from_the_list_of_seats_that_can_continue()
-    // {
-    //     $this->gamePlay->start(null, $this->gameState);
-
-    //     $this->givenBigBlindRaisesPreFlopCaller();
-
-    //     $this->givenPlayerThreeCanContinue();
-    //     $this->givenPlayerFourFolds();
-
-    //     $this->gamePlay->play($this->gameState);
-
-    //     $canContinue = TableSeat::find([
-    //         'table_id' => $this->gamePlay->handTable->id,
-    //         'can_continue' => 1
-    //     ]);
-
-    //     $this->assertCount(1, $canContinue->content);
-    //     $this->assertEquals(0, $this->gamePlay->handTable->seats()->slice(3, 1)->can_continue);
-    // }
 
     /**
      * @test
@@ -156,7 +114,7 @@ class GamePlayFourHandedTest extends BaseTest
 
         $this->givenActionsMeanNewStreetIsDealt();
 
-        $this->gamePlay->play($this->gameState);
+        $this->jsonResponse();
 
         $this->assertCount(2, HandStreet::find(['hand_id' => $this->gamePlay->handId])->content);
     }
@@ -177,13 +135,13 @@ class GamePlayFourHandedTest extends BaseTest
         $this->givenPlayerOneFolds();
         $this->givenPlayerOneCanNotContinue();
 
-        $this->givenPlayerTwoFolds();
+        $this->setPlayerTwoFoldsPost();
 
-        $gamePlay = $this->gamePlay->play($this->gameState);
+        $response = $this->jsonResponse();
 
         $this->assertCount(1, $this->gamePlay->hand->streets()->content);
-        $this->assertEquals(1, $gamePlay['players'][2]['can_continue']);
-        $this->assertEquals($this->player3->id, $gamePlay['winner']['player']->id);
+        $this->assertEquals(1, $response['players'][2]['can_continue']);
+        $this->assertEquals($this->player3->id, $response['winner']['player']['id']);
     }
 
     /**
@@ -198,7 +156,7 @@ class GamePlayFourHandedTest extends BaseTest
 
         $this->givenBigBlindRaisesPreFlopCaller();
 
-        $response = $this->gamePlay->play($this->gameState);
+        $response = $this->jsonResponse();
 
         // We are still on the pre-flop action
         $this->assertCount(1, $this->gamePlay->hand->streets() ->content);
@@ -220,7 +178,7 @@ class GamePlayFourHandedTest extends BaseTest
 
         $this->givenActionsMeanNewStreetIsDealtWhenDealerIsSeatTwo();
 
-        $response = $this->gamePlay->play($this->gameState);
+        $response = $this->jsonResponse();
 
         $this->assertCount(2, HandStreet::find(['hand_id' => $this->gamePlay->handId])->content);
 
@@ -231,7 +189,7 @@ class GamePlayFourHandedTest extends BaseTest
      * @test
      * @return void
      */
-    public function four_handed_if_there_is_one_seat_after_current_dealer_big_blind_will_be_seat_two()
+    public function if_there_is_one_seat_after_current_dealer_big_blind_will_be_seat_two()
     {
         $this->gamePlay->start(TableSeat::find([
             'id' => $this->gamePlay->handTable->seats()->slice(2, 1)->id
@@ -239,7 +197,7 @@ class GamePlayFourHandedTest extends BaseTest
 
         $this->assertCount(1, $this->gamePlay->hand->streets()->content);
 
-        $response = $this->gamePlay->play($this->gameState);
+        $response = $this->jsonResponse();
 
         $this->assertEquals(1, $response['players'][0]['small_blind']);
         $this->assertEquals(1, $response['players'][1]['big_blind']);
@@ -257,37 +215,9 @@ class GamePlayFourHandedTest extends BaseTest
 
         $this->givenActionsMeanNewStreetIsDealt();
 
-        $response = $this->gamePlay->play($this->gameState);
+        $response = $this->jsonResponse();
 
         $this->assertTrue($response['players'][2]['action_on']);
-    }
-
-    private function givenActionsMeanNewStreetIsDealt()
-    {
-        $this->givenPlayerFourCalls();
-        $this->givenPlayerFourCanContinue();
-
-        $this->givenPlayerOneFolds();
-        $this->givenPlayerOneCanNotContinue();
-
-        $this->givenPlayerTwoFolds();
-        $this->givenPlayerTwoCanNotContinue();
-
-        $this->givenPlayerThreeChecks();
-    }
-
-    private function givenActionsMeanNewStreetIsDealtWhenDealerIsSeatTwo()
-    {
-        $this->givenPlayerOneCalls();
-        $this->givenPlayerOneCanContinue();
-
-        $this->givenPlayerTwoCalls();
-        $this->givenPlayerTwoCanContinue();
-
-        $this->givenPlayerThreeCallsSmallBlind();
-        $this->givenPlayerThreeCanContinue();
-
-        $this->givenPlayerFourChecks();
     }
 
     private function givenBigBlindRaisesPreFlopCaller()
@@ -301,6 +231,34 @@ class GamePlayFourHandedTest extends BaseTest
         $this->givenPlayerTwoFolds();
         $this->givenPlayerTwoCanNotContinue();
 
-        $this->givenPlayerThreeRaises();
+        $this->setPlayerThreeRaisesPost();
+    }
+
+    private function givenActionsMeanNewStreetIsDealt()
+    {
+        $this->givenPlayerFourCalls();
+        $this->givenPlayerFourCanContinue();
+
+        $this->givenPlayerOneFolds();
+        $this->givenPlayerOneCanNotContinue();
+
+        $this->givenPlayerTwoFolds();
+        $this->givenPlayerTwoCanNotContinue();
+
+        $this->setPlayerThreeChecksPost();
+    }
+
+    private function givenActionsMeanNewStreetIsDealtWhenDealerIsSeatTwo()
+    {
+        $this->givenPlayerOneCalls();
+        $this->givenPlayerOneCanContinue();
+
+        $this->givenPlayerTwoCalls();
+        $this->givenPlayerTwoCanContinue();
+
+        $this->givenPlayerThreeCallsSmallBlind();
+        $this->givenPlayerThreeCanContinue();
+
+        $this->setPlayerFourChecksPost();
     }
 }

@@ -1,20 +1,20 @@
 <?php
 
-namespace Tests\Feature\Controllers;
+namespace Tests\Feature\Controllers\PlayerActionController\ActionOptions;
 
 use App\Classes\ActionHandler\ActionHandler;
 use App\Classes\GamePlay\GamePlay;
 use App\Classes\GameState\GameState;
 use App\Constants\Action;
-use App\Controllers\PlayerActionController;
 use App\Models\Hand;
 use App\Models\Player;
 use App\Models\Table;
 use App\Models\TableSeat;
 use Tests\BaseTest;
-use Tests\Feature\GamePlay\HasGamePlay;
+use Tests\Feature\HasActionPosts;
+use Tests\Feature\HasGamePlay;
 
-class GamePlayActionOptionsTest extends BaseTest
+class PlayerActionControllerTest extends BaseTest
 {
     use HasGamePlay;
     use HasActionPosts;
@@ -79,14 +79,13 @@ class GamePlayActionOptionsTest extends BaseTest
 
         $this->setPlayerFourRaisesPost();
 
-        $response     = (new PlayerActionController($this->actionHandler))->action();
-        $responseBody = json_decode($response, true)['body'];
+        $response = $this->jsonResponse();
 
-        $this->assertTrue($responseBody['players'][0]['action_on']);
+        $this->assertTrue($response['players'][0]['action_on']);
 
-        $this->assertContains(Action::FOLD, $responseBody['players'][0]['availableOptions']);
-        $this->assertContains(Action::CALL, $responseBody['players'][0]['availableOptions']);
-        $this->assertContains(Action::RAISE, $responseBody['players'][0]['availableOptions']);
+        $this->assertContains(Action::FOLD, $response['players'][0]['availableOptions']);
+        $this->assertContains(Action::CALL, $response['players'][0]['availableOptions']);
+        $this->assertContains(Action::RAISE, $response['players'][0]['availableOptions']);
     }
 
     /**
@@ -100,14 +99,13 @@ class GamePlayActionOptionsTest extends BaseTest
         $this->givenPlayerFourRaises();
         $this->setPlayerOneFoldsPost();
 
-        $response     = (new PlayerActionController($this->actionHandler))->action();
-        $responseBody = json_decode($response, true)['body'];
+        $response = $this->jsonResponse();
 
-        $this->assertTrue($responseBody['players'][1]['action_on']);
+        $this->assertTrue($response['players'][1]['action_on']);
 
-        $this->assertContains(Action::FOLD, $responseBody['players'][1]['availableOptions']);
-        $this->assertContains(Action::CALL, $responseBody['players'][1]['availableOptions']);
-        $this->assertContains(Action::RAISE, $responseBody['players'][1]['availableOptions']);
+        $this->assertContains(Action::FOLD, $response['players'][1]['availableOptions']);
+        $this->assertContains(Action::CALL, $response['players'][1]['availableOptions']);
+        $this->assertContains(Action::RAISE, $response['players'][1]['availableOptions']);
     }
 
     /**
@@ -120,11 +118,10 @@ class GamePlayActionOptionsTest extends BaseTest
 
         $this->setPlayerFourFoldsPost();
 
-        $response     = (new PlayerActionController($this->actionHandler))->action();
-        $responseBody = json_decode($response, true)['body'];
+        $response = $this->jsonResponse();
 
-        $this->assertTrue($responseBody['players'][0]['action_on']);
-        $this->assertEmpty($responseBody['players'][3]['availableOptions']);
+        $this->assertTrue($response['players'][0]['action_on']);
+        $this->assertEmpty($response['players'][3]['availableOptions']);
     }
 
     /**
@@ -137,14 +134,13 @@ class GamePlayActionOptionsTest extends BaseTest
 
         $this->setPlayerTwoCallsPost();
 
-        $response     = (new PlayerActionController($this->actionHandler))->action();
-        $responseBody = json_decode($response, true)['body'];
+        $response = $this->jsonResponse();
 
-        $this->assertTrue($responseBody['players'][2]['action_on']);
+        $this->assertTrue($response['players'][2]['action_on']);
 
-        $this->assertContains(ACTION::FOLD, $responseBody['players'][2]['availableOptions']);
-        $this->assertContains(ACTION::CHECK, $responseBody['players'][2]['availableOptions']);
-        $this->assertContains(ACTION::RAISE, $responseBody['players'][2]['availableOptions']);
+        $this->assertContains(ACTION::FOLD, $response['players'][2]['availableOptions']);
+        $this->assertContains(ACTION::CHECK, $response['players'][2]['availableOptions']);
+        $this->assertContains(ACTION::RAISE, $response['players'][2]['availableOptions']);
     }
 
     /**
@@ -158,17 +154,47 @@ class GamePlayActionOptionsTest extends BaseTest
 
         $this->setPlayerFourCallsPost();
 
-        $response     = (new PlayerActionController($this->actionHandler))->action();
-        $responseBody = json_decode($response, true)['body'];
+        $response = $this->jsonResponse();
 
-        $this->assertTrue($responseBody['players'][0]['action_on']);
+        $this->assertTrue($response['players'][0]['action_on']);
 
-        $this->assertContains(ACTION::FOLD, $responseBody['players'][0]['availableOptions']);
-        $this->assertContains(ACTION::CALL, $responseBody['players'][0]['availableOptions']);
-        $this->assertContains(ACTION::RAISE, $responseBody['players'][0]['availableOptions']);
+        $this->assertContains(ACTION::FOLD, $response['players'][0]['availableOptions']);
+        $this->assertContains(ACTION::CALL, $response['players'][0]['availableOptions']);
+        $this->assertContains(ACTION::RAISE, $response['players'][0]['availableOptions']);
     }
 
     /**
-     * TODO: the first active player on a new street can fold, check or bet
+     * @test
+     * @return void
      */
+    public function the_first_active_player_on_a_new_street_can_fold_check_or_bet()
+    {
+        $this->gamePlay->start(null, $this->gameState);
+
+        $this->assertCount(1, $this->gamePlay->hand->streets()->content);
+
+        $this->givenActionsMeanNewStreetIsDealt();
+
+        $response = $this->jsonResponse();
+
+        $this->assertTrue($response['players'][2]['action_on']);
+
+        $this->assertContains(ACTION::FOLD, $response['players'][2]['availableOptions']);
+        $this->assertContains(ACTION::CHECK, $response['players'][2]['availableOptions']);
+        $this->assertContains(ACTION::BET, $response['players'][2]['availableOptions']);
+    }
+
+    private function givenActionsMeanNewStreetIsDealt()
+    {
+        $this->givenPlayerFourCalls();
+        $this->givenPlayerFourCanContinue();
+
+        $this->givenPlayerOneFolds();
+        $this->givenPlayerOneCanNotContinue();
+
+        $this->givenPlayerTwoFolds();
+        $this->givenPlayerTwoCanNotContinue();
+
+        $this->setPlayerThreeChecksPost();
+    }
 }

@@ -8,28 +8,29 @@ use App\Models\Hand;
 
 class HandController
 {
-    public function play()
+    public function play($tableId = null, $currentDealer = null)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $gamePlay  = (new GamePlay(Hand::create(['table_id' => 1])))->start(null, new GameState());
+            $hand     = Hand::create(['table_id' => $tableId ?? 1]);
+            $gamePlay = (new GamePlay($hand))->start($currentDealer ?? null, new GameState());
 
             if (!isset($GLOBALS['dev'])) {
                 header("Content-Type: application/json");
                 http_response_code(200);
             }
 
-            $responseBody = serialize([
+            $responseBody = [
                 'deck'           => $gamePlay['deck'],
                 'pot'            => $gamePlay['pot'],
                 'communityCards' => $gamePlay['communityCards'],
                 'players'        => $gamePlay['players'],
                 'winner'         => $gamePlay['winner']
-            ]);
+            ];
 
             if (isset($GLOBALS['dev'])) {
                 return json_encode(['body' => $responseBody]);
             } else {
-                echo json_encode(['body' => unserialize($responseBody)]);
+                echo json_encode(['body' => $responseBody]);
             }
         }
 

@@ -1,8 +1,9 @@
 <?php
 
-namespace Tests\Feature\GamePlay;
+namespace Tests\Feature;
 
 use App\Constants\Action;
+use App\Controllers\HandController;
 use App\Factory\PlayerActionFactory;
 use App\Models\TableSeat;
 

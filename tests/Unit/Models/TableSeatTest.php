@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Classes\GamePlay\GamePlay;
+use App\Classes\GameState\GameState;
 use App\Models\Hand;
 use App\Models\Player;
 use App\Models\Table;
@@ -15,8 +16,9 @@ class TableSeatTest extends BaseTest
     public function setUp(): void
     {
         parent::setUp();
-        $this->table    = Table::create(['name' => 'Test Table', 'seats' => 3]);
-        $this->gamePlay = new GamePlay(Hand::create(['table_id' => $this->table->id]));
+        $this->table     = Table::create(['name' => 'Test Table', 'seats' => 3]);
+        $this->gamePlay  = new GamePlay(Hand::create(['table_id' => $this->table->id]));
+        $this->gameState = new GameState();
 
         $this->player1 = Player::create([
             'name' => 'Player 1',
@@ -72,7 +74,7 @@ class TableSeatTest extends BaseTest
     {
         $this->gamePlay->start(TableSeat::find([
             'id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id
-        ]));
+        ]), $this->gameState);
 
         $tableSeat = TableSeat::playerAfterDealer(
             $this->gamePlay->hand->id,
