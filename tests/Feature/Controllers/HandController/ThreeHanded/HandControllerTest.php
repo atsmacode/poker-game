@@ -86,6 +86,8 @@ class HandControllerTest extends BaseTest
 
     private function jsonResponse(): array
     {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+
         $response = (new HandController())->play($this->table->id);
 
         return json_decode($response, true)['body'];

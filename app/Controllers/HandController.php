@@ -12,7 +12,7 @@ class HandController
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $hand     = Hand::create(['table_id' => $tableId ?? 1]);
-            $gamePlay = (new GamePlay($hand))->start($currentDealer ?? null, new GameState());
+            $gamePlay = (new GamePlay($hand))->start($currentDealer ?? null, new GameState($hand));
 
             if (!isset($GLOBALS['dev'])) {
                 header("Content-Type: application/json");

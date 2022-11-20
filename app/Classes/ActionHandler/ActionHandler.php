@@ -60,7 +60,7 @@ class ActionHandler implements ActionHandlerInterface
             'created_at'       => date('Y-m-d H:i:s', time())
         ]);
 
-        $this->gameState->setHand($hand);
+        $this->gameState->initiate($hand);
         $this->gameState->setLatestAction($playerAction);
 
         $this->updateSeatStatusOfLatestAction();

@@ -13,6 +13,7 @@ use App\Models\PlayerAction;
 use App\Models\Street;
 use App\Models\TableSeat;
 use App\Constants\Action;
+use App\Models\Stack;
 
 class GamePlay
 {
@@ -32,7 +33,6 @@ class GamePlay
         $this->game      = new PotLimitHoldEm();
         $this->dealer    = (new Dealer())->setDeck($deck);
         $this->hand      = $hand;
-        $this->handId    = $hand->id;
         $this->handTable = $hand->table();
         $this->street    = null;
     }
@@ -153,10 +153,10 @@ class GamePlay
 
     protected function updatePlayerStatusesOnNewStreet()
     {
-        TableSeat::find(['table_id' => $this->handTable->id])
+        TableSeat::find(['table_id' => $this->gameState->tableId()])
             ->updateBatch([
                 'can_continue' => 0
-            ], 'table_id = ' . $this->handTable->id);
+            ], 'table_id = ' . $this->gameState->tableId());
 
         PlayerAction::find(['hand_id' => $this->handId])
             ->updateBatch([
@@ -271,8 +271,8 @@ class GamePlay
 
             $actionName = $playerAction->action_id ? $playerAction->action()->name : null;
 
-            $stack = $playerAction->player()->stacks()->search('table_id', $this->handTable->id)
-                ? $playerAction->player()->stacks()->search('table_id', $this->handTable->id)->amount
+            $stack = $playerAction->player()->stacks()->search('table_id', $this->gameState->tableId())
+                ? $playerAction->player()->stacks()->search('table_id', $this->gameState->tableId())->amount
                 : null;
 
             $playerData[] = [
@@ -394,11 +394,11 @@ class GamePlay
             'hand_id'   => $this->handId
         ]);
 
-        foreach($this->handTable->seats()->collect()->content as $seat){
-            $seat->player()->actions()::create([
-                'player_id'      => $seat->player_id,
+        foreach($this->gameState->getSeats() as $seat){
+            PlayerAction::create([
+                'player_id'      => $seat['player_id'],
                 'hand_street_id' => $this->street->id,
-                'table_seat_id'  => $seat->id,
+                'table_seat_id'  => $seat['id'],
                 'hand_id'        => $this->handId,
                 'active'         => 1
             ]);
@@ -409,12 +409,21 @@ class GamePlay
 
     public function initiatePlayerStacks()
     {
-        foreach($this->handTable->seats()->collect()->content as $seat){
-            if(count($seat->player()->stacks()->content) === 0){
-                $seat->player()->stacks()::create([
+        foreach($this->gameState->getSeats() as $seat){
+            /**
+             * Looks like this count() check was added
+             * as there's only 1 table being handled.
+             */
+            $tableStacks = Stack::find([
+                'player_id' => $seat['player_id'],
+                'table_id' => $this->gameState->tableId()
+            ]);
+
+            if(count($tableStacks->content) === 0){
+                Stack::create([
                     'amount' => 1000,
-                    'player_id' => $seat->player_id,
-                    'table_id' => $this->handTable->id
+                    'player_id' => $seat['player_id'],
+                    'table_id' => $this->gameState->tableId()
                 ]);
             }
         }
@@ -424,30 +433,30 @@ class GamePlay
 
     protected function noDealerIsSetOrThereIsNoSeatAfterTheCurrentDealer($currentDealer)
     {
-        return !$currentDealer || !$this->handTable->seats()->search('id', $currentDealer->id + 1);
+        return !$currentDealer || !$this->gameState->getSeat($currentDealer['id'] + 1);
     }
 
     protected function thereAreThreeSeatsAfterTheCurrentDealer($currentDealer)
     {
-        return $this->handTable->seats()->search('id', $currentDealer->id + 3);
+        return $this->gameState->getSeat($currentDealer['id'] + 3);
     }
 
     protected function thereAreTwoSeatsAfterTheCurrentDealer($currentDealer)
     {
-        return $this->handTable->seats()->search('id', $currentDealer->id + 2);
+        return $this->gameState->getSeat($currentDealer['id'] + 2);
     }
 
     protected function thereIsOneSeatAfterTheDealer($currentDealer)
     {
-        return $this->handTable->seats()->search('id', $currentDealer->id + 1);
+        return $this->gameState->getSeat($currentDealer['id'] + 1);
     }
 
     protected function identifyTheNextDealerAndBlindSeats($currentDealer)
     {
         if($currentDealer){
-            $currentDealer = $this->handTable->seats()->search('id', $currentDealer->id);
+            $currentDealer = $this->gameState->getSeat($currentDealer->id);
         } else {
-            $currentDealer = $this->handTable->seats()->search('is_dealer', 1);
+            $currentDealer = $this->gameState->getDealer();
         }
 
         /**
@@ -456,28 +465,27 @@ class GamePlay
          * work if all seats have a stack/player.
          */
         if($this->noDealerIsSetOrThereIsNoSeatAfterTheCurrentDealer($currentDealer)){
-            
-            $dealer         = $this->handTable->seats()->slice(0, 1);
-            $smallBlindSeat = $this->handTable->seats()->search('id', $dealer->id + 1);
-            $bigBlindSeat   = $this->handTable->seats()->search('id', $dealer->id + 2);
+            $dealer         = $this->gameState->getSeats()[0];
+            $smallBlindSeat = $this->gameState->getSeat($dealer['id'] + 1);
+            $bigBlindSeat   = $this->gameState->getSeat($dealer['id'] + 2);
 
         } else if($this->thereAreThreeSeatsAfterTheCurrentDealer($currentDealer)) {
 
-            $dealer         = $this->handTable->seats()->search('id', $currentDealer->id + 1);
-            $smallBlindSeat = $this->handTable->seats()->search('id', $dealer->id + 1);
-            $bigBlindSeat   = $this->handTable->seats()->search('id', $dealer->id + 2);
+            $dealer         = $this->gameState->getSeat($currentDealer['id'] + 1);
+            $smallBlindSeat = $this->gameState->getSeat($dealer['id'] + 1);
+            $bigBlindSeat   = $this->gameState->getSeat($dealer['id'] + 2);
 
         } else if($this->thereAreTwoSeatsAfterTheCurrentDealer($currentDealer)) {
 
-            $dealer         = $this->handTable->seats()->search('id', $currentDealer->id + 1);
-            $smallBlindSeat = $this->handTable->seats()->search('id', $dealer->id + 1);
-            $bigBlindSeat   = $this->handTable->seats()->slice(0, 1);
+            $dealer         = $this->gameState->getSeat($currentDealer['id'] + 1);
+            $smallBlindSeat = $this->gameState->getSeat($dealer['id'] + 1);
+            $bigBlindSeat   = $this->gameState->getSeats()[0];
 
         } else {
 
-            $dealer         = $this->handTable->seats()->search('id', $currentDealer->id + 1);
-            $smallBlindSeat = $this->handTable->seats()->slice(0, 1);
-            $bigBlindSeat   = $this->handTable->seats()->slice(1, 1);
+            $dealer         = $this->gameState->getSeat($currentDealer['id'] + 1);
+            $smallBlindSeat = $this->gameState->getSeats()[0];
+            $bigBlindSeat   = $this->gameState->getSeats()[1];
 
         }
 
@@ -513,24 +521,22 @@ class GamePlay
 
         if($currentDealer){
             $currentDealerSeat = TableSeat::find([
-                'id'       =>  $currentDealer->id,
-                'table_id' => $this->handTable->id
+                'id'       =>  $currentDealer['id'],
+                'table_id' => $this->gameState->tableId()
             ]);
 
             $currentDealerSeat->update([
-                'is_dealer'  => 0,
-                'updated_at' => date('Y-m-d H:i:s', strtotime('- 20 seconds'))
+                'is_dealer'  => 0
             ]);
         }
-        
+
         $newDealerSeat = TableSeat::find([
-            'id'       =>  $dealer->id,
-            'table_id' => $this->handTable->id
+            'id'       =>  $dealer['id'],
+            'table_id' => $this->gameState->tableId()
         ]);
 
         $newDealerSeat->update([
-            'is_dealer'  => 1,
-            'updated_at' => date('Y-m-d H:i:s', strtotime('- 18 seconds'))
+            'is_dealer'  => 1
         ]);
 
         $handStreetId = HandStreet::find([
@@ -539,14 +545,14 @@ class GamePlay
         ])->id;
 
         $smallBlind = PlayerAction::find([
-            'player_id'      => $smallBlindSeat->player()->id,
-            'table_seat_id'  => $smallBlindSeat->id,
+            'player_id'      => $smallBlindSeat['player_id'],
+            'table_seat_id'  => $smallBlindSeat['id'],
             'hand_street_id' => $handStreetId,
         ]);
 
         $bigBlind = PlayerAction::find([
-            'player_id'      => $bigBlindSeat->player()->id,
-            'table_seat_id'  => $bigBlindSeat->id,
+            'player_id'      => $bigBlindSeat['player_id'],
+            'table_seat_id'  => $bigBlindSeat['id'],
             'hand_street_id' => $handStreetId,
         ]);
         
