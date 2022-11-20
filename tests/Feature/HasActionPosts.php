@@ -183,4 +183,21 @@ trait HasActionPosts
 
         $_POST['body'] = serialize($requestBody);
     }
+
+    private function setPlayerSixFoldsPost()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+
+        $requestBody = [
+            'deck'           => $this->gamePlay->dealer->getDeck(),
+            'player_id'      => $this->player6->id,
+            'table_seat_id'  => $this->gamePlay->handTable->seats()->slice(5, 1)->id,
+            'hand_street_id' => $this->gamePlay->hand->streets()->slice(0, 1)->id,
+            'action_id'      => Action::FOLD_ID,
+            'bet_amount'     => null,
+            'active'         => 0,
+        ];
+
+        $_POST['body'] = serialize($requestBody);
+    }
 }

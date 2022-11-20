@@ -168,16 +168,16 @@ class TableSeat extends Model
         }
     }
 
-    public static function getContinuingBetter($handId)
+    public static function getContinuingBetters($handId)
     {
-        return (new static())->getContinuingBetterQuery($handId);
+        return (new static())->getContinuingBettersQuery($handId);
     }
 
-    private function getContinuingBetterQuery($handId)
+    private function getContinuingBettersQuery($handId)
     {
         $raiseId = Action::RAISE_ID;
-        $betId = Action::BET_ID;
-        $callId = Action::CALL_ID;
+        $betId   = Action::BET_ID;
+        $callId  = Action::CALL_ID;
 
         $query = sprintf("
             SELECT
@@ -203,11 +203,7 @@ class TableSeat extends Model
             $stmt->bindParam(':call_id', $callId);
             $stmt->execute();
 
-            $rows = $stmt->fetchAll();
-
-            $this->setModelProperties($rows);
-
-            return $this;
+            return $stmt->fetchAll();
         } catch(PDOException $e) {
             echo $e->getMessage();
         }

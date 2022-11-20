@@ -138,9 +138,9 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->assertTrue($response['players'][2]['action_on']);
 
-        $this->assertContains(ACTION::FOLD, $response['players'][2]['availableOptions']);
-        $this->assertContains(ACTION::CHECK, $response['players'][2]['availableOptions']);
-        $this->assertContains(ACTION::RAISE, $response['players'][2]['availableOptions']);
+        $this->assertContains(Action::FOLD, $response['players'][2]['availableOptions']);
+        $this->assertContains(Action::CHECK, $response['players'][2]['availableOptions']);
+        $this->assertContains(Action::RAISE, $response['players'][2]['availableOptions']);
     }
 
     /**
@@ -158,9 +158,9 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->assertTrue($response['players'][0]['action_on']);
 
-        $this->assertContains(ACTION::FOLD, $response['players'][0]['availableOptions']);
-        $this->assertContains(ACTION::CALL, $response['players'][0]['availableOptions']);
-        $this->assertContains(ACTION::RAISE, $response['players'][0]['availableOptions']);
+        $this->assertContains(Action::FOLD, $response['players'][0]['availableOptions']);
+        $this->assertContains(Action::CALL, $response['players'][0]['availableOptions']);
+        $this->assertContains(Action::RAISE, $response['players'][0]['availableOptions']);
     }
 
     /**
@@ -179,9 +179,9 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->assertTrue($response['players'][2]['action_on']);
 
-        $this->assertContains(ACTION::FOLD, $response['players'][2]['availableOptions']);
-        $this->assertContains(ACTION::CHECK, $response['players'][2]['availableOptions']);
-        $this->assertContains(ACTION::BET, $response['players'][2]['availableOptions']);
+        $this->assertContains(Action::FOLD, $response['players'][2]['availableOptions']);
+        $this->assertContains(Action::CHECK, $response['players'][2]['availableOptions']);
+        $this->assertContains(Action::BET, $response['players'][2]['availableOptions']);
     }
 
     private function givenActionsMeanNewStreetIsDealt()

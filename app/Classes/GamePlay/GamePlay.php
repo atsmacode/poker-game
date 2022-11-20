@@ -341,7 +341,6 @@ class GamePlay
             return [Action::FOLD, Action::CHECK, Action::BET];
         }
 
-        $options      = [Action::FOLD];
         $latestAction = $this->gameState->getLatestAction();
 
         /**
@@ -375,9 +374,10 @@ class GamePlay
                  * to check if anyone has raised, called or bet
                  * before the folder.
                  */
-                $continuingBetter = TableSeat::getContinuingBetter($this->gameState->getHand()->id);
+                 // Need this condition?: !in_array($playerAction->player_id, array_column($continuingBetters, 'player_id'))
+                $continuingBetters = TableSeat::getContinuingBetters($this->gameState->getHand()->id);
 
-                if (isset($continuingBetter->id) && $continuingBetter->player_id != $playerAction->player_id) {
+                if (0 < count($continuingBetters)) {
                     return [Action::FOLD, Action::CALL, Action::RAISE];
                     break;
                 }
@@ -385,8 +385,6 @@ class GamePlay
                 return [Action::FOLD, Action::CHECK, Action::BET];
                 break;
         }
-
-        return $options;
     }
 
     public function initiateStreetActions()

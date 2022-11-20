@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Constants\Action;
-use App\Controllers\HandController;
 use App\Factory\PlayerActionFactory;
 use App\Models\TableSeat;
 use App\Models\WholeCard;
@@ -219,6 +218,27 @@ trait HasGamePlay
         TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(3, 1)->id])
             ->update([
                 'can_continue' => 0
+            ]);
+    }
+
+    private function givenPlayerFiveCalls()
+    {
+        $playerAction = PlayerActionFactory::create(
+            playerActionId: $this->gamePlay->hand->actions()->slice(4, 1)->id,
+            handId:         $this->gamePlay->handId,
+            actionId:       Action::CALL_ID,
+            betAmount:      50.00,
+            active:         1,
+        );
+
+        $this->gameState->setLatestAction($playerAction);
+    }
+
+    private function givenPlayerFiveCanContinue()
+    {
+        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(4, 1)->id])
+            ->update([
+                'can_continue' => 1
             ]);
     }
 
