@@ -233,15 +233,15 @@ class GamePlay
     {
         $firstActivePlayer = TableSeat::firstActivePlayer($this->gameState->handId());
 
-        if($this->newStreet){
+        if ($this->newStreet) {
             return $this->getThePlayerActionShouldBeOnForANewStreet($firstActivePlayer);
         }
 
-        $lastToAct = $this->hand->getLatestAction()['id'];
+        $lastToAct = $this->gameState->getLatestAction()->table_seat_id;
 
         $activePlayersAfterLastToAct = array_filter(
             PlayerAction::find(['active' => 1, 'hand_id' => $this->gameState->handId()])->collect()->content,
-            function($value) use($lastToAct){
+            function ($value) use ($lastToAct) {
                 return $value->table_seat_id > $lastToAct;
             }
         );
@@ -250,7 +250,7 @@ class GamePlay
             ? array_shift($activePlayersAfterLastToAct)
             : null;
 
-        if(!$playerAfterLastToAct){
+        if (!$playerAfterLastToAct) {
             return $firstActivePlayer;
         }
 

@@ -6,7 +6,6 @@ use App\Classes\GameData\GameData;
 use App\Models\Hand;
 use App\Models\PlayerAction;
 use App\Models\Table;
-use App\Models\TableSeat;
 
 class GameState implements GameStateInterface
 {

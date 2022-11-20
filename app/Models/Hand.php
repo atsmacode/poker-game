@@ -186,35 +186,4 @@ class Hand extends Model
             echo $e->getMessage();
         }
     }
-
-    public function getLatestAction()
-    {
-        $query = sprintf("
-                SELECT
-                    ts.id
-                FROM
-                    player_actions AS pa
-                LEFT JOIN
-                    player_action_logs AS pal ON pa.id = pal.player_status_id
-                LEFT JOIN
-                    table_seats AS ts ON pa.table_seat_id = ts.id
-                WHERE
-                    pa.hand_id = :hand_id
-                AND
-                    pa.active = 1
-                ORDER BY pal.id DESC
-                LIMIT 1
-        ");
-
-        try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $stmt->bindParam(':hand_id', $this->id);
-            $stmt->execute();
-
-            return $stmt->fetch();
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
 }
