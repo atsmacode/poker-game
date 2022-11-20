@@ -1,8 +1,10 @@
 <?php
 
-namespace Tests\Feature\GamePlay;
+namespace Tests\Feature\Controllers\PlayerActionController\ShowdownRankingAndKicker;
 
+use App\Classes\ActionHandler\ActionHandler;
 use App\Classes\GamePlay\GamePlay;
+use App\Classes\GameState\GameState;
 use App\Constants\Card;
 use App\Constants\HandType;
 use App\Models\Hand;
@@ -12,19 +14,31 @@ use App\Models\Player;
 use App\Models\Street;
 use App\Models\Table;
 use App\Models\TableSeat;
-use App\Models\WholeCard;
 use Tests\BaseTest;
+use Tests\Feature\HasActionPosts;
+use Tests\Feature\HasGamePlay;
+use Tests\Feature\HasStreets;
 
-class GamePlayShowdownTest extends BaseTest
+/**
+ * In these tests, we are not calling GamePlay->start()
+ * as we need to set specific whole cards.
+ */
+class PlayerActionControllerTest extends BaseTest
 {
     use HasGamePlay;
+    use HasActionPosts;
+    use HasStreets;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->table    = Table::create(['name' => 'Test Table', 'seats' => 3]);
-        $this->gamePlay = new GamePlay(Hand::create(['table_id' => $this->table->id]));
+        $this->table         = Table::create(['name' => 'Test Table', 'seats' => 3]);
+        $this->gamePlay      = new GamePlay(Hand::create(['table_id' => $this->table->id]));
+        $this->gameState     = new GameState();
+        $this->actionHandler = new ActionHandler($this->gameState);
+
+        $this->gamePlay->setGameState($this->gameState);
 
         $this->player1 = Player::create([
             'name' => 'Player 1',
@@ -42,26 +56,26 @@ class GamePlayShowdownTest extends BaseTest
         ]);
 
         TableSeat::create([
-            'table_id' => $this->gamePlay->handTable->id,
+            'table_id' => $this->table->id,
             'player_id' => $this->player1->id
         ]);
 
         TableSeat::create([
-            'table_id' => $this->gamePlay->handTable->id,
+            'table_id' => $this->table->id,
             'player_id' => $this->player2->id
         ]);
 
         TableSeat::create([
-            'table_id' => $this->gamePlay->handTable->id,
+            'table_id' => $this->table->id,
             'player_id' => $this->player3->id
-        ]); 
+        ]);
     }
 
-    /**
+   /**
      * @test
      * @return void
      */
-    public function a_pair_beats_high_card()
+    public function high_card_king_beats_high_card_queen()
     {
         $this->gamePlay->initiateStreetActions()
             ->initiatePlayerStacks()
@@ -69,19 +83,19 @@ class GamePlayShowdownTest extends BaseTest
 
         $wholeCards = [
             [
-                'player' => $this->player3,
+                'player'  => $this->player3,
                 'card_id' => Card::KING_SPADES_ID
             ],
             [
-                'player' => $this->player3,
-                'card_id' => Card::SIX_DIAMONDS_ID
+                'player'  => $this->player3,
+                'card_id' => Card::THREE_DIAMONDS_ID
             ],
             [
-                'player' => $this->player1,
-                'card_id' => Card::SIX_HEARTS_ID
+                'player'  => $this->player1,
+                'card_id' => Card::QUEEN_SPADES_ID
             ],
             [
-                'player' => $this->player1,
+                'player'  => $this->player1,
                 'card_id' => Card::SEVEN_DIAMONDS_ID
             ],
         ];
@@ -90,10 +104,10 @@ class GamePlayShowdownTest extends BaseTest
 
         $flopCards = [
             [
-                'card_id' => Card::KING_CLUBS_ID
+                'card_id' => Card::FOUR_CLUBS_ID
             ],
             [
-                'card_id' => Card::QUEEN_SPADES_ID
+                'card_id' => Card::JACK_SPADES_ID
             ],
             [
                 'card_id' => Card::DEUCE_CLUBS_ID
@@ -109,24 +123,24 @@ class GamePlayShowdownTest extends BaseTest
         $this->setTurn($turnCard);
 
         $riverCard = [
-            'card_id' => Card::THREE_SPADES_ID
+            'card_id' => Card::TEN_SPADES_ID
         ];
 
         $this->setRiver($riverCard);
 
         $this->executeActionsToContinue();
 
-        $gamePlay = $this->gamePlay->play();
+        $response = $this->jsonResponse();
 
-        $this->assertEquals($this->player3->id, $gamePlay['winner']['player']->id);
-        $this->assertEquals(HandType::PAIR['id'], $gamePlay['winner']['handType']['id']);
+        $this->assertEquals($this->player3->id, $response['winner']['player']['id']);
+        $this->assertEquals(HandType::HIGH_CARD['id'], $response['winner']['handType']['id']);
     }
 
     /**
      * @test
      * @return void
      */
-    public function two_pair_beats_a_pair()
+    public function ace_king_beats_king_queen()
     {
         $this->gamePlay->initiateStreetActions()
             ->initiatePlayerStacks()
@@ -134,20 +148,20 @@ class GamePlayShowdownTest extends BaseTest
 
         $wholeCards = [
             [
-                'player' => $this->player3,
+                'player'  => $this->player3,
                 'card_id' => Card::KING_SPADES_ID
             ],
             [
-                'player' => $this->player3,
-                'card_id' => Card::QUEEN_DIAMONDS_ID
+                'player'  => $this->player3,
+                'card_id' => Card::ACE_DIAMONDS_ID
             ],
             [
-                'player' => $this->player1,
-                'card_id' => Card::KING_HEARTS_ID
+                'player'  => $this->player1,
+                'card_id' => Card::QUEEN_SPADES_ID
             ],
             [
-                'player' => $this->player1,
-                'card_id' => Card::SEVEN_DIAMONDS_ID
+                'player'  => $this->player1,
+                'card_id' => Card::KING_DIAMONDS_ID
             ],
         ];
 
@@ -155,10 +169,10 @@ class GamePlayShowdownTest extends BaseTest
 
         $flopCards = [
             [
-                'card_id' => Card::KING_CLUBS_ID
+                'card_id' => Card::FOUR_CLUBS_ID
             ],
             [
-                'card_id' => Card::QUEEN_SPADES_ID
+                'card_id' => Card::JACK_SPADES_ID
             ],
             [
                 'card_id' => Card::DEUCE_CLUBS_ID
@@ -174,28 +188,17 @@ class GamePlayShowdownTest extends BaseTest
         $this->setTurn($turnCard);
 
         $riverCard = [
-            'card_id' => Card::THREE_SPADES_ID
+            'card_id' => Card::THREE_HEARTS_ID
         ];
 
         $this->setRiver($riverCard);
 
         $this->executeActionsToContinue();
 
-        $gamePlay = $this->gamePlay->play();
+        $response = $this->jsonResponse();
 
-        $this->assertEquals($this->player3->id, $gamePlay['winner']['player']->id);
-        $this->assertEquals(HandType::TWO_PAIR['id'], $gamePlay['winner']['handType']['id']);
-    }
-
-    protected function setWholeCards($wholeCards)
-    {
-        foreach($wholeCards as $card){
-            WholeCard::create([
-                'player_id' => $card['player']->id,
-                'card_id'   => $card['card_id'],
-                'hand_id'   => $this->gamePlay->hand->id
-            ]);
-        }
+        $this->assertEquals($this->player3->id, $response['winner']['player']['id']);
+        $this->assertEquals(HandType::HIGH_CARD['id'], $response['winner']['handType']['id']);
     }
 
     protected function setflop($flopCards)
@@ -237,5 +240,16 @@ class GamePlayShowdownTest extends BaseTest
             'hand_street_id' => $river->id,
             'card_id'        => $riverCard['card_id']
         ]);
+    }
+
+    protected function executeActionsToContinue()
+    {
+        $this->givenPlayerOneCalls();
+        $this->givenPlayerOneCanContinue();
+
+        $this->givenPlayerTwoFolds();
+        $this->givenPlayerTwoCanNotContinue();
+
+        $this->setPlayerThreeChecksPost();
     }
 }

@@ -37,6 +37,14 @@ class GamePlay
         $this->street    = null;
     }
 
+    /**
+     * To assist with unit test scenario set-up.
+     */
+    public function setGameState(GameState $gameState): void
+    {
+        $this->gameState = $gameState;
+    }
+
     public function play(GameState $gameState = null)
     {
         $this->gameState = $gameState;
@@ -271,7 +279,7 @@ class GamePlay
                 'stack'            => $stack,
                 'name'             => $playerAction->player()->name,
                 'action_id'        => $playerAction->action_id,
-                'action_name'      => $actionName ,
+                'action_name'      => $actionName,
                 'player_id'        => $playerAction->player_id,
                 'table_seat_id'    => $playerAction->table_seat_id,
                 'hand_street_id'   => $playerAction->hand_street_id,

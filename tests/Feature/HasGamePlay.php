@@ -6,6 +6,7 @@ use App\Constants\Action;
 use App\Controllers\HandController;
 use App\Factory\PlayerActionFactory;
 use App\Models\TableSeat;
+use App\Models\WholeCard;
 
 trait HasGamePlay
 {
@@ -221,15 +222,14 @@ trait HasGamePlay
             ]);
     }
 
-    protected function executeActionsToContinue()
+    protected function setWholeCards($wholeCards)
     {
-        $this->givenPlayerOneCalls();
-        $this->givenPlayerOneCanContinue();
-
-        $this->givenPlayerTwoFolds();
-        $this->givenPlayerTwoCanNotContinue();
-
-        $this->givenPlayerThreeChecks();
-        $this->givenPlayerThreeCanContinue();
+        foreach($wholeCards as $card){
+            WholeCard::create([
+                'player_id' => $card['player']->id,
+                'card_id'   => $card['card_id'],
+                'hand_id'   => $this->gamePlay->hand->id
+            ]);
+        }
     }
 }

@@ -1,8 +1,10 @@
 <?php
 
-namespace Tests\Feature\GamePlay;
+namespace Tests\Feature\Controllers\PlayerActionController\HoldEmStreetTest;
 
+use App\Classes\ActionHandler\ActionHandler;
 use App\Classes\GamePlay\GamePlay;
+use App\Classes\GameState\GameState;
 use App\Models\Hand;
 use App\Models\HandStreet;
 use App\Models\Player;
@@ -10,17 +12,24 @@ use App\Models\Street;
 use App\Models\Table;
 use App\Models\TableSeat;
 use Tests\BaseTest;
+use Tests\Feature\HasActionPosts;
+use Tests\Feature\HasGamePlay;
+use Tests\Feature\HasStreets;
 
-class GamePlayHoldEmStreetTest extends BaseTest
+class PlayerActionControllerTest extends BaseTest
 {
     use HasGamePlay;
+    use HasActionPosts;
+    use HasStreets;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->table = Table::create(['name' => 'Test Table', 'seats' => 3]);
-        $this->gamePlay = new GamePlay(Hand::create(['table_id' => $this->table->id]));
+        $this->table         = Table::create(['name' => 'Test Table', 'seats' => 3]);
+        $this->gamePlay      = new GamePlay(Hand::create(['table_id' => $this->table->id]));
+        $this->gameState     = new GameState();
+        $this->actionHandler = new ActionHandler($this->gameState);
 
         $this->player1 = Player::create([
             'name' => 'Player 1',
@@ -59,11 +68,11 @@ class GamePlayHoldEmStreetTest extends BaseTest
      */
     public function it_can_deal_3_cards_to_a_flop()
     {
-        $this->gamePlay->start();
+        $this->gamePlay->start(null, $this->gameState);
 
         $this->executeActionsToContinue();
 
-        $this->gamePlay->play();
+        $this->jsonResponse();
 
         $this->assertCount(2, HandStreet::find(['hand_id' => $this->gamePlay->handId])->content);
         $this->assertCount(3, HandStreet::getStreetCards($this->gamePlay->handId, 2));
@@ -75,13 +84,13 @@ class GamePlayHoldEmStreetTest extends BaseTest
      */
     public function it_can_deal_1_card_to_a_turn()
     {
-        $this->gamePlay->start();
+        $this->gamePlay->start(null, $this->gameState);
 
         $this->setFlop();
 
         $this->executeActionsToContinue();
 
-        $this->gamePlay->play();
+        $this->jsonResponse();
 
         $this->assertCount(3, HandStreet::find(['hand_id' => $this->gamePlay->handId])->content);
         $this->assertCount(1, HandStreet::getStreetCards($this->gamePlay->handId, 3));
@@ -93,7 +102,7 @@ class GamePlayHoldEmStreetTest extends BaseTest
      */
     public function it_can_deal_1_card_to_a_river()
     {
-        $this->gamePlay->start();
+        $this->gamePlay->start(null, $this->gameState);
 
         $this->setFlop();
 
@@ -101,7 +110,7 @@ class GamePlayHoldEmStreetTest extends BaseTest
 
         $this->executeActionsToContinue();
 
-        $this->gamePlay->play();
+        $this->jsonResponse();
 
         $this->assertCount(4, HandStreet::find(['hand_id' => $this->gamePlay->handId])->content);
         $this->assertCount(1, HandStreet::getStreetCards($this->gamePlay->handId, 4));
@@ -113,7 +122,7 @@ class GamePlayHoldEmStreetTest extends BaseTest
      */
     public function it_can_reach_showdown_when_all_active_players_can_continue_on_the_river()
     {
-        $this->gamePlay->start();
+        $this->gamePlay->start(null, $this->gameState);
 
         $this->setFlop();
 
@@ -123,47 +132,19 @@ class GamePlayHoldEmStreetTest extends BaseTest
 
         $this->executeActionsToContinue();
 
-        $response = $this->gamePlay->play();
+        $response = $this->jsonResponse();
 
         $this->assertNotNull($response['winner']);
     }
 
-    protected function setFlop()
+    protected function executeActionsToContinue()
     {
-        $flop = HandStreet::create([
-            'street_id' => Street::find(['name' => 'Flop'])->id,
-            'hand_id' => $this->gamePlay->hand->id
-        ]);
+        $this->givenPlayerOneCalls();
+        $this->givenPlayerOneCanContinue();
 
-        $this->gamePlay->dealer->dealStreetCards(
-            $flop,
-            $this->gamePlay->game->streets[1]['community_cards']
-        );
-    }
+        $this->givenPlayerTwoFolds();
+        $this->givenPlayerTwoCanNotContinue();
 
-    protected function setTurn()
-    {
-        $turn = HandStreet::create([
-            'street_id' => Street::find(['name' => 'Turn'])->id,
-            'hand_id' => $this->gamePlay->hand->id
-        ]);
-
-        $this->gamePlay->dealer->dealStreetCards(
-            $turn,
-            $this->gamePlay->game->streets[2]['community_cards']
-        );
-    }
-
-    protected function setRiver()
-    {
-        $river = HandStreet::create([
-            'street_id' => Street::find(['name' => 'River'])->id,
-            'hand_id' => $this->gamePlay->hand->id
-        ]);
-
-        $this->gamePlay->dealer->dealStreetCards(
-            $river,
-            $this->gamePlay->game->streets[3]['community_cards']
-        );
+        $this->setPlayerThreeChecksPost();
     }
 }
