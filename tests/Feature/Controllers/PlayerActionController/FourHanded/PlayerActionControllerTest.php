@@ -118,7 +118,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->jsonResponse();
 
-        $this->assertCount(2, HandStreet::find(['hand_id' => $this->gamePlay->handId])->content);
+        $this->assertCount(2, HandStreet::find(['hand_id' => $this->gameState->handId()])->content);
     }
 
     /**
@@ -182,7 +182,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $response = $this->jsonResponse();
 
-        $this->assertCount(2, HandStreet::find(['hand_id' => $this->gamePlay->handId])->content);
+        $this->assertCount(2, HandStreet::find(['hand_id' => $this->gameState->handId()])->content);
 
         $this->assertTrue($response['players'][2]['action_on']);
     }

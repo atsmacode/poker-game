@@ -23,9 +23,8 @@ class PlayerActionControllerTest extends BaseTest
         parent::setUp();
 
         $this->table         = Table::create(['name' => 'Test Table', 'seats' => 3]);
-        $this->gamePlay      = new GamePlay(Hand::create(['table_id' => $this->table->id]));
-        $this->gameState     = new GameState();
-        $this->actionHandler = new ActionHandler($this->gameState);
+        $this->hand          = Hand::create(['table_id' => $this->table->id]);
+        $this->gamePlay      = new GamePlay($this->hand);
 
         $this->player1 = Player::create([
             'name' => 'Player 1',
@@ -86,6 +85,9 @@ class PlayerActionControllerTest extends BaseTest
             'table_id' => $this->table->id,
             'player_id' => $this->player6->id
         ]);
+
+        $this->gameState     = new GameState($this->hand);
+        $this->actionHandler = new ActionHandler($this->gameState);
     }
 
     /**

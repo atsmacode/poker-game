@@ -17,8 +17,8 @@ class TableSeatTest extends BaseTest
     {
         parent::setUp();
         $this->table     = Table::create(['name' => 'Test Table', 'seats' => 3]);
-        $this->gamePlay  = new GamePlay(Hand::create(['table_id' => $this->table->id]));
-        $this->gameState = new GameState();
+        $this->hand      = Hand::create(['table_id' => $this->table->id]);
+        $this->gamePlay  = new GamePlay($this->hand);
 
         $this->player1 = Player::create([
             'name' => 'Player 1',
@@ -36,19 +36,21 @@ class TableSeatTest extends BaseTest
         ]);
 
         TableSeat::create([
-            'table_id' => $this->gamePlay->handTable->id,
+            'table_id' => $this->table->id,
             'player_id' => $this->player1->id
         ]);
 
         TableSeat::create([
-            'table_id' => $this->gamePlay->handTable->id,
+            'table_id' => $this->table->id,
             'player_id' => $this->player2->id
         ]);
 
         TableSeat::create([
-            'table_id' => $this->gamePlay->handTable->id,
+            'table_id' => $this->table->id,
             'player_id' => $this->player3->id
         ]);
+
+        $this->gameState = new GameState($this->hand);
     }
 
     /**

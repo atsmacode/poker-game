@@ -56,6 +56,7 @@ class GameData extends Database
                 pa.action_id,
                 pa.hand_id,
                 pa.hand_street_id,
+                pa.id AS player_action_id,
                 ts.id AS table_seat_id
             FROM
                 table_seats AS ts

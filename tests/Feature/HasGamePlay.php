@@ -13,7 +13,7 @@ trait HasGamePlay
     {
         $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(0, 1)->id,
-            handId:         $this->gamePlay->handId,
+            handId:         $this->gameState->handId(),
             actionId:       Action::RAISE_ID,
             betAmount:      100.0,
             active:         1,
@@ -26,7 +26,7 @@ trait HasGamePlay
     {
         $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(0, 1)->id,
-            handId:         $this->gamePlay->handId,
+            handId:         $this->gameState->handId(),
             actionId:       Action::FOLD_ID,
             betAmount:      null,
             active:         0,
@@ -55,7 +55,7 @@ trait HasGamePlay
     {
         $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(0, 1)->id,
-            handId:         $this->gamePlay->handId,
+            handId:         $this->gameState->handId(),
             actionId:       Action::CALL_ID,
             betAmount:      50.00,
             active:         1,
@@ -68,7 +68,7 @@ trait HasGamePlay
     {
         $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(1, 1)->id,
-            handId:         $this->gamePlay->handId,
+            handId:         $this->gameState->handId(),
             actionId:       Action::CALL_ID,
             betAmount:      50.00,
             active:         1,
@@ -81,7 +81,7 @@ trait HasGamePlay
     {
         $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(1, 1)->id,
-            handId:         $this->gamePlay->handId,
+            handId:         $this->gameState->handId(),
             actionId:       Action::FOLD_ID,
             betAmount:      null,
             active:         0,
@@ -110,7 +110,7 @@ trait HasGamePlay
     {
         $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(2, 1)->id,
-            handId:         $this->gamePlay->handId,
+            handId:         $this->gameState->handId(),
             actionId:       Action::CHECK_ID,
             betAmount:      null,
             active:         1,
@@ -123,7 +123,7 @@ trait HasGamePlay
     {
         $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(2, 1)->id,
-            handId:         $this->gamePlay->handId,
+            handId:         $this->gameState->handId(),
             actionId:       Action::CALL_ID,
             betAmount:      25.00,
             active:         1,
@@ -136,7 +136,7 @@ trait HasGamePlay
     {
         $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(2, 1)->id,
-            handId:         $this->gamePlay->handId,
+            handId:         $this->gameState->handId(),
             actionId:       Action::RAISE_ID,
             betAmount:      100.00,
             active:         1,
@@ -157,7 +157,7 @@ trait HasGamePlay
     {
         $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(3, 1)->id,
-            handId:         $this->gamePlay->handId,
+            handId:         $this->gameState->handId(),
             actionId:       Action::FOLD_ID,
             betAmount:      null,
             active:         0,
@@ -170,7 +170,7 @@ trait HasGamePlay
     {
         $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(3, 1)->id,
-            handId:         $this->gamePlay->handId,
+            handId:         $this->gameState->handId(),
             actionId:       Action::CALL_ID,
             betAmount:      50.00,
             active:         1,
@@ -183,7 +183,7 @@ trait HasGamePlay
     {
         $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(3, 1)->id,
-            handId:         $this->gamePlay->handId,
+            handId:         $this->gameState->handId(),
             actionId:       Action::CHECK_ID,
             betAmount:      null,
             active:         1,
@@ -196,7 +196,7 @@ trait HasGamePlay
     {
         $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(3, 1)->id,
-            handId:         $this->gamePlay->handId,
+            handId:         $this->gameState->handId(),
             actionId:       Action::RAISE_ID,
             betAmount:      100.00,
             active:         1,
@@ -225,7 +225,7 @@ trait HasGamePlay
     {
         $playerAction = PlayerActionFactory::create(
             playerActionId: $this->gamePlay->hand->actions()->slice(4, 1)->id,
-            handId:         $this->gamePlay->handId,
+            handId:         $this->gameState->handId(),
             actionId:       Action::CALL_ID,
             betAmount:      50.00,
             active:         1,

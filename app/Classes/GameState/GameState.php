@@ -18,6 +18,7 @@ class GameState implements GameStateInterface
     private ?PlayerAction $latestAction;
     private Hand          $hand;
     private int           $tableId;
+    private int           $handId;
     private array         $seats;
     private ?array        $actions;
 
@@ -26,6 +27,7 @@ class GameState implements GameStateInterface
         if ($hand) {
             $this->hand    = $hand;
             $this->tableId = $hand->table_id;
+            $this->handId  = $hand->id;
             $this->seats   = GameData::getSeats($this->tableId);
             $this->actions = GameData::getActions($this->hand->id);
         }
@@ -35,6 +37,7 @@ class GameState implements GameStateInterface
     {
         $this->hand    = $hand;
         $this->tableId = $hand->table_id;
+        $this->handId  = $hand->id;
         $this->seats   = GameData::getSeats($this->tableId);
         $this->actions = GameData::getActions($this->hand->id);
     }
@@ -72,6 +75,17 @@ class GameState implements GameStateInterface
         return false;
     }
 
+    public function getSeatAction(int $seatId)
+    {
+        $key = array_search($seatId, array_column($this->actions, 'table_seat_id'));
+
+        if ($key !== false) {
+            return $this->actions[$key];
+        }
+
+        return false;
+    }
+
     public function setHand(Hand $hand): void
     {
         $this->hand = $hand;
@@ -95,6 +109,11 @@ class GameState implements GameStateInterface
     public function tableId(): int
     {
         return $this->tableId;
+    }
+
+    public function handId(): int
+    {
+        return $this->handId;
     }
 
     public function getSeats(): array

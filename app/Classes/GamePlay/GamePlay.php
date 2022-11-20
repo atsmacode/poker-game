@@ -76,7 +76,7 @@ class GamePlay
         // Not keen on the way I'm adding/subtracting from the handStreets->count() to match array starting with 0
         $this->street = HandStreet::create([
             'street_id' => Street::find(['name' => $this->game->streets[count($this->hand->streets()->content)]['name']])->id,
-            'hand_id' => $this->handId
+            'hand_id' => $this->gameState->handId()
         ]);
 
         $this->dealer->dealStreetCards(
@@ -125,7 +125,7 @@ class GamePlay
     public function nextStep()
     {
         if ($this->theBigBlindIsTheOnlyActivePlayerRemainingPreFlop()) {
-            TableSeat::bigBlindWins($this->handId);
+            TableSeat::bigBlindWins($this->gameState->handId());
 
             return $this->showdown();
         }
@@ -158,10 +158,10 @@ class GamePlay
                 'can_continue' => 0
             ], 'table_id = ' . $this->gameState->tableId());
 
-        PlayerAction::find(['hand_id' => $this->handId])
+        PlayerAction::find(['hand_id' => $this->gameState->handId()])
             ->updateBatch([
                 'action_id' => null
-            ], 'hand_id = ' . $this->handId);
+            ], 'hand_id = ' . $this->gameState->handId());
 
         /**
          * Added flag for new street as preceeding action
@@ -196,13 +196,13 @@ class GamePlay
         $bigBlindActive = PlayerAction::find([
             'active'    => 1,
             'big_blind' => 1,
-            'hand_id'   => $this->handId
+            'hand_id'   => $this->gameState->handId()
         ])->content;
 
         $nonBigBlindActive = PlayerAction::find([
             'active'    => 1,
             'big_blind' => 0,
-            'hand_id'   => $this->handId
+            'hand_id'   => $this->gameState->handId()
         ])->content;
 
         return count($bigBlindActive) === 1 && count($nonBigBlindActive) === 0;
@@ -218,7 +218,7 @@ class GamePlay
         $dealer = $this->hand->getDealer();
 
         $playerAfterDealer = TableSeat::playerAfterDealer(
-            $this->handId,
+            $this->gameState->handId(),
             $dealer->table_seat_id
         );
 
@@ -231,7 +231,7 @@ class GamePlay
 
     public function getActionOn(): TableSeat
     {
-        $firstActivePlayer = TableSeat::firstActivePlayer($this->handId);
+        $firstActivePlayer = TableSeat::firstActivePlayer($this->gameState->handId());
 
         if($this->newStreet){
             return $this->getThePlayerActionShouldBeOnForANewStreet($firstActivePlayer);
@@ -240,7 +240,7 @@ class GamePlay
         $lastToAct = $this->hand->getLatestAction()['id'];
 
         $activePlayersAfterLastToAct = array_filter(
-            PlayerAction::find(['active' => 1, 'hand_id' => $this->handId])->collect()->content,
+            PlayerAction::find(['active' => 1, 'hand_id' => $this->gameState->handId()])->collect()->content,
             function($value) use($lastToAct){
                 return $value->table_seat_id > $lastToAct;
             }
@@ -262,7 +262,7 @@ class GamePlay
         $playerData  = [];
         $actionOnGet = $this->getActionOn();
 
-        foreach(PlayerAction::find(['hand_id' => $this->handId])->collect()->content as $playerAction){
+        foreach(PlayerAction::find(['hand_id' => $this->gameState->handId()])->collect()->content as $playerAction){
             $actionOn = false;
 
             if($actionOnGet && $actionOnGet->player_id === $playerAction->player_id){
@@ -303,7 +303,7 @@ class GamePlay
         $wholeCards = [];
 
         if(isset($player)){
-            foreach($player->getWholeCards($this->handId) as $wholeCard){
+            foreach($player->getWholeCards($this->gameState->handId()) as $wholeCard){
                 $wholeCards[] = [
                     'player_id'        => $wholeCard['player_id'],
                     'rank'             => $wholeCard['rank'],
@@ -391,7 +391,7 @@ class GamePlay
     {
         $this->street = HandStreet::create([
             'street_id' => Street::find(['name' => 'Pre-flop'])->id,
-            'hand_id'   => $this->handId
+            'hand_id'   => $this->gameState->handId()
         ]);
 
         foreach($this->gameState->getSeats() as $seat){
@@ -399,7 +399,7 @@ class GamePlay
                 'player_id'      => $seat['player_id'],
                 'hand_street_id' => $this->street->id,
                 'table_seat_id'  => $seat['id'],
-                'hand_id'        => $this->handId,
+                'hand_id'        => $this->gameState->handId(),
                 'active'         => 1
             ]);
         }
@@ -501,7 +501,7 @@ class GamePlay
     {
         if(count($this->hand->streets()->content) === 1){
             $bigBlind = PlayerAction::find([
-                'hand_id' => $this->handId,
+                'hand_id' => $this->gameState->handId(),
                 'big_blind' => 1
             ]);
 
@@ -541,7 +541,7 @@ class GamePlay
 
         $handStreetId = HandStreet::find([
             'street_id'  => Street::find(['name' => $this->game->streets[0]['name']])->id,
-            'hand_id' => $this->handId
+            'hand_id' => $this->gameState->handId()
         ])->id;
 
         $smallBlind = PlayerAction::find([
