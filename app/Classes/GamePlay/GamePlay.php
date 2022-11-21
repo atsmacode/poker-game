@@ -52,15 +52,15 @@ class GamePlay
 
     public function showdown()
     {
-        $winner = (new Showdown($this->hand))->compileHands()->decideWinner();
+        $winner = (new Showdown($this->gameState->getHand()))->compileHands()->decideWinner();
 
-        PotHelper::awardPot($this->hand->pot(), $winner['player']);
+        PotHelper::awardPot($this->gameState->getHand()->pot(), $winner['player']);
 
-        $this->hand->complete();
+        $this->gameState->getHand()->complete();
 
         return [
             'deck'           => $this->dealer->getDeck(),
-            'pot'            => $this->hand->pot()->amount,
+            'pot'            => $this->gameState->getHand()->pot()->amount,
             'communityCards' => $this->getCommunityCards(),
             'players'        => $this->getPlayerData(),
             'winner'         => $winner
@@ -84,7 +84,7 @@ class GamePlay
 
         return [
             'deck'           => $this->dealer->getDeck(),
-            'pot'            => $this->hand->pot()->amount,
+            'pot'            => $this->gameState->getHand()->pot()->amount,
             'communityCards' => $this->getCommunityCards(),
             'players'        => $this->getPlayerData(),
             'winner'         => null
@@ -113,7 +113,7 @@ class GamePlay
 
         return [
             'deck'           => $this->dealer->getDeck(),
-            'pot'            => $this->hand->pot()->amount,
+            'pot'            => $this->gameState->getHand()->pot()->amount,
             'communityCards' => $this->getCommunityCards(),
             'players'        => $this->getPlayerData(),
             'winner'         => null
@@ -142,7 +142,7 @@ class GamePlay
 
         return [
             'deck'           => $this->dealer->getDeck(),
-            'pot'            => $this->hand->pot()->amount,
+            'pot'            => $this->gameState->getHand()->pot()->amount,
             'communityCards' => $this->getCommunityCards(),
             'players'        => $this->getPlayerData(),
             'winner'         => null
@@ -172,21 +172,21 @@ class GamePlay
     protected function readyForShowdown()
     {
         return count($this->gameState->getUpdatedHandStreets()->content) === count($this->game->streets) &&
-            count($this->hand->getActivePlayers()) ===
-            count($this->hand->getContinuingPlayers());
+            count($this->gameState->getHand()->getActivePlayers()) ===
+            count($this->gameState->getHand()->getContinuingPlayers());
     }
 
     protected function onePlayerRemainsThatCanContinue()
     {
-        return count($this->hand->getActivePlayers())
-            === count($this->hand->getContinuingPlayers())
-            && count($this->hand->getContinuingPlayers()) === 1;
+        return count($this->gameState->getHand()->getActivePlayers())
+            === count($this->gameState->getHand()->getContinuingPlayers())
+            && count($this->gameState->getHand()->getContinuingPlayers()) === 1;
     }
 
     protected function allActivePlayersCanContinue()
     {
-        return count($this->hand->getActivePlayers()) ===
-            count($this->hand->getContinuingPlayers());
+        return count($this->gameState->getHand()->getActivePlayers()) ===
+            count($this->gameState->getHand()->getContinuingPlayers());
     }
 
     protected function theBigBlindIsTheOnlyActivePlayerRemainingPreFlop()
@@ -208,12 +208,12 @@ class GamePlay
 
     protected function theLastHandWasCompleted()
     {
-        return $this->hand->completed_on;
+        return $this->gameState->getHand()->completed_on;
     }
 
     protected function getThePlayerActionShouldBeOnForANewStreet(TableSeat $firstActivePlayer)
     {
-        $dealer = $this->hand->getDealer();
+        $dealer = $this->gameState->getHand()->getDealer();
 
         $playerAfterDealer = TableSeat::playerAfterDealer(
             $this->gameState->handId(),
@@ -261,20 +261,12 @@ class GamePlay
         $actionOnGet = $this->getActionOn();
 
         foreach(PlayerAction::find(['hand_id' => $this->gameState->handId()])->collect()->content as $playerAction){
-            $actionOn = false;
-
-            if($actionOnGet && $actionOnGet->player_id === $playerAction->player_id){
-                $actionOn = true;
-            }
-
+            $actionOn   = $actionOnGet && $actionOnGet->player_id === $playerAction->player_id ? true : false;
             $actionName = $playerAction->action_id ? $playerAction->action()->name : null;
-
-            $stack = $playerAction->player()->stacks()->search('table_id', $this->gameState->tableId())
-                ? $playerAction->player()->stacks()->search('table_id', $this->gameState->tableId())->amount
-                : null;
+            $stack      = $playerAction->player()->stacks()->search('table_id', $this->gameState->tableId());
 
             $playerData[] = [
-                'stack'            => $stack,
+                'stack'            => $stack ? $stack->amount : null,
                 'name'             => $playerAction->player()->name,
                 'action_id'        => $playerAction->action_id,
                 'action_name'      => $actionName,
@@ -353,7 +345,7 @@ class GamePlay
                 /**
                  * BB can only check if there were no raises before the latest call action.
                  */
-                if ($playerAction->big_blind && !$this->hand->actions()->search('action_id', Action::RAISE['id'])) {
+                if ($playerAction->big_blind && !$this->gameState->getHand()->actions()->search('action_id', Action::RAISE['id'])) {
                     return [Action::FOLD, Action::CHECK, Action::RAISE];
                 } else {
                     return [Action::FOLD, Action::CALL, Action::RAISE];
@@ -372,7 +364,6 @@ class GamePlay
                  * to check if anyone has raised, called or bet
                  * before the folder.
                  */
-                 // Need this condition?: !in_array($playerAction->player_id, array_column($continuingBetters, 'player_id'))
                 $continuingBetters = TableSeat::getContinuingBetters($this->gameState->getHand()->id);
 
                 if (0 < count($continuingBetters)) {
@@ -449,13 +440,11 @@ class GamePlay
         return $this->gameState->getSeat($currentDealer['id'] + 1);
     }
 
-    protected function identifyTheNextDealerAndBlindSeats($currentDealer)
+    protected function identifyTheNextDealerAndBlindSeats($currentDealerSet)
     {
-        if($currentDealer){
-            $currentDealer = $this->gameState->getSeat($currentDealer->id);
-        } else {
-            $currentDealer = $this->gameState->getDealer();
-        }
+        $currentDealer = $currentDealerSet 
+            ? $this->gameState->getSeat($currentDealerSet->id) 
+            : $this->gameState->getDealer();
 
         /**
          * TODO: these methods must currently be called
@@ -556,6 +545,6 @@ class GamePlay
         
         $this->gameState->setLatestAction($bigBlind);
 
-        BetHelper::postBlinds($this->hand, $smallBlind, $bigBlind);
+        BetHelper::postBlinds($this->gameState->getHand(), $smallBlind, $bigBlind);
     }
 }
