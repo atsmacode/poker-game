@@ -26,12 +26,7 @@ class GameState implements GameStateInterface
     public function __construct(Hand $hand = null)
     {
         if ($hand) {
-            $this->hand        = $hand;
-            $this->tableId     = $hand->table_id;
-            $this->handId      = $hand->id;
-            $this->seats       = GameData::getSeats($this->tableId);
-            $this->players     = GameData::getPlayers($this->hand->id);
-            $this->handStreets = $this->hand->streets();
+            $this->initiate($hand);
         }
     }
 
