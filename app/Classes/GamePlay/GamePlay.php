@@ -34,7 +34,6 @@ class GamePlay
         $this->dealer    = (new Dealer())->setDeck($deck);
         $this->hand      = $hand;
         $this->handTable = $hand->table();
-        $this->street    = null;
     }
 
     /**
@@ -74,13 +73,13 @@ class GamePlay
         $this->updatePlayerStatusesOnNewStreet();
 
         // Not keen on the way I'm adding/subtracting from the handStreets->count() to match array starting with 0
-        $this->street = HandStreet::create([
+        $street = HandStreet::create([
             'street_id' => Street::find(['name' => $this->game->streets[$this->gameState->handStreetCount()]['name']])->id,
             'hand_id' => $this->gameState->handId()
         ]);
 
         $this->dealer->dealStreetCards(
-            $this->street,
+            $street,
             $this->game->streets[$this->gameState->incrementedHandStreets() - 1]['community_cards']
         );
 
@@ -389,7 +388,7 @@ class GamePlay
 
     public function initiateStreetActions()
     {
-        $this->street = HandStreet::create([
+        $street = HandStreet::create([
             'street_id' => Street::find(['name' => 'Pre-flop'])->id,
             'hand_id'   => $this->gameState->handId()
         ]);
@@ -397,7 +396,7 @@ class GamePlay
         foreach($this->gameState->getSeats() as $seat){
             PlayerAction::create([
                 'player_id'      => $seat['player_id'],
-                'hand_street_id' => $this->street->id,
+                'hand_street_id' => $street->id,
                 'table_seat_id'  => $seat['id'],
                 'hand_id'        => $this->gameState->handId(),
                 'active'         => 1
