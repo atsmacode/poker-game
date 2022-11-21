@@ -75,13 +75,13 @@ class GamePlay
 
         // Not keen on the way I'm adding/subtracting from the handStreets->count() to match array starting with 0
         $this->street = HandStreet::create([
-            'street_id' => Street::find(['name' => $this->game->streets[count($this->hand->streets()->content)]['name']])->id,
+            'street_id' => Street::find(['name' => $this->game->streets[$this->gameState->handStreetCount()]['name']])->id,
             'hand_id' => $this->gameState->handId()
         ]);
 
         $this->dealer->dealStreetCards(
             $this->street,
-            $this->game->streets[count($this->hand->streets()->content) - 1]['community_cards']
+            $this->game->streets[$this->gameState->incrementedHandStreets() - 1]['community_cards']
         );
 
         return [
@@ -173,7 +173,7 @@ class GamePlay
 
     protected function readyForShowdown()
     {
-        return count($this->hand->streets()->content) === count($this->game->streets) &&
+        return count($this->gameState->getUpdatedHandStreets()->content) === count($this->game->streets) &&
             count($this->hand->getActivePlayers()) ===
             count($this->hand->getContinuingPlayers());
     }
@@ -322,7 +322,7 @@ class GamePlay
     public function getCommunityCards()
     {
         $cards = [];
-        foreach($this->hand->streets()->collect()->content as $street){
+        foreach($this->gameState->getUpdatedHandStreets()->collect()->content as $street){
             foreach($street->cards()->collect()->content as $streetCard){
                 $cards[] = [
                     'rankAbbreviation' => $streetCard->getCard()['rankAbbreviation'],
@@ -346,7 +346,7 @@ class GamePlay
         /**
          * BB is the only player that can fold / check / raise pre-flop
          */
-        if (count($this->hand->streets()->content) === 1 && !$playerAction->big_blind) {
+        if (count($this->gameState->getUpdatedHandStreets()->content) === 1 && !$playerAction->big_blind) {
             return [Action::FOLD, Action::CALL, Action::RAISE];
         }
 
@@ -499,7 +499,7 @@ class GamePlay
 
     public function setDealerAndBlindSeats($currentDealer = null)
     {
-        if(count($this->hand->streets()->content) === 1){
+        if($this->gameState->handStreetCount() === 1){
             $bigBlind = PlayerAction::find([
                 'hand_id' => $this->gameState->handId(),
                 'big_blind' => 1

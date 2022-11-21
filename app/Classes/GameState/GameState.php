@@ -4,6 +4,7 @@ namespace App\Classes\GameState;
 
 use App\Classes\GameData\GameData;
 use App\Models\Hand;
+use App\Models\HandStreet;
 use App\Models\PlayerAction;
 use App\Models\Table;
 
@@ -20,25 +21,28 @@ class GameState implements GameStateInterface
     private int           $handId;
     private array         $seats;
     private ?array        $actions;
+    private HandStreet    $handStreets;
 
     public function __construct(Hand $hand = null)
     {
         if ($hand) {
-            $this->hand    = $hand;
-            $this->tableId = $hand->table_id;
-            $this->handId  = $hand->id;
-            $this->seats   = GameData::getSeats($this->tableId);
-            $this->actions = GameData::getActions($this->hand->id);
+            $this->hand        = $hand;
+            $this->tableId     = $hand->table_id;
+            $this->handId      = $hand->id;
+            $this->seats       = GameData::getSeats($this->tableId);
+            $this->actions     = GameData::getActions($this->hand->id);
+            $this->handStreets = $this->hand->streets();
         }
     }
 
     public function initiate(Hand $hand)
     {
-        $this->hand    = $hand;
-        $this->tableId = $hand->table_id;
-        $this->handId  = $hand->id;
-        $this->seats   = GameData::getSeats($this->tableId);
-        $this->actions = GameData::getActions($this->hand->id);
+        $this->hand        = $hand;
+        $this->tableId     = $hand->table_id;
+        $this->handId      = $hand->id;
+        $this->seats       = GameData::getSeats($this->tableId);
+        $this->actions     = GameData::getActions($this->hand->id);
+        $this->handStreets = $this->hand->streets();
     }
 
     public function state(): array
@@ -123,6 +127,26 @@ class GameState implements GameStateInterface
     public function getActions(): ?array
     {
         return $this->actions;
+    }
+
+    public function getHandStreets(): HandStreet
+    {
+        return $this->handStreets;
+    }
+
+    public function getUpdatedHandStreets(): HandStreet
+    {
+        return $this->hand->streets();
+    }
+
+    public function incrementedHandStreets(): int
+    {
+        return count($this->handStreets->content) + 1;
+    }
+
+    public function handStreetCount(): int
+    {
+        return count($this->handStreets->content);
     }
 
     public function setLatestAction(PlayerAction $playerAction): void
