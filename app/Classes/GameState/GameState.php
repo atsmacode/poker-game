@@ -30,7 +30,7 @@ class GameState implements GameStateInterface
             $this->tableId     = $hand->table_id;
             $this->handId      = $hand->id;
             $this->seats       = GameData::getSeats($this->tableId);
-            $this->actions     = GameData::getActions($this->hand->id);
+            $this->players     = GameData::getPlayers($this->hand->id);
             $this->handStreets = $this->hand->streets();
         }
     }
@@ -41,7 +41,7 @@ class GameState implements GameStateInterface
         $this->tableId     = $hand->table_id;
         $this->handId      = $hand->id;
         $this->seats       = GameData::getSeats($this->tableId);
-        $this->actions     = GameData::getActions($this->hand->id);
+        $this->players     = GameData::getPlayers($this->hand->id);
         $this->handStreets = $this->hand->streets();
     }
 
@@ -122,11 +122,6 @@ class GameState implements GameStateInterface
     public function getSeats(): array
     {
         return $this->seats;
-    }
-
-    public function getActions(): ?array
-    {
-        return $this->actions;
     }
 
     public function getHandStreets(): HandStreet

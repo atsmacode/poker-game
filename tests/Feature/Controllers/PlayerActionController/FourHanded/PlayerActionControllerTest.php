@@ -48,22 +48,22 @@ class PlayerActionControllerTest extends BaseTest
         ]);
 
         TableSeat::create([
-            'table_id' => $this->gamePlay->handTable->id,
+            'table_id'  => $this->table->id,
             'player_id' => $this->player1->id
         ]);
 
         TableSeat::create([
-            'table_id' => $this->gamePlay->handTable->id,
+            'table_id'  => $this->table->id,
             'player_id' => $this->player2->id
         ]);
 
         TableSeat::create([
-            'table_id' => $this->gamePlay->handTable->id,
+            'table_id'  => $this->table->id,
             'player_id' => $this->player3->id
         ]);
 
         TableSeat::create([
-            'table_id' => $this->gamePlay->handTable->id,
+            'table_id'  => $this->table->id,
             'player_id' => $this->player4->id
         ]); 
 
@@ -173,7 +173,7 @@ class PlayerActionControllerTest extends BaseTest
     public function if_the_dealer_is_seat_two_and_the_first_active_seat_on_a_new_street_the_first_active_seat_after_them_will_be_first_to_act()
     {
         $this->gamePlay->start(TableSeat::find([
-            'id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id
+            'id' => $this->gameState->getSeats()[0]['id']
         ]), $this->gameState);
 
         $this->assertCount(1, $this->gamePlay->hand->streets()->content);
@@ -194,7 +194,7 @@ class PlayerActionControllerTest extends BaseTest
     public function if_there_is_one_seat_after_current_dealer_big_blind_will_be_seat_two()
     {
         $this->gamePlay->start(TableSeat::find([
-            'id' => $this->gamePlay->handTable->seats()->slice(2, 1)->id
+            'id' => $this->gameState->getSeats()[2]['id']
         ]), $this->gameState);
 
         $this->assertCount(1, $this->gamePlay->hand->streets()->content);

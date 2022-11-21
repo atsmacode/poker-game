@@ -34,12 +34,12 @@ class GameData extends Database
         }
     }
 
-    public static function getActions($handId)
+    public static function getPlayers($handId)
     {
-        return (new static())->getActionsQuery($handId);
+        return (new static())->getPlayersQuery($handId);
     }
 
-    private function getActionsQuery($handId)
+    private function getPlayersQuery($handId)
     {
 
         $query = sprintf("

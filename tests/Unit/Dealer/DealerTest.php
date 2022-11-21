@@ -70,24 +70,6 @@ class DealerTest extends BaseTest
 
     /**
      * @test
-     * @return void
-     */
-    public function it_can_deal_a_card_to_a_player()
-    {
-        $player = Player::create([
-            'name' => 'Player 1',
-            'email' => 'player1@rrh.com'
-        ]);
-
-        $this->assertCount(0, $player->wholeCards()->content);
-
-        $this->dealer->setDeck()->shuffle()->dealTo($player, 1);
-
-        $this->assertCount(1, $player->wholeCards()->content);
-    }
-
-    /**
-     * @test
      * @group skip
      * @return void
      */
@@ -131,7 +113,7 @@ class DealerTest extends BaseTest
             $this->assertCount(0, $player->wholeCards()->content);
         }
 
-        $this->dealer->setDeck()->shuffle()->dealTo($table->players(), 1, $hand);
+        $this->dealer->setDeck()->shuffle()->dealTo($table->seats()->content, 1, $hand);
 
         foreach($table->players()->collect()->content as $player){
             $this->assertCount(1, $player->wholeCards()->content);

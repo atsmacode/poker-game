@@ -4,6 +4,7 @@ namespace App\Classes\Dealer;
 
 use App\Classes\Deck\Deck;
 use App\Models\HandStreetCard;
+use App\Models\WholeCard;
 
 class Dealer
 {
@@ -68,19 +69,18 @@ class Dealer
         return $this->card;
     }
 
-    public function dealTo($players, $cardCount, $hand = null)
+    public function dealTo(array $players, int $cardCount, $hand = null)
     {
-        foreach($players->collect()->content as $player){
-            $dealtCards = 0;
-            while($dealtCards < $cardCount){
-                $player->wholeCards()->create([
-                    'player_id' => $player->id,
-                    'card_id' => $this->pickCard()->getCard()['id'],
-                    'hand_id' => $hand ? $hand->id : null
+        $dealtCards = 0;
+        while($dealtCards < $cardCount){
+            foreach($players as $player){
+                WholeCard::create([
+                    'player_id' => $player['player_id'],
+                    'card_id'   => $this->pickCard()->getCard()['id'],
+                    'hand_id'   => $hand ? $hand->id : null
                 ]);
-                $dealtCards++;
             }
-
+            $dealtCards++;
         }
 
         return $this;

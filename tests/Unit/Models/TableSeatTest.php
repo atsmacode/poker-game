@@ -59,7 +59,7 @@ class TableSeatTest extends BaseTest
      */
     public function a_table_seat_can_be_updated()
     {
-        $tableSeat = TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id]);
+        $tableSeat = TableSeat::find(['id' => $this->gameState->getSeats()[0]['id']]);
 
         $this->assertEquals(0, $tableSeat->can_continue);
 
@@ -75,14 +75,14 @@ class TableSeatTest extends BaseTest
     public function it_can_select_first_active_player_after_dealer()
     {
         $this->gamePlay->start(TableSeat::find([
-            'id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id
+            'id' => $this->gameState->getSeats()[0]['id']
         ]), $this->gameState);
 
         $tableSeat = TableSeat::playerAfterDealer(
             $this->gamePlay->hand->id,
-            $this->gamePlay->handTable->seats()->slice(0, 1)->id
+            $this->gameState->getSeats()[0]['id']
         );
 
-        $this->assertEquals($this->gamePlay->handTable->seats()->slice(1, 1)->id, $tableSeat->id);
+        $this->assertEquals($this->gameState->getSeats()[1]['id'], $tableSeat->id);
     }
 }

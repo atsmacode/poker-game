@@ -37,7 +37,7 @@ trait HasGamePlay
 
     private function givenPlayerOneCanNotContinue()
     {
-        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
+        TableSeat::find(['id' => $this->gameState->getSeats()[0]['id']])
             ->update([
                 'can_continue' => 0
             ]);
@@ -45,7 +45,7 @@ trait HasGamePlay
 
     private function givenPlayerOneCanContinue()
     {
-        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(0, 1)->id])
+        TableSeat::find(['id' => $this->gameState->getSeats()[0]['id']])
             ->update([
                 'can_continue' => 1
             ]);
@@ -92,7 +92,7 @@ trait HasGamePlay
 
     private function givenPlayerTwoCanNotContinue()
     {
-        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(1, 1)->id])
+        TableSeat::find(['id' => $this->gameState->getSeats()[1]['id']])
             ->update([
                 'can_continue' => 0
             ]);
@@ -100,7 +100,7 @@ trait HasGamePlay
 
     private function givenPlayerTwoCanContinue()
     {
-        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(1, 1)->id])
+        TableSeat::find(['id' => $this->gameState->getSeats()[1]['id']])
             ->update([
                 'can_continue' => 1
             ]);
@@ -147,7 +147,7 @@ trait HasGamePlay
 
     private function givenPlayerThreeCanContinue()
     {
-        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(2, 1)->id])
+        TableSeat::find(['id' => $this->gameState->getSeats()[2]['id']])
             ->update([
                 'can_continue' => 1
             ]);
@@ -207,7 +207,7 @@ trait HasGamePlay
 
     private function givenPlayerFourCanContinue()
     {
-        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(3, 1)->id])
+        TableSeat::find(['id' => $this->gameState->getSeats()[3]['id']])
             ->update([
                 'can_continue' => 1
             ]);
@@ -215,7 +215,7 @@ trait HasGamePlay
 
     private function givenPlayerFourCanNotContinue()
     {
-        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(3, 1)->id])
+        TableSeat::find(['id' => $this->gameState->getSeats()[3]['id']])
             ->update([
                 'can_continue' => 0
             ]);
@@ -236,7 +236,7 @@ trait HasGamePlay
 
     private function givenPlayerFiveCanContinue()
     {
-        TableSeat::find(['id' => $this->gamePlay->handTable->seats()->slice(4, 1)->id])
+        TableSeat::find(['id' => $this->gameState->getSeats()[4]['id']])
             ->update([
                 'can_continue' => 1
             ]);

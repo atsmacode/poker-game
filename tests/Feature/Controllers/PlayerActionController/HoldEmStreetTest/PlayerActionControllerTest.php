@@ -46,17 +46,17 @@ class PlayerActionControllerTest extends BaseTest
         ]);
 
         TableSeat::create([
-            'table_id' => $this->gamePlay->handTable->id,
+            'table_id'  => $this->table->id,
             'player_id' => $this->player1->id
         ]);
 
         TableSeat::create([
-            'table_id' => $this->gamePlay->handTable->id,
+            'table_id'  => $this->table->id,
             'player_id' => $this->player2->id
         ]);
 
         TableSeat::create([
-            'table_id' => $this->gamePlay->handTable->id,
+            'table_id'  => $this->table->id,
             'player_id' => $this->player3->id
         ]);
 

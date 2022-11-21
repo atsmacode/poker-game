@@ -21,7 +21,7 @@ trait HasActionPosts
         $requestBody = [
             'deck'           => $this->gamePlay->dealer->getDeck(),
             'player_id'      => $this->player1->id,
-            'table_seat_id'  => $this->gamePlay->handTable->seats()->slice(0, 1)->id,
+            'table_seat_id'  => $this->gameState->getSeats()[0]['id'],
             'hand_street_id' => $this->gamePlay->hand->streets()->slice(0, 1)->id,
             'action_id'      => Action::CALL_ID,
             'bet_amount'     => 50.0,
@@ -38,7 +38,7 @@ trait HasActionPosts
         $requestBody = [
             'deck'           => $this->gamePlay->dealer->getDeck(),
             'player_id'      => $this->player1->id,
-            'table_seat_id'  => $this->gamePlay->handTable->seats()->slice(0, 1)->id,
+            'table_seat_id'  => $this->gameState->getSeats()[0]['id'],
             'hand_street_id' => $this->gamePlay->hand->streets()->slice(0, 1)->id,
             'action_id'      => Action::FOLD_ID,
             'bet_amount'     => null,
@@ -55,7 +55,7 @@ trait HasActionPosts
         $requestBody = [
             'deck'           => $this->gamePlay->dealer->getDeck(),
             'player_id'      => $this->player2->id,
-            'table_seat_id'  => $this->gamePlay->handTable->seats()->slice(1, 1)->id,
+            'table_seat_id'  => $this->gameState->getSeats()[1]['id'],
             'hand_street_id' => $this->gamePlay->hand->streets()->slice(0, 1)->id,
             'action_id'      => Action::CALL_ID,
             'bet_amount'     => 50.0,
@@ -72,7 +72,7 @@ trait HasActionPosts
         $requestBody = [
             'deck'           => $this->gamePlay->dealer->getDeck(),
             'player_id'      => $this->player2->id,
-            'table_seat_id'  => $this->gamePlay->handTable->seats()->slice(1, 1)->id,
+            'table_seat_id'  => $this->gameState->getSeats()[1]['id'],
             'hand_street_id' => $this->gamePlay->hand->streets()->slice(0, 1)->id,
             'action_id'      => Action::FOLD_ID,
             'bet_amount'     => null,
@@ -89,7 +89,7 @@ trait HasActionPosts
         $requestBody = [
             'deck'           => $this->gamePlay->dealer->getDeck(),
             'player_id'      => $this->player3->id,
-            'table_seat_id'  => $this->gamePlay->handTable->seats()->slice(2, 1)->id,
+            'table_seat_id'  => $this->gameState->getSeats()[2]['id'],
             'hand_street_id' => $this->gamePlay->hand->streets()->slice(0, 1)->id,
             'action_id'      => Action::CHECK_ID,
             'bet_amount'     => null,
@@ -106,7 +106,7 @@ trait HasActionPosts
         $requestBody = [
             'deck'           => $this->gamePlay->dealer->getDeck(),
             'player_id'      => $this->player3->id,
-            'table_seat_id'  => $this->gamePlay->handTable->seats()->slice(2, 1)->id,
+            'table_seat_id'  => $this->gameState->getSeats()[2]['id'],
             'hand_street_id' => $this->gamePlay->hand->streets()->slice(0, 1)->id,
             'action_id'      => Action::RAISE_ID,
             'bet_amount'     => 100.00,
@@ -123,7 +123,7 @@ trait HasActionPosts
         $requestBody = [
             'deck'           => $this->gamePlay->dealer->getDeck(),
             'player_id'      => $this->player4->id,
-            'table_seat_id'  => $this->gamePlay->handTable->seats()->slice(3, 1)->id,
+            'table_seat_id'  => $this->gameState->getSeats()[3]['id'],
             'hand_street_id' => $this->gamePlay->hand->streets()->slice(0, 1)->id,
             'action_id'      => Action::CALL_ID,
             'bet_amount'     => 50.0,
@@ -140,7 +140,7 @@ trait HasActionPosts
         $requestBody = [
             'deck'           => $this->gamePlay->dealer->getDeck(),
             'player_id'      => $this->player4->id,
-            'table_seat_id'  => $this->gamePlay->handTable->seats()->slice(3, 1)->id,
+            'table_seat_id'  => $this->gameState->getSeats()[3]['id'],
             'hand_street_id' => $this->gamePlay->hand->streets()->slice(0, 1)->id,
             'action_id'      => Action::FOLD_ID,
             'bet_amount'     => null,
@@ -157,7 +157,7 @@ trait HasActionPosts
         $requestBody = [
             'deck'           => $this->gamePlay->dealer->getDeck(),
             'player_id'      => $this->player4->id,
-            'table_seat_id'  => $this->gamePlay->handTable->seats()->slice(3, 1)->id,
+            'table_seat_id'  => $this->gameState->getSeats()[3]['id'],
             'hand_street_id' => $this->gamePlay->hand->streets()->slice(0, 1)->id,
             'action_id'      => Action::RAISE_ID,
             'bet_amount'     => 100.00,
@@ -174,7 +174,7 @@ trait HasActionPosts
         $requestBody = [
             'deck'           => $this->gamePlay->dealer->getDeck(),
             'player_id'      => $this->player4->id,
-            'table_seat_id'  => $this->gamePlay->handTable->seats()->slice(3, 1)->id,
+            'table_seat_id'  => $this->gameState->getSeats()[3]['id'],
             'hand_street_id' => $this->gamePlay->hand->streets()->slice(0, 1)->id,
             'action_id'      => Action::CHECK_ID,
             'bet_amount'     => null,
@@ -191,7 +191,7 @@ trait HasActionPosts
         $requestBody = [
             'deck'           => $this->gamePlay->dealer->getDeck(),
             'player_id'      => $this->player6->id,
-            'table_seat_id'  => $this->gamePlay->handTable->seats()->slice(5, 1)->id,
+            'table_seat_id'  => $this->gameState->getSeats()[5]['id'],
             'hand_street_id' => $this->gamePlay->hand->streets()->slice(0, 1)->id,
             'action_id'      => Action::FOLD_ID,
             'bet_amount'     => null,

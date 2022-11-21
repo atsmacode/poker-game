@@ -30,10 +30,9 @@ class GamePlay
 
     public function __construct($hand, $deck = null)
     {
-        $this->game      = new PotLimitHoldEm();
-        $this->dealer    = (new Dealer())->setDeck($deck);
-        $this->hand      = $hand;
-        $this->handTable = $hand->table();
+        $this->game   = new PotLimitHoldEm();
+        $this->dealer = (new Dealer())->setDeck($deck);
+        $this->hand   = $hand;
     }
 
     /**
@@ -106,9 +105,9 @@ class GamePlay
 
         if($this->game->streets[0]['whole_cards']){
             $this->dealer->dealTo(
-                $this->handTable->players(),
+                $this->gameState->getSeats(),
                 $this->game->streets[0]['whole_cards'],
-                $this->hand,
+                $this->gameState->getHand(),
             );
         }
 
