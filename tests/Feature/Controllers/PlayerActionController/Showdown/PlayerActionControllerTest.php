@@ -83,8 +83,6 @@ class PlayerActionControllerTest extends BaseTest
             ->initiatePlayerStacks()
             ->setDealerAndBlindSeats();
 
-        $this->gameState->refreshPlayers();
-
         $wholeCards = [
             [
                 'player' => $this->player3,
@@ -149,8 +147,6 @@ class PlayerActionControllerTest extends BaseTest
         $this->gamePlay->initiateStreetActions()
             ->initiatePlayerStacks()
             ->setDealerAndBlindSeats();
-
-        $this->gameState->refreshPlayers();
 
         $wholeCards = [
             [

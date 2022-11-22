@@ -13,6 +13,7 @@ use App\Models\PlayerAction;
 use App\Models\Street;
 use App\Models\TableSeat;
 use App\Constants\Action;
+use App\Models\Player;
 use App\Models\Stack;
 
 class GamePlay
@@ -253,26 +254,26 @@ class GamePlay
         $playerData  = [];
         $actionOnGet = $this->getActionOn();
 
-        foreach(PlayerAction::find(['hand_id' => $this->gameState->handId()])->collect()->content as $playerAction){
-            $actionOn   = $actionOnGet && $actionOnGet->player_id === $playerAction->player_id ? true : false;
-            $actionName = $playerAction->action_id ? $playerAction->action()->name : null;
-            $stack      = $playerAction->player()->stacks()->search('table_id', $this->gameState->tableId());
+        foreach($this->gameState->getPlayers() as $playerAction){
+            $actionOn   = $actionOnGet && $actionOnGet->player_id === $playerAction['player_id'] ? true : false;
+            $actionName = $playerAction['action_id'] ? $playerAction['actionName'] : null;
+            $stack      = $playerAction['stack'];
 
             $playerData[] = [
-                'stack'            => $stack ? $stack->amount : null,
-                'name'             => $playerAction->player()->name,
-                'action_id'        => $playerAction->action_id,
+                'stack'            => $stack ?? null,
+                'name'             => $playerAction['playerName'],
+                'action_id'        => $playerAction['action_id'],
                 'action_name'      => $actionName,
-                'player_id'        => $playerAction->player_id,
-                'table_seat_id'    => $playerAction->table_seat_id,
-                'hand_street_id'   => $playerAction->hand_street_id,
-                'bet_amount'       => $playerAction->bet_amount,
-                'active'           => $playerAction->active,
-                'can_continue'     => $playerAction->tableSeat()->can_continue,
-                'is_dealer'        => $playerAction->tableSeat()->is_dealer,
-                'big_blind'        => $playerAction->big_blind,
-                'small_blind'      => $playerAction->small_blind,
-                'whole_cards'      => $this->getWholeCards($playerAction->player()),
+                'player_id'        => $playerAction['player_id'],
+                'table_seat_id'    => $playerAction['table_seat_id'],
+                'hand_street_id'   => $playerAction['hand_street_id'],
+                'bet_amount'       => $playerAction['bet_amount'],
+                'active'           => $playerAction['active'],
+                'can_continue'     => $playerAction['can_continue'],
+                'is_dealer'        => $playerAction['is_dealer'],
+                'big_blind'        => $playerAction['big_blind'],
+                'small_blind'      => $playerAction['small_blind'],
+                'whole_cards'      => $this->getWholeCards($playerAction),
                 'action_on'        => $actionOn,
                 'availableOptions' => $actionOn ? $this->getAvailableOptionsBasedOnLatestAction($playerAction) : []
             ];
@@ -286,7 +287,7 @@ class GamePlay
         $wholeCards = [];
 
         if(isset($player)){
-            foreach($player->getWholeCards($this->gameState->handId()) as $wholeCard){
+            foreach(Player::getWholeCards($this->gameState->handId(), $player['player_id']) as $wholeCard){
                 $wholeCards[] = [
                     'player_id'        => $wholeCard['player_id'],
                     'rank'             => $wholeCard['rank'],
@@ -329,7 +330,7 @@ class GamePlay
         /**
          * BB is the only player that can fold / check / raise pre-flop
          */
-        if (count($this->gameState->getUpdatedHandStreets()->content) === 1 && !$playerAction->big_blind) {
+        if (count($this->gameState->getUpdatedHandStreets()->content) === 1 && !$playerAction['big_blind']) {
             return [Action::FOLD, Action::CALL, Action::RAISE];
         }
 
@@ -338,7 +339,7 @@ class GamePlay
                 /**
                  * BB can only check if there were no raises before the latest call action.
                  */
-                if ($playerAction->big_blind && !$this->gameState->getHand()->actions()->search('action_id', Action::RAISE['id'])) {
+                if ($playerAction['big_blind'] && !$this->gameState->getHand()->actions()->search('action_id', Action::RAISE['id'])) {
                     return [Action::FOLD, Action::CHECK, Action::RAISE];
                 } else {
                     return [Action::FOLD, Action::CALL, Action::RAISE];

@@ -57,13 +57,24 @@ class GameData extends Database
                 pa.hand_id,
                 pa.hand_street_id,
                 pa.id AS player_action_id,
-                ts.id AS table_seat_id
+                ts.id AS table_seat_id,
+                s.amount AS stack,
+                a.name AS actionName,
+                p.name AS playerName
             FROM
                 table_seats AS ts
             LEFT JOIN
                 player_actions AS pa ON ts.id = pa.table_seat_id
+            LEFT JOIN
+                players AS p ON pa.player_id = p.id
+            LEFT JOIN
+                stacks AS s ON pa.player_id = s.player_id AND ts.table_id = s.table_id
+            LEFT JOIN
+                actions AS a ON pa.action_id = a.id
             WHERE
-                pa.hand_id = :hand_id 
+                pa.hand_id = :hand_id
+            ORDER BY
+                ts.id ASC
         ");
 
         try {

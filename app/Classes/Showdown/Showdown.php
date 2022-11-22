@@ -4,6 +4,7 @@ namespace App\Classes\Showdown;
 
 use App\Classes\HandIdentifier\HandIdentifier;
 use App\Models\Hand;
+use App\Models\Player;
 use App\Models\TableSeat;
 
 class Showdown
@@ -97,7 +98,7 @@ class Showdown
             /**
              * TODO: Custom query, too many relations
              */
-            foreach($tableSeat->player()->getWholeCards($this->hand->id) as $wholeCard){
+            foreach(Player::getWholeCards($this->hand->id, $tableSeat->player_id) as $wholeCard){
                 $wholeCards[] = $wholeCard;
             }
 

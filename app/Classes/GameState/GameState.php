@@ -13,7 +13,6 @@ class GameState implements GameStateInterface
     private array         $deck;
     private int           $pot;
     private array         $communityCards;
-    private array         $players;
     private array         $winner;
     private ?PlayerAction $latestAction;
     private Hand          $hand;
@@ -36,7 +35,6 @@ class GameState implements GameStateInterface
         $this->tableId     = $hand->table_id;
         $this->handId      = $hand->id;
         $this->seats       = GameData::getSeats($this->tableId);
-        $this->players     = GameData::getPlayers($this->hand->id);
         $this->handStreets = $this->hand->streets();
     }
 
@@ -186,12 +184,7 @@ class GameState implements GameStateInterface
 
     public function getPlayers(): array
     {
-        return $this->players;
-    }
-
-    public function refreshPlayers(): void
-    {
-        $this->players = GameData::getPlayers($this->hand->id);
+        return GameData::getPlayers($this->handId);
     }
 
     public function setWinner(array $winner): void

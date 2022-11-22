@@ -27,12 +27,12 @@ class Player extends Model
         return Stack::find(['player_id' => $this->id]);
     }
 
-    public function getWholeCards($handId)
+    public static function getWholeCards(int $handId, int $playerId)
     {
-        return $this->wholeCardsQuery($handId);
+        return (new static())->wholeCardsQuery($handId, $playerId);
     }
 
-    private function wholeCardsQuery($handId)
+    private function wholeCardsQuery(int $handId, int $playerId)
     {
         $query = sprintf("
             SELECT
@@ -61,7 +61,7 @@ class Player extends Model
             $stmt = $this->connection->prepare($query);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->bindParam(':hand_id', $handId);
-            $stmt->bindParam(':player_id', $this->id);
+            $stmt->bindParam(':player_id', $playerId);
             $stmt->execute();
 
             return $stmt->fetchAll();
