@@ -11,7 +11,7 @@ trait HasStreets
     {
         $flop = HandStreet::create([
             'street_id' => Street::find(['name' => 'Flop'])->id,
-            'hand_id' => $this->gamePlay->hand->id
+            'hand_id' => $this->gameState->handId()
         ]);
 
         $this->gamePlay->dealer->dealStreetCards(
@@ -24,7 +24,7 @@ trait HasStreets
     {
         $turn = HandStreet::create([
             'street_id' => Street::find(['name' => 'Turn'])->id,
-            'hand_id' => $this->gamePlay->hand->id
+            'hand_id' => $this->gameState->handId()
         ]);
 
         $this->gamePlay->dealer->dealStreetCards(
@@ -37,7 +37,7 @@ trait HasStreets
     {
         $river = HandStreet::create([
             'street_id' => Street::find(['name' => 'River'])->id,
-            'hand_id' => $this->gamePlay->hand->id
+            'hand_id' => $this->gameState->handId()
         ]);
 
         $this->gamePlay->dealer->dealStreetCards(

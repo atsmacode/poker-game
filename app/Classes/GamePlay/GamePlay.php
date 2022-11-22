@@ -17,22 +17,15 @@ use App\Models\Stack;
 
 class GamePlay
 {
-    public $game;
-    public $dealer;
-    protected $actionOn;
-    public $fold;
-    public $check;
-    public $call;
-    public $bet;
-    public $raise;
+    public  $game;
+    public  $dealer;
     private ?GameState $gameState;
     private bool $newStreet = false;
 
-    public function __construct($hand, $deck = null)
+    public function __construct($deck = null)
     {
         $this->game   = new PotLimitHoldEm();
         $this->dealer = (new Dealer())->setDeck($deck);
-        $this->hand   = $hand;
     }
 
     /**

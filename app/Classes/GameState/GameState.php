@@ -189,6 +189,11 @@ class GameState implements GameStateInterface
         return $this->players;
     }
 
+    public function refreshPlayers(): void
+    {
+        $this->players = GameData::getPlayers($this->hand->id);
+    }
+
     public function setWinner(array $winner): void
     {
         $this->winner = $winner;

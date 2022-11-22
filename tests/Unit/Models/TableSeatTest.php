@@ -79,7 +79,7 @@ class TableSeatTest extends BaseTest
         ]), $this->gameState);
 
         $tableSeat = TableSeat::playerAfterDealer(
-            $this->gamePlay->hand->id,
+            $this->gameState->handId(),
             $this->gameState->getSeats()[0]['id']
         );
 

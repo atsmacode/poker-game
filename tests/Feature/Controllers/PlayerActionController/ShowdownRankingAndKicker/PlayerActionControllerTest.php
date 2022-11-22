@@ -83,6 +83,8 @@ class PlayerActionControllerTest extends BaseTest
             ->initiatePlayerStacks()
             ->setDealerAndBlindSeats();
 
+        $this->gameState->refreshPlayers();
+
         $wholeCards = [
             [
                 'player'  => $this->player3,
@@ -148,6 +150,8 @@ class PlayerActionControllerTest extends BaseTest
             ->initiatePlayerStacks()
             ->setDealerAndBlindSeats();
 
+        $this->gameState->refreshPlayers();
+
         $wholeCards = [
             [
                 'player'  => $this->player3,
@@ -207,7 +211,7 @@ class PlayerActionControllerTest extends BaseTest
     {
         $flop = HandStreet::create([
             'street_id' => Street::find(['name' => $this->gamePlay->game->streets[1]['name']])->id,
-            'hand_id'   => $this->gamePlay->hand->id
+            'hand_id'   => $this->gameState->handId()
         ]);
 
         foreach($flopCards as $card){
@@ -222,7 +226,7 @@ class PlayerActionControllerTest extends BaseTest
     {
         $turn = HandStreet::create([
             'street_id' => Street::find(['name' => $this->gamePlay->game->streets[2]['name']])->id,
-            'hand_id'   => $this->gamePlay->hand->id
+            'hand_id'   => $this->gameState->handId()
         ]);
 
         HandStreetCard::create([
@@ -235,7 +239,7 @@ class PlayerActionControllerTest extends BaseTest
     {
         $river = HandStreet::create([
             'street_id' => Street::find(['name' => $this->gamePlay->game->streets[3]['name']])->id,
-            'hand_id'   => $this->gamePlay->hand->id
+            'hand_id'   => $this->gameState->handId()
         ]);
 
         HandStreetCard::create([

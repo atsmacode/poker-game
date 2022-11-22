@@ -25,7 +25,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->table         = Table::create(['name' => 'Test Table', 'seats' => 3]);
         $this->hand          = Hand::create(['table_id' => $this->table->id]);
-        $this->gamePlay      = new GamePlay($this->hand);
+        $this->gamePlay      = new GamePlay();
 
         $this->player1 = Player::create([
             'name' => 'Player 1',
@@ -78,6 +78,7 @@ class PlayerActionControllerTest extends BaseTest
     public function it_adds_a_player_that_calls_the_big_blind_to_the_list_of_table_seats_that_can_continue()
     {
         $this->gamePlay->start(null, $this->gameState);
+        $this->gameState->refreshPlayers();
 
         $this->setPlayerFourCallsPost();
 
@@ -93,6 +94,7 @@ class PlayerActionControllerTest extends BaseTest
     public function it_removes_a_folded_player_from_the_list_of_seats_that_can_continue()
     {
         $this->gamePlay->start(null, $this->gameState);
+        $this->gameState->refreshPlayers();
 
         $this->givenBigBlindRaisesPreFlopCaller();
 
@@ -111,8 +113,9 @@ class PlayerActionControllerTest extends BaseTest
     public function it_can_deal_a_new_street()
     {
         $this->gamePlay->start(null, $this->gameState);
+        $this->gameState->refreshPlayers();
 
-        $this->assertCount(1, $this->gamePlay->hand->streets()->content);
+        $this->assertCount(1, $this->gameState->getUpdatedHandStreets()->content);
 
         $this->givenActionsMeanNewStreetIsDealt();
 
@@ -128,8 +131,9 @@ class PlayerActionControllerTest extends BaseTest
     public function the_big_blind_will_win_the_pot_if_all_other_players_fold_pre_flop()
     {
         $this->gamePlay->start(null, $this->gameState);
+        $this->gameState->refreshPlayers();
 
-        $this->assertCount(1, $this->gamePlay->hand->streets()->content);
+        $this->assertCount(1, $this->gameState->getUpdatedHandStreets()->content);
 
         $this->givenPlayerFourFolds();
         $this->givenPlayerFourCanNotContinue();
@@ -141,7 +145,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $response = $this->jsonResponse();
 
-        $this->assertCount(1, $this->gamePlay->hand->streets()->content);
+        $this->assertCount(1, $this->gameState->getUpdatedHandStreets()->content);
         $this->assertEquals(1, $response['players'][2]['can_continue']);
         $this->assertEquals($this->player3->id, $response['winner']['player']['id']);
     }
@@ -153,15 +157,16 @@ class PlayerActionControllerTest extends BaseTest
     public function the_pre_flop_action_will_be_back_on_the_big_blind_caller_if_the_big_blind_raises()
     {
         $this->gamePlay->start(null, $this->gameState);
+        $this->gameState->refreshPlayers();
 
-        $this->assertCount(1, $this->gamePlay->hand->streets() ->content);
+        $this->assertCount(1, $this->gameState->getUpdatedHandStreets() ->content);
 
         $this->givenBigBlindRaisesPreFlopCaller();
 
         $response = $this->jsonResponse();
 
         // We are still on the pre-flop action
-        $this->assertCount(1, $this->gamePlay->hand->streets() ->content);
+        $this->assertCount(1, $this->gameState->getUpdatedHandStreets() ->content);
 
         $this->assertTrue($response['players'][3]['action_on']);
     }
@@ -176,7 +181,9 @@ class PlayerActionControllerTest extends BaseTest
             'id' => $this->gameState->getSeats()[0]['id']
         ]), $this->gameState);
 
-        $this->assertCount(1, $this->gamePlay->hand->streets()->content);
+        $this->gameState->refreshPlayers();
+
+        $this->assertCount(1, $this->gameState->getUpdatedHandStreets()->content);
 
         $this->givenActionsMeanNewStreetIsDealtWhenDealerIsSeatTwo();
 
@@ -197,7 +204,9 @@ class PlayerActionControllerTest extends BaseTest
             'id' => $this->gameState->getSeats()[2]['id']
         ]), $this->gameState);
 
-        $this->assertCount(1, $this->gamePlay->hand->streets()->content);
+        $this->gameState->refreshPlayers();
+
+        $this->assertCount(1, $this->gameState->getUpdatedHandStreets()->content);
 
         /**
          * TODO, why did this not work without the POST 'all of a sudden'
@@ -216,8 +225,9 @@ class PlayerActionControllerTest extends BaseTest
     public function if_the_dealer_is_the_first_active_seat_on_a_new_street_the_first_active_seat_after_them_will_be_first_to_act()
     {
         $this->gamePlay->start(null, $this->gameState);
+        $this->gameState->refreshPlayers();
 
-        $this->assertCount(1, $this->gamePlay->hand->streets()->content);
+        $this->assertCount(1, $this->gameState->getUpdatedHandStreets()->content);
 
         $this->givenActionsMeanNewStreetIsDealt();
 

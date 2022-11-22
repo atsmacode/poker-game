@@ -31,7 +31,7 @@ class PlayerActionController
             $requestBody['active']
         );
 
-        $gamePlay = (new GamePlay($hand, $requestBody['deck']))->play($gameState);
+        $gamePlay = (new GamePlay($requestBody['deck']))->play($gameState);
 
         if (!isset($GLOBALS['dev'])) {
             header("Content-Type: application/json");

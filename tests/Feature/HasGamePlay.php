@@ -12,7 +12,7 @@ trait HasGamePlay
     private function givenPlayerOneRaisesBigBlind()
     {
         $playerAction = PlayerActionFactory::create(
-            playerActionId: $this->gamePlay->hand->actions()->slice(0, 1)->id,
+            playerActionId: $this->gameState->getPlayers()[0]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::RAISE_ID,
             betAmount:      100.0,
@@ -25,7 +25,7 @@ trait HasGamePlay
     private function givenPlayerOneFolds()
     {
         $playerAction = PlayerActionFactory::create(
-            playerActionId: $this->gamePlay->hand->actions()->slice(0, 1)->id,
+            playerActionId: $this->gameState->getPlayers()[0]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::FOLD_ID,
             betAmount:      null,
@@ -54,7 +54,7 @@ trait HasGamePlay
     private function givenPlayerOneCalls()
     {
         $playerAction = PlayerActionFactory::create(
-            playerActionId: $this->gamePlay->hand->actions()->slice(0, 1)->id,
+            playerActionId: $this->gameState->getPlayers()[0]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::CALL_ID,
             betAmount:      50.00,
@@ -67,7 +67,7 @@ trait HasGamePlay
     private function givenPlayerTwoCalls()
     {
         $playerAction = PlayerActionFactory::create(
-            playerActionId: $this->gamePlay->hand->actions()->slice(1, 1)->id,
+            playerActionId: $this->gameState->getPlayers()[1]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::CALL_ID,
             betAmount:      50.00,
@@ -80,7 +80,7 @@ trait HasGamePlay
     private function givenPlayerTwoFolds()
     {
         $playerAction = PlayerActionFactory::create(
-            playerActionId: $this->gamePlay->hand->actions()->slice(1, 1)->id,
+            playerActionId: $this->gameState->getPlayers()[1]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::FOLD_ID,
             betAmount:      null,
@@ -109,7 +109,7 @@ trait HasGamePlay
     private function givenPlayerThreeChecks()
     {
         $playerAction = PlayerActionFactory::create(
-            playerActionId: $this->gamePlay->hand->actions()->slice(2, 1)->id,
+            playerActionId: $this->gameState->getPlayers()[2]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::CHECK_ID,
             betAmount:      null,
@@ -122,7 +122,7 @@ trait HasGamePlay
     private function givenPlayerThreeCallsSmallBlind()
     {
         $playerAction = PlayerActionFactory::create(
-            playerActionId: $this->gamePlay->hand->actions()->slice(2, 1)->id,
+            playerActionId: $this->gameState->getPlayers()[2]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::CALL_ID,
             betAmount:      25.00,
@@ -135,7 +135,7 @@ trait HasGamePlay
     private function givenPlayerThreeRaises()
     {
         $playerAction = PlayerActionFactory::create(
-            playerActionId: $this->gamePlay->hand->actions()->slice(2, 1)->id,
+            playerActionId: $this->gameState->getPlayers()[2]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::RAISE_ID,
             betAmount:      100.00,
@@ -156,7 +156,7 @@ trait HasGamePlay
     private function givenPlayerFourFolds()
     {
         $playerAction = PlayerActionFactory::create(
-            playerActionId: $this->gamePlay->hand->actions()->slice(3, 1)->id,
+            playerActionId: $this->gameState->getPlayers()[3]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::FOLD_ID,
             betAmount:      null,
@@ -169,7 +169,7 @@ trait HasGamePlay
     private function givenPlayerFourCalls()
     {
         $playerAction = PlayerActionFactory::create(
-            playerActionId: $this->gamePlay->hand->actions()->slice(3, 1)->id,
+            playerActionId: $this->gameState->getPlayers()[3]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::CALL_ID,
             betAmount:      50.00,
@@ -182,7 +182,7 @@ trait HasGamePlay
     private function givenPlayerFourChecks()
     {
         $playerAction = PlayerActionFactory::create(
-            playerActionId: $this->gamePlay->hand->actions()->slice(3, 1)->id,
+            playerActionId: $this->gameState->getPlayers()[3]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::CHECK_ID,
             betAmount:      null,
@@ -195,7 +195,7 @@ trait HasGamePlay
     private function givenPlayerFourRaises()
     {
         $playerAction = PlayerActionFactory::create(
-            playerActionId: $this->gamePlay->hand->actions()->slice(3, 1)->id,
+            playerActionId: $this->gameState->getPlayers()[3]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::RAISE_ID,
             betAmount:      100.00,
@@ -224,7 +224,7 @@ trait HasGamePlay
     private function givenPlayerFiveCalls()
     {
         $playerAction = PlayerActionFactory::create(
-            playerActionId: $this->gamePlay->hand->actions()->slice(4, 1)->id,
+            playerActionId: $this->gameState->getPlayers()[4]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::CALL_ID,
             betAmount:      50.00,
@@ -248,7 +248,7 @@ trait HasGamePlay
             WholeCard::create([
                 'player_id' => $card['player']->id,
                 'card_id'   => $card['card_id'],
-                'hand_id'   => $this->gamePlay->hand->id
+                'hand_id'   => $this->gameState->handId()
             ]);
         }
     }
