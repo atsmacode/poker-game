@@ -54,7 +54,7 @@ class GamePlay
 
         return [
             'deck'           => $this->dealer->getDeck(),
-            'pot'            => $this->gameState->getHand()->pot()->amount,
+            'pot'            => $this->gameState->getPot(),
             'communityCards' => $this->getCommunityCards(),
             'players'        => $this->getPlayerData(),
             'winner'         => $winner
@@ -78,7 +78,7 @@ class GamePlay
 
         return [
             'deck'           => $this->dealer->getDeck(),
-            'pot'            => $this->gameState->getHand()->pot()->amount,
+            'pot'            => $this->gameState->getPot(),
             'communityCards' => $this->getCommunityCards(),
             'players'        => $this->getPlayerData(),
             'winner'         => null
@@ -107,7 +107,7 @@ class GamePlay
 
         return [
             'deck'           => $this->dealer->getDeck(),
-            'pot'            => $this->gameState->getHand()->pot()->amount,
+            'pot'            => $this->gameState->getPot(),
             'communityCards' => $this->getCommunityCards(),
             'players'        => $this->getPlayerData(),
             'winner'         => null
@@ -136,7 +136,7 @@ class GamePlay
 
         return [
             'deck'           => $this->dealer->getDeck(),
-            'pot'            => $this->gameState->getHand()->pot()->amount,
+            'pot'            => $this->gameState->getPot(),
             'communityCards' => $this->getCommunityCards(),
             'players'        => $this->getPlayerData(),
             'winner'         => null
@@ -539,6 +539,6 @@ class GamePlay
         
         $this->gameState->setLatestAction($bigBlind);
 
-        BetHelper::postBlinds($this->gameState->getHand(), $smallBlind, $bigBlind);
+        BetHelper::postBlinds($this->gameState->getHand(), $smallBlind, $bigBlind, $this->gameState);
     }
 }

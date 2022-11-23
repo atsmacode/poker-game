@@ -11,7 +11,6 @@ use App\Models\Table;
 class GameState implements GameStateInterface
 {
     private array         $deck;
-    private int           $pot;
     private array         $communityCards;
     private array         $winner;
     private ?PlayerAction $latestAction;
@@ -21,6 +20,7 @@ class GameState implements GameStateInterface
     private array         $seats;
     private ?array        $actions;
     private HandStreet    $handStreets;
+    private int           $pot;
 
     public function __construct(Hand $hand = null)
     {
@@ -157,14 +157,9 @@ class GameState implements GameStateInterface
         return $this->deck;
     }
 
-    public function setPot(int $potAmount): void
-    {
-        $this->pot = $potAmount;
-    }
-
     public function getPot(): int
     {
-        return $this->pot;
+        return isset($this->hand->pot()->amount) ? $this->hand->pot()->amount : 0;
     }
 
     public function setCommunityCards(array $communityCards): void
