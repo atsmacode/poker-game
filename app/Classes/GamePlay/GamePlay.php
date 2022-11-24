@@ -165,12 +165,7 @@ class GamePlay
                 'action_id' => null
             ], 'hand_id = ' . $this->gameState->handId());
 
-        /**
-         * Added flag for new street as preceeding action
-         * updates were not being picked up when setting
-         * action options.
-         */
-        $this->newStreet = true;
+        $this->gameState->setNewStreet();
     }
 
     protected function readyForShowdown()
@@ -227,7 +222,7 @@ class GamePlay
     {
         $firstActivePlayer = TableSeat::firstActivePlayer($this->gameState->handId());
 
-        if ($this->newStreet) {
+        if ($this->gameState->isNewStreet()) {
             return $this->getThePlayerActionShouldBeOnForANewStreet($firstActivePlayer);
         }
 
@@ -323,7 +318,7 @@ class GamePlay
 
     public function getAvailableOptionsBasedOnLatestAction($playerAction)
     {
-        if ($this->newStreet) {
+        if ($this->gameState->isNewStreet()) {
             return [Action::FOLD, Action::CHECK, Action::BET];
         }
 

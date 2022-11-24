@@ -22,6 +22,7 @@ class GameState implements GameStateInterface
     private HandStreet    $handStreets;
     private array         $players;
     private array         $stacks;
+    private bool          $newStreet = false;
 
     public function __construct(Hand $hand = null)
     {
@@ -217,5 +218,15 @@ class GameState implements GameStateInterface
     public function getStacks(): array
     {
         return $this->stacks;
+    }
+
+    public function setNewStreet(): void
+    {
+        $this->newStreet = true;
+    }
+
+    public function isNewStreet(): bool
+    {
+        return $this->newStreet;
     }
 }
