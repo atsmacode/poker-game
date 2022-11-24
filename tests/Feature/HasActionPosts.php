@@ -24,8 +24,9 @@ trait HasActionPosts
             'table_seat_id'  => $this->gameState->getSeats()[0]['id'],
             'hand_street_id' => $this->gameState->getUpdatedHandStreets()->slice(0, 1)->id,
             'action_id'      => Action::CALL_ID,
-            'bet_amount'     => 50.0,
+            'bet_amount'     => 50,
             'active'         => 1,
+            'stack'          => $this->gameState->getPlayers()[0]['stack']
         ];
 
         $_POST['body'] = serialize($requestBody);
@@ -43,6 +44,7 @@ trait HasActionPosts
             'action_id'      => Action::FOLD_ID,
             'bet_amount'     => null,
             'active'         => 0,
+            'stack'          => $this->gameState->getPlayers()[0]['stack']
         ];
 
         $_POST['body'] = serialize($requestBody);
@@ -58,8 +60,9 @@ trait HasActionPosts
             'table_seat_id'  => $this->gameState->getSeats()[1]['id'],
             'hand_street_id' => $this->gameState->getUpdatedHandStreets()->slice(0, 1)->id,
             'action_id'      => Action::CALL_ID,
-            'bet_amount'     => 50.0,
+            'bet_amount'     => 50,
             'active'         => 1,
+            'stack'          => $this->gameState->getPlayers()[1]['stack']
         ];
 
         $_POST['body'] = serialize($requestBody);
@@ -77,6 +80,7 @@ trait HasActionPosts
             'action_id'      => Action::FOLD_ID,
             'bet_amount'     => null,
             'active'         => 0,
+            'stack'          => $this->gameState->getPlayers()[1]['stack']
         ];
 
         $_POST['body'] = serialize($requestBody);
@@ -94,6 +98,7 @@ trait HasActionPosts
             'action_id'      => Action::CHECK_ID,
             'bet_amount'     => null,
             'active'         => 1,
+            'stack'          => $this->gameState->getPlayers()[2]['stack']
         ];
 
         $_POST['body'] = serialize($requestBody);
@@ -109,8 +114,9 @@ trait HasActionPosts
             'table_seat_id'  => $this->gameState->getSeats()[2]['id'],
             'hand_street_id' => $this->gameState->getUpdatedHandStreets()->slice(0, 1)->id,
             'action_id'      => Action::RAISE_ID,
-            'bet_amount'     => 100.00,
+            'bet_amount'     => 100,
             'active'         => 1,
+            'stack'          => $this->gameState->getPlayers()[2]['stack']
         ];
 
         $_POST['body'] = serialize($requestBody);
@@ -126,8 +132,9 @@ trait HasActionPosts
             'table_seat_id'  => $this->gameState->getSeats()[3]['id'],
             'hand_street_id' => $this->gameState->getUpdatedHandStreets()->slice(0, 1)->id,
             'action_id'      => Action::CALL_ID,
-            'bet_amount'     => 50.0,
+            'bet_amount'     => 50,
             'active'         => 1,
+            'stack'          => $this->gameState->getPlayers()[3]['stack']
         ];
 
         $_POST['body'] = serialize($requestBody);
@@ -145,6 +152,7 @@ trait HasActionPosts
             'action_id'      => Action::FOLD_ID,
             'bet_amount'     => null,
             'active'         => 0,
+            'stack'          => $this->gameState->getPlayers()[3]['stack']
         ];
 
         $_POST['body'] = serialize($requestBody);
@@ -160,8 +168,9 @@ trait HasActionPosts
             'table_seat_id'  => $this->gameState->getSeats()[3]['id'],
             'hand_street_id' => $this->gameState->getUpdatedHandStreets()->slice(0, 1)->id,
             'action_id'      => Action::RAISE_ID,
-            'bet_amount'     => 100.00,
+            'bet_amount'     => 100,
             'active'         => 1,
+            'stack'          => $this->gameState->getPlayers()[3]['stack']
         ];
 
         $_POST['body'] = serialize($requestBody);
@@ -179,6 +188,7 @@ trait HasActionPosts
             'action_id'      => Action::CHECK_ID,
             'bet_amount'     => null,
             'active'         => 1,
+            'stack'          => $this->gameState->getPlayers()[3]['stack']
         ];
 
         $_POST['body'] = serialize($requestBody);
@@ -196,6 +206,7 @@ trait HasActionPosts
             'action_id'      => Action::FOLD_ID,
             'bet_amount'     => null,
             'active'         => 0,
+            'stack'          => $this->gameState->getPlayers()[5]['stack']
         ];
 
         $_POST['body'] = serialize($requestBody);

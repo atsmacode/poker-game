@@ -29,7 +29,8 @@ class ActionHandler implements ActionHandlerInterface
         int  $handStreetId,
              $betAmount,
         int  $actionId,
-        int  $active
+        int  $active,
+        int  $stack
     ): GameState {
         $playerAction = PlayerAction::find([
             'player_id'      =>  $playerId,
@@ -37,8 +38,7 @@ class ActionHandler implements ActionHandlerInterface
             'hand_street_id' => $handStreetId
         ]);
 
-        $player    = $playerAction->player();
-        $betAmount = BetHelper::handle($hand, $player, $betAmount);
+        BetHelper::handle($hand, $stack, $playerId, $hand->table_id, $betAmount);
 
         $playerAction->update([
             'action_id'  => $actionId,

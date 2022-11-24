@@ -17,6 +17,7 @@ interface ActionHandlerInterface
         int  $handStreetId,
              $betAmount,
         int  $actionId,
-        int  $active
+        int  $active,
+        int  $stack
     ): GameState;
 }

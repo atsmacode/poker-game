@@ -59,7 +59,8 @@ createApp({
 					table_seat_id:  player.table_seat_id,
 					hand_street_id: player.hand_street_id,
 					active:         active,
-					bet_amount:     this.actionBetAmounts[action.name]
+					bet_amount:     this.actionBetAmounts[action.name],
+					stack:          player.stack
 				}
 			};
 

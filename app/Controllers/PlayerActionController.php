@@ -28,7 +28,8 @@ class PlayerActionController
             $requestBody['hand_street_id'],
             $requestBody['bet_amount'],
             $requestBody['action_id'],
-            $requestBody['active']
+            $requestBody['active'],
+            $requestBody['stack']
         );
 
         $gamePlay = (new GamePlay($requestBody['deck']))->play($gameState);

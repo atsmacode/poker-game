@@ -72,7 +72,6 @@ class GamePlay
     {
         $this->updatePlayerStatusesOnNewStreet();
 
-        // Not keen on the way I'm adding/subtracting from the handStreets->count() to match array starting with 0
         $street = HandStreet::create([
             'street_id' => Street::find(['name' => $this->game->streets[$this->gameState->handStreetCount()]['name']])->id,
             'hand_id' => $this->gameState->handId()
@@ -402,30 +401,6 @@ class GamePlay
         return $this;
     }
 
-    public function initiatePlayerStacks()
-    {
-        foreach($this->gameState->getSeats() as $seat){
-            /**
-             * Looks like this count() check was added
-             * as there's only 1 table being handled.
-             */
-            $tableStacks = Stack::find([
-                'player_id' => $seat['player_id'],
-                'table_id' => $this->gameState->tableId()
-            ]);
-
-            if(count($tableStacks->content) === 0){
-                Stack::create([
-                    'amount' => 1000,
-                    'player_id' => $seat['player_id'],
-                    'table_id' => $this->gameState->tableId()
-                ]);
-            }
-        }
-
-        return $this;
-    }
-
     protected function noDealerIsSetOrThereIsNoSeatAfterTheCurrentDealer($currentDealer)
     {
         return !$currentDealer || !$this->gameState->getSeat($currentDealer['id'] + 1);
@@ -491,6 +466,36 @@ class GamePlay
         ];
     }
 
+    public function initiatePlayerStacks()
+    {
+        $tableStacks = [];
+
+        foreach($this->gameState->getSeats() as $seat){
+            /**
+             * Looks like this count() check was added
+             * as there's only 1 table being handled.
+             */
+            $playerTableStack = Stack::find([
+                'player_id' => $seat['player_id'],
+                'table_id'  => $this->gameState->tableId()
+            ]);
+
+            if (0 === count($playerTableStack->content)) {
+                $tableStacks[$seat['player_id']] = Stack::create([
+                    'amount' => 1000,
+                    'player_id' => $seat['player_id'],
+                    'table_id' => $this->gameState->tableId()
+                ]);
+            } else {
+                $tableStacks[$seat['player_id']] = $playerTableStack;
+            }
+        }
+
+        $this->gameState->setStacks($tableStacks);
+
+        return $this;
+    }
+
     public function setDealerAndBlindSeats($currentDealer = null)
     {
         if($this->gameState->handStreetCount() === 1){
@@ -552,6 +557,11 @@ class GamePlay
         
         $this->gameState->setLatestAction($bigBlind);
 
-        BetHelper::postBlinds($this->gameState->getHand(), $smallBlind, $bigBlind, $this->gameState);
+        BetHelper::postBlinds(
+            $this->gameState->getHand(),
+            $smallBlind,
+            $bigBlind,
+            $this->gameState
+        );
     }
 }

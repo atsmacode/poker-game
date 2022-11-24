@@ -58,7 +58,7 @@ class BetHelperTest extends BaseTest
 
         $this->assertEquals(1000, $player->stacks()->search('id', $stack->id)->amount);
 
-        BetHelper::handle($hand, $player, 150);
+        BetHelper::handle($hand, $stack->amount, $player->id, $table->id, 150);
 
         $this->assertEquals(150, Pot::find(['id' => $pot->id])->amount);
         $this->assertEquals(850, $player->stacks()->search('id', $stack->id)->amount);

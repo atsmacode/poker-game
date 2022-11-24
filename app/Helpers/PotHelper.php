@@ -17,6 +17,6 @@ class PotHelper
     {
         $amount = $stackAmount + $potAmount;
 
-        Stack::increment($amount, $playerId, $tableId);
+        Stack::change($amount, $playerId, $tableId);
     }
 }

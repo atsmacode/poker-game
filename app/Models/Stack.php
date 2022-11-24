@@ -9,12 +9,12 @@ class Stack extends Model
     public $table = 'stacks';
     public string $name;
 
-    public static function increment(int $amount, int $playerId, int $tableId)
+    public static function change(int $amount, int $playerId, int $tableId)
     {
-        return (new static())->incrementQuery($amount, $playerId, $tableId);
+        return (new static())->changeQuery($amount, $playerId, $tableId);
     }
 
-    private function incrementQuery(int $amount, int $playerId, int $tableId)
+    private function changeQuery(int $amount, int $playerId, int $tableId)
     {
         $query = sprintf("
             UPDATE

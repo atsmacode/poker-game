@@ -20144,6 +20144,7 @@ __webpack_require__.r(__webpack_exports__);
         active = 0;
       }
 
+      console.log('stack: ' + player.stack);
       var payload = {
         body: {
           deck: this.deck,
@@ -20152,10 +20153,12 @@ __webpack_require__.r(__webpack_exports__);
           table_seat_id: player.table_seat_id,
           hand_street_id: player.hand_street_id,
           active: active,
-          bet_amount: this.actionBetAmounts[_action.name]
+          bet_amount: this.actionBetAmounts[_action.name],
+          stack: player.stack
         }
       };
       this.loading = true;
+      console.log('test');
       axios__WEBPACK_IMPORTED_MODULE_1___default().post('/index.php/action', payload).then(function (response) {
         console.log(response.data);
         var data = response.data.body;

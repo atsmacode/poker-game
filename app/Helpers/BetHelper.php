@@ -2,32 +2,41 @@
 
 namespace App\Helpers;
 
+use App\Classes\GameState\GameState;
 use App\Constants\Action as ConstantsAction;
 use App\Models\Action;
 use App\Models\Hand;
-use App\Models\Player;
+use App\Models\PlayerAction;
 use App\Models\PlayerActionLog;
+use App\Models\Stack;
 use App\Models\TableSeat;
 
 class BetHelper
 {
-    public static function handle(Hand $hand, Player $player, $betAmount = null)
-    {
-        if($betAmount){
-            $hand->pot()->update(['amount' => $hand->pot()->amount + $betAmount]);
+    public static function handle(
+        Hand $hand,
+        int $stackAmount,
+        int $playerId,
+        int $tableId,
+        int $betAmount = null
+    ): ?int {
+        if ($betAmount) {
+            $stack  = $stackAmount - $betAmount;
+            $pot    = $hand->pot();
 
-            $stack = $player->stacks()->search('table_id', $hand->table()->id);
-
-            $stack->update(['amount' => $stack->amount - $betAmount]);
-
-            return $betAmount;
+            Stack::change($stack, $playerId, $tableId);
+            $pot->update(['amount' => $pot->amount + $betAmount]);
         }
-
+        
         return null;
     }
 
-    public static function postBlinds($hand, $smallBlind, $bigBlind)
-    {
+    public static function postBlinds(
+        Hand $hand,
+        PlayerAction $smallBlind,
+        PlayerAction $bigBlind,
+        GameState $gameState
+    ): void {
         PotHelper::initiatePot($hand);
 
         $smallBlind->update([
@@ -55,7 +64,13 @@ class BetHelper
                 'can_continue' => 0
             ]);
 
-        BetHelper::handle($hand, $smallBlind->player(), $smallBlind->bet_amount);
+        BetHelper::handle(
+            $hand,
+            $gameState->getStacks()[$smallBlind->player_id]->amount,
+            $smallBlind->player_id,
+            $hand->table_id,
+            $smallBlind->bet_amount
+        );
 
         $bigBlind->update([
             'action_id'  => Action::find(['name' => 'Bet'])->id,
@@ -82,6 +97,12 @@ class BetHelper
                 'can_continue' => 0
             ]);
 
-        BetHelper::handle($hand, $bigBlind->player(), $bigBlind->bet_amount);
+        BetHelper::handle(
+            $hand,
+            $gameState->getStacks()[$bigBlind->player_id]->amount,
+            $bigBlind->player_id,
+            $hand->table_id,
+            $bigBlind->bet_amount
+        );
     }
 }
