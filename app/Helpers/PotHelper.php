@@ -3,20 +3,20 @@
 namespace App\Helpers;
 
 use App\Models\Hand;
-use App\Models\Player;
 use App\Models\Pot;
+use App\Models\Stack;
 
 class PotHelper
 {
-    public static function initiatePot(Hand $hand)
+    public static function initiatePot(Hand $hand): void
     {
         Pot::create(['amount' => 0, 'hand_id' => $hand->id]);
     }
 
-    public static function awardPot(Pot $pot, Player $player)
+    public static function awardPot(int $stackAmount, int $potAmount, int $playerId, int $tableId): void
     {
-        $stack = $player->stacks()->search('table_id', $pot->table()->id);
+        $amount = $stackAmount + $potAmount;
 
-        $stack->update(['amount' => $stack->amount + $pot->amount]);
+        Stack::increment($amount, $playerId, $tableId);
     }
 }

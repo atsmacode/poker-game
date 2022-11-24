@@ -20,7 +20,7 @@ class GameState implements GameStateInterface
     private array         $seats;
     private ?array        $actions;
     private HandStreet    $handStreets;
-    private int           $pot;
+    private array         $players;
 
     public function __construct(Hand $hand = null)
     {
@@ -159,7 +159,9 @@ class GameState implements GameStateInterface
 
     public function getPot(): int
     {
-        return isset($this->hand->pot()->amount) ? $this->hand->pot()->amount : 0;
+        $pot = $this->hand->pot();
+
+        return isset($pot->amount) ? $pot->amount : 0;
     }
 
     public function setCommunityCards(array $communityCards): void
@@ -172,14 +174,14 @@ class GameState implements GameStateInterface
         return $this->communityCards;
     }
 
-    public function setPlayers(array $players): void
+    public function setPlayers(): void
     {
-        $this->players = $players;
+        $this->players = GameData::getPlayers($this->handId);
     }
 
     public function getPlayers(): array
     {
-        return GameData::getPlayers($this->handId);
+        return $this->players;
     }
 
     public function setWinner(array $winner): void

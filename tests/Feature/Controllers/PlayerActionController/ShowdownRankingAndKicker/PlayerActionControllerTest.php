@@ -130,11 +130,13 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->setRiver($riverCard);
 
+        $this->gameState->setPlayers();
+
         $this->executeActionsToContinue();
 
         $response = $this->jsonResponse();
 
-        $this->assertEquals($this->player3->id, $response['winner']['player']['id']);
+        $this->assertEquals($this->player3->id, $response['winner']['player']['player_id']);
         $this->assertEquals(HandType::HIGH_CARD['id'], $response['winner']['handType']['id']);
     }
 
@@ -195,11 +197,13 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->setRiver($riverCard);
 
+        $this->gameState->setPlayers();
+
         $this->executeActionsToContinue();
 
         $response = $this->jsonResponse();
 
-        $this->assertEquals($this->player3->id, $response['winner']['player']['id']);
+        $this->assertEquals($this->player3->id, $response['winner']['player']['player_id']);
         $this->assertEquals(HandType::HIGH_CARD['id'], $response['winner']['handType']['id']);
     }
 

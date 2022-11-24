@@ -46,9 +46,16 @@ class GamePlay
 
     public function showdown()
     {
-        $winner = (new Showdown($this->gameState->getHand()))->compileHands()->decideWinner();
+        $this->gameState->setPlayers();
 
-        PotHelper::awardPot($this->gameState->getHand()->pot(), $winner['player']);
+        $winner = (new Showdown($this->gameState))->compileHands()->decideWinner();
+
+        PotHelper::awardPot(
+            $winner['player']['stack'],
+            $this->gameState->getPot(),
+            $winner['player']['player_id'],
+            $winner['player']['table_id']
+        );
 
         $this->gameState->getHand()->complete();
 
@@ -105,6 +112,8 @@ class GamePlay
             );
         }
 
+        $this->gameState->setPlayers();
+
         return [
             'deck'           => $this->dealer->getDeck(),
             'pot'            => $this->gameState->getPot(),
@@ -116,11 +125,18 @@ class GamePlay
 
     public function nextStep()
     {
+
         if ($this->theBigBlindIsTheOnlyActivePlayerRemainingPreFlop()) {
             TableSeat::bigBlindWins($this->gameState->handId());
 
             return $this->showdown();
         }
+
+        if ($this->theLastHandWasCompleted()) {
+            return $this->start();
+        }
+
+        $this->gameState->setPlayers();
 
         if ($this->readyForShowdown() || $this->onePlayerRemainsThatCanContinue()) {
             return $this->showdown();
@@ -128,10 +144,6 @@ class GamePlay
 
         if ($this->allActivePlayersCanContinue()) {
             return $this->continue();
-        }
-
-        if ($this->theLastHandWasCompleted()) {
-            return $this->start();
         }
 
         return [
@@ -445,18 +457,19 @@ class GamePlay
          * in order. Consider changing. Also will only
          * work if all seats have a stack/player.
          */
-        if($this->noDealerIsSetOrThereIsNoSeatAfterTheCurrentDealer($currentDealer)){
+        if ($this->noDealerIsSetOrThereIsNoSeatAfterTheCurrentDealer($currentDealer)) {
+
             $dealer         = $this->gameState->getSeats()[0];
             $smallBlindSeat = $this->gameState->getSeat($dealer['id'] + 1);
             $bigBlindSeat   = $this->gameState->getSeat($dealer['id'] + 2);
 
-        } else if($this->thereAreThreeSeatsAfterTheCurrentDealer($currentDealer)) {
+        } else if ($this->thereAreThreeSeatsAfterTheCurrentDealer($currentDealer)) {
 
             $dealer         = $this->gameState->getSeat($currentDealer['id'] + 1);
             $smallBlindSeat = $this->gameState->getSeat($dealer['id'] + 1);
             $bigBlindSeat   = $this->gameState->getSeat($dealer['id'] + 2);
 
-        } else if($this->thereAreTwoSeatsAfterTheCurrentDealer($currentDealer)) {
+        } else if ($this->thereAreTwoSeatsAfterTheCurrentDealer($currentDealer)) {
 
             $dealer         = $this->gameState->getSeat($currentDealer['id'] + 1);
             $smallBlindSeat = $this->gameState->getSeat($dealer['id'] + 1);

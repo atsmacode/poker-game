@@ -9,5 +9,4 @@ class Street extends Model
     public $table = 'streets';
     public string $name;
     public $id;
-
 }

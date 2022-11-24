@@ -93,7 +93,7 @@
     <div v-if="winner">
         <div class="bg-info p-3 rounded mb-1">
             <h2>Winner</h2>
-            <p>Player {{winner.player.id}} with {{winner.handType.name}}</p>
+            <p>Player {{winner.player.player_id}} with {{winner.handType.name}}</p>
             <button v-on:click="gameData" class="btn btn-primary">
                 Next Hand
             </button>

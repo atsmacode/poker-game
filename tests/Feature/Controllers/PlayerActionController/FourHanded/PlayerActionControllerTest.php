@@ -94,6 +94,8 @@ class PlayerActionControllerTest extends BaseTest
     {
         $this->gamePlay->start(null, $this->gameState);
 
+        //$this->gameState->setPlayers();
+
         $this->givenBigBlindRaisesPreFlopCaller();
 
         $this->givenPlayerThreeCanContinue();
@@ -143,7 +145,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->assertCount(1, $this->gameState->getUpdatedHandStreets()->content);
         $this->assertEquals(1, $response['players'][2]['can_continue']);
-        $this->assertEquals($this->player3->id, $response['winner']['player']['id']);
+        $this->assertEquals($this->player3->id, $response['winner']['player']['player_id']);
     }
 
     /**

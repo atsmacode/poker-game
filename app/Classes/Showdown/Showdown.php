@@ -2,15 +2,14 @@
 
 namespace App\Classes\Showdown;
 
+use App\Classes\GameState\GameState;
 use App\Classes\HandIdentifier\HandIdentifier;
-use App\Models\Hand;
 use App\Models\Player;
-use App\Models\TableSeat;
 
 class Showdown
 {
-    public $handIdentifier;
-    public $hand;
+    public HandIdentifier $handIdentifier;
+    public GameState $gameState;
     public $winner;
 
     /**
@@ -24,12 +23,12 @@ class Showdown
     public array $playerHands = [];
 
     /**
-     * @param Hand $hand
+     * @param GameState $gameState
      */
-    public function __construct($hand)
+    public function __construct($gameState)
     {
         $this->handIdentifier = new HandIdentifier();
-        $this->hand = $hand;
+        $this->gameState      = $gameState;
     }
 
     public function decideWinner(): array
@@ -92,19 +91,16 @@ class Showdown
     {
         $this->getCommunityCards();
 
-        foreach(TableSeat::getContinuingPlayerSeats($this->hand->id)->collect()->content as $tableSeat){
+        foreach ($this->getContinuingPlayerSeats($this->gameState->getPlayers()) as $player) {
             $wholeCards = [];
 
-            /**
-             * TODO: Custom query, too many relations
-             */
-            foreach(Player::getWholeCards($this->hand->id, $tableSeat->player_id) as $wholeCard){
+            foreach (Player::getWholeCards($this->gameState->handId(), $player['player_id']) as $wholeCard) {
                 $wholeCards[] = $wholeCard;
             }
 
             $compileInfo = (new HandIdentifier())->identify($wholeCards, $this->communityCards)->identifiedHandType;
             $compileInfo['highestActiveCard'] = max($compileInfo['activeCards']);
-            $compileInfo['player']            = $tableSeat->player();
+            $compileInfo['player']            = $player;
 
             $this->playerHands[] = $compileInfo;
         }
@@ -112,12 +108,15 @@ class Showdown
         return $this;
     }
 
+    private function getContinuingPlayerSeats(array $players): array {
+        return array_filter($players, function($player) {
+            return 1 === $player['active'] && 1 === $player['can_continue'];
+        });
+    }
+
     public function getCommunityCards(): void
     {
-        /**
-         * TODO: Custom query, too many relations
-         */
-        foreach($this->hand->streets()->collect()->content as $handStreet){
+        foreach($this->gameState->getUpdatedHandStreets()->collect()->content as $handStreet){
             foreach($handStreet->cards()->collect()->content as $handStreetCard){
                 $this->communityCards[] = $handStreetCard->getCard();
             }

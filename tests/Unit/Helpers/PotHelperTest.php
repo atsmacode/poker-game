@@ -54,7 +54,7 @@ class PotHelperTest extends BaseTest
 
         $this->assertEquals(1000, $player->stacks()->search('id', $stack->id)->amount);
 
-        PotHelper::awardPot($pot, $player);
+        PotHelper::awardPot($stack->amount, $pot->amount, $player->id, $table->id);
 
         $this->assertEquals(1075, $player->stacks()->search('id', $stack->id)->amount);
     }
