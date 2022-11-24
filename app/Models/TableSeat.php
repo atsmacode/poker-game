@@ -95,44 +95,6 @@ class TableSeat extends Model
         }
     }
 
-    public static function firstActivePlayer($handId)
-    {
-        return (new static())->firstActivePlayerQuery($handId);
-    }
-
-    private function firstActivePlayerQuery($handId)
-    {
-        $query = sprintf("
-            SELECT
-                ts.*
-            FROM
-                table_seats AS ts
-            LEFT JOIN
-                player_actions AS pa ON ts.id = pa.table_seat_id
-            WHERE
-                pa.hand_id = :hand_id
-            AND
-                pa.active = 1
-            LIMIT
-                1
-        ");
-
-        try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $stmt->bindParam(':hand_id', $handId);
-            $stmt->execute();
-
-            $rows = $stmt->fetchAll();
-
-            $this->setModelProperties($rows);
-
-            return $this;
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
-
     public static function getContinuingPlayerSeats($handId)
     {
         return (new static())->getContinuingPlayerSeatsQuery($handId);
