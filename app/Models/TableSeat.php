@@ -50,7 +50,8 @@ class TableSeat extends Model
             $stmt->bindParam(':dealer', $dealer);
             $stmt->execute();
 
-            $rows = $stmt->fetchAll();
+            $rows          = $stmt->fetchAll();
+            $this->content = $rows;
 
             $this->setModelProperties($rows);
 

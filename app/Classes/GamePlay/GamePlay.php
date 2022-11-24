@@ -200,7 +200,7 @@ class GamePlay
         return $this->gameState->getHand()->completed_on;
     }
 
-    protected function getThePlayerActionShouldBeOnForANewStreet(TableSeat $firstActivePlayer)
+    protected function getThePlayerActionShouldBeOnForANewStreet(array $firstActivePlayer)
     {
         $dealer = $this->gameState->getHand()->getDealer();
 
@@ -213,12 +213,12 @@ class GamePlay
             $playerAfterDealer = null;
         }
 
-        return $playerAfterDealer ?: $firstActivePlayer;
+        return $playerAfterDealer->content[0] ?: $firstActivePlayer;
     }
 
-    public function getActionOn(): TableSeat
+    public function getActionOn()
     {
-        $firstActivePlayer = TableSeat::firstActivePlayer($this->gameState->handId());
+        $firstActivePlayer = $this->gameState->firstActivePlayer();
 
         if ($this->gameState->isNewStreet()) {
             return $this->getThePlayerActionShouldBeOnForANewStreet($firstActivePlayer);
@@ -227,9 +227,9 @@ class GamePlay
         $lastToAct = $this->gameState->getLatestAction()->table_seat_id;
 
         $activePlayersAfterLastToAct = array_filter(
-            PlayerAction::find(['active' => 1, 'hand_id' => $this->gameState->handId()])->collect()->content,
+            $this->gameState->getActivePlayers(),
             function ($value) use ($lastToAct) {
-                return $value->table_seat_id > $lastToAct;
+                return $value['table_seat_id'] > $lastToAct;
             }
         );
 
@@ -241,7 +241,7 @@ class GamePlay
             return $firstActivePlayer;
         }
 
-        return $playerAfterLastToAct->tableSeat();
+        return $playerAfterLastToAct;
     }
 
     protected function getPlayerData()
@@ -250,7 +250,7 @@ class GamePlay
         $actionOnGet = $this->getActionOn();
 
         foreach($this->gameState->getPlayers() as $playerAction){
-            $actionOn   = $actionOnGet && $actionOnGet->player_id === $playerAction['player_id'] ? true : false;
+            $actionOn   = $actionOnGet && $actionOnGet['player_id'] === $playerAction['player_id'] ? true : false;
             $actionName = $playerAction['action_id'] ? $playerAction['actionName'] : null;
             $stack      = $playerAction['stack'];
 

@@ -204,6 +204,17 @@ class GameState implements GameStateInterface
         });
     }
 
+    public function firstActivePlayer()
+    {
+        $key = array_search(1, array_column($this->players, 'active'));
+
+        if ($key !== false) {
+            return $this->players[$key];
+        }
+
+        return false;
+    }
+
     public function setWinner(array $winner): void
     {
         $this->winner = $winner;
