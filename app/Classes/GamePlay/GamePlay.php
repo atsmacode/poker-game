@@ -21,7 +21,6 @@ class GamePlay
     public  $game;
     public  $dealer;
     private ?GameState $gameState;
-    private bool $newStreet = false;
 
     public function __construct($deck = null)
     {
@@ -29,9 +28,6 @@ class GamePlay
         $this->dealer = (new Dealer())->setDeck($deck);
     }
 
-    /**
-     * To assist with unit test scenario set-up.
-     */
     public function setGameState(GameState $gameState): void
     {
         $this->gameState = $gameState;
