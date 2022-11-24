@@ -43,6 +43,13 @@ class GamePlay
         ];
     }
 
+    public function play(GameState $gameState)
+    {
+        $this->gameState = $gameState;
+
+        return $this->nextStep();
+    }
+
     public function nextStep()
     {
         if ($this->theLastHandWasCompleted()) { return $this->start(); }
@@ -78,13 +85,6 @@ class GamePlay
         }
 
         return $this->response();
-    }
-
-    public function play(GameState $gameState)
-    {
-        $this->gameState = $gameState;
-
-        return $this->nextStep();
     }
 
     public function continue()
