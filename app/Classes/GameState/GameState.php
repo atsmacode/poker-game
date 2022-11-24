@@ -185,6 +185,20 @@ class GameState implements GameStateInterface
         return $this->players;
     }
 
+    public function getActivePlayers(): array
+    {
+        return array_filter($this->players, function($player){
+            return 1 === $player['active'];
+        });
+    }
+
+    public function getContinuingPlayers(): array
+    {
+        return array_filter($this->players, function($player){
+            return 1 === $player['active'] && 1 === $player['can_continue'];
+        });
+    }
+
     public function setWinner(array $winner): void
     {
         $this->winner = $winner;

@@ -77,60 +77,6 @@ class Hand extends Model
         }
     }
 
-    public function getActivePlayers()
-    {
-        $query = sprintf("
-                SELECT
-                    *
-                FROM
-                    player_actions
-                WHERE
-                    hand_id = :hand_id
-                AND
-                    active = 1
-        ");
-
-        try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $stmt->bindParam(':hand_id', $this->id);
-            $stmt->execute();
-
-            return $stmt->fetchAll();
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
-
-    public function getContinuingPlayers()
-    {
-        $query = sprintf("
-            SELECT
-                pa.*
-            FROM
-                player_actions AS pa
-            LEFT JOIN
-                table_seats AS ts ON pa.table_seat_id = ts.id
-            WHERE
-                pa.hand_id = :hand_id
-            AND
-                pa.active = 1
-            AND
-                ts.can_continue = 1
-        ");
-
-        try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $stmt->bindParam(':hand_id', $this->id);
-            $stmt->execute();
-
-            return $stmt->fetchAll();
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
-
     public function getNullActions()
     {
         $query = sprintf("

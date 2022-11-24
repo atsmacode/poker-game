@@ -124,6 +124,7 @@ class GamePlay
 
     public function nextStep()
     {
+        $this->gameState->setPlayers();
 
         if ($this->theBigBlindIsTheOnlyActivePlayerRemainingPreFlop()) {
             TableSeat::bigBlindWins($this->gameState->handId());
@@ -134,8 +135,6 @@ class GamePlay
         if ($this->theLastHandWasCompleted()) {
             return $this->start();
         }
-
-        $this->gameState->setPlayers();
 
         if ($this->readyForShowdown() || $this->onePlayerRemainsThatCanContinue()) {
             return $this->showdown();
@@ -177,38 +176,30 @@ class GamePlay
     protected function readyForShowdown()
     {
         return count($this->gameState->getUpdatedHandStreets()->content) === count($this->game->streets) &&
-            count($this->gameState->getHand()->getActivePlayers()) ===
-            count($this->gameState->getHand()->getContinuingPlayers());
+            count($this->gameState->getActivePlayers()) ===
+            count($this->gameState->getContinuingPlayers());
     }
 
     protected function onePlayerRemainsThatCanContinue()
     {
-        return count($this->gameState->getHand()->getActivePlayers())
-            === count($this->gameState->getHand()->getContinuingPlayers())
-            && count($this->gameState->getHand()->getContinuingPlayers()) === 1;
+        return count($this->gameState->getActivePlayers())
+            === count($this->gameState->getContinuingPlayers())
+            && count($this->gameState->getContinuingPlayers()) === 1;
     }
 
     protected function allActivePlayersCanContinue()
     {
-        return count($this->gameState->getHand()->getActivePlayers()) ===
-            count($this->gameState->getHand()->getContinuingPlayers());
+        return count($this->gameState->getActivePlayers()) ===
+            count($this->gameState->getContinuingPlayers());
     }
 
     protected function theBigBlindIsTheOnlyActivePlayerRemainingPreFlop()
     {
-        $bigBlindActive = PlayerAction::find([
-            'active'    => 1,
-            'big_blind' => 1,
-            'hand_id'   => $this->gameState->handId()
-        ])->content;
+        $activePlayers = array_values(array_filter($this->gameState->getPlayers(), function($player){
+            return 1 === $player['active'];
+        }));
 
-        $nonBigBlindActive = PlayerAction::find([
-            'active'    => 1,
-            'big_blind' => 0,
-            'hand_id'   => $this->gameState->handId()
-        ])->content;
-
-        return count($bigBlindActive) === 1 && count($nonBigBlindActive) === 0;
+        return 1 === count($activePlayers) && 1 === $activePlayers[0]['big_blind'];
     }
 
     protected function theLastHandWasCompleted()
