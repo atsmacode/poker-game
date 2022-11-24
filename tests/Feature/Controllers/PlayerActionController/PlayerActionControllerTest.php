@@ -96,7 +96,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function it_returns_expected_response_keys()
     {
-        $this->gamePlay->start(null, $this->gameState);
+        $this->gamePlay->start($this->gameState, null);
 
         $this->setPost();
 

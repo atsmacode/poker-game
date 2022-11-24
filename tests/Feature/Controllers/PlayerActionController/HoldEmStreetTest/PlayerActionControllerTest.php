@@ -70,7 +70,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function it_can_deal_3_cards_to_a_flop()
     {
-        $this->gamePlay->start(null, $this->gameState);
+        $this->gamePlay->start($this->gameState, null);
 
         $this->executeActionsToContinue();
 
@@ -86,7 +86,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function it_can_deal_1_card_to_a_turn()
     {
-        $this->gamePlay->start(null, $this->gameState);
+        $this->gamePlay->start($this->gameState, null);
 
         $this->setFlop();
 
@@ -104,7 +104,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function it_can_deal_1_card_to_a_river()
     {
-        $this->gamePlay->start(null, $this->gameState);
+        $this->gamePlay->start($this->gameState, null);
 
         $this->setFlop();
 
@@ -124,7 +124,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function it_can_reach_showdown_when_all_active_players_can_continue_on_the_river()
     {
-        $this->gamePlay->start(null, $this->gameState);
+        $this->gamePlay->start($this->gameState, null);
 
         $this->setFlop();
 

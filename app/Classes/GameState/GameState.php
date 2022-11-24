@@ -5,13 +5,15 @@ namespace App\Classes\GameState;
 use App\Classes\GameData\GameData;
 use App\Models\Hand;
 use App\Models\HandStreet;
+use App\Models\Player;
 use App\Models\PlayerAction;
 use App\Models\Table;
 
 class GameState implements GameStateInterface
 {
     private array         $deck;
-    private array         $communityCards;
+    private array         $communityCards = [];
+    private array         $wholeCards = [];
     private array         $winner;
     private ?PlayerAction $latestAction;
     private Hand          $hand;
@@ -168,14 +170,52 @@ class GameState implements GameStateInterface
         return isset($pot->amount) ? $pot->amount : 0;
     }
 
-    public function setCommunityCards(array $communityCards): void
+    public function setCommunityCards(): self
     {
-        $this->communityCards = $communityCards;
+        foreach ($this->getHandStreets()->collect()->content as $street) {
+            foreach ($street->cards()->collect()->content as $streetCard) {
+                $this->communityCards[] = [
+                    'rankAbbreviation' => $streetCard->getCard()['rankAbbreviation'],
+                    'suit'             => $streetCard->getCard()['suit'],
+                    'suitAbbreviation' => $streetCard->getCard()['suitAbbreviation']
+                ];
+            }
+        }
+
+        return $this;
     }
 
     public function getCommunityCards(): array
     {
         return $this->communityCards;
+    }
+
+    public function setWholeCards(): self
+    {
+        foreach ($this->getPlayers() as $player) {
+            foreach (Player::getWholeCards($this->handId, $player['player_id']) as $wholeCard) {
+                $data = [
+                    'player_id'        => $wholeCard['player_id'],
+                    'rank'             => $wholeCard['rank'],
+                    'rankAbbreviation' => $wholeCard['rankAbbreviation'],
+                    'suit'             => $wholeCard['suit'],
+                    'suitAbbreviation' => $wholeCard['suitAbbreviation']
+                ];
+
+                if (array_key_exists($wholeCard['player_id'], $this->wholeCards)) {
+                    array_push($this->wholeCards[$wholeCard['player_id']], $data);
+                } else {
+                    $this->wholeCards[$wholeCard['player_id']][] = $data;
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    public function getWholeCards(): array
+    {
+        return $this->wholeCards;
     }
 
     public function setPlayers(): self

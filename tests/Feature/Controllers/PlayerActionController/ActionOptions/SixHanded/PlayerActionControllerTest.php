@@ -99,7 +99,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function a_player_facing_a_raise_call_fold_can_fold_call_or_raise()
     {
-        $this->gamePlay->start(null, $this->gameState);
+        $this->gamePlay->start($this->gameState, null);
 
         $this->setFlop();
 

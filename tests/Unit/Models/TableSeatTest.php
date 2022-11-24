@@ -74,9 +74,9 @@ class TableSeatTest extends BaseTest
      */
     public function it_can_select_first_active_player_after_dealer()
     {
-        $this->gamePlay->start(TableSeat::find([
+        $this->gamePlay->start($this->gameState, TableSeat::find([
             'id' => $this->gameState->getSeats()[0]['id']
-        ]), $this->gameState);
+        ]));
 
         $tableSeat = TableSeat::playerAfterDealer(
             $this->gameState->handId(),
