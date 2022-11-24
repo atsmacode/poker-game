@@ -124,9 +124,11 @@ class GameState implements GameStateInterface
         return $this->handStreets;
     }
 
-    public function getUpdatedHandStreets(): HandStreet
+    public function updateHandStreets(): self
     {
-        return $this->hand->streets();
+        $this->handStreets = $this->hand->streets();
+
+        return $this;
     }
 
     public function incrementedHandStreets(): int
@@ -176,9 +178,11 @@ class GameState implements GameStateInterface
         return $this->communityCards;
     }
 
-    public function setPlayers(): void
+    public function setPlayers(): self
     {
         $this->players = GameData::getPlayers($this->handId);
+
+        return $this;
     }
 
     public function getPlayers(): array

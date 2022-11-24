@@ -173,7 +173,7 @@ class PlayerActionControllerTest extends BaseTest
     {
         $this->gamePlay->start(null, $this->gameState);
 
-        $this->assertCount(1, $this->gameState->getUpdatedHandStreets()->content);
+        $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets()->content);
 
         $this->givenActionsMeanNewStreetIsDealt();
 

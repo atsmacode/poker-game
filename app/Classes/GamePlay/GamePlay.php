@@ -78,6 +78,8 @@ class GamePlay
             $this->game->streets[$this->gameState->incrementedHandStreets() - 1]['community_cards']
         );
 
+        $this->gameState->updateHandStreets();
+
         return [
             'deck'           => $this->dealer->getDeck(),
             'pot'            => $this->gameState->getPot(),
@@ -166,7 +168,7 @@ class GamePlay
 
     protected function readyForShowdown()
     {
-        return count($this->gameState->getUpdatedHandStreets()->content) === count($this->game->streets) &&
+        return count($this->gameState->getHandStreets()->content) === count($this->game->streets) &&
             count($this->gameState->getActivePlayers()) ===
             count($this->gameState->getContinuingPlayers());
     }
@@ -299,7 +301,7 @@ class GamePlay
     public function getCommunityCards()
     {
         $cards = [];
-        foreach($this->gameState->getUpdatedHandStreets()->collect()->content as $street){
+        foreach($this->gameState->getHandStreets()->collect()->content as $street){
             foreach($street->cards()->collect()->content as $streetCard){
                 $cards[] = [
                     'rankAbbreviation' => $streetCard->getCard()['rankAbbreviation'],
@@ -323,7 +325,7 @@ class GamePlay
         /**
          * BB is the only player that can fold / check / raise pre-flop
          */
-        if (count($this->gameState->getUpdatedHandStreets()->content) === 1 && !$playerAction['big_blind']) {
+        if (count($this->gameState->getHandStreets()->content) === 1 && !$playerAction['big_blind']) {
             return [Action::FOLD, Action::CALL, Action::RAISE];
         }
 

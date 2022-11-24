@@ -116,7 +116,7 @@ class Showdown
 
     public function getCommunityCards(): void
     {
-        foreach($this->gameState->getUpdatedHandStreets()->collect()->content as $handStreet){
+        foreach($this->gameState->getHandStreets()->collect()->content as $handStreet){
             foreach($handStreet->cards()->collect()->content as $handStreetCard){
                 $this->communityCards[] = $handStreetCard->getCard();
             }
