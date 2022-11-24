@@ -66,11 +66,11 @@ class HandControllerTest extends BaseTest
         $response = $this->jsonResponse();
 
         // The small blind was posted
-        $this->assertEquals(25.0, $response['players'][1]['bet_amount']);
+        $this->assertEquals(25, $response['players'][1]['bet_amount']);
         $this->assertEquals('Bet', $response['players'][1]['action_name']);
 
         // The big blind was posted
-        $this->assertEquals(50.0, $response['players'][2]['bet_amount']);
+        $this->assertEquals(50, $response['players'][2]['bet_amount']);
         $this->assertEquals('Bet', $response['players'][2]['action_name']);
 
         // The dealer, seat 1, has not acted yet

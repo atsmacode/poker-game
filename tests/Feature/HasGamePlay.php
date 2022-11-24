@@ -15,7 +15,7 @@ trait HasGamePlay
             playerActionId: $this->gameState->getPlayers()[0]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::RAISE_ID,
-            betAmount:      100.0,
+            betAmount:      100,
             active:         1,
         );
 
@@ -57,7 +57,7 @@ trait HasGamePlay
             playerActionId: $this->gameState->getPlayers()[0]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::CALL_ID,
-            betAmount:      50.00,
+            betAmount:      50,
             active:         1,
         );
 
@@ -70,7 +70,7 @@ trait HasGamePlay
             playerActionId: $this->gameState->getPlayers()[1]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::CALL_ID,
-            betAmount:      50.00,
+            betAmount:      50,
             active:         1,
         );
 
@@ -125,7 +125,7 @@ trait HasGamePlay
             playerActionId: $this->gameState->getPlayers()[2]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::CALL_ID,
-            betAmount:      25.00,
+            betAmount:      25,
             active:         1,
         );
 
@@ -138,7 +138,7 @@ trait HasGamePlay
             playerActionId: $this->gameState->getPlayers()[2]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::RAISE_ID,
-            betAmount:      100.00,
+            betAmount:      100,
             active:         1,
         );
 
@@ -198,7 +198,7 @@ trait HasGamePlay
             playerActionId: $this->gameState->getPlayers()[3]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::RAISE_ID,
-            betAmount:      100.00,
+            betAmount:      100,
             active:         1,
         );
 
@@ -227,7 +227,7 @@ trait HasGamePlay
             playerActionId: $this->gameState->getPlayers()[4]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::CALL_ID,
-            betAmount:      50.00,
+            betAmount:      50,
             active:         1,
         );
 
