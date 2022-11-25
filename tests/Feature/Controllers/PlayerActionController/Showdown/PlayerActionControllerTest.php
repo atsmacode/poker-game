@@ -79,14 +79,11 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function a_pair_beats_high_card()
     { 
-        $startGameState = $this->start
-            ->setGameState($this->gameState)
+        $this->start->setGameState($this->gameState)
             ->initiateStreetActions()
             ->initiatePlayerStacks()
             ->setDealerAndBlindSeats()
             ->getGameState();
-
-        $this->gamePlay->setGameState($startGameState);
 
         $wholeCards = [
             [
@@ -151,14 +148,11 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function two_pair_beats_a_pair()
     {
-        $startGameState = $this->start
-            ->setGameState($this->gameState)
+        $this->start->setGameState($this->gameState)
             ->initiateStreetActions()
             ->initiatePlayerStacks()
             ->setDealerAndBlindSeats()
             ->getGameState();
-
-        $this->gamePlay->setGameState($startGameState);
 
         $wholeCards = [
             [

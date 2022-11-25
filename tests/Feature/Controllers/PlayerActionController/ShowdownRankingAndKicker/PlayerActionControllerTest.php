@@ -79,8 +79,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function high_card_king_beats_high_card_queen()
     {
-        $startGameState = $this->start
-            ->setGameState($this->gameState)
+        $this->start->setGameState($this->gameState)
             ->initiateStreetActions()
             ->initiatePlayerStacks()
             ->setDealerAndBlindSeats()
@@ -149,8 +148,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function ace_king_beats_king_queen()
     {
-        $startGameState = $this->start
-            ->setGameState($this->gameState)
+        $this->start->setGameState($this->gameState)
             ->initiateStreetActions()
             ->initiatePlayerStacks()
             ->setDealerAndBlindSeats()

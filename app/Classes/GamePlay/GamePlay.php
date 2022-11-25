@@ -67,7 +67,7 @@ class GamePlay
 
     public function nextStep($currentDealer = null)
     {
-        if ($this->theLastHandWasCompleted()) { $this->response($this->start, $currentDealer); }
+        if ($this->theLastHandWasCompleted()) { return $this->response($this->start, $currentDealer); }
 
         $this->gameState->setPlayers();
 
@@ -87,14 +87,12 @@ class GamePlay
     protected function readyForShowdown()
     {
         return count($this->gameState->getHandStreets()->content) === count($this->game->streets) &&
-            count($this->gameState->getActivePlayers()) ===
-            count($this->gameState->getContinuingPlayers());
+            count($this->gameState->getActivePlayers()) === count($this->gameState->getContinuingPlayers());
     }
 
     protected function onePlayerRemainsThatCanContinue()
     {
-        return count($this->gameState->getActivePlayers())
-            === count($this->gameState->getContinuingPlayers())
+        return count($this->gameState->getActivePlayers()) === count($this->gameState->getContinuingPlayers())
             && count($this->gameState->getContinuingPlayers()) === 1;
     }
 
