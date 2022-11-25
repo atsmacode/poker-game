@@ -48,7 +48,7 @@ class PlayerHandler implements PlayerHandlerInterface
         return $playerData;
     }
 
-    public function getActionOn()
+    private function getActionOn()
     {
         $firstActivePlayer = $this->gameState->firstActivePlayer();
         $lastToAct         = $this->gameState->getLatestAction()->table_seat_id;
@@ -66,7 +66,7 @@ class PlayerHandler implements PlayerHandlerInterface
         return $playerAfterLastToAct ?: $firstActivePlayer;
     }
 
-    protected function getThePlayerActionShouldBeOnForANewStreet(array $firstActivePlayer)
+    private function getThePlayerActionShouldBeOnForANewStreet(array $firstActivePlayer)
     {
         $dealer            = $this->gameState->getHand()->getDealer();
         $playerAfterDealer = TableSeat::playerAfterDealer($this->gameState->handId(), $dealer->table_seat_id);
@@ -76,7 +76,7 @@ class PlayerHandler implements PlayerHandlerInterface
         return $playerAfterDealer ? $playerAfterDealer->content[0] : $firstActivePlayer;
     }
 
-    public function getAvailableOptionsBasedOnLatestAction($playerAction)
+    private function getAvailableOptionsBasedOnLatestAction($playerAction)
     {
         if ($this->gameState->isNewStreet()) { return [Action::FOLD, Action::CHECK, Action::BET]; }
 
