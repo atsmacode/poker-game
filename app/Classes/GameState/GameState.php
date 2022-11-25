@@ -5,7 +5,6 @@ namespace App\Classes\GameState;
 use App\Classes\GameData\GameData;
 use App\Models\Hand;
 use App\Models\HandStreet;
-use App\Models\Player;
 use App\Models\PlayerAction;
 use App\Models\Table;
 
@@ -172,15 +171,7 @@ class GameState implements GameStateInterface
 
     public function setCommunityCards(): self
     {
-        foreach ($this->getHandStreets()->collect()->content as $street) {
-            foreach ($street->cards()->collect()->content as $streetCard) {
-                $this->communityCards[] = [
-                    'rankAbbreviation' => $streetCard->getCard()['rankAbbreviation'],
-                    'suit'             => $streetCard->getCard()['suit'],
-                    'suitAbbreviation' => $streetCard->getCard()['suitAbbreviation']
-                ];
-            }
-        }
+        $this->communityCards = GameData::getCommunityCards($this->getHandStreets());
 
         return $this;
     }
@@ -192,23 +183,7 @@ class GameState implements GameStateInterface
 
     public function setWholeCards(): self
     {
-        foreach ($this->getPlayers() as $player) {
-            foreach (Player::getWholeCards($this->handId, $player['player_id']) as $wholeCard) {
-                $data = [
-                    'player_id'        => $wholeCard['player_id'],
-                    'rank'             => $wholeCard['rank'],
-                    'rankAbbreviation' => $wholeCard['rankAbbreviation'],
-                    'suit'             => $wholeCard['suit'],
-                    'suitAbbreviation' => $wholeCard['suitAbbreviation']
-                ];
-
-                if (array_key_exists($wholeCard['player_id'], $this->wholeCards)) {
-                    array_push($this->wholeCards[$wholeCard['player_id']], $data);
-                } else {
-                    $this->wholeCards[$wholeCard['player_id']][] = $data;
-                }
-            }
-        }
+        $this->wholeCards = GameData::getWholeCards($this->getPlayers(), $this->handId);
 
         return $this;
     }

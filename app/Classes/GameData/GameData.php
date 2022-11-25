@@ -2,6 +2,8 @@
 namespace App\Classes\GameData;
 
 use App\Classes\Database;
+use App\Models\HandStreet;
+use App\Models\Player;
 
 class GameData extends Database
 {
@@ -87,5 +89,47 @@ class GameData extends Database
         } catch(\PDOException $e) {
             echo $e->getMessage();
         }
+    }
+
+    public static function getWholeCards(array $players, int $handId): array
+    {
+        $wholeCards = [];
+
+        foreach ($players as $player) {
+            foreach (Player::getWholeCards($handId, $player['player_id']) as $wholeCard) {
+                $data = [
+                    'player_id'        => $wholeCard['player_id'],
+                    'rank'             => $wholeCard['rank'],
+                    'rankAbbreviation' => $wholeCard['rankAbbreviation'],
+                    'suit'             => $wholeCard['suit'],
+                    'suitAbbreviation' => $wholeCard['suitAbbreviation']
+                ];
+
+                if (array_key_exists($wholeCard['player_id'], $wholeCards)) {
+                    array_push($wholeCards[$wholeCard['player_id']], $data);
+                } else {
+                    $wholeCards[$wholeCard['player_id']][] = $data;
+                }
+            }
+        }
+
+        return $wholeCards;
+    }
+
+    public static function getCommunityCards(HandStreet $handStreets): array
+    {
+        $communityCards = [];
+
+        foreach ($handStreets->collect()->content as $street) {
+            foreach ($street->cards()->collect()->content as $streetCard) {
+                $communityCards[] = [
+                    'rankAbbreviation' => $streetCard->getCard()['rankAbbreviation'],
+                    'suit'             => $streetCard->getCard()['suit'],
+                    'suitAbbreviation' => $streetCard->getCard()['suitAbbreviation']
+                ];
+            }
+        }
+
+        return $communityCards;
     }
 }
