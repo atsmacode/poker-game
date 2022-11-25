@@ -10,6 +10,9 @@ use App\Models\PlayerAction;
 use App\Models\Street;
 use App\Models\TableSeat;
 
+/**
+ * Responsible for the actions required if a hand is to continue (next street)
+ */
 class InProgress extends HandStep
 {
     public function __construct(Game $game, Dealer $dealer)
@@ -21,12 +24,12 @@ class InProgress extends HandStep
     public function handle(GameState $gameState): GameState
     {
         $this->gameState = $gameState;
-        
+
         $this->updatePlayerStatusesOnNewStreet();
 
         $street = HandStreet::create([
             'street_id' => Street::find(['name' => $this->game->streets[$this->gameState->handStreetCount()]['name']])->id,
-            'hand_id' => $this->gameState->handId()
+            'hand_id'   => $this->gameState->handId()
         ]);
 
         $this->dealer->dealStreetCards(

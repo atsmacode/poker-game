@@ -8,6 +8,9 @@ use App\Classes\GameState\GameState;
 use App\Classes\Showdown\Showdown as TheShowdown;
 use App\Helpers\PotHelper;
 
+/**
+ * Responsible for the actions required if the hand has reached a showdown.
+ */
 class Showdown extends HandStep
 {
     public function __construct(Game $game, Dealer $dealer)

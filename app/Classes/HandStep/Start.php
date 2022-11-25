@@ -12,6 +12,9 @@ use App\Models\Stack;
 use App\Models\Street;
 use App\Models\TableSeat;
 
+/**
+ * Responsible for the actions required to start a new hand.
+ */
 class Start extends HandStep
 {
     public function __construct(Game $game, Dealer $dealer)
