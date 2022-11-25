@@ -3,10 +3,11 @@
 namespace App\Classes\HandStep;
 
 use App\Classes\GameState\GameState;
+use App\Models\TableSeat;
 
 abstract class HandStep
 {
-    public function handle(GameState $gameState): GameState {}
+    public function handle(GameState $gameState, TableSeat $currentDealer = null): GameState {}
 
     public function getGameState(): GameState
     {

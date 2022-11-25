@@ -11,9 +11,9 @@ use App\Models\Street;
 use App\Models\TableSeat;
 
 /**
- * Responsible for the actions required if a hand is to continue (next street)
+ * Responsible for the actions required if a hand is to continue to the next street.
  */
-class InProgress extends HandStep
+class NewStreet extends HandStep
 {
     public function __construct(Game $game, Dealer $dealer)
     {
@@ -21,7 +21,7 @@ class InProgress extends HandStep
         $this->dealer = $dealer;
     }
 
-    public function handle(GameState $gameState): GameState
+    public function handle(GameState $gameState, TableSeat $currentDealer = null): GameState
     {
         $this->gameState = $gameState;
 

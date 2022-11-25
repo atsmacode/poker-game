@@ -7,6 +7,7 @@ use App\Classes\Game\Game;
 use App\Classes\GameState\GameState;
 use App\Classes\Showdown\Showdown as TheShowdown;
 use App\Helpers\PotHelper;
+use App\Models\TableSeat;
 
 /**
  * Responsible for the actions required if the hand has reached a showdown.
@@ -19,7 +20,7 @@ class Showdown extends HandStep
         $this->dealer = $dealer;
     }
 
-    public function handle(GameState $gameState): GameState
+    public function handle(GameState $gameState, TableSeat $currentDealer = null): GameState
     {
         $this->gameState = $gameState;
         

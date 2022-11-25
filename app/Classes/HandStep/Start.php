@@ -23,7 +23,7 @@ class Start extends HandStep
         $this->dealer = $dealer;
     }
 
-    public function handle(GameState $gameState, $currentDealer = null): GameState
+    public function handle(GameState $gameState, TableSeat $currentDealer = null): GameState
     {
         $this->gameState = $gameState;
 

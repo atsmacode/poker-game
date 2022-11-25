@@ -8,12 +8,12 @@ use App\Models\HandStreet;
 use App\Models\PlayerAction;
 use App\Models\Table;
 
-class GameState implements GameStateInterface
+class GameState
 {
     private array         $deck;
     private array         $communityCards = [];
     private array         $wholeCards = [];
-    private array         $winner;
+    private ?array        $winner = null;
     private ?PlayerAction $latestAction;
     private Hand          $hand;
     private int           $tableId;
@@ -39,17 +39,6 @@ class GameState implements GameStateInterface
         $this->handId      = $hand->id;
         $this->seats       = GameData::getSeats($this->tableId);
         $this->handStreets = $this->hand->streets();
-    }
-
-    public function state(): array
-    {
-        return [
-            'deck'           => $this->deck,
-            'pot'            => $this->pot,
-            'communityCards' => $this->communityCards,
-            'players'        => $this->players,
-            'winner'         => $this->winner
-        ];
     }
 
     public function getSeat(int $seatId)
@@ -235,7 +224,7 @@ class GameState implements GameStateInterface
         $this->winner = $winner;
     }
 
-    public function getWinner(): array
+    public function getWinner(): ?array
     {
         return $this->winner;
     }

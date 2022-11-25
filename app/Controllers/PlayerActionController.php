@@ -47,9 +47,7 @@ class PlayerActionController
             'winner'         => $gamePlay['winner']
         ];
 
-        /**
-         * @todo Remove all isset($dev)s
-         */
+        /** @todo Remove all isset($dev)s */
         if (isset($GLOBALS['dev'])) {
             return json_encode(['body' => $responseBody]);
         } else {

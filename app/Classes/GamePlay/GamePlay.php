@@ -5,14 +5,16 @@ namespace App\Classes\GamePlay;
 use App\Classes\Dealer\Dealer;
 use App\Classes\Game\PotLimitHoldEm;
 use App\Classes\GameState\GameState;
-use App\Classes\HandStep\InProgress;
+use App\Classes\HandStep\HandStep;
+use App\Classes\HandStep\NewStreet;
 use App\Classes\HandStep\Showdown;
 use App\Classes\HandStep\Start;
 use App\Classes\PlayerHandler\PlayerHandler;
 use App\Models\TableSeat;
 
 /**
- * Responsible for deciding what happens next in a hand.
+ * Responsible for deciding what happens next in a hand and 
+ * providing the response to the front-end application.
  */
 class GamePlay
 {
@@ -25,7 +27,7 @@ class GamePlay
         $this->game          = new PotLimitHoldEm();
         $this->dealer        = (new Dealer())->setDeck($deck);
         $this->start         = new Start($this->game, $this->dealer);
-        $this->inProgress    = new InProgress($this->game, $this->dealer);
+        $this->newStreet     = new NewStreet($this->game, $this->dealer);
         $this->showdown      = new Showdown($this->game, $this->dealer);
         $this->playerHandler = new PlayerHandler();
     }
@@ -35,61 +37,51 @@ class GamePlay
         $this->gameState = $gameState;
     }
 
-    public function response(array $winner = null): array
+    public function response(HandStep $step = null, $currentDealer = null): array
     {
+        $this->gameState = $step ? $step->handle($this->gameState, $currentDealer) : $this->gameState;
+
         return [
             'deck'           => $this->dealer->getDeck(),
             'pot'            => $this->gameState->getPot(),
             'communityCards' => $this->gameState->setCommunityCards()->getCommunityCards(),
             'players'        => $this->playerHandler->handle($this->gameState),
-            'winner'         => $winner
+            'winner'         => $this->gameState->getWinner()
         ];
     }
 
-    public function play(GameState $gameState)
+    /** Specific start method to start new hand on page refresh in HandController */
+    public function start(GameState $gameState = null, $currentDealer = null)
     {
         $this->gameState = $gameState;
 
-        return $this->nextStep();
+        return $this->response($this->start, $currentDealer);
     }
 
-    public function nextStep()
+    public function play(GameState $gameState, $currentDealer = null)
     {
-        if ($this->theLastHandWasCompleted()) { return $this->start(); }
+        $this->gameState = $gameState;
+
+        return $this->nextStep($currentDealer);
+    }
+
+    public function nextStep($currentDealer = null)
+    {
+        if ($this->theLastHandWasCompleted()) { $this->response($this->start, $currentDealer); }
 
         $this->gameState->setPlayers();
 
         if ($this->theBigBlindIsTheOnlyActivePlayerRemainingPreFlop()) {
             TableSeat::bigBlindWins($this->gameState->handId());
 
-            return $this->showdown();
+            return $this->response($this->showdown);
         }
 
-        if ($this->readyForShowdown() || $this->onePlayerRemainsThatCanContinue()) { return $this->showdown(); }
+        if ($this->readyForShowdown() || $this->onePlayerRemainsThatCanContinue()) { return $this->response($this->showdown); }
 
-        if ($this->allActivePlayersCanContinue()) { return $this->inProgress(); }
-
-        return $this->response();
-    }
-
-    public function start(GameState $gameState = null, $currentDealer = null) {
-        $this->gameState = $this->start->handle($gameState, $currentDealer);
+        if ($this->allActivePlayersCanContinue()) { return $this->response($this->newStreet); }
 
         return $this->response();
-    }
-
-    public function inProgress()
-    {
-        $this->gameState = $this->inProgress->handle($this->gameState);
-
-        return $this->response();
-    }
-
-    public function showdown()
-    {
-        $this->gameState = $this->showdown->handle($this->gameState);
-
-        return $this->response($this->gameState->getWinner());
     }
 
     protected function readyForShowdown()
