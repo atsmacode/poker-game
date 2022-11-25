@@ -5,6 +5,7 @@ namespace Tests\Feature\Controllers\PlayerActionController\ShowdownRankingAndKic
 use App\Classes\ActionHandler\ActionHandler;
 use App\Classes\GamePlay\GamePlay;
 use App\Classes\GameState\GameState;
+use App\Classes\HandStep\Start;
 use App\Constants\Card;
 use App\Constants\HandType;
 use App\Models\Hand;
@@ -36,6 +37,7 @@ class PlayerActionControllerTest extends BaseTest
         $this->table         = Table::create(['name' => 'Test Table', 'seats' => 3]);
         $this->hand          = Hand::create(['table_id' => $this->table->id]);
         $this->gamePlay      = new GamePlay($this->hand);
+        $this->start         = new Start($this->gamePlay->game, $this->gamePlay->dealer);
 
         $this->player1 = Player::create([
             'name' => 'Player 1',
@@ -69,8 +71,6 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->gameState     = new GameState($this->hand);
         $this->actionHandler = new ActionHandler($this->gameState);
-
-        $this->gamePlay->setGameState($this->gameState);
     }
 
    /**
@@ -79,9 +79,12 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function high_card_king_beats_high_card_queen()
     {
-        $this->gamePlay->initiateStreetActions()
+        $startGameState = $this->start
+            ->setGameState($this->gameState)
+            ->initiateStreetActions()
             ->initiatePlayerStacks()
-            ->setDealerAndBlindSeats();
+            ->setDealerAndBlindSeats()
+            ->getGameState();
 
         $wholeCards = [
             [
@@ -146,9 +149,12 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function ace_king_beats_king_queen()
     {
-        $this->gamePlay->initiateStreetActions()
+        $startGameState = $this->start
+            ->setGameState($this->gameState)
+            ->initiateStreetActions()
             ->initiatePlayerStacks()
-            ->setDealerAndBlindSeats();
+            ->setDealerAndBlindSeats()
+            ->getGameState();
 
         $wholeCards = [
             [

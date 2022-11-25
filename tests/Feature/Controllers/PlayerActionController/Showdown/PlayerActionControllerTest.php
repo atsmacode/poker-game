@@ -5,6 +5,7 @@ namespace Tests\Feature\Controllers\PlayerActionController\Showdown;
 use App\Classes\ActionHandler\ActionHandler;
 use App\Classes\GamePlay\GamePlay;
 use App\Classes\GameState\GameState;
+use App\Classes\HandStep\Start;
 use App\Constants\Card;
 use App\Constants\HandType;
 use App\Models\Hand;
@@ -35,7 +36,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->table         = Table::create(['name' => 'Test Table', 'seats' => 3]);
         $this->hand          = Hand::create(['table_id' => $this->table->id]);
-        $this->gamePlay      = new GamePlay($this->hand);
+        $this->gamePlay      = new GamePlay();
 
         $this->player1 = Player::create([
             'name' => 'Player 1',
@@ -69,8 +70,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->gameState     = new GameState($this->hand);
         $this->actionHandler = new ActionHandler($this->gameState);
-
-        $this->gamePlay->setGameState($this->gameState);
+        $this->start         = new Start($this->gamePlay->game, $this->gamePlay->dealer);
     }
 
    /**
@@ -78,10 +78,15 @@ class PlayerActionControllerTest extends BaseTest
      * @return void
      */
     public function a_pair_beats_high_card()
-    {
-        $this->gamePlay->initiateStreetActions()
+    { 
+        $startGameState = $this->start
+            ->setGameState($this->gameState)
+            ->initiateStreetActions()
             ->initiatePlayerStacks()
-            ->setDealerAndBlindSeats();
+            ->setDealerAndBlindSeats()
+            ->getGameState();
+
+        $this->gamePlay->setGameState($startGameState);
 
         $wholeCards = [
             [
@@ -146,9 +151,14 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function two_pair_beats_a_pair()
     {
-        $this->gamePlay->initiateStreetActions()
+        $startGameState = $this->start
+            ->setGameState($this->gameState)
+            ->initiateStreetActions()
             ->initiatePlayerStacks()
-            ->setDealerAndBlindSeats();
+            ->setDealerAndBlindSeats()
+            ->getGameState();
+
+        $this->gamePlay->setGameState($startGameState);
 
         $wholeCards = [
             [
