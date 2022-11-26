@@ -9,29 +9,6 @@ class Database
 {
     use Connect;
 
-    /**
-     * PDO class can't be serialized normally.
-     * 
-     * Using magic methods to make this possible.
-     *
-     * @return array
-     */
-    public function __serialize(): array
-    {
-        $this->connection = (array) $this->connection;
-        
-        return (array) $this;
-    }
-
-    public function __unserialize(array $data): void
-    {
-        $this->connection = $data['connection'];
-        $this->servername = $data['servername'];
-        $this->database   = $data['database'];
-        $this->username   = $data['username'];
-        $this->password   = $data['password'];
-    }
-
     public function __construct()
     {
         $this->setCredentials();

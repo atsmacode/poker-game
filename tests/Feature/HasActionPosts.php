@@ -29,7 +29,7 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[0]['stack']
         ];
 
-        $_POST['body'] = serialize($requestBody);
+        $_POST['body'] = $requestBody;
     }
 
     private function setPlayerOneFoldsPost()
@@ -47,7 +47,7 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[0]['stack']
         ];
 
-        $_POST['body'] = serialize($requestBody);
+        $_POST['body'] = $requestBody;
     }
 
     private function setPlayerTwoCallsPost()
@@ -65,7 +65,7 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[1]['stack']
         ];
 
-        $_POST['body'] = serialize($requestBody);
+        $_POST['body'] = $requestBody;
     }
 
     private function setPlayerTwoFoldsPost()
@@ -83,7 +83,7 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[1]['stack']
         ];
 
-        $_POST['body'] = serialize($requestBody);
+        $_POST['body'] = $requestBody;
     }
 
     private function setPlayerThreeChecksPost()
@@ -101,7 +101,7 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[2]['stack']
         ];
 
-        $_POST['body'] = serialize($requestBody);
+        $_POST['body'] = $requestBody;
     }
 
     private function setPlayerThreeRaisesPost()
@@ -119,7 +119,7 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[2]['stack']
         ];
 
-        $_POST['body'] = serialize($requestBody);
+        $_POST['body'] = $requestBody;
     }
 
     private function setPlayerFourCallsPost()
@@ -137,7 +137,7 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[3]['stack']
         ];
 
-        $_POST['body'] = serialize($requestBody);
+        $_POST['body'] = $requestBody;
     }
 
     private function setPlayerFourFoldsPost()
@@ -155,7 +155,7 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[3]['stack']
         ];
 
-        $_POST['body'] = serialize($requestBody);
+        $_POST['body'] = $requestBody;
     }
 
     private function setPlayerFourRaisesPost()
@@ -173,7 +173,7 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[3]['stack']
         ];
 
-        $_POST['body'] = serialize($requestBody);
+        $_POST['body'] = $requestBody;
     }
 
     private function setPlayerFourChecksPost()
@@ -191,7 +191,7 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[3]['stack']
         ];
 
-        $_POST['body'] = serialize($requestBody);
+        $_POST['body'] = $requestBody;
     }
 
     private function setPlayerSixFoldsPost()
@@ -209,6 +209,6 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[5]['stack']
         ];
 
-        $_POST['body'] = serialize($requestBody);
+        $_POST['body'] = $requestBody;
     }
 }

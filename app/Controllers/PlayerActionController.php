@@ -3,9 +3,7 @@
 namespace App\Controllers;
 
 use App\Classes\ActionHandler\ActionHandler;
-use App\Classes\GameData\GameData;
 use App\Classes\GamePlay\GamePlay;
-use App\Classes\GameState\GameState;
 use App\Classes\HandStep\NewStreet;
 use App\Classes\HandStep\Showdown;
 use App\Classes\HandStep\Start;
@@ -24,7 +22,7 @@ class PlayerActionController
     {
         $requestBody = file_get_contents('php://input')
             ? json_decode(file_get_contents('php://input'), true)['body']
-            : unserialize($_POST['body']);
+            : $_POST['body'];
 
         $hand      = Hand::latest();
         $gameState = $this->actionHandler->handle(
