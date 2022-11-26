@@ -47,7 +47,7 @@ class Hand extends Model
             $stmt = $this->connection->prepare($query);
             $stmt->execute();
         } catch(PDOException $e) {
-            echo $e->getMessage();
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
 
@@ -73,7 +73,7 @@ class Hand extends Model
 
             return $this;
         } catch(PDOException $e) {
-            echo $e->getMessage();
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
 
@@ -98,7 +98,7 @@ class Hand extends Model
 
             return $stmt->fetchAll();
         } catch(PDOException $e) {
-            echo $e->getMessage();
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
 
@@ -129,7 +129,7 @@ class Hand extends Model
 
             return $this;
         } catch(PDOException $e) {
-            echo $e->getMessage();
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
 }
