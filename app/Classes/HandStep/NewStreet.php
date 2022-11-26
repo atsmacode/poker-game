@@ -17,8 +17,6 @@ class NewStreet extends HandStep
     {
         $this->gameState = $gameState;
 
-        $this->updatePlayerStatusesOnNewStreet();
-
         $street = HandStreet::create([
             'street_id' => Street::find(['name' => $this->gameState->getGame()->streets[$this->gameState->handStreetCount()]['name']])->id,
             'hand_id'   => $this->gameState->handId()
@@ -29,12 +27,14 @@ class NewStreet extends HandStep
             $this->gameState->getGame()->streets[$this->gameState->incrementedHandStreets() - 1]['community_cards']
         );
 
+        $this->updatePlayerStatusesOnNewStreet($street->id);
         $this->gameState->updateHandStreets();
+        $this->gameState->setPlayers();
 
         return $this->gameState;
     }
 
-    private function updatePlayerStatusesOnNewStreet()
+    private function updatePlayerStatusesOnNewStreet(int $handStreetId): void
     {
         TableSeat::find(['table_id' => $this->gameState->tableId()])
             ->updateBatch([
@@ -43,7 +43,8 @@ class NewStreet extends HandStep
 
         PlayerAction::find(['hand_id' => $this->gameState->handId()])
             ->updateBatch([
-                'action_id' => null
+                'action_id'      => null,
+                'hand_street_id' => $handStreetId
             ], 'hand_id = ' . $this->gameState->handId());
 
         $this->gameState->setNewStreet();

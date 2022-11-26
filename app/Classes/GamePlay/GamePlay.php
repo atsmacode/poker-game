@@ -60,8 +60,6 @@ class GamePlay
 
         if ($this->theLastHandWasCompleted()) { return $this->response($this->start, $currentDealer); }
 
-        $this->gameState->setPlayers();
-
         if ($this->theBigBlindIsTheOnlyActivePlayerRemainingPreFlop()) {
             TableSeat::bigBlindWins($this->gameState->handId());
 
@@ -94,6 +92,8 @@ class GamePlay
 
     protected function theBigBlindIsTheOnlyActivePlayerRemainingPreFlop()
     {
+        $this->gameState->setPlayers();
+        
         $activePlayers = array_values(array_filter($this->gameState->getPlayers(), function($player){
             return 1 === $player['active'];
         }));

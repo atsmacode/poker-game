@@ -35,7 +35,7 @@ class ActionHandler implements ActionHandlerInterface
         $playerAction = PlayerAction::find([
             'player_id'      =>  $playerId,
             'table_seat_id'  =>  $tableSeatId,
-            'hand_street_id' => $handStreetId
+            'hand_street_id' =>  $handStreetId
         ]);
 
         BetHelper::handle($hand, $stack, $playerId, $hand->table_id, $betAmount);
