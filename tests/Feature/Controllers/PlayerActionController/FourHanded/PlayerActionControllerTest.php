@@ -6,6 +6,10 @@ use App\Classes\ActionHandler\ActionHandler;
 use App\Classes\GameData\GameData;
 use App\Classes\GamePlay\GamePlay;
 use App\Classes\GameState\GameState;
+use App\Classes\HandStep\NewStreet;
+use App\Classes\HandStep\Showdown;
+use App\Classes\HandStep\Start;
+use App\Classes\PlayerHandler\PlayerHandler;
 use App\Models\Hand;
 use App\Models\HandStreet;
 use App\Models\Player;
@@ -26,7 +30,6 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->table         = Table::create(['name' => 'Test Table', 'seats' => 3]);
         $this->hand          = Hand::create(['table_id' => $this->table->id]);
-        $this->gamePlay      = new GamePlay();
 
         $this->player1 = Player::create([
             'name' => 'Player 1',
@@ -68,7 +71,15 @@ class PlayerActionControllerTest extends BaseTest
             'player_id' => $this->player4->id
         ]); 
 
-        $this->gameState     = new GameState(new GameData(), $this->hand);
+        $this->gameState = new GameState(new GameData(), $this->hand);
+        $this->gamePlay  = new GamePlay(
+            $this->gameState,
+            new Start(),
+            new NewStreet(),
+            new Showdown(),
+            new PlayerHandler()
+        );
+
         $this->actionHandler = new ActionHandler($this->gameState);
     }
 
@@ -78,7 +89,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function it_adds_a_player_that_calls_the_big_blind_to_the_list_of_table_seats_that_can_continue()
     {
-        $this->gamePlay->start($this->gameState, null);
+        $this->gamePlay->start();
 
         $this->setPlayerFourCallsPost();
 
@@ -93,7 +104,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function it_removes_a_folded_player_from_the_list_of_seats_that_can_continue()
     {
-        $this->gamePlay->start($this->gameState, null);
+        $this->gamePlay->start();
 
         $this->givenBigBlindRaisesPreFlopCaller();
 
@@ -111,7 +122,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function it_can_deal_a_new_street()
     {
-        $this->gamePlay->start($this->gameState, null);
+        $this->gamePlay->start();
 
         $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets()->content);
 
@@ -128,7 +139,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function the_big_blind_will_win_the_pot_if_all_other_players_fold_pre_flop()
     {
-        $this->gamePlay->start($this->gameState, null);
+        $this->gamePlay->start();
 
         $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets()->content);
 
@@ -153,7 +164,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function the_pre_flop_action_will_be_back_on_the_big_blind_caller_if_the_big_blind_raises()
     {
-        $this->gamePlay->start($this->gameState, null);
+        $this->gamePlay->start();
 
         $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets() ->content);
 
@@ -173,7 +184,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function if_the_dealer_is_seat_two_and_the_first_active_seat_on_a_new_street_the_first_active_seat_after_them_will_be_first_to_act()
     {
-        $this->gamePlay->start($this->gameState, TableSeat::find([
+        $this->gamePlay->start(TableSeat::find([
             'id' => $this->gameState->getSeats()[0]['id']
         ]));
 
@@ -194,7 +205,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function if_there_is_one_seat_after_current_dealer_big_blind_will_be_seat_two()
     {
-        $this->gamePlay->start($this->gameState, TableSeat::find([
+        $this->gamePlay->start(TableSeat::find([
             'id' => $this->gameState->getSeats()[2]['id']
         ]));
 
@@ -216,7 +227,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function if_the_dealer_is_the_first_active_seat_on_a_new_street_the_first_active_seat_after_them_will_be_first_to_act()
     {
-        $this->gamePlay->start($this->gameState, null);
+        $this->gamePlay->start();
 
         $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets()->content);
 

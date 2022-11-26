@@ -14,9 +14,9 @@ trait HasStreets
             'hand_id' => $this->gameState->handId()
         ]);
 
-        $this->gamePlay->dealer->dealStreetCards(
+        $this->gameState->getGameDealer()->dealStreetCards(
             $flop,
-            $this->gamePlay->game->streets[1]['community_cards']
+            $this->gameState->getGame()->streets[1]['community_cards']
         );
     }
 
@@ -27,9 +27,9 @@ trait HasStreets
             'hand_id' => $this->gameState->handId()
         ]);
 
-        $this->gamePlay->dealer->dealStreetCards(
+        $this->gameState->getGameDealer()->dealStreetCards(
             $turn,
-            $this->gamePlay->game->streets[2]['community_cards']
+            $this->gameState->getGame()->streets[2]['community_cards']
         );
     }
 
@@ -40,9 +40,9 @@ trait HasStreets
             'hand_id' => $this->gameState->handId()
         ]);
 
-        $this->gamePlay->dealer->dealStreetCards(
+        $this->gameState->getGameDealer()->dealStreetCards(
             $river,
-            $this->gamePlay->game->streets[3]['community_cards']
+            $this->gameState->getGame()->streets[3]['community_cards']
         );
     }
 }

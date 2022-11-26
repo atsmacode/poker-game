@@ -6,6 +6,10 @@ use App\Classes\ActionHandler\ActionHandler;
 use App\Classes\GameData\GameData;
 use App\Classes\GamePlay\GamePlay;
 use App\Classes\GameState\GameState;
+use App\Classes\HandStep\NewStreet;
+use App\Classes\HandStep\Showdown;
+use App\Classes\HandStep\Start;
+use App\Classes\PlayerHandler\PlayerHandler;
 use App\Constants\Action;
 use App\Models\Hand;
 use App\Models\Player;
@@ -26,7 +30,6 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->table    = Table::create(['name' => 'Test Table', 'seats' => 3]);
         $this->hand     = Hand::create(['table_id' => $this->table->id]);
-        $this->gamePlay = new GamePlay();
 
         $this->player1 = Player::create([
             'name' => 'Player 1',
@@ -68,7 +71,15 @@ class PlayerActionControllerTest extends BaseTest
             'player_id' => $this->player4->id
         ]); 
 
-        $this->gameState     = new GameState(new GameData(), $this->hand);
+        $this->gameState = new GameState(new GameData(), $this->hand);
+        $this->gamePlay  = new GamePlay(
+            $this->gameState,
+            new Start(),
+            new NewStreet(),
+            new Showdown(),
+            new PlayerHandler()
+        );
+
         $this->actionHandler = new ActionHandler($this->gameState);
     }
 
@@ -78,7 +89,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function a_player_facing_a_raise_can_fold_call_or_raise()
     {
-        $this->gamePlay->start($this->gameState, null);
+        $this->gamePlay->start();
 
         $this->setPlayerFourRaisesPost();
 
@@ -97,7 +108,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function a_player_facing_a_raise_fold_can_fold_call_or_raise()
     {
-        $this->gamePlay->start($this->gameState, null);
+        $this->gamePlay->start();
 
         $this->givenPlayerFourRaises();
         $this->setPlayerOneFoldsPost();
@@ -117,7 +128,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function a_folded_player_has_no_options()
     {
-        $this->gamePlay->start($this->gameState, null);
+        $this->gamePlay->start();
 
         $this->setPlayerFourFoldsPost();
 
@@ -133,7 +144,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function the_big_blind_facing_a_call_can_fold_check_or_raise()
     {
-        $this->gamePlay->start($this->gameState, null);
+        $this->gamePlay->start();
 
         $this->setPlayerTwoCallsPost();
 
@@ -153,7 +164,7 @@ class PlayerActionControllerTest extends BaseTest
     public function a_player_facing_a_call_can_fold_call_or_raise()
     {
         
-        $this->gamePlay->start($this->gameState, null);
+        $this->gamePlay->start();
 
         $this->setPlayerFourCallsPost();
 
@@ -172,7 +183,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function the_first_active_player_on_a_new_street_can_fold_check_or_bet()
     {
-        $this->gamePlay->start($this->gameState, null);
+        $this->gamePlay->start();
 
         $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets()->content);
 

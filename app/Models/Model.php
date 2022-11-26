@@ -56,7 +56,7 @@ class Model extends Database
 
             $id = $this->connection->lastInsertId();
         } catch(PDOException $e) {
-            echo $this->table . ' ->' . 'createEntry() ' . $e->getMessage();
+            error_log(__METHOD__ . $e->getMessage());
         }
 
         $this->content = $this->getSelected(['id' => $id])->content;
@@ -82,7 +82,7 @@ class Model extends Database
             $rows = $stmt->fetchAll();
 
         } catch(PDOException $e) {
-            echo $this->table . ' ->' . 'getSelected() ' . $e->getMessage();
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
 
         if(!$rows){
@@ -117,7 +117,7 @@ class Model extends Database
 
             $stmt->execute();
         } catch(PDOException $e) {
-            echo $this->table . ' ->' . 'update() ' . $e->getMessage();
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
 
         $this->content = $this->getSelected(['id' => $this->id])->content;
@@ -144,7 +144,7 @@ class Model extends Database
 
             $stmt->execute();
         } catch(PDOException $e) {
-            echo $this->table . ' ->' . 'updateBatch() ' . $e->getMessage();
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
 
         return $this;
@@ -163,7 +163,7 @@ class Model extends Database
 
             $rows = $stmt->fetchAll();
         } catch(PDOException $e) {
-            echo $this->table . ' ->' . 'all() ' . $e->getMessage();
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
 
         $result = $rows;
@@ -205,7 +205,7 @@ class Model extends Database
 
             return $this;
         } catch(PDOException $e) {
-            echo $this->table . ' ->' . 'setNullValue() ' . $e->getMessage();
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
 

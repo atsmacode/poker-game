@@ -66,7 +66,7 @@ class Player extends Model
 
             return $stmt->fetchAll();
         } catch(PDOException $e) {
-            echo $e->getMessage();
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
 }

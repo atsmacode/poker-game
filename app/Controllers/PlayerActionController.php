@@ -3,7 +3,13 @@
 namespace App\Controllers;
 
 use App\Classes\ActionHandler\ActionHandler;
+use App\Classes\GameData\GameData;
 use App\Classes\GamePlay\GamePlay;
+use App\Classes\GameState\GameState;
+use App\Classes\HandStep\NewStreet;
+use App\Classes\HandStep\Showdown;
+use App\Classes\HandStep\Start;
+use App\Classes\PlayerHandler\PlayerHandler;
 use App\Models\Hand;
 
 class PlayerActionController
@@ -33,8 +39,13 @@ class PlayerActionController
         );
 
         $gamePlay = (new GamePlay(
-            $requestBody['deck'])
-        )->play($gameState);
+            $gameState,
+            new Start(),
+            new NewStreet(),
+            new Showdown(),
+            new PlayerHandler(),
+            $requestBody['deck']
+        ))->play($gameState);
 
         if (!isset($GLOBALS['dev'])) {
             header("Content-Type: application/json");

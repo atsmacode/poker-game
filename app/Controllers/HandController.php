@@ -5,6 +5,10 @@ namespace App\Controllers;
 use App\Classes\GameData\GameData;
 use App\Classes\GamePlay\GamePlay;
 use App\Classes\GameState\GameState;
+use App\Classes\HandStep\NewStreet;
+use App\Classes\HandStep\Showdown;
+use App\Classes\HandStep\Start;
+use App\Classes\PlayerHandler\PlayerHandler;
 use App\Models\Hand;
 
 class HandController
@@ -14,9 +18,12 @@ class HandController
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $hand     = Hand::create(['table_id' => $tableId ?? 1]);
             $gamePlay = (new GamePlay(
-
-            ))->start(
                 new GameState(new GameData(), $hand),
+                new Start(),
+                new NewStreet(),
+                new Showdown(),
+                new PlayerHandler()
+            ))->start(
                 $currentDealer ?? null
             );
 

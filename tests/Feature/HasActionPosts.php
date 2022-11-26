@@ -19,7 +19,7 @@ trait HasActionPosts
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
         $requestBody = [
-            'deck'           => $this->gamePlay->dealer->getDeck(),
+            'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player1->id,
             'table_seat_id'  => $this->gameState->getSeats()[0]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()->slice(0, 1)->id,
@@ -37,7 +37,7 @@ trait HasActionPosts
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
         $requestBody = [
-            'deck'           => $this->gamePlay->dealer->getDeck(),
+            'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player1->id,
             'table_seat_id'  => $this->gameState->getSeats()[0]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()->slice(0, 1)->id,
@@ -55,7 +55,7 @@ trait HasActionPosts
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
         $requestBody = [
-            'deck'           => $this->gamePlay->dealer->getDeck(),
+            'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player2->id,
             'table_seat_id'  => $this->gameState->getSeats()[1]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()->slice(0, 1)->id,
@@ -73,7 +73,7 @@ trait HasActionPosts
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
         $requestBody = [
-            'deck'           => $this->gamePlay->dealer->getDeck(),
+            'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player2->id,
             'table_seat_id'  => $this->gameState->getSeats()[1]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()->slice(0, 1)->id,
@@ -91,7 +91,7 @@ trait HasActionPosts
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
         $requestBody = [
-            'deck'           => $this->gamePlay->dealer->getDeck(),
+            'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player3->id,
             'table_seat_id'  => $this->gameState->getSeats()[2]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()->slice(0, 1)->id,
@@ -109,7 +109,7 @@ trait HasActionPosts
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
         $requestBody = [
-            'deck'           => $this->gamePlay->dealer->getDeck(),
+            'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player3->id,
             'table_seat_id'  => $this->gameState->getSeats()[2]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()->slice(0, 1)->id,
@@ -127,7 +127,7 @@ trait HasActionPosts
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
         $requestBody = [
-            'deck'           => $this->gamePlay->dealer->getDeck(),
+            'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player4->id,
             'table_seat_id'  => $this->gameState->getSeats()[3]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()->slice(0, 1)->id,
@@ -145,7 +145,7 @@ trait HasActionPosts
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
         $requestBody = [
-            'deck'           => $this->gamePlay->dealer->getDeck(),
+            'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player4->id,
             'table_seat_id'  => $this->gameState->getSeats()[3]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()->slice(0, 1)->id,
@@ -163,7 +163,7 @@ trait HasActionPosts
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
         $requestBody = [
-            'deck'           => $this->gamePlay->dealer->getDeck(),
+            'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player4->id,
             'table_seat_id'  => $this->gameState->getSeats()[3]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()->slice(0, 1)->id,
@@ -181,7 +181,7 @@ trait HasActionPosts
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
         $requestBody = [
-            'deck'           => $this->gamePlay->dealer->getDeck(),
+            'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player4->id,
             'table_seat_id'  => $this->gameState->getSeats()[3]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()->slice(0, 1)->id,
@@ -199,7 +199,7 @@ trait HasActionPosts
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
         $requestBody = [
-            'deck'           => $this->gamePlay->dealer->getDeck(),
+            'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player6->id,
             'table_seat_id'  => $this->gameState->getSeats()[5]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()->slice(0, 1)->id,

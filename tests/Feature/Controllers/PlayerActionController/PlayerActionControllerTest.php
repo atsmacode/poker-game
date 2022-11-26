@@ -6,6 +6,10 @@ use App\Classes\ActionHandler\ActionHandler;
 use App\Classes\GameData\GameData;
 use App\Classes\GamePlay\GamePlay;
 use App\Classes\GameState\GameState;
+use App\Classes\HandStep\NewStreet;
+use App\Classes\HandStep\Showdown;
+use App\Classes\HandStep\Start;
+use App\Classes\PlayerHandler\PlayerHandler;
 use App\Models\Hand;
 use App\Models\Player;
 use App\Models\Table;
@@ -25,7 +29,6 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->table         = Table::create(['name' => 'Test Table', 'seats' => 3]);
         $this->hand          = Hand::create(['table_id' => $this->table->id]);
-        $this->gamePlay      = new GamePlay($this->hand);
 
         $this->player1 = Player::create([
             'name' => 'Player 1',
@@ -87,7 +90,15 @@ class PlayerActionControllerTest extends BaseTest
             'player_id' => $this->player6->id
         ]);
 
-        $this->gameState     = new GameState(new GameData(), $this->hand);
+        $this->gameState = new GameState(new GameData(), $this->hand);
+        $this->gamePlay  = new GamePlay(
+            $this->gameState,
+            new Start(),
+            new NewStreet(),
+            new Showdown(),
+            new PlayerHandler()
+        );
+
         $this->actionHandler = new ActionHandler($this->gameState);
     }
 
@@ -97,7 +108,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function it_returns_expected_response_keys()
     {
-        $this->gamePlay->start($this->gameState, null);
+        $this->gamePlay->start();
 
         $this->setPost();
 

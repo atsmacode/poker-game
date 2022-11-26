@@ -6,6 +6,10 @@ use App\Classes\ActionHandler\ActionHandler;
 use App\Classes\GameData\GameData;
 use App\Classes\GamePlay\GamePlay;
 use App\Classes\GameState\GameState;
+use App\Classes\HandStep\NewStreet;
+use App\Classes\HandStep\Showdown;
+use App\Classes\HandStep\Start;
+use App\Classes\PlayerHandler\PlayerHandler;
 use App\Models\Hand;
 use App\Models\HandStreet;
 use App\Models\Player;
@@ -29,7 +33,6 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->table         = Table::create(['name' => 'Test Table', 'seats' => 3]);
         $this->hand          = Hand::create(['table_id' => $this->table->id]);
-        $this->gamePlay      = new GamePlay($this->hand);
 
         $this->player1 = Player::create([
             'name' => 'Player 1',
@@ -61,7 +64,15 @@ class PlayerActionControllerTest extends BaseTest
             'player_id' => $this->player3->id
         ]);
 
-        $this->gameState     = new GameState(new GameData(), $this->hand);
+        $this->gameState = new GameState(new GameData(), $this->hand);
+        $this->gamePlay  = new GamePlay(
+            $this->gameState,
+            new Start(),
+            new NewStreet(),
+            new Showdown(),
+            new PlayerHandler()
+        );
+
         $this->actionHandler = new ActionHandler($this->gameState);
     }
 
@@ -71,7 +82,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function it_can_deal_3_cards_to_a_flop()
     {
-        $this->gamePlay->start($this->gameState, null);
+        $this->gamePlay->start();
 
         $this->executeActionsToContinue();
 
@@ -87,7 +98,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function it_can_deal_1_card_to_a_turn()
     {
-        $this->gamePlay->start($this->gameState, null);
+        $this->gamePlay->start();
 
         $this->setFlop();
 
@@ -105,7 +116,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function it_can_deal_1_card_to_a_river()
     {
-        $this->gamePlay->start($this->gameState, null);
+        $this->gamePlay->start();
 
         $this->setFlop();
 
@@ -125,7 +136,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function it_can_reach_showdown_when_all_active_players_can_continue_on_the_river()
     {
-        $this->gamePlay->start($this->gameState, null);
+        $this->gamePlay->start();
 
         $this->setFlop();
 

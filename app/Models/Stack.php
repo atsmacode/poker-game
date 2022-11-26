@@ -37,7 +37,7 @@ class Stack extends Model
 
             return true;
         } catch(\PDOException $e) {
-            echo $e->getMessage();
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
 }

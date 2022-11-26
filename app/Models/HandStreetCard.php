@@ -46,7 +46,7 @@ class HandStreetCard extends Model
 
             return $stmt->fetch();
         } catch(PDOException $e) {
-            echo $e->getMessage();
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
 }

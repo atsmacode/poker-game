@@ -5,6 +5,10 @@ namespace Tests\Unit;
 use App\Classes\GameData\GameData;
 use App\Classes\GamePlay\GamePlay;
 use App\Classes\GameState\GameState;
+use App\Classes\HandStep\NewStreet;
+use App\Classes\HandStep\Showdown;
+use App\Classes\HandStep\Start;
+use App\Classes\PlayerHandler\PlayerHandler;
 use App\Models\Hand;
 use App\Models\Player;
 use App\Models\Table;
@@ -17,9 +21,9 @@ class TableSeatTest extends BaseTest
     public function setUp(): void
     {
         parent::setUp();
-        $this->table     = Table::create(['name' => 'Test Table', 'seats' => 3]);
-        $this->hand      = Hand::create(['table_id' => $this->table->id]);
-        $this->gamePlay  = new GamePlay($this->hand);
+
+        $this->table = Table::create(['name' => 'Test Table', 'seats' => 3]);
+        $this->hand  = Hand::create(['table_id' => $this->table->id]);
 
         $this->player1 = Player::create([
             'name' => 'Player 1',
@@ -52,6 +56,13 @@ class TableSeatTest extends BaseTest
         ]);
 
         $this->gameState = new GameState(new GameData(), $this->hand);
+        $this->gamePlay  = new GamePlay(
+            $this->gameState,
+            new Start(),
+            new NewStreet(),
+            new Showdown(),
+            new PlayerHandler()
+        );
     }
 
     /**
@@ -75,7 +86,7 @@ class TableSeatTest extends BaseTest
      */
     public function it_can_select_first_active_player_after_dealer()
     {
-        $this->gamePlay->start($this->gameState, TableSeat::find([
+        $this->gamePlay->start(TableSeat::find([
             'id' => $this->gameState->getSeats()[0]['id']
         ]));
 

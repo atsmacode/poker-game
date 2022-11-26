@@ -2,8 +2,6 @@
 
 namespace App\Classes\HandStep;
 
-use App\Classes\Dealer\Dealer;
-use App\Classes\Game\Game;
 use App\Classes\GameState\GameState;
 use App\Helpers\BetHelper;
 use App\Models\HandStreet;
@@ -17,24 +15,18 @@ use App\Models\TableSeat;
  */
 class Start extends HandStep
 {
-    public function __construct(Game $game, Dealer $dealer)
-    {
-        $this->game   = $game;
-        $this->dealer = $dealer;
-    }
-
     public function handle(GameState $gameState, TableSeat $currentDealer = null): GameState
     {
         $this->gameState = $gameState;
 
         $this->initiateStreetActions()->initiatePlayerStacks()->setDealerAndBlindSeats($currentDealer);
         $this->gameState->setPlayers();
-        $this->dealer->setDeck()->shuffle();
+        $this->gameState->getGameDealer()->setDeck()->shuffle();
 
-        if($this->game->streets[0]['whole_cards']){
-            $this->dealer->dealTo(
+        if($this->gameState->getGame()->streets[0]['whole_cards']){
+            $this->gameState->getGameDealer()->dealTo(
                 $this->gameState->getSeats(),
-                $this->game->streets[0]['whole_cards'],
+                $this->gameState->getGame()->streets[0]['whole_cards'],
                 $this->gameState->getHand(),
             );
         }
@@ -107,7 +99,7 @@ class Start extends HandStep
         $newDealerSeat->update(['is_dealer'  => 1]);
 
         $handStreetId = HandStreet::find([
-            'street_id'  => Street::find(['name' => $this->game->streets[0]['name']])->id,
+            'street_id'  => Street::find(['name' => $this->gameState->getGame()->streets[0]['name']])->id,
             'hand_id' => $this->gameState->handId()
         ])->id;
 
@@ -158,7 +150,7 @@ class Start extends HandStep
 
         /** TODO: These must be called in order. Also will only work if all seats have a stack/player.*/
         if ($this->noDealerIsSetOrThereIsNoSeatAfterTheCurrentDealer($currentDealer)) {
-
+            
             $dealer         = $this->gameState->getSeats()[0];
             $smallBlindSeat = $this->gameState->getSeat($dealer['id'] + 1);
             $bigBlindSeat   = $this->gameState->getSeat($dealer['id'] + 2);

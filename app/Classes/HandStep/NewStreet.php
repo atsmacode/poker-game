@@ -2,8 +2,6 @@
 
 namespace App\Classes\HandStep;
 
-use App\Classes\Dealer\Dealer;
-use App\Classes\Game\Game;
 use App\Classes\GameState\GameState;
 use App\Models\HandStreet;
 use App\Models\PlayerAction;
@@ -15,12 +13,6 @@ use App\Models\TableSeat;
  */
 class NewStreet extends HandStep
 {
-    public function __construct(Game $game, Dealer $dealer)
-    {
-        $this->game   = $game;
-        $this->dealer = $dealer;
-    }
-
     public function handle(GameState $gameState, TableSeat $currentDealer = null): GameState
     {
         $this->gameState = $gameState;
@@ -28,13 +20,13 @@ class NewStreet extends HandStep
         $this->updatePlayerStatusesOnNewStreet();
 
         $street = HandStreet::create([
-            'street_id' => Street::find(['name' => $this->game->streets[$this->gameState->handStreetCount()]['name']])->id,
+            'street_id' => Street::find(['name' => $this->gameState->getGame()->streets[$this->gameState->handStreetCount()]['name']])->id,
             'hand_id'   => $this->gameState->handId()
         ]);
 
-        $this->dealer->dealStreetCards(
+        $this->gameState->getGameDealer()->dealStreetCards(
             $street,
-            $this->game->streets[$this->gameState->incrementedHandStreets() - 1]['community_cards']
+            $this->gameState->getGame()->streets[$this->gameState->incrementedHandStreets() - 1]['community_cards']
         );
 
         $this->gameState->updateHandStreets();

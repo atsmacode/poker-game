@@ -26,7 +26,7 @@ class GameData extends Database
 
             return $stmt->fetchAll();
         } catch(\PDOException $e) {
-            echo $e->getMessage();
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
 
@@ -75,7 +75,7 @@ class GameData extends Database
 
             return $stmt->fetchAll();
         } catch(\PDOException $e) {
-            echo $e->getMessage();
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
 

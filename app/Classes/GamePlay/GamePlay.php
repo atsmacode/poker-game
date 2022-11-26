@@ -18,19 +18,16 @@ use App\Models\TableSeat;
  */
 class GamePlay
 {
-    public  $game;
-    public  $dealer;
-    private ?GameState $gameState;
-
     public function __construct(
+        private GameState $gameState,
+        private Start $start,
+        private NewStreet $newStreet,
+        private Showdown $showdown,
+        private PlayerHandler $playerHandler,
         $deck = null
     ) {
-        $this->game          = new PotLimitHoldEm();
-        $this->dealer        = (new Dealer())->setDeck($deck);
-        $this->start         = new Start($this->game, $this->dealer);
-        $this->newStreet     = new NewStreet($this->game, $this->dealer);
-        $this->showdown      = new Showdown($this->game, $this->dealer);
-        $this->playerHandler = new PlayerHandler();
+        $this->gameState->setGame(new PotLimitHoldEm());
+        $this->gameState->setGameDealer((new Dealer())->setDeck($deck));
     }
 
     public function setGameState(GameState $gameState): void
@@ -43,7 +40,7 @@ class GamePlay
         $this->gameState = $step ? $step->handle($this->gameState, $currentDealer) : $this->gameState;
 
         return [
-            'deck'           => $this->dealer->getDeck(),
+            'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'pot'            => $this->gameState->getPot(),
             'communityCards' => $this->gameState->setCommunityCards()->getCommunityCards(),
             'players'        => $this->playerHandler->handle($this->gameState),
@@ -52,10 +49,8 @@ class GamePlay
     }
 
     /** Specific start method to start new hand on page refresh in HandController */
-    public function start(GameState $gameState = null, $currentDealer = null)
+    public function start($currentDealer = null)
     {
-        $this->gameState = $gameState;
-
         return $this->response($this->start, $currentDealer);
     }
 
@@ -82,7 +77,7 @@ class GamePlay
 
     protected function readyForShowdown()
     {
-        return count($this->gameState->getHandStreets()->content) === count($this->game->streets) &&
+        return count($this->gameState->getHandStreets()->content) === count($this->gameState->getGame()->streets) &&
             count($this->gameState->getActivePlayers()) === count($this->gameState->getContinuingPlayers());
     }
 

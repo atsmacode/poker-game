@@ -57,7 +57,7 @@ class TableSeat extends Model
 
             return $this;
         } catch(PDOException $e) {
-            echo $e->getMessage();
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
 
@@ -91,7 +91,7 @@ class TableSeat extends Model
 
             return true;
         } catch(PDOException $e) {
-            echo $e->getMessage();
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
 
@@ -127,7 +127,7 @@ class TableSeat extends Model
 
             return $this;
         } catch(PDOException $e) {
-            echo $e->getMessage();
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
 
@@ -168,7 +168,7 @@ class TableSeat extends Model
 
             return $stmt->fetchAll();
         } catch(PDOException $e) {
-            echo $e->getMessage();
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
 }

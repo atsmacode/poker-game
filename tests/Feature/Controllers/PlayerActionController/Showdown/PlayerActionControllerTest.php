@@ -6,7 +6,10 @@ use App\Classes\ActionHandler\ActionHandler;
 use App\Classes\GameData\GameData;
 use App\Classes\GamePlay\GamePlay;
 use App\Classes\GameState\GameState;
+use App\Classes\HandStep\NewStreet;
+use App\Classes\HandStep\Showdown;
 use App\Classes\HandStep\Start;
+use App\Classes\PlayerHandler\PlayerHandler;
 use App\Constants\Card;
 use App\Constants\HandType;
 use App\Models\Hand;
@@ -37,7 +40,6 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->table         = Table::create(['name' => 'Test Table', 'seats' => 3]);
         $this->hand          = Hand::create(['table_id' => $this->table->id]);
-        $this->gamePlay      = new GamePlay();
 
         $this->player1 = Player::create([
             'name' => 'Player 1',
@@ -69,9 +71,17 @@ class PlayerActionControllerTest extends BaseTest
             'player_id' => $this->player3->id
         ]);
 
-        $this->gameState     = new GameState(new GameData(), $this->hand);
+        $this->gameState = new GameState(new GameData(), $this->hand);
+        $this->gamePlay  = new GamePlay(
+            $this->gameState,
+            new Start(),
+            new NewStreet(),
+            new Showdown(),
+            new PlayerHandler()
+        );
+
         $this->actionHandler = new ActionHandler($this->gameState);
-        $this->start         = new Start($this->gamePlay->game, $this->gamePlay->dealer);
+        $this->start         = new Start($this->gameState->getGame(), $this->gameState->getGameDealer());
     }
 
    /**
@@ -215,7 +225,7 @@ class PlayerActionControllerTest extends BaseTest
     protected function setflop($flopCards)
     {
         $flop = HandStreet::create([
-            'street_id' => Street::find(['name' => $this->gamePlay->game->streets[1]['name']])->id,
+            'street_id' => Street::find(['name' => $this->gameState->getGame()->streets[1]['name']])->id,
             'hand_id'   => $this->gameState->handId()
         ]);
 
@@ -230,7 +240,7 @@ class PlayerActionControllerTest extends BaseTest
     protected function setTurn($turnCard)
     {
         $turn = HandStreet::create([
-            'street_id' => Street::find(['name' => $this->gamePlay->game->streets[2]['name']])->id,
+            'street_id' => Street::find(['name' => $this->gameState->getGame()->streets[2]['name']])->id,
             'hand_id'   => $this->gameState->handId()
         ]);
 
@@ -243,7 +253,7 @@ class PlayerActionControllerTest extends BaseTest
     protected function setRiver($riverCard)
     {
         $river = HandStreet::create([
-            'street_id' => Street::find(['name' => $this->gamePlay->game->streets[3]['name']])->id,
+            'street_id' => Street::find(['name' => $this->gameState->getGame()->streets[3]['name']])->id,
             'hand_id'   => $this->gameState->handId()
         ]);
 

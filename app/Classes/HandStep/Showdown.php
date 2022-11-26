@@ -2,8 +2,6 @@
 
 namespace App\Classes\HandStep;
 
-use App\Classes\Dealer\Dealer;
-use App\Classes\Game\Game;
 use App\Classes\GameState\GameState;
 use App\Classes\Showdown\Showdown as TheShowdown;
 use App\Helpers\PotHelper;
@@ -14,12 +12,6 @@ use App\Models\TableSeat;
  */
 class Showdown extends HandStep
 {
-    public function __construct(Game $game, Dealer $dealer)
-    {
-        $this->game   = $game;
-        $this->dealer = $dealer;
-    }
-
     public function handle(GameState $gameState, TableSeat $currentDealer = null): GameState
     {
         $this->gameState = $gameState;
