@@ -22,8 +22,9 @@ class GamePlay
     public  $dealer;
     private ?GameState $gameState;
 
-    public function __construct($deck = null)
-    {
+    public function __construct(
+        $deck = null
+    ) {
         $this->game          = new PotLimitHoldEm();
         $this->dealer        = (new Dealer())->setDeck($deck);
         $this->start         = new Start($this->game, $this->dealer);
@@ -62,11 +63,6 @@ class GamePlay
     {
         $this->gameState = $gameState;
 
-        return $this->nextStep($currentDealer);
-    }
-
-    public function nextStep($currentDealer = null)
-    {
         if ($this->theLastHandWasCompleted()) { return $this->response($this->start, $currentDealer); }
 
         $this->gameState->setPlayers();
