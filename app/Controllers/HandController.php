@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Classes\GameData\GameData;
 use App\Classes\GamePlay\GamePlay;
 use App\Classes\GameState\GameState;
 use App\Models\Hand;
@@ -12,7 +13,7 @@ class HandController
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $hand     = Hand::create(['table_id' => $tableId ?? 1]);
-            $gamePlay = (new GamePlay())->start(new GameState($hand), $currentDealer ?? null);
+            $gamePlay = (new GamePlay())->start(new GameState(new GameData(), $hand), $currentDealer ?? null);
 
             if (!isset($GLOBALS['dev'])) {
                 header("Content-Type: application/json");

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controllers\PlayerActionController\Showdown;
 
 use App\Classes\ActionHandler\ActionHandler;
+use App\Classes\GameData\GameData;
 use App\Classes\GamePlay\GamePlay;
 use App\Classes\GameState\GameState;
 use App\Classes\HandStep\Start;
@@ -68,7 +69,7 @@ class PlayerActionControllerTest extends BaseTest
             'player_id' => $this->player3->id
         ]);
 
-        $this->gameState     = new GameState($this->hand);
+        $this->gameState     = new GameState(new GameData(), $this->hand);
         $this->actionHandler = new ActionHandler($this->gameState);
         $this->start         = new Start($this->gamePlay->game, $this->gamePlay->dealer);
     }

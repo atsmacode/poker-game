@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Classes\GameData\GameData;
 use App\Classes\GamePlay\GamePlay;
 use App\Classes\GameState\GameState;
 use App\Models\Hand;
@@ -50,7 +51,7 @@ class TableSeatTest extends BaseTest
             'player_id' => $this->player3->id
         ]);
 
-        $this->gameState = new GameState($this->hand);
+        $this->gameState = new GameState(new GameData(), $this->hand);
     }
 
     /**

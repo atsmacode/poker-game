@@ -24,9 +24,12 @@ class GameState
     private array         $players;
     private array         $stacks;
     private bool          $newStreet = false;
+    private GameData      $gameData;
 
-    public function __construct(Hand $hand = null)
+    public function __construct(GameData $gameData, Hand $hand = null)
     {
+        $this->gameData = $gameData;
+        
         if ($hand) {
             $this->initiate($hand);
         }
@@ -37,7 +40,7 @@ class GameState
         $this->hand        = $hand;
         $this->tableId     = $hand->table_id;
         $this->handId      = $hand->id;
-        $this->seats       = GameData::getSeats($this->tableId);
+        $this->seats       = $this->gameData->getSeats($this->tableId);
         $this->handStreets = $this->hand->streets();
     }
 
@@ -160,7 +163,7 @@ class GameState
 
     public function setCommunityCards(): self
     {
-        $this->communityCards = GameData::getCommunityCards($this->getHandStreets());
+        $this->communityCards = $this->gameData->getCommunityCards($this->getHandStreets());
 
         return $this;
     }
@@ -172,7 +175,7 @@ class GameState
 
     public function setWholeCards(): self
     {
-        $this->wholeCards = GameData::getWholeCards($this->getPlayers(), $this->handId);
+        $this->wholeCards = $this->gameData->getWholeCards($this->getPlayers(), $this->handId);
 
         return $this;
     }
@@ -184,7 +187,7 @@ class GameState
 
     public function setPlayers(): self
     {
-        $this->players = GameData::getPlayers($this->handId);
+        $this->players = $this->gameData->getPlayers($this->handId);
 
         return $this;
     }

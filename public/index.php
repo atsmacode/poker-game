@@ -1,6 +1,7 @@
 <?php
 
 use App\Classes\ActionHandler\ActionHandler;
+use App\Classes\GameData\GameData;
 use App\Classes\GameState\GameState;
 use App\Controllers\HandController;
 use App\Controllers\PlayerActionController;
@@ -17,7 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if (str_contains($_SERVER['REQUEST_URI'], 'action')) {
-        return (new PlayerActionController(new ActionHandler(new GameState())))->action();
+        return (new PlayerActionController(
+            new ActionHandler(new GameState(new GameData()))
+        ))->action();
     }
 }
 

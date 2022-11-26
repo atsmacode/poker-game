@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controllers\PlayerActionController;
 
 use App\Classes\ActionHandler\ActionHandler;
+use App\Classes\GameData\GameData;
 use App\Classes\GamePlay\GamePlay;
 use App\Classes\GameState\GameState;
 use App\Models\Hand;
@@ -86,7 +87,7 @@ class PlayerActionControllerTest extends BaseTest
             'player_id' => $this->player6->id
         ]);
 
-        $this->gameState     = new GameState($this->hand);
+        $this->gameState     = new GameState(new GameData(), $this->hand);
         $this->actionHandler = new ActionHandler($this->gameState);
     }
 

@@ -7,14 +7,8 @@ use App\Models\Player;
 
 class GameData extends Database
 {
-    public static function getSeats($handId)
+    public function getSeats($tableId)
     {
-        return (new static())->getSeatsQuery($handId);
-    }
-
-    private function getSeatsQuery($tableId)
-    {
-
         $query = sprintf("
             SELECT
                 *
@@ -36,14 +30,8 @@ class GameData extends Database
         }
     }
 
-    public static function getPlayers($handId)
+    public function getPlayers($handId)
     {
-        return (new static())->getPlayersQuery($handId);
-    }
-
-    private function getPlayersQuery($handId)
-    {
-
         $query = sprintf("
             SELECT
                 ts.can_continue,
@@ -91,7 +79,7 @@ class GameData extends Database
         }
     }
 
-    public static function getWholeCards(array $players, int $handId): array
+    public function getWholeCards(array $players, int $handId): array
     {
         $wholeCards = [];
 
@@ -116,7 +104,7 @@ class GameData extends Database
         return $wholeCards;
     }
 
-    public static function getCommunityCards(HandStreet $handStreets): array
+    public function getCommunityCards(HandStreet $handStreets): array
     {
         $communityCards = [];
 
