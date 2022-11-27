@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Unit\HandIdentifier;
+namespace Atsmacode\PokerGame\Tests\Unit\HandIdentifier;
 
-use App\Classes\HandIdentifier\HandIdentifier;
+use Atsmacode\PokerGame\Classes\HandIdentifier\HandIdentifier;
 use Atsmacode\CardGames\Constants\Card;
 use Atsmacode\CardGames\Factory\CardFactory;
-use Tests\BaseTest;
+use Atsmacode\PokerGame\Tests\BaseTest;
 
 class HandIdentifierKickerTest extends BaseTest
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Unit\Models;
+namespace Atsmacode\PokerGame\Tests\Unit\Models;
 
-use App\Models\Player;
-use App\Models\Stack;
-use App\Models\Table;
-use Tests\BaseTest;
+use Atsmacode\PokerGame\Models\Player;
+use Atsmacode\PokerGame\Models\Stack;
+use Atsmacode\PokerGame\Models\Table;
+use Atsmacode\PokerGame\Tests\BaseTest;
 
 class StackTest extends BaseTest
 {

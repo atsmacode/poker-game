@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace Atsmacode\PokerGame\Models;
 
 class Table extends Model
 {

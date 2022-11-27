@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Atsmacode\PokerGame\Console\Commands;
 
-use Database\Migrations\CreateActions;
+use Atsmacode\PokerGame\Database\Migrations\CreateActions;
 use Atsmacode\CardGames\Database\Migrations\CreateCards;
-use Database\Migrations\CreateDatabase;
-use Database\Migrations\CreateHands;
-use Database\Migrations\CreateHandTypes;
-use Database\Migrations\CreatePlayerActionLogs;
-use Database\Migrations\CreatePlayerActions;
-use Database\Migrations\CreatePlayers;
-use Database\Migrations\CreatePots;
-use Database\Migrations\CreateStacks;
-use Database\Migrations\CreateStreets;
-use Database\Migrations\CreateTables;
-use Database\Migrations\CreateWholeCards;
-use Database\Seeders\SeedActions;
+use Atsmacode\PokerGame\Database\Migrations\CreateDatabase;
+use Atsmacode\PokerGame\Database\Migrations\CreateHands;
+use Atsmacode\PokerGame\Database\Migrations\CreateHandTypes;
+use Atsmacode\PokerGame\Database\Migrations\CreatePlayerActionLogs;
+use Atsmacode\PokerGame\Database\Migrations\CreatePlayerActions;
+use Atsmacode\PokerGame\Database\Migrations\CreatePlayers;
+use Atsmacode\PokerGame\Database\Migrations\CreatePots;
+use Atsmacode\PokerGame\Database\Migrations\CreateStacks;
+use Atsmacode\PokerGame\Database\Migrations\CreateStreets;
+use Atsmacode\PokerGame\Database\Migrations\CreateTables;
+use Atsmacode\PokerGame\Database\Migrations\CreateWholeCards;
+use Atsmacode\PokerGame\Database\Seeders\SeedActions;
 use Atsmacode\CardGames\Database\Seeders\SeedCards;
-use Database\Seeders\SeedHandTypes;
-use Database\Seeders\SeedPlayers;
-use Database\Seeders\SeedStreets;
-use Database\Seeders\SeedTables;
+use Atsmacode\PokerGame\Database\Seeders\SeedHandTypes;
+use Atsmacode\PokerGame\Database\Seeders\SeedPlayers;
+use Atsmacode\PokerGame\Database\Seeders\SeedStreets;
+use Atsmacode\PokerGame\Database\Seeders\SeedTables;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

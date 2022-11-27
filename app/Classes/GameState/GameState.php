@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace App\Classes\GameState;
+namespace Atsmacode\PokerGame\Classes\GameState;
 
-use App\Classes\Dealer\PokerDealer;
-use App\Classes\Game\Game;
-use App\Classes\GameData\GameData;
-use App\Models\Hand;
-use App\Models\HandStreet;
-use App\Models\PlayerAction;
-use App\Models\Table;
+use Atsmacode\PokerGame\Classes\Dealer\PokerDealer;
+use Atsmacode\PokerGame\Classes\Game\Game;
+use Atsmacode\PokerGame\Classes\GameData\GameData;
+use Atsmacode\PokerGame\Models\Hand;
+use Atsmacode\PokerGame\Models\HandStreet;
+use Atsmacode\PokerGame\Models\PlayerAction;
+use Atsmacode\PokerGame\Models\Table;
 
 class GameState
 {

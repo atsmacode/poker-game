@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Factory;
+namespace Atsmacode\PokerGame\Factory;
 
-use App\Models\PlayerAction;
-use App\Models\PlayerActionLog;
+use Atsmacode\PokerGame\Models\PlayerAction;
+use Atsmacode\PokerGame\Models\PlayerActionLog;
 
 /**
  * A class to easily set player actions & associated logs in test suite.

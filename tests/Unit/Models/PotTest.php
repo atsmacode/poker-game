@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Unit\Models;
+namespace Atsmacode\PokerGame\Tests\Unit\Models;
 
-use App\Models\Hand;
-use App\Models\Pot;
-use Tests\BaseTest;
+use Atsmacode\PokerGame\Models\Hand;
+use Atsmacode\PokerGame\Models\Pot;
+use Atsmacode\PokerGame\Tests\BaseTest;
 
 class PotTest extends BaseTest
 {

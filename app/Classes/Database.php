@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Classes;
+namespace Atsmacode\PokerGame\Classes;
 
-use App\Traits\Connect;
+use Atsmacode\PokerGame\Traits\Connect;
 use PDO;
 
 class Database

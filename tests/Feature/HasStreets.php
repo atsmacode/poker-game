@@ -1,9 +1,9 @@
 <?php 
 
-namespace Tests\Feature;
+namespace Atsmacode\PokerGame\Tests\Feature;
 
-use App\Models\HandStreet;
-use App\Models\Street;
+use Atsmacode\PokerGame\Models\HandStreet;
+use Atsmacode\PokerGame\Models\Street;
 
 trait HasStreets
 {

@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Classes\GamePlay;
+namespace Atsmacode\PokerGame\Classes\GamePlay;
 
-use App\Classes\Dealer\PokerDealer;
-use App\Classes\Game\PotLimitHoldEm;
-use App\Classes\GameState\GameState;
-use App\Classes\HandStep\HandStep;
-use App\Classes\HandStep\NewStreet;
-use App\Classes\HandStep\Showdown;
-use App\Classes\HandStep\Start;
-use App\Classes\PlayerHandler\PlayerHandler;
-use App\Models\TableSeat;
+use Atsmacode\PokerGame\Classes\Dealer\PokerDealer;
+use Atsmacode\PokerGame\Classes\Game\PotLimitHoldEm;
+use Atsmacode\PokerGame\Classes\GameState\GameState;
+use Atsmacode\PokerGame\Classes\HandStep\HandStep;
+use Atsmacode\PokerGame\Classes\HandStep\NewStreet;
+use Atsmacode\PokerGame\Classes\HandStep\Showdown;
+use Atsmacode\PokerGame\Classes\HandStep\Start;
+use Atsmacode\PokerGame\Classes\PlayerHandler\PlayerHandler;
+use Atsmacode\PokerGame\Models\TableSeat;
 
 /**
  * Responsible for deciding what happens next in a hand and 

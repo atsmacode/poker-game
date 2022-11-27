@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace App\Classes\PlayerHandler;
+namespace Atsmacode\PokerGame\Classes\PlayerHandler;
 
-use App\Classes\GameState\GameState;
-use App\Constants\Action;
-use App\Models\TableSeat;
+use Atsmacode\PokerGame\Classes\GameState\GameState;
+use Atsmacode\PokerGame\Constants\Action;
+use Atsmacode\PokerGame\Models\TableSeat;
 
 /**
  * Responsible for returning the status and options for the players in a hand.

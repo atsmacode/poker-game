@@ -1,17 +1,17 @@
 <?php
 
-namespace Tests\Unit\PokerDealer;
+namespace Atsmacode\PokerGame\Tests\Unit\PokerDealer;
 
-use App\Classes\Dealer\PokerDealer;
+use Atsmacode\PokerGame\Classes\Dealer\PokerDealer;
 use Atsmacode\CardGames\Constants\Card;
 use Atsmacode\CardGames\Factory\CardFactory;
-use App\Models\Hand;
-use App\Models\HandStreet;
-use App\Models\Player;
-use App\Models\Street;
-use App\Models\Table;
-use App\Models\TableSeat;
-use Tests\BaseTest;
+use Atsmacode\PokerGame\Models\Hand;
+use Atsmacode\PokerGame\Models\HandStreet;
+use Atsmacode\PokerGame\Models\Player;
+use Atsmacode\PokerGame\Models\Street;
+use Atsmacode\PokerGame\Models\Table;
+use Atsmacode\PokerGame\Models\TableSeat;
+use Atsmacode\PokerGame\Tests\BaseTest;
 
 class PokerDealerTest extends BaseTest
 {

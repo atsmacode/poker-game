@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Classes\HandStep;
+namespace Atsmacode\PokerGame\Classes\HandStep;
 
-use App\Classes\GameState\GameState;
-use App\Helpers\BetHelper;
-use App\Models\HandStreet;
-use App\Models\PlayerAction;
-use App\Models\Stack;
-use App\Models\Street;
-use App\Models\TableSeat;
+use Atsmacode\PokerGame\Classes\GameState\GameState;
+use Atsmacode\PokerGame\Helpers\BetHelper;
+use Atsmacode\PokerGame\Models\HandStreet;
+use Atsmacode\PokerGame\Models\PlayerAction;
+use Atsmacode\PokerGame\Models\Stack;
+use Atsmacode\PokerGame\Models\Street;
+use Atsmacode\PokerGame\Models\TableSeat;
 
 /**
  * Responsible for the actions required to start a new hand.

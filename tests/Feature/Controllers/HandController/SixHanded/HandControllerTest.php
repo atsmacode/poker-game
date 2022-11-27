@@ -1,14 +1,14 @@
 <?php
 
-namespace Tests\Feature\Controllers\HandController\SixHanded;
+namespace Atsmacode\PokerGame\Tests\Feature\Controllers\HandController\SixHanded;
 
-use App\Controllers\HandController;
-use App\Models\Player;
-use App\Models\Table;
-use App\Models\TableSeat;
-use Tests\BaseTest;
-use Tests\Feature\HasActionPosts;
-use Tests\Feature\HasGamePlay;
+use Atsmacode\PokerGame\Controllers\HandController;
+use Atsmacode\PokerGame\Models\Player;
+use Atsmacode\PokerGame\Models\Table;
+use Atsmacode\PokerGame\Models\TableSeat;
+use Atsmacode\PokerGame\Tests\BaseTest;
+use Atsmacode\PokerGame\Tests\Feature\HasActionPosts;
+use Atsmacode\PokerGame\Tests\Feature\HasGamePlay;
 
 class HandControllerTest extends BaseTest
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Classes\Showdown;
+namespace Atsmacode\PokerGame\Classes\Showdown;
 
-use App\Classes\GameState\GameState;
-use App\Classes\HandIdentifier\HandIdentifier;
-use App\Models\Player;
+use Atsmacode\PokerGame\Classes\GameState\GameState;
+use Atsmacode\PokerGame\Classes\HandIdentifier\HandIdentifier;
+use Atsmacode\PokerGame\Models\Player;
 
 class Showdown
 {

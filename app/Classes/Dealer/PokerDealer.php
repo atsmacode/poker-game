@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Classes\Dealer;
+namespace Atsmacode\PokerGame\Classes\Dealer;
 
-use App\Models\HandStreetCard;
-use App\Models\WholeCard;
+use Atsmacode\PokerGame\Models\HandStreetCard;
+use Atsmacode\PokerGame\Models\WholeCard;
 use Atsmacode\CardGames\Classes\Dealer\Dealer;
 
 class PokerDealer extends Dealer

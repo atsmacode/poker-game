@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Controllers;
+namespace Atsmacode\PokerGame\Controllers;
 
-use App\Classes\ActionHandler\ActionHandler;
-use App\Classes\GamePlay\GamePlay;
-use App\Classes\HandStep\NewStreet;
-use App\Classes\HandStep\Showdown;
-use App\Classes\HandStep\Start;
-use App\Classes\PlayerHandler\PlayerHandler;
-use App\Models\Hand;
+use Atsmacode\PokerGame\Classes\ActionHandler\ActionHandler;
+use Atsmacode\PokerGame\Classes\GamePlay\GamePlay;
+use Atsmacode\PokerGame\Classes\HandStep\NewStreet;
+use Atsmacode\PokerGame\Classes\HandStep\Showdown;
+use Atsmacode\PokerGame\Classes\HandStep\Start;
+use Atsmacode\PokerGame\Classes\PlayerHandler\PlayerHandler;
+use Atsmacode\PokerGame\Models\Hand;
 
 class PlayerActionController
 {

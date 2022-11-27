@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Classes\HandStep;
+namespace Atsmacode\PokerGame\Classes\HandStep;
 
-use App\Classes\GameState\GameState;
-use App\Models\TableSeat;
+use Atsmacode\PokerGame\Classes\GameState\GameState;
+use Atsmacode\PokerGame\Models\TableSeat;
 
 abstract class HandStep
 {

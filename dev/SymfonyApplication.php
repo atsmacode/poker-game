@@ -2,7 +2,7 @@
 
 require './vendor/autoload.php';
 
-use App\Console\Commands\BuildEnvironment;
+use Atsmacode\PokerGame\Console\Commands\BuildEnvironment;
 use Symfony\Component\Console\Application;
 
 $application = new Application();

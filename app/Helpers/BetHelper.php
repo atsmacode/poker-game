@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Helpers;
+namespace Atsmacode\PokerGame\Helpers;
 
-use App\Classes\GameState\GameState;
-use App\Constants\Action as ConstantsAction;
-use App\Models\Action;
-use App\Models\Hand;
-use App\Models\PlayerAction;
-use App\Models\PlayerActionLog;
-use App\Models\Stack;
-use App\Models\TableSeat;
+use Atsmacode\PokerGame\Classes\GameState\GameState;
+use Atsmacode\PokerGame\Constants\Action as ConstantsAction;
+use Atsmacode\PokerGame\Models\Action;
+use Atsmacode\PokerGame\Models\Hand;
+use Atsmacode\PokerGame\Models\PlayerAction;
+use Atsmacode\PokerGame\Models\PlayerActionLog;
+use Atsmacode\PokerGame\Models\Stack;
+use Atsmacode\PokerGame\Models\TableSeat;
 
 class BetHelper
 {

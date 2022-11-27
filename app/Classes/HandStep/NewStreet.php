@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Classes\HandStep;
+namespace Atsmacode\PokerGame\Classes\HandStep;
 
-use App\Classes\GameState\GameState;
-use App\Models\HandStreet;
-use App\Models\PlayerAction;
-use App\Models\Street;
-use App\Models\TableSeat;
+use Atsmacode\PokerGame\Classes\GameState\GameState;
+use Atsmacode\PokerGame\Models\HandStreet;
+use Atsmacode\PokerGame\Models\PlayerAction;
+use Atsmacode\PokerGame\Models\Street;
+use Atsmacode\PokerGame\Models\TableSeat;
 
 /**
  * Responsible for the actions required if a hand is to continue to the next street.

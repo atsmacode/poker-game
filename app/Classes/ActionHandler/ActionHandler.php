@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace App\Classes\ActionHandler;
+namespace Atsmacode\PokerGame\Classes\ActionHandler;
 
-use App\Classes\GameState\GameState;
-use App\Constants\Action;
-use App\Helpers\BetHelper;
-use App\Models\Hand;
-use App\Models\PlayerAction;
-use App\Models\PlayerActionLog;
-use App\Models\TableSeat;
+use Atsmacode\PokerGame\Classes\GameState\GameState;
+use Atsmacode\PokerGame\Constants\Action;
+use Atsmacode\PokerGame\Helpers\BetHelper;
+use Atsmacode\PokerGame\Models\Hand;
+use Atsmacode\PokerGame\Models\PlayerAction;
+use Atsmacode\PokerGame\Models\PlayerActionLog;
+use Atsmacode\PokerGame\Models\TableSeat;
 
 class ActionHandler implements ActionHandlerInterface
 {

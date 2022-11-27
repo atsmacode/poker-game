@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Feature;
+namespace Atsmacode\PokerGame\Tests\Feature;
 
-use App\Constants\Action;
-use App\Controllers\PlayerActionController;
+use Atsmacode\PokerGame\Constants\Action;
+use Atsmacode\PokerGame\Controllers\PlayerActionController;
 
 trait HasActionPosts
 {

@@ -1,28 +1,28 @@
 <?php
 
-namespace Tests\Feature\Controllers\PlayerActionController\Showdown;
+namespace Atsmacode\PokerGame\Tests\Feature\Controllers\PlayerActionController\Showdown;
 
-use App\Classes\ActionHandler\ActionHandler;
-use App\Classes\GameData\GameData;
-use App\Classes\GamePlay\GamePlay;
-use App\Classes\GameState\GameState;
-use App\Classes\HandStep\NewStreet;
-use App\Classes\HandStep\Showdown;
-use App\Classes\HandStep\Start;
-use App\Classes\PlayerHandler\PlayerHandler;
+use Atsmacode\PokerGame\Classes\ActionHandler\ActionHandler;
+use Atsmacode\PokerGame\Classes\GameData\GameData;
+use Atsmacode\PokerGame\Classes\GamePlay\GamePlay;
+use Atsmacode\PokerGame\Classes\GameState\GameState;
+use Atsmacode\PokerGame\Classes\HandStep\NewStreet;
+use Atsmacode\PokerGame\Classes\HandStep\Showdown;
+use Atsmacode\PokerGame\Classes\HandStep\Start;
+use Atsmacode\PokerGame\Classes\PlayerHandler\PlayerHandler;
 use Atsmacode\CardGames\Constants\Card;
-use App\Constants\HandType;
-use App\Models\Hand;
-use App\Models\HandStreet;
-use App\Models\HandStreetCard;
-use App\Models\Player;
-use App\Models\Street;
-use App\Models\Table;
-use App\Models\TableSeat;
-use Tests\BaseTest;
-use Tests\Feature\HasActionPosts;
-use Tests\Feature\HasGamePlay;
-use Tests\Feature\HasStreets;
+use Atsmacode\PokerGame\Constants\HandType;
+use Atsmacode\PokerGame\Models\Hand;
+use Atsmacode\PokerGame\Models\HandStreet;
+use Atsmacode\PokerGame\Models\HandStreetCard;
+use Atsmacode\PokerGame\Models\Player;
+use Atsmacode\PokerGame\Models\Street;
+use Atsmacode\PokerGame\Models\Table;
+use Atsmacode\PokerGame\Models\TableSeat;
+use Atsmacode\PokerGame\Tests\BaseTest;
+use Atsmacode\PokerGame\Tests\Feature\HasActionPosts;
+use Atsmacode\PokerGame\Tests\Feature\HasGamePlay;
+use Atsmacode\PokerGame\Tests\Feature\HasStreets;
 
 /**
  * In these tests, we are not calling GamePlay->start()

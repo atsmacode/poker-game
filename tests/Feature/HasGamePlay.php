@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Feature;
+namespace Atsmacode\PokerGame\Tests\Feature;
 
-use App\Constants\Action;
-use App\Factory\PlayerActionFactory;
-use App\Models\TableSeat;
-use App\Models\WholeCard;
+use Atsmacode\PokerGame\Constants\Action;
+use Atsmacode\PokerGame\Factory\PlayerActionFactory;
+use Atsmacode\PokerGame\Models\TableSeat;
+use Atsmacode\PokerGame\Models\WholeCard;
 
 trait HasGamePlay
 {

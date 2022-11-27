@@ -1,9 +1,10 @@
 <?php
-namespace App\Classes\GameData;
 
-use App\Classes\Database;
-use App\Models\HandStreet;
-use App\Models\Player;
+namespace Atsmacode\PokerGame\Classes\GameData;
+
+use Atsmacode\PokerGame\Classes\Database;
+use Atsmacode\PokerGame\Models\HandStreet;
+use Atsmacode\PokerGame\Models\Player;
 
 class GameData extends Database
 {

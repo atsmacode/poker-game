@@ -1,8 +1,8 @@
 <?php
 
-namespace Database\Migrations;
+namespace Atsmacode\PokerGame\Database\Migrations;
 
-use App\Traits\Connect;
+use Atsmacode\PokerGame\Traits\Connect;
 use PDO;
 use PDOException;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Constants;
+namespace Atsmacode\PokerGame\Constants;
 
 class HandType
 {

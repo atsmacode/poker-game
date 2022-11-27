@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace Atsmacode\PokerGame\Models;
 
-use App\Constants\Action;
+use Atsmacode\PokerGame\Constants\Action;
 use PDO;
 use PDOException;
 

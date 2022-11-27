@@ -1,8 +1,8 @@
 <?php
 
-namespace Database\Migrations;
+namespace Atsmacode\PokerGame\Database\Migrations;
 
-use App\Classes\Database;
+use Atsmacode\PokerGame\Classes\Database;
 
 class CreateStreets extends Database
 {

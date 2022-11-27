@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Classes\HandStep;
+namespace Atsmacode\PokerGame\Classes\HandStep;
 
-use App\Classes\GameState\GameState;
-use App\Classes\Showdown\Showdown as TheShowdown;
-use App\Helpers\PotHelper;
-use App\Models\TableSeat;
+use Atsmacode\PokerGame\Classes\GameState\GameState;
+use Atsmacode\PokerGame\Classes\Showdown\Showdown as TheShowdown;
+use Atsmacode\PokerGame\Helpers\PotHelper;
+use Atsmacode\PokerGame\Models\TableSeat;
 
 /**
  * Responsible for the actions required if the hand has reached a showdown.

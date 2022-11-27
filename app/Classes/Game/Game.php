@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Classes\Game;
+namespace Atsmacode\PokerGame\Classes\Game;
 
 interface Game
 {

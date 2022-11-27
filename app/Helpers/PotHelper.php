@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Helpers;
+namespace Atsmacode\PokerGame\Helpers;
 
-use App\Models\Hand;
-use App\Models\Pot;
-use App\Models\Stack;
+use Atsmacode\PokerGame\Models\Hand;
+use Atsmacode\PokerGame\Models\Pot;
+use Atsmacode\PokerGame\Models\Stack;
 
 class PotHelper
 {

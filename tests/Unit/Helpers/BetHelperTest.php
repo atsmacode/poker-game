@@ -1,14 +1,14 @@
 <?php
 
-namespace Tests\Unit\Helpers;
+namespace Atsmacode\PokerGame\Tests\Unit\Helpers;
 
-use App\Helpers\BetHelper;
-use App\Models\Hand;
-use App\Models\Player;
-use App\Models\Pot;
-use App\Models\Stack;
-use App\Models\Table;
-use Tests\BaseTest;
+use Atsmacode\PokerGame\Helpers\BetHelper;
+use Atsmacode\PokerGame\Models\Hand;
+use Atsmacode\PokerGame\Models\Player;
+use Atsmacode\PokerGame\Models\Pot;
+use Atsmacode\PokerGame\Models\Stack;
+use Atsmacode\PokerGame\Models\Table;
+use Atsmacode\PokerGame\Tests\BaseTest;
 
 class BetHelperTest extends BaseTest
 {

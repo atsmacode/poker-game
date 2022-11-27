@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Atsmacode\PokerGame\Tests;
 
 use PHPUnit\Framework\TestCase;
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace Database\Seeders;
+namespace Atsmacode\PokerGame\Database\Seeders;
 
-use App\Classes\Database;
-use App\Constants\HandType;
+use Atsmacode\PokerGame\Classes\Database;
+use Atsmacode\PokerGame\Constants\HandType;
 
 class SeedHandTypes extends Database
 {

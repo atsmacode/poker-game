@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Unit\Models;
+namespace Atsmacode\PokerGame\Tests\Unit\Models;
 
-use App\Models\HandType;
-use Tests\BaseTest;
+use Atsmacode\PokerGame\Models\HandType;
+use Atsmacode\PokerGame\Tests\BaseTest;
 
 class HandTypeTest extends BaseTest
 {

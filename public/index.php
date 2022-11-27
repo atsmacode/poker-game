@@ -1,10 +1,10 @@
 <?php
 
-use App\Classes\ActionHandler\ActionHandler;
-use App\Classes\GameData\GameData;
-use App\Classes\GameState\GameState;
-use App\Controllers\HandController;
-use App\Controllers\PlayerActionController;
+use Atsmacode\PokerGame\Classes\ActionHandler\ActionHandler;
+use Atsmacode\PokerGame\Classes\GameData\GameData;
+use Atsmacode\PokerGame\Classes\GameState\GameState;
+use Atsmacode\PokerGame\Controllers\HandController;
+use Atsmacode\PokerGame\Controllers\PlayerActionController;
 
 if (!isset($GLOBALS['dev'])) {
     $GLOBALS['THE_ROOT'] = '../';

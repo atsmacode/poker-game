@@ -11,14 +11,14 @@
     "autoload": {
         "psr-4": {
             "Atsmacode\\CardGames\\": "atsmacode/card-games/app",
-            "App\\": "app/",
-            "Database\\Migrations\\": "database/migrations/",
-            "Database\\Seeders\\": "database/seeders/"
+            "Atsmacode\\PokerGame\\": "app/",
+            "Atsmacode\\PokerGame\\Database\\Migrations\\": "database/migrations/",
+            "Atsmacode\\PokerGame\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Atsmacode\\PokerGame\\Tests\\": "tests/"
         }
     },
     "require": {

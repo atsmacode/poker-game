@@ -1,8 +1,8 @@
 <?php
 
-namespace Database\Seeders;
+namespace Atsmacode\PokerGame\Database\Seeders;
 
-use App\Classes\Database;
+use Atsmacode\PokerGame\Classes\Database;
 
 class SeedTables extends Database
 {
