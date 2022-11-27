@@ -1,6 +1,6 @@
 {
-    "name": "atsmacode/read-right-hands-vanilla",
-    "description": "Vanilla PHP Version of Read Right Hands",
+    "name": "atsmacode/poker-game",
+    "description": "A PHP/Vue Based Poker Game",
     "type": "project",
     "authors": [
         {
