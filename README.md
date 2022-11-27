@@ -51,10 +51,6 @@ return [
 ];
 ```
 
-# Endpoints
-
-http://read-right-hands-vanilla.com/index.php/action
-
 # Todo:
 - Review Showdown kickers/rankings logic, need to retain all hand types and rank after the highest of each type is included in the array
 - Errors during showdown - probably due to that fact it's not yet fully implemented
