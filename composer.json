@@ -11,6 +11,7 @@
     "autoload": {
         "psr-4": {
             "Atsmacode\\CardGames\\": "atsmacode/card-games/app",
+            "Atsmacode\\Orm\\": "atsmacode/orm/app",
             "Atsmacode\\PokerGame\\": "app/",
             "Atsmacode\\PokerGame\\Database\\Migrations\\": "database/migrations/",
             "Atsmacode\\PokerGame\\Database\\Seeders\\": "database/seeders/"

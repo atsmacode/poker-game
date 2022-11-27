@@ -2,7 +2,7 @@
 
 namespace Atsmacode\PokerGame\Database\Seeders;
 
-use Atsmacode\PokerGame\Classes\Database;
+use Atsmacode\Orm\Classes\Database;
 
 class SeedStreets extends Database
 {

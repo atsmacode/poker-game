@@ -3,6 +3,8 @@
 namespace Atsmacode\PokerGame\Models;
 
 use Atsmacode\PokerGame\Constants\Action;
+use Atsmacode\Orm\Classes\Collection;
+use Atsmacode\Orm\Classes\Model;
 use PDO;
 use PDOException;
 

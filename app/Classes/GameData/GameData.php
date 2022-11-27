@@ -2,7 +2,7 @@
 
 namespace Atsmacode\PokerGame\Classes\GameData;
 
-use Atsmacode\PokerGame\Classes\Database;
+use Atsmacode\Orm\Classes\Database;
 use Atsmacode\PokerGame\Models\HandStreet;
 use Atsmacode\PokerGame\Models\Player;
 

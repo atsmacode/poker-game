@@ -2,7 +2,7 @@
 
 namespace Atsmacode\PokerGame\Database\Migrations;
 
-use Atsmacode\PokerGame\Traits\Connect;
+use Atsmacode\Orm\Traits\Connect;
 use PDO;
 use PDOException;
 

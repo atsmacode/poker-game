@@ -2,6 +2,8 @@
 
 namespace Atsmacode\PokerGame\Models;
 
+use Atsmacode\Orm\Classes\Collection;
+use Atsmacode\Orm\Classes\Model;
 class Pot extends Model
 {
     use Collection;

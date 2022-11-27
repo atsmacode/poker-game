@@ -2,7 +2,7 @@
 
 namespace Atsmacode\PokerGame\Database\Migrations;
 
-use Atsmacode\PokerGame\Classes\Database;
+use Atsmacode\Orm\Classes\Database;
 
 class CreatePots extends Database
 {
