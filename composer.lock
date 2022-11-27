@@ -4,25 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a9e526552d52846cf99ca22bb08af873",
+    "content-hash": "ef1aa729974815243762cbc4deb84be6",
     "packages": [
         {
             "name": "atsmacode/card-games",
-            "version": "v1.0.2",
+            "version": "v1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/atsmacode/card-games.git",
-                "reference": "c0fb56c74ebbd478f4f036d8320a54d14b259c21"
+                "reference": "5052d4293173b98af6c4a78feb978c340fcab6f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atsmacode/card-games/zipball/c0fb56c74ebbd478f4f036d8320a54d14b259c21",
-                "reference": "c0fb56c74ebbd478f4f036d8320a54d14b259c21",
+                "url": "https://api.github.com/repos/atsmacode/card-games/zipball/5052d4293173b98af6c4a78feb978c340fcab6f3",
+                "reference": "5052d4293173b98af6c4a78feb978c340fcab6f3",
                 "shasum": ""
             },
             "require": {
-                "doctrine/reflection": "^1.2",
-                "phpmd/phpmd": "^2.12",
+                "atsmacode/orm": "^1.0",
                 "symfony/console": "^6.0"
             },
             "require-dev": {
@@ -46,9 +45,9 @@
             "description": "Base package to support any type of card based game",
             "support": {
                 "issues": "https://github.com/atsmacode/card-games/issues",
-                "source": "https://github.com/atsmacode/card-games/tree/v1.0.2"
+                "source": "https://github.com/atsmacode/card-games/tree/v1.0.3"
             },
-            "time": "2022-11-27T10:47:56+00:00"
+            "time": "2022-11-27T12:44:18+00:00"
         },
         {
             "name": "atsmacode/orm",

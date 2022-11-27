@@ -24,7 +24,7 @@
         "symfony/console": "^6.0",
         "phpmd/phpmd": "^2.12",
         "doctrine/reflection": "^1.2",
-        "atsmacode/card-games": "v1.0.2",
+        "atsmacode/card-games": "v1.0.3",
         "atsmacode/orm": "1.0.2"
     },
     "require-dev": {
