@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cde31f511ffcd03fbc2bc3253e658a24",
+    "content-hash": "ba1551d8cd82bcd2dd9ec4b8fd0257c6",
     "packages": [
         {
             "name": "atsmacode/card-games",
@@ -49,6 +49,43 @@
                 "source": "https://github.com/atsmacode/card-games/tree/v1.0.2"
             },
             "time": "2022-11-27T10:47:56+00:00"
+        },
+        {
+            "name": "atsmacode/orm",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/atsmacode/orm.git",
+                "reference": "11a10a0cac60999b73ecc71763cec2c073984ee9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/atsmacode/orm/zipball/11a10a0cac60999b73ecc71763cec2c073984ee9",
+                "reference": "11a10a0cac60999b73ecc71763cec2c073984ee9",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Atsmacode\\Orm\\": "app/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Mark Ramage",
+                    "email": "mramage@hotmail.co.uk"
+                }
+            ],
+            "description": "Object Relational Mapping",
+            "support": {
+                "issues": "https://github.com/atsmacode/orm/issues",
+                "source": "https://github.com/atsmacode/orm/tree/v1.0.0"
+            },
+            "time": "2022-11-27T11:59:40+00:00"
         },
         {
             "name": "composer/pcre",
