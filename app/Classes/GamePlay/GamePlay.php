@@ -19,12 +19,12 @@ use Atsmacode\PokerGame\Models\TableSeat;
 class GamePlay
 {
     public function __construct(
-        private GameState $gameState,
-        private Start $start,
-        private NewStreet $newStreet,
-        private Showdown $showdown,
+        private GameState     $gameState,
+        private Start         $start,
+        private NewStreet     $newStreet,
+        private Showdown      $showdown,
         private PlayerHandler $playerHandler,
-        $deck = null
+                array         $deck = null
     ) {
         $this->gameState->setGame(new PotLimitHoldEm());
         $this->gameState->setGameDealer((new PokerDealer())->setDeck($deck));

@@ -28,7 +28,7 @@ class GameState
     private bool          $newStreet = false;
     private GameData      $gameData;
     private Game          $game;
-    private PokerDealer        $dealer;
+    private PokerDealer   $dealer;
 
     public function __construct(GameData $gameData, Hand $hand = null)
     {
