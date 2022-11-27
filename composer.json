@@ -10,8 +10,6 @@
     ],
     "autoload": {
         "psr-4": {
-            "Atsmacode\\CardGames\\": "atsmacode/card-games/app",
-            "Atsmacode\\Orm\\": "atsmacode/orm/app",
             "Atsmacode\\PokerGame\\": "app/",
             "Atsmacode\\PokerGame\\Database\\Migrations\\": "database/migrations/",
             "Atsmacode\\PokerGame\\Database\\Seeders\\": "database/seeders/"
@@ -27,7 +25,7 @@
         "phpmd/phpmd": "^2.12",
         "doctrine/reflection": "^1.2",
         "atsmacode/card-games": "v1.0.2",
-        "atsmacode/orm": "^1.0"
+        "atsmacode/orm": "1.0.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"

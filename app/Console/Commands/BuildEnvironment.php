@@ -4,7 +4,7 @@ namespace Atsmacode\PokerGame\Console\Commands;
 
 use Atsmacode\PokerGame\Database\Migrations\CreateActions;
 use Atsmacode\CardGames\Database\Migrations\CreateCards;
-use Atsmacode\PokerGame\Database\Migrations\CreateDatabase;
+use Atsmacode\Orm\Database\Migrations\CreateDatabase;
 use Atsmacode\PokerGame\Database\Migrations\CreateHands;
 use Atsmacode\PokerGame\Database\Migrations\CreateHandTypes;
 use Atsmacode\PokerGame\Database\Migrations\CreatePlayerActionLogs;
@@ -35,7 +35,6 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class BuildEnvironment extends Command
 {
-
     private $buildClasses = [
         CreateDatabase::class,
         CreateCards::class,

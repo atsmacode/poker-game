@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ba1551d8cd82bcd2dd9ec4b8fd0257c6",
+    "content-hash": "a9e526552d52846cf99ca22bb08af873",
     "packages": [
         {
             "name": "atsmacode/card-games",
@@ -52,16 +52,16 @@
         },
         {
             "name": "atsmacode/orm",
-            "version": "v1.0.0",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/atsmacode/orm.git",
-                "reference": "11a10a0cac60999b73ecc71763cec2c073984ee9"
+                "reference": "5357da9c1949f726c2363aa101900154c37f6888"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atsmacode/orm/zipball/11a10a0cac60999b73ecc71763cec2c073984ee9",
-                "reference": "11a10a0cac60999b73ecc71763cec2c073984ee9",
+                "url": "https://api.github.com/repos/atsmacode/orm/zipball/5357da9c1949f726c2363aa101900154c37f6888",
+                "reference": "5357da9c1949f726c2363aa101900154c37f6888",
                 "shasum": ""
             },
             "require-dev": {
@@ -70,7 +70,8 @@
             "type": "project",
             "autoload": {
                 "psr-4": {
-                    "Atsmacode\\Orm\\": "app/"
+                    "Atsmacode\\Orm\\": "app/",
+                    "Atsmacode\\Orm\\Database\\Migrations\\": "database/migrations/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -83,9 +84,9 @@
             "description": "Object Relational Mapping",
             "support": {
                 "issues": "https://github.com/atsmacode/orm/issues",
-                "source": "https://github.com/atsmacode/orm/tree/v1.0.0"
+                "source": "https://github.com/atsmacode/orm/tree/v1.0.2"
             },
-            "time": "2022-11-27T11:59:40+00:00"
+            "time": "2022-11-27T12:29:57+00:00"
         },
         {
             "name": "composer/pcre",
