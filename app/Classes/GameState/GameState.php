@@ -2,7 +2,7 @@
 
 namespace App\Classes\GameState;
 
-use App\Classes\Dealer\Dealer;
+use App\Classes\Dealer\PokerDealer;
 use App\Classes\Game\Game;
 use App\Classes\GameData\GameData;
 use App\Models\Hand;
@@ -28,7 +28,7 @@ class GameState
     private bool          $newStreet = false;
     private GameData      $gameData;
     private Game          $game;
-    private Dealer        $dealer;
+    private PokerDealer        $dealer;
 
     public function __construct(GameData $gameData, Hand $hand = null)
     {
@@ -266,12 +266,12 @@ class GameState
         return $this->game;
     }
 
-    public function setGameDealer(Dealer $dealer): void
+    public function setGameDealer(PokerDealer $dealer): void
     {
         $this->dealer = $dealer;
     }
 
-    public function getGameDealer(): Dealer
+    public function getGameDealer(): PokerDealer
     {
         return $this->dealer;
     }

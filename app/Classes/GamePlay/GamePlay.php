@@ -2,7 +2,7 @@
 
 namespace App\Classes\GamePlay;
 
-use App\Classes\Dealer\Dealer;
+use App\Classes\Dealer\PokerDealer;
 use App\Classes\Game\PotLimitHoldEm;
 use App\Classes\GameState\GameState;
 use App\Classes\HandStep\HandStep;
@@ -27,7 +27,7 @@ class GamePlay
         $deck = null
     ) {
         $this->gameState->setGame(new PotLimitHoldEm());
-        $this->gameState->setGameDealer((new Dealer())->setDeck($deck));
+        $this->gameState->setGameDealer((new PokerDealer())->setDeck($deck));
     }
 
     public function setGameState(GameState $gameState): void

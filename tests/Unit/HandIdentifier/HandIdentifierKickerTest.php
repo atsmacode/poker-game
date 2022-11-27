@@ -3,8 +3,8 @@
 namespace Tests\Unit\HandIdentifier;
 
 use App\Classes\HandIdentifier\HandIdentifier;
-use App\Constants\Card;
-use App\Factory\CardFactory;
+use Atsmacode\CardGames\Constants\Card;
+use Atsmacode\CardGames\Factory\CardFactory;
 use Tests\BaseTest;
 
 class HandIdentifierKickerTest extends BaseTest

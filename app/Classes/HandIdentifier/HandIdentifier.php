@@ -3,7 +3,7 @@
 namespace App\Classes\HandIdentifier;
 
 use App\Constants\HandType;
-use App\Constants\Rank;
+use Atsmacode\CardGames\Constants\Rank;
 
 class HandIdentifier
 {

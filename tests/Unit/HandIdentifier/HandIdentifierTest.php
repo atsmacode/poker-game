@@ -3,9 +3,9 @@
 namespace Tests\Unit\HandIdentifier;
 
 use App\Classes\HandIdentifier\HandIdentifier;
-use App\Constants\Card;
+use Atsmacode\CardGames\Constants\Card;
 use App\Constants\HandType;
-use App\Factory\CardFactory;
+use Atsmacode\CardGames\Factory\CardFactory;
 use Tests\BaseTest;
 
 class HandIdentifierTest extends BaseTest

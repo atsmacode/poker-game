@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Unit\Dealer;
+namespace Tests\Unit\PokerDealer;
 
-use App\Classes\Dealer\Dealer;
-use App\Constants\Card;
-use App\Factory\CardFactory;
+use App\Classes\Dealer\PokerDealer;
+use Atsmacode\CardGames\Constants\Card;
+use Atsmacode\CardGames\Factory\CardFactory;
 use App\Models\Hand;
 use App\Models\HandStreet;
 use App\Models\Player;
@@ -13,59 +13,13 @@ use App\Models\Table;
 use App\Models\TableSeat;
 use Tests\BaseTest;
 
-class DealerTest extends BaseTest
+class PokerDealerTest extends BaseTest
 {
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->dealer = new Dealer();
-    }
-
-    /**
-     * @test
-     * @return void
-     */
-    public function it_can_shuffle_the_deck()
-    {
-        $unshuffled = $this->dealer->setDeck()->getDeck();
-        /*
-         * Settled for calling setDeck here as the assertion was
-         * picking up the same data for some reason.
-         */
-        $shuffled = $this->dealer->setDeck()->shuffle()->getDeck();
-
-        $this->assertNotSame($unshuffled, $shuffled);
-    }
-
-    /**
-     * @test
-     * @return void
-     */
-    public function it_can_select_a_random_card()
-    {
-        $this->assertNotNull($this->dealer->setDeck()->shuffle()->pickCard()->getCard());
-    }
-
-    /**
-     * @test
-     * @return void
-     */
-    public function it_can_select_a_specific_card()
-    {
-        $this->assertNotNull($this->dealer->setDeck()->shuffle()->pickCard('Ace', 'Spades')->getCard());
-    }
-
-    /**
-     * @test
-     * @return void
-     */
-    public function once_a_card_is_picked_it_is_no_longer_in_the_deck()
-    {
-
-        $card = $this->dealer->setDeck()->pickCard()->getCard();
-
-        $this->assertNotContains($card, $this->dealer->getDeck());
+        $this->dealer = new PokerDealer();
     }
 
     /**

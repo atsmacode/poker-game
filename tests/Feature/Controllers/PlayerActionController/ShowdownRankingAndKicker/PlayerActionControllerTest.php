@@ -10,7 +10,7 @@ use App\Classes\HandStep\NewStreet;
 use App\Classes\HandStep\Showdown;
 use App\Classes\HandStep\Start;
 use App\Classes\PlayerHandler\PlayerHandler;
-use App\Constants\Card;
+use Atsmacode\CardGames\Constants\Card;
 use App\Constants\HandType;
 use App\Models\Hand;
 use App\Models\HandStreet;

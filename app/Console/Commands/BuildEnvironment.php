@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Database\Migrations\CreateActions;
-use Database\Migrations\CreateCards;
+use Atsmacode\CardGames\Database\Migrations\CreateCards;
 use Database\Migrations\CreateDatabase;
 use Database\Migrations\CreateHands;
 use Database\Migrations\CreateHandTypes;
@@ -16,7 +16,7 @@ use Database\Migrations\CreateStreets;
 use Database\Migrations\CreateTables;
 use Database\Migrations\CreateWholeCards;
 use Database\Seeders\SeedActions;
-use Database\Seeders\SeedCards;
+use Atsmacode\CardGames\Database\Seeders\SeedCards;
 use Database\Seeders\SeedHandTypes;
 use Database\Seeders\SeedPlayers;
 use Database\Seeders\SeedStreets;
