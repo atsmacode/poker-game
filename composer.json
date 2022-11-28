@@ -22,10 +22,9 @@
     },
     "require": {
         "symfony/console": "^6.0",
-        "phpmd/phpmd": "^2.12",
-        "doctrine/reflection": "^1.2",
         "atsmacode/card-games": "v1.0.3",
-        "atsmacode/orm": "1.0.2"
+        "atsmacode/orm": "1.0.2",
+        "laminas/laminas-servicemanager": "^3.19"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
