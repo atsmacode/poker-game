@@ -3,6 +3,7 @@
 namespace Atsmacode\PokerGame\Classes\GamePlay;
 
 use Atsmacode\PokerGame\Classes\Dealer\PokerDealer;
+use Atsmacode\PokerGame\Classes\Game\Game;
 use Atsmacode\PokerGame\Classes\Game\PotLimitHoldEm;
 use Atsmacode\PokerGame\Classes\GameState\GameState;
 use Atsmacode\PokerGame\Classes\HandStep\HandStep;
@@ -20,13 +21,14 @@ class GamePlay
 {
     public function __construct(
         private GameState     $gameState,
+        private Game          $game,
         private Start         $start,
         private NewStreet     $newStreet,
         private Showdown      $showdown,
         private PlayerHandler $playerHandler,
                 array         $deck = null
     ) {
-        $this->gameState->setGame(new PotLimitHoldEm());
+        $this->gameState->setGame($game);
         $this->gameState->setGameDealer((new PokerDealer())->setDeck($deck));
     }
 

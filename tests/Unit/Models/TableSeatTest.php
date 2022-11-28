@@ -2,6 +2,7 @@
 
 namespace Atsmacode\PokerGame\Tests\Unit;
 
+use Atsmacode\PokerGame\Classes\Game\PotLimitHoldEm;
 use Atsmacode\PokerGame\Classes\GameData\GameData;
 use Atsmacode\PokerGame\Classes\GamePlay\GamePlay;
 use Atsmacode\PokerGame\Classes\GameState\GameState;
@@ -58,6 +59,7 @@ class TableSeatTest extends BaseTest
         $this->gameState = new GameState(new GameData(), $this->hand);
         $this->gamePlay  = new GamePlay(
             $this->gameState,
+            new PotLimitHoldEm(),
             new Start(),
             new NewStreet(),
             new Showdown(),
