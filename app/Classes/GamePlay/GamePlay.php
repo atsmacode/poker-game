@@ -4,7 +4,6 @@ namespace Atsmacode\PokerGame\Classes\GamePlay;
 
 use Atsmacode\PokerGame\Classes\Dealer\PokerDealer;
 use Atsmacode\PokerGame\Classes\Game\Game;
-use Atsmacode\PokerGame\Classes\Game\PotLimitHoldEm;
 use Atsmacode\PokerGame\Classes\GameState\GameState;
 use Atsmacode\PokerGame\Classes\HandStep\HandStep;
 use Atsmacode\PokerGame\Classes\HandStep\NewStreet;
