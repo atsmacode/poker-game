@@ -2,20 +2,20 @@
 
 return [
     'invokables' => [
-        Atsmacode\PokerGame\Classes\GameData\GameData::class,
-        Atsmacode\PokerGame\Classes\HandStep\Start::class,
-        Atsmacode\PokerGame\Classes\HandStep\NewStreet::class,
-        Atsmacode\PokerGame\Classes\HandStep\Showdown::class,
-        Atsmacode\PokerGame\Classes\PlayerHandler\PlayerHandler::class,
-        Atsmacode\PokerGame\Classes\Game\PotLimitHoldEm::class,
-        Atsmacode\PokerGame\Classes\Game\PotLimitOmaha::class,
+        Atsmacode\PokerGame\GameData\GameData::class,
+        Atsmacode\PokerGame\HandStep\Start::class,
+        Atsmacode\PokerGame\HandStep\NewStreet::class,
+        Atsmacode\PokerGame\HandStep\Showdown::class,
+        Atsmacode\PokerGame\PlayerHandler\PlayerHandler::class,
+        Atsmacode\PokerGame\Game\PotLimitHoldEm::class,
+        Atsmacode\PokerGame\Game\PotLimitOmaha::class,
     ],
     'factories' => [
-        Atsmacode\PokerGame\Classes\GamePlay\GamePlay::class 
-            => Atsmacode\PokerGame\Classes\GamePlay\GamePlayFactory::class,
-        Atsmacode\PokerGame\Classes\GameState\GameState::class 
-            => Atsmacode\PokerGame\Classes\GameState\GameStateFactory::class,
-        Atsmacode\PokerGame\Classes\ActionHandler\ActionHandler::class
-            => Atsmacode\PokerGame\Classes\ActionHandler\ActionHandlerFactory::class,
+        Atsmacode\PokerGame\GamePlay\GamePlay::class 
+            => Atsmacode\PokerGame\GamePlay\GamePlayFactory::class,
+        Atsmacode\PokerGame\GameState\GameState::class 
+            => Atsmacode\PokerGame\GameState\GameStateFactory::class,
+        Atsmacode\PokerGame\ActionHandler\ActionHandler::class
+            => Atsmacode\PokerGame\ActionHandler\ActionHandlerFactory::class,
     ]
 ];
