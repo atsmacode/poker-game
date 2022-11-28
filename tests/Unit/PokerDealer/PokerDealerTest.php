@@ -2,7 +2,7 @@
 
 namespace Atsmacode\PokerGame\Tests\Unit\PokerDealer;
 
-use Atsmacode\PokerGame\Classes\Dealer\PokerDealer;
+use Atsmacode\PokerGame\Dealer\PokerDealer;
 use Atsmacode\CardGames\Constants\Card;
 use Atsmacode\CardGames\Factory\CardFactory;
 use Atsmacode\PokerGame\Models\Hand;

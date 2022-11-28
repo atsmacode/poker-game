@@ -2,14 +2,14 @@
 
 namespace Atsmacode\PokerGame\Tests\Unit;
 
-use Atsmacode\PokerGame\Classes\Game\PotLimitHoldEm;
-use Atsmacode\PokerGame\Classes\GameData\GameData;
-use Atsmacode\PokerGame\Classes\GamePlay\GamePlay;
-use Atsmacode\PokerGame\Classes\GameState\GameState;
-use Atsmacode\PokerGame\Classes\HandStep\NewStreet;
-use Atsmacode\PokerGame\Classes\HandStep\Showdown;
-use Atsmacode\PokerGame\Classes\HandStep\Start;
-use Atsmacode\PokerGame\Classes\PlayerHandler\PlayerHandler;
+use Atsmacode\PokerGame\Game\PotLimitHoldEm;
+use Atsmacode\PokerGame\GameData\GameData;
+use Atsmacode\PokerGame\GamePlay\GamePlay;
+use Atsmacode\PokerGame\GameState\GameState;
+use Atsmacode\PokerGame\HandStep\NewStreet;
+use Atsmacode\PokerGame\HandStep\Showdown;
+use Atsmacode\PokerGame\HandStep\Start;
+use Atsmacode\PokerGame\PlayerHandler\PlayerHandler;
 use Atsmacode\PokerGame\Models\Hand;
 use Atsmacode\PokerGame\Models\Player;
 use Atsmacode\PokerGame\Models\Table;

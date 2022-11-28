@@ -1,13 +1,13 @@
 <?php
 
-namespace Atsmacode\PokerGame\Classes\GamePlay;
+namespace Atsmacode\PokerGame\GamePlay;
 
-use Atsmacode\PokerGame\Classes\GameData\GameData;
-use Atsmacode\PokerGame\Classes\GameState\GameState;
-use Atsmacode\PokerGame\Classes\HandStep\NewStreet;
-use Atsmacode\PokerGame\Classes\HandStep\Showdown;
-use Atsmacode\PokerGame\Classes\HandStep\Start;
-use Atsmacode\PokerGame\Classes\PlayerHandler\PlayerHandler;
+use Atsmacode\PokerGame\GameData\GameData;
+use Atsmacode\PokerGame\GameState\GameState;
+use Atsmacode\PokerGame\HandStep\NewStreet;
+use Atsmacode\PokerGame\HandStep\Showdown;
+use Atsmacode\PokerGame\HandStep\Start;
+use Atsmacode\PokerGame\PlayerHandler\PlayerHandler;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 

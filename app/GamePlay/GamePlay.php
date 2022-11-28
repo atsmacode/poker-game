@@ -1,15 +1,15 @@
 <?php
 
-namespace Atsmacode\PokerGame\Classes\GamePlay;
+namespace Atsmacode\PokerGame\GamePlay;
 
-use Atsmacode\PokerGame\Classes\Dealer\PokerDealer;
-use Atsmacode\PokerGame\Classes\Game\Game;
-use Atsmacode\PokerGame\Classes\GameState\GameState;
-use Atsmacode\PokerGame\Classes\HandStep\HandStep;
-use Atsmacode\PokerGame\Classes\HandStep\NewStreet;
-use Atsmacode\PokerGame\Classes\HandStep\Showdown;
-use Atsmacode\PokerGame\Classes\HandStep\Start;
-use Atsmacode\PokerGame\Classes\PlayerHandler\PlayerHandler;
+use Atsmacode\PokerGame\Dealer\PokerDealer;
+use Atsmacode\PokerGame\Game\Game;
+use Atsmacode\PokerGame\GameState\GameState;
+use Atsmacode\PokerGame\HandStep\HandStep;
+use Atsmacode\PokerGame\HandStep\NewStreet;
+use Atsmacode\PokerGame\HandStep\Showdown;
+use Atsmacode\PokerGame\HandStep\Start;
+use Atsmacode\PokerGame\PlayerHandler\PlayerHandler;
 use Atsmacode\PokerGame\Models\TableSeat;
 
 /**

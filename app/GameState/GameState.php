@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Atsmacode\PokerGame\Classes\GameState;
+namespace Atsmacode\PokerGame\GameState;
 
-use Atsmacode\PokerGame\Classes\Dealer\PokerDealer;
-use Atsmacode\PokerGame\Classes\Game\Game;
-use Atsmacode\PokerGame\Classes\GameData\GameData;
+use Atsmacode\PokerGame\Dealer\PokerDealer;
+use Atsmacode\PokerGame\Game\Game;
+use Atsmacode\PokerGame\GameData\GameData;
 use Atsmacode\PokerGame\Models\Hand;
 use Atsmacode\PokerGame\Models\HandStreet;
 use Atsmacode\PokerGame\Models\PlayerAction;

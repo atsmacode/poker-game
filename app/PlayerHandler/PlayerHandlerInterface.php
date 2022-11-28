@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Atsmacode\PokerGame\Classes\PlayerHandler;
+namespace Atsmacode\PokerGame\PlayerHandler;
 
-use Atsmacode\PokerGame\Classes\GameState\GameState;
+use Atsmacode\PokerGame\GameState\GameState;
 
 interface PlayerHandlerInterface
 {

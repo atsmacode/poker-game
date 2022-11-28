@@ -2,7 +2,7 @@
 
 namespace Atsmacode\PokerGame\Tests\Unit\HandIdentifier;
 
-use Atsmacode\PokerGame\Classes\HandIdentifier\HandIdentifier;
+use Atsmacode\PokerGame\HandIdentifier\HandIdentifier;
 use Atsmacode\CardGames\Constants\Card;
 use Atsmacode\CardGames\Factory\CardFactory;
 use Atsmacode\PokerGame\Tests\BaseTest;

@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dd459c2b7c5b52ee54ded3326a504fd3",
+    "content-hash": "2066bb2ff0c411705cc67fac48cdf1db",
     "packages": [
         {
             "name": "atsmacode/card-games",
-            "version": "v1.0.3",
+            "version": "v1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/atsmacode/card-games.git",
-                "reference": "5052d4293173b98af6c4a78feb978c340fcab6f3"
+                "reference": "594fe51de94163e565184cce89bf4fc366e5f8f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atsmacode/card-games/zipball/5052d4293173b98af6c4a78feb978c340fcab6f3",
-                "reference": "5052d4293173b98af6c4a78feb978c340fcab6f3",
+                "url": "https://api.github.com/repos/atsmacode/card-games/zipball/594fe51de94163e565184cce89bf4fc366e5f8f6",
+                "reference": "594fe51de94163e565184cce89bf4fc366e5f8f6",
                 "shasum": ""
             },
             "require": {
@@ -45,9 +45,9 @@
             "description": "Base package to support any type of card based game",
             "support": {
                 "issues": "https://github.com/atsmacode/card-games/issues",
-                "source": "https://github.com/atsmacode/card-games/tree/v1.0.3"
+                "source": "https://github.com/atsmacode/card-games/tree/v1.0.4"
             },
-            "time": "2022-11-27T12:44:18+00:00"
+            "time": "2022-11-28T12:01:32+00:00"
         },
         {
             "name": "atsmacode/orm",

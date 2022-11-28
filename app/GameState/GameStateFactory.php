@@ -1,9 +1,9 @@
 <?php
 
-namespace Atsmacode\PokerGame\Classes\GameState;
+namespace Atsmacode\PokerGame\GameState;
 
-use Atsmacode\PokerGame\Classes\GameData\GameData;
-use Atsmacode\PokerGame\Classes\GameState\GameState;
+use Atsmacode\PokerGame\GameData\GameData;
+use Atsmacode\PokerGame\GameState\GameState;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 

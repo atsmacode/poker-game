@@ -1,6 +1,6 @@
 <?php
 
-namespace Atsmacode\PokerGame\Classes\HandIdentifier;
+namespace Atsmacode\PokerGame\HandIdentifier;
 
 use Atsmacode\PokerGame\Constants\HandType;
 use Atsmacode\CardGames\Constants\Rank;

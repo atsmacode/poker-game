@@ -1,6 +1,6 @@
 <?php
 
-namespace Atsmacode\PokerGame\Classes\GameData;
+namespace Atsmacode\PokerGame\GameData;
 
 use Atsmacode\Orm\Classes\Database;
 use Atsmacode\PokerGame\Models\HandStreet;

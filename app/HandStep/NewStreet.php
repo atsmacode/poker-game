@@ -1,8 +1,8 @@
 <?php
 
-namespace Atsmacode\PokerGame\Classes\HandStep;
+namespace Atsmacode\PokerGame\HandStep;
 
-use Atsmacode\PokerGame\Classes\GameState\GameState;
+use Atsmacode\PokerGame\GameState\GameState;
 use Atsmacode\PokerGame\Models\HandStreet;
 use Atsmacode\PokerGame\Models\PlayerAction;
 use Atsmacode\PokerGame\Models\Street;

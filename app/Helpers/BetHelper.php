@@ -2,7 +2,7 @@
 
 namespace Atsmacode\PokerGame\Helpers;
 
-use Atsmacode\PokerGame\Classes\GameState\GameState;
+use Atsmacode\PokerGame\GameState\GameState;
 use Atsmacode\PokerGame\Constants\Action as ConstantsAction;
 use Atsmacode\PokerGame\Models\Action;
 use Atsmacode\PokerGame\Models\Hand;

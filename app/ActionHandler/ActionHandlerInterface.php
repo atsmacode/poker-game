@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Atsmacode\PokerGame\Classes\ActionHandler;
+namespace Atsmacode\PokerGame\ActionHandler;
 
-use Atsmacode\PokerGame\Classes\GameState\GameState;
+use Atsmacode\PokerGame\GameState\GameState;
 use Atsmacode\PokerGame\Models\Hand;
 
 interface ActionHandlerInterface

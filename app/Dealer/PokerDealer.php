@@ -1,10 +1,10 @@
 <?php
 
-namespace Atsmacode\PokerGame\Classes\Dealer;
+namespace Atsmacode\PokerGame\Dealer;
 
 use Atsmacode\PokerGame\Models\HandStreetCard;
 use Atsmacode\PokerGame\Models\WholeCard;
-use Atsmacode\CardGames\Classes\Dealer\Dealer;
+use Atsmacode\CardGames\Dealer\Dealer;
 
 class PokerDealer extends Dealer
 {

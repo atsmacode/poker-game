@@ -1,9 +1,9 @@
 <?php
 
-namespace Atsmacode\PokerGame\Classes\HandStep;
+namespace Atsmacode\PokerGame\HandStep;
 
-use Atsmacode\PokerGame\Classes\GameState\GameState;
-use Atsmacode\PokerGame\Classes\Showdown\Showdown as TheShowdown;
+use Atsmacode\PokerGame\GameState\GameState;
+use Atsmacode\PokerGame\Showdown\Showdown as TheShowdown;
 use Atsmacode\PokerGame\Helpers\PotHelper;
 use Atsmacode\PokerGame\Models\TableSeat;
 

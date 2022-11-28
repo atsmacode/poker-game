@@ -1,6 +1,6 @@
 <?php
 
-namespace Atsmacode\PokerGame\Classes\Game;
+namespace Atsmacode\PokerGame\Game;
 
 class PotLimitOmaha implements Game
 {
