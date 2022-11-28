@@ -11,6 +11,11 @@ return [
         Atsmacode\PokerGame\Classes\Game\PotLimitOmaha::class,
     ],
     'factories' => [
-        Atsmacode\PokerGame\Classes\GamePlay\GamePlay::class => Atsmacode\PokerGame\Classes\GamePlay\GamePlayFactory::class,
+        Atsmacode\PokerGame\Classes\GamePlay\GamePlay::class 
+            => Atsmacode\PokerGame\Classes\GamePlay\GamePlayFactory::class,
+        Atsmacode\PokerGame\Classes\GameState\GameState::class 
+            => Atsmacode\PokerGame\Classes\GameState\GameStateFactory::class,
+        Atsmacode\PokerGame\Classes\ActionHandler\ActionHandler::class
+            => Atsmacode\PokerGame\Classes\ActionHandler\ActionHandlerFactory::class,
     ]
 ];

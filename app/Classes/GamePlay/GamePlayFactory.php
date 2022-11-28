@@ -11,10 +11,6 @@ use Atsmacode\PokerGame\Classes\PlayerHandler\PlayerHandler;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 
-/**
- * Responsible for deciding what happens next in a hand and 
- * providing the response to the front-end application.
- */
 class GamePlayFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
