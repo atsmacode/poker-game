@@ -6,10 +6,6 @@ use Atsmacode\PokerGame\Game\PotLimitHoldEm;
 use Atsmacode\PokerGame\GameData\GameData;
 use Atsmacode\PokerGame\GamePlay\GamePlay;
 use Atsmacode\PokerGame\GameState\GameState;
-use Atsmacode\PokerGame\HandStep\NewStreet;
-use Atsmacode\PokerGame\HandStep\Showdown;
-use Atsmacode\PokerGame\HandStep\Start;
-use Atsmacode\PokerGame\PlayerHandler\PlayerHandler;
 use Atsmacode\PokerGame\Models\Hand;
 use Atsmacode\PokerGame\Models\Player;
 use Atsmacode\PokerGame\Models\Table;
@@ -57,14 +53,10 @@ class TableSeatTest extends BaseTest
         ]);
 
         $this->gameState = new GameState(new GameData(), $this->hand);
-        $this->gamePlay  = new GamePlay(
-            $this->gameState,
-            new PotLimitHoldEm(),
-            new Start(),
-            new NewStreet(),
-            new Showdown(),
-            new PlayerHandler()
-        );
+        $this->gamePlay  = $this->container->build(GamePlay::class, [
+            'game'      => $this->container->get(PotLimitHoldEm::class),
+            'gameState' => $this->gameState
+        ]);
     }
 
     /**

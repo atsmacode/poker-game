@@ -20,6 +20,7 @@ class PokerDealerTest extends BaseTest
         parent::setUp();
 
         $this->dealer = new PokerDealer();
+        $this->street = $this->container->get(Street::class);
     }
 
     /**
@@ -82,7 +83,7 @@ class PokerDealerTest extends BaseTest
     {
 
         $handStreet = HandStreet::create([
-            'street_id' => Street::find(['name' => 'Flop'])->id,
+            'street_id' => $this->street->find(['name' => 'Flop'])->id,
             'hand_id' => Hand::create(['table_id' => 1])->id
         ]);
 
@@ -101,7 +102,7 @@ class PokerDealerTest extends BaseTest
     public function it_can_deal_a_specific_street_card()
     {
         $handStreet = HandStreet::create([
-            'street_id' => Street::find(['name' => 'Flop'])->id,
+            'street_id' => $this->street->find(['name' => 'Flop'])->id,
             'hand_id' => Hand::create(['table_id' => 1])->id
         ]);
 

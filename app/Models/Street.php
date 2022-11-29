@@ -3,7 +3,9 @@
 namespace Atsmacode\PokerGame\Models;
 
 use Atsmacode\Orm\Classes\Collection;
-use Atsmacode\Orm\Classes\Model;
+use Atsmacode\PokerGame\Models\Model;
+use PDO;
+
 class Street extends Model
 {
     use Collection;
@@ -11,4 +13,9 @@ class Street extends Model
     public $table = 'streets';
     public string $name;
     public $id;
+
+    public function __construct(PDO $connection, array $data = null)
+    {
+        parent::__construct($connection, $data);
+    }
 }
