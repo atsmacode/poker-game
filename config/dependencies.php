@@ -1,7 +1,5 @@
 <?php
 
-use Atsmacode\PokerGame\Models\Street;
-
 return [
     'invokables' => [
         Atsmacode\PokerGame\GameData\GameData::class,
@@ -24,6 +22,10 @@ return [
         Atsmacode\PokerGame\HandStep\NewStreet::class
             => Atsmacode\PokerGame\HandStep\NewStreetFactory::class,
         Atsmacode\PokerGame\HandStep\Start::class
-            => Atsmacode\PokerGame\HandStep\StartFactory::class
+            => Atsmacode\PokerGame\HandStep\StartFactory::class,
+        Doctrine\DBAL\Connection::class
+            => Atsmacode\PokerGame\DbalFactory::class,
+        PDO::class
+            => Atsmacode\PokerGame\PdoFactory::class,
     ]
 ];

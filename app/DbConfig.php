@@ -11,8 +11,9 @@ class DbConfig
 
         $dbConfig = [
             'db' => [
-                'test' => $dbTest,
-                'live' => $db,
+                'test'     => $dbTest,
+                'live'     => $db,
+                'provider' => $db['provider'],
             ],
         ];
 

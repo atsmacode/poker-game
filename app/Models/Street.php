@@ -14,7 +14,7 @@ class Street extends Model
     public string $name;
     public $id;
 
-    public function __construct(PDO $connection, array $data = null)
+    public function __construct($connection, array $data = null)
     {
         parent::__construct($connection, $data);
     }

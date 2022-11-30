@@ -10,12 +10,12 @@ use PDOException;
  */
 class Model 
 {
-    protected PDO $connection;
+    protected $connection;
     protected $table;
     public    $content = [];
     public    $data;
 
-    public function __construct(PDO $connection, array $data = null)
+    public function __construct($connection, array $data = null)
     {
         $this->connection = $connection;
         $this->data       = $data;
@@ -69,21 +69,24 @@ class Model
 
     protected function getSelected($data)
     {
-        $rows = null;
-
+        $rows       = null;
         $properties = $this->compileWhereStatement($data);
 
         try {
-
             $stmt = $this->connection->prepare("
                     SELECT * FROM {$this->table}
                     {$properties}
                 ");
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $stmt->execute();
 
-            $rows = $stmt->fetchAll();
+            /**
+             * Previous PDO implementation.
+             */
+            // $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            // $stmt->execute();
+            // $rows = $stmt->fetchAll();
 
+            $results = $stmt->executeQuery();
+            $rows    = $results->fetchAllAssociative();
         } catch(PDOException $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
