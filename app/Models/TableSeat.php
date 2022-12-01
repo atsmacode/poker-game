@@ -62,7 +62,7 @@ class TableSeat extends Model
         }
     }
 
-    public function bigBlindWinsy($handId)
+    public function bigBlindWins($handId)
     {
         $query = sprintf("
             UPDATE
