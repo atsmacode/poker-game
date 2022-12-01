@@ -1,5 +1,7 @@
 <?php
 
+use Atsmacode\PokerGame\Models\TableSeat;
+
 return [
     'invokables' => [
         Atsmacode\PokerGame\GameData\GameData::class,
@@ -23,6 +25,8 @@ return [
             => Atsmacode\PokerGame\HandStep\NewStreetFactory::class,
         Atsmacode\PokerGame\HandStep\Start::class
             => Atsmacode\PokerGame\HandStep\StartFactory::class,
+        Atsmacode\PokerGame\Models\TableSeat::class
+            => Atsmacode\PokerGame\Models\TableSeatFactory::class,
         Doctrine\DBAL\Connection::class
             => Atsmacode\PokerGame\DbalFactory::class,
         PDO::class

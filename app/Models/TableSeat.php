@@ -4,7 +4,6 @@ namespace Atsmacode\PokerGame\Models;
 
 use Atsmacode\PokerGame\Constants\Action;
 use Atsmacode\Orm\Classes\Collection;
-use Atsmacode\Orm\Classes\Model;
 use PDO;
 use PDOException;
 
@@ -12,21 +11,21 @@ class TableSeat extends Model
 {
     use Collection;
 
-    protected $table = 'table_seats';
+    protected     $table = 'table_seats';
     public string $name;
-    public $player_id;
+    public        $player_id;
+
+    public function __construct($connection, array $data = null)
+    {
+        parent::__construct($connection, $data);
+    }
 
     public function player()
     {
         return Player::find(['id' => $this->player_id]);
     }
 
-    public static function playerAfterDealer($handId, $dealer)
-    {
-        return (new static())->playerAfterDealerQuery($handId, $dealer);
-    }
-
-    private function playerAfterDealerQuery($handId, $dealer)
+    public function playerAfterDealer($handId, $dealer)
     {
         $query = sprintf("
             SELECT
@@ -63,12 +62,7 @@ class TableSeat extends Model
         }
     }
 
-    public static function bigBlindWins($handId)
-    {
-        return (new static())->bigBlindWinsQuery($handId);
-    }
-
-    private function bigBlindWinsQuery($handId)
+    public function bigBlindWinsy($handId)
     {
         $query = sprintf("
             UPDATE
@@ -97,12 +91,7 @@ class TableSeat extends Model
         }
     }
 
-    public static function getContinuingPlayerSeats($handId)
-    {
-        return (new static())->getContinuingPlayerSeatsQuery($handId);
-    }
-
-    private function getContinuingPlayerSeatsQuery($handId)
+    public function getContinuingPlayerSeats($handId)
     {
         $query = sprintf("
             SELECT
@@ -133,12 +122,7 @@ class TableSeat extends Model
         }
     }
 
-    public static function getContinuingBetters($handId)
-    {
-        return (new static())->getContinuingBettersQuery($handId);
-    }
-
-    private function getContinuingBettersQuery($handId)
+    public function getContinuingBetters($handId)
     {
         $raiseId = Action::RAISE_ID;
         $betId   = Action::BET_ID;

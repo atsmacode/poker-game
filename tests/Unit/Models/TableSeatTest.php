@@ -19,8 +19,9 @@ class TableSeatTest extends BaseTest
     {
         parent::setUp();
 
-        $this->table = Table::create(['name' => 'Test Table', 'seats' => 3]);
-        $this->hand  = Hand::create(['table_id' => $this->table->id]);
+        $this->table     = Table::create(['name' => 'Test Table', 'seats' => 3]);
+        $this->hand      = Hand::create(['table_id' => $this->table->id]);
+        $this->tableSeat = $this->container->get(TableSeat::class);
 
         $this->player1 = Player::create([
             'name' => 'Player 1',
@@ -37,17 +38,17 @@ class TableSeatTest extends BaseTest
             'email' => 'player3@rrh.com'
         ]);
 
-        TableSeat::create([
+        $this->tableSeat->create([
             'table_id' => $this->table->id,
             'player_id' => $this->player1->id
         ]);
 
-        TableSeat::create([
+        $this->tableSeat->create([
             'table_id' => $this->table->id,
             'player_id' => $this->player2->id
         ]);
 
-        TableSeat::create([
+        $this->tableSeat->create([
             'table_id' => $this->table->id,
             'player_id' => $this->player3->id
         ]);
@@ -65,7 +66,7 @@ class TableSeatTest extends BaseTest
      */
     public function a_table_seat_can_be_updated()
     {
-        $tableSeat = TableSeat::find(['id' => $this->gameState->getSeats()[0]['id']]);
+        $tableSeat = $this->tableSeat->find(['id' => $this->gameState->getSeats()[0]['id']]);
 
         $this->assertEquals(0, $tableSeat->can_continue);
 
@@ -80,11 +81,11 @@ class TableSeatTest extends BaseTest
      */
     public function it_can_select_first_active_player_after_dealer()
     {
-        $this->gamePlay->start(TableSeat::find([
+        $this->gamePlay->start($this->tableSeat->find([
             'id' => $this->gameState->getSeats()[0]['id']
         ]));
 
-        $tableSeat = TableSeat::playerAfterDealer(
+        $tableSeat = $this->tableSeat->playerAfterDealer(
             $this->gameState->handId(),
             $this->gameState->getSeats()[0]['id']
         );

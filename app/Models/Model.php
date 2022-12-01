@@ -3,12 +3,11 @@
 namespace Atsmacode\PokerGame\Models;
 
 use PDO;
-use PDOException;
 
 /**
  * New Model class intended to replace atsmacode/orm implementation.
  */
-class Model 
+abstract class Model 
 {
     protected $connection;
     protected $table;
@@ -58,7 +57,7 @@ class Model
             $stmt->execute();
 
             $id = $this->connection->lastInsertId();
-        } catch(PDOException $e) {
+        } catch(\Exception $e) {
             error_log(__METHOD__ . $e->getMessage());
         }
 
@@ -87,7 +86,7 @@ class Model
 
             $results = $stmt->executeQuery();
             $rows    = $results->fetchAllAssociative();
-        } catch(PDOException $e) {
+        } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
 
@@ -122,7 +121,7 @@ class Model
             }
 
             $stmt->execute();
-        } catch(PDOException $e) {
+        } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
 
@@ -149,7 +148,7 @@ class Model
             }
 
             $stmt->execute();
-        } catch(PDOException $e) {
+        } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
 
@@ -168,7 +167,7 @@ class Model
             $stmt->execute();
 
             $rows = $stmt->fetchAll();
-        } catch(PDOException $e) {
+        } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
 
@@ -210,7 +209,7 @@ class Model
             $stmt->execute();
 
             return $this;
-        } catch(PDOException $e) {
+        } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }

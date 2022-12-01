@@ -4,7 +4,6 @@ namespace Atsmacode\PokerGame\Models;
 
 use Atsmacode\Orm\Classes\Collection;
 use Atsmacode\PokerGame\Models\Model;
-use PDO;
 
 class Street extends Model
 {

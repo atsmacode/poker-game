@@ -11,6 +11,7 @@ class PokerDealer extends Dealer
     public function dealTo(array $players, int $cardCount, $hand = null)
     {
         $dealtCards = 0;
+
         while($dealtCards < $cardCount){
             foreach($players as $player){
                 WholeCard::create([
@@ -19,6 +20,7 @@ class PokerDealer extends Dealer
                     'hand_id'   => $hand ? $hand->id : null
                 ]);
             }
+
             $dealtCards++;
         }
 

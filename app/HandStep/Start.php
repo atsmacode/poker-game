@@ -15,11 +15,11 @@ use Atsmacode\PokerGame\Models\TableSeat;
  */
 class Start extends HandStep
 {
-    private Street $street;
+    private Street $streetModel;
 
-    public function __construct(Street $street)
+    public function __construct(Street $streetModel)
     {
-        $this->street = $street;
+        $this->streetModel = $streetModel;
     }
 
     public function handle(GameState $gameState, TableSeat $currentDealer = null): GameState
@@ -43,12 +43,12 @@ class Start extends HandStep
 
     public function initiateStreetActions(): self
     {
-        $street = HandStreet::create(['street_id' => $this->street->find(['name' => 'Pre-flop'])->id, 'hand_id' => $this->gameState->handId()]);
+        $handStreet = HandStreet::create(['street_id' => $this->streetModel->find(['name' => 'Pre-flop'])->id, 'hand_id' => $this->gameState->handId()]);
 
         foreach($this->gameState->getSeats() as $seat){
             PlayerAction::create([
                 'player_id'      => $seat['player_id'],
-                'hand_street_id' => $street->id,
+                'hand_street_id' => $handStreet->id,
                 'table_seat_id'  => $seat['id'],
                 'hand_id'        => $this->gameState->handId(),
                 'active'         => 1
@@ -106,7 +106,7 @@ class Start extends HandStep
         $newDealerSeat->update(['is_dealer'  => 1]);
 
         $handStreetId = HandStreet::find([
-            'street_id'  => $this->street->find(['name' => $this->gameState->getGame()->streets[0]['name']])->id,
+            'street_id'  => $this->streetModel->find(['name' => $this->gameState->getGame()->streets[0]['name']])->id,
             'hand_id' => $this->gameState->handId()
         ])->id;
 

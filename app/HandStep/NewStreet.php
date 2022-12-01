@@ -7,37 +7,36 @@ use Atsmacode\PokerGame\Models\HandStreet;
 use Atsmacode\PokerGame\Models\PlayerAction;
 use Atsmacode\PokerGame\Models\Street;
 use Atsmacode\PokerGame\Models\TableSeat;
-use PDO;
 
 /**
  * Responsible for the actions required if a hand is to continue to the next street.
  */
 class NewStreet extends HandStep
 {
-    private Street $street;
+    private Street $streetModel;
 
-    public function __construct(Street $street)
+    public function __construct(Street $streetModel)
     {
-        $this->street = $street;
+        $this->streetModel = $streetModel;
     }
 
     public function handle(GameState $gameState, TableSeat $currentDealer = null): GameState
     {
         $this->gameState = $gameState;
 
-        $street = HandStreet::create([
-            'street_id' => $this->street->find([
+        $handStreet = HandStreet::create([
+            'street_id' => $this->streetModel->find([
                 'name' => $this->gameState->getGame()->streets[$this->gameState->handStreetCount()]['name']
             ])->id,
             'hand_id'   => $this->gameState->handId()
         ]);
 
         $this->gameState->getGameDealer()->dealStreetCards(
-            $street,
+            $handStreet,
             $this->gameState->getGame()->streets[$this->gameState->incrementedHandStreets() - 1]['community_cards']
         );
 
-        $this->updatePlayerStatusesOnNewStreet($street->id);
+        $this->updatePlayerStatusesOnNewStreet($handStreet->id);
         $this->gameState->updateHandStreets();
         $this->gameState->setPlayers();
 
