@@ -25,7 +25,7 @@ Run the unit test suite:
 
 Drop, Create and Seed all tables. '-d true' is required to run this in test DB:
 
-> php dev/SymfonyApplication.php app:build-env -d true
+> php dev/SymfonyApplication.php app:build-poker-game -d true
 
 ## Windows
 Run the unit test suite:
@@ -34,7 +34,8 @@ Run the unit test suite:
 
 Drop, Create and Seed all tables. '-d true' is required to run this in test DB
 
-> php .\dev\SymfonyApplication.php app:build-env -d true
+> php .\dev\PokerGameApp.php app:build-card-games -d true
+> php .\dev\PokerGameApp.php app:build-poker-game -d true
 
 # Configs
 
@@ -45,9 +46,9 @@ You need to add db.php and db-test.php to configure your local DB credentials, l
 
 return [
     'servername' => "localhost",
-    'username' => "DB_USER",
-    'password' => "DB_PASSWORD",
-    'database' => "poker_game_test"
+    'username'   => "DB_USER",
+    'password'   => "DB_PASSWORD",
+    'database'   => "poker_game_test"
 ];
 ```
 

@@ -2,9 +2,9 @@
 
 namespace Atsmacode\PokerGame\Models;
 
-use Atsmacode\Orm\Classes\Collection;
-use Atsmacode\Orm\Classes\Model;
-class Stack extends Model
+use Atsmacode\Framework\Collection\Collection;
+use Atsmacode\PokerGame\Models\PokerGameModel;
+class Stack extends PokerGameModel
 {
     use Collection;
 
@@ -31,11 +31,10 @@ class Stack extends Model
 
         try {
             $stmt = $this->connection->prepare($query);
-            $stmt->setFetchMode(\PDO::FETCH_ASSOC);
             $stmt->bindParam(':table_id', $tableId);
             $stmt->bindParam(':player_id', $playerId);
             $stmt->bindParam(':amount', $amount);
-            $stmt->execute();
+            $stmt->executeQuery();
 
             return true;
         } catch(\PDOException $e) {

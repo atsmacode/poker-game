@@ -3,8 +3,6 @@
 namespace Atsmacode\PokerGame\Console\Commands;
 
 use Atsmacode\PokerGame\Database\Migrations\CreateActions;
-use Atsmacode\CardGames\Database\Migrations\CreateCards;
-use Atsmacode\Orm\Database\Migrations\CreateDatabase;
 use Atsmacode\PokerGame\Database\Migrations\CreateHands;
 use Atsmacode\PokerGame\Database\Migrations\CreateHandTypes;
 use Atsmacode\PokerGame\Database\Migrations\CreatePlayerActionLogs;
@@ -16,7 +14,7 @@ use Atsmacode\PokerGame\Database\Migrations\CreateStreets;
 use Atsmacode\PokerGame\Database\Migrations\CreateTables;
 use Atsmacode\PokerGame\Database\Migrations\CreateWholeCards;
 use Atsmacode\PokerGame\Database\Seeders\SeedActions;
-use Atsmacode\CardGames\Database\Seeders\SeedCards;
+use Atsmacode\Framework\ConfigProvider;
 use Atsmacode\PokerGame\Database\Seeders\SeedHandTypes;
 use Atsmacode\PokerGame\Database\Seeders\SeedPlayers;
 use Atsmacode\PokerGame\Database\Seeders\SeedStreets;
@@ -27,17 +25,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
 #[AsCommand(
-    name: 'app:build-env',
+    name: 'app:build-poker-game',
     description: 'Populate the DB with all resources',
     hidden: false,
-    aliases: ['app:build-env']
+    aliases: ['app:build-poker-game']
 )]
 
-class BuildEnvironment extends Command
+class BuildPokerGame extends Command
 {
     private $buildClasses = [
-        CreateDatabase::class,
-        CreateCards::class,
         CreateHandTypes::class,
         CreatePlayers::class,
         CreateTables::class,
@@ -48,7 +44,6 @@ class BuildEnvironment extends Command
         CreatePlayerActions::class,
         CreateStacks::class,
         CreatePots::class,
-        SeedCards::class,
         SeedHandTypes::class,
         SeedTables::class,
         SeedPlayers::class,
@@ -56,11 +51,13 @@ class BuildEnvironment extends Command
         SeedActions::class,
         CreatePlayerActionLogs::class
     ];
-    protected static $defaultName = 'app:build-env';
+    protected static $defaultName = 'app:build-poker-game';
 
-    public function __construct(string $name = null)
+    public function __construct(string $name = null, ConfigProvider $configProvider)
     {
         parent::__construct($name);
+
+        $this->configProvider = $configProvider;
     }
 
     protected function configure(): void
@@ -79,7 +76,7 @@ class BuildEnvironment extends Command
 
         foreach($this->buildClasses as $class){
             foreach($class::$methods as $method){
-                (new $class())->{$method}();
+                (new $class($this->configProvider))->{$method}();
             }
         }
 

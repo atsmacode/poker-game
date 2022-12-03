@@ -2,12 +2,10 @@
 
 namespace Atsmacode\PokerGame\Models;
 
-use Atsmacode\Orm\Classes\Collection;
-use Atsmacode\Orm\Classes\Model;
-use PDO;
-use PDOException;
+use Atsmacode\Framework\Collection\Collection;
+use Atsmacode\PokerGame\Models\PokerGameModel;
 
-class Hand extends Model
+class Hand extends PokerGameModel
 {
     use Collection;
 
@@ -47,8 +45,8 @@ class Hand extends Model
 
         try {
             $stmt = $this->connection->prepare($query);
-            $stmt->execute();
-        } catch(PDOException $e) {
+            $stmt->executeQuery();
+        } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
@@ -65,16 +63,14 @@ class Hand extends Model
         ");
 
         try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $stmt->execute();
-
-            $rows = $stmt->fetchAll();
+            $stmt    = $this->connection->prepare($query);
+            $results = $stmt->executeQuery();
+            $rows    = $results->fetchAllAssociative();
 
             $this->setModelProperties($rows);
 
             return $this;
-        } catch(PDOException $e) {
+        } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
@@ -94,12 +90,12 @@ class Hand extends Model
 
         try {
             $stmt = $this->connection->prepare($query);
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->bindParam(':hand_id', $this->id);
-            $stmt->execute();
 
-            return $stmt->fetchAll();
-        } catch(PDOException $e) {
+            $results = $stmt->executeQuery();
+
+            return $results->fetchAllAssociative();
+        } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
@@ -121,16 +117,15 @@ class Hand extends Model
 
         try {
             $stmt = $this->connection->prepare($query);
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->bindParam(':hand_id', $this->id);
-            $stmt->execute();
-
-            $rows = $stmt->fetchAll();
+            
+            $results = $stmt->executeQuery();
+            $rows    = $results->fetchAllAssociative();
 
             $this->setModelProperties($rows);
 
             return $this;
-        } catch(PDOException $e) {
+        } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }

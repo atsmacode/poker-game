@@ -2,10 +2,10 @@
 
 namespace Atsmacode\PokerGame\Models;
 
-use Atsmacode\Orm\Classes\Collection;
-use Atsmacode\Orm\Classes\Model;
+use Atsmacode\Framework\Collection\Collection;
+use Atsmacode\PokerGame\Models\PokerGameModel;
 
-class Action extends Model
+class Action extends PokerGameModel
 {
     use Collection;
 

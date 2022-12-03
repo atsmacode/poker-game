@@ -2,12 +2,10 @@
 
 namespace Atsmacode\PokerGame\Models;
 
-use Atsmacode\Orm\Classes\Collection;
-use Atsmacode\Orm\Classes\Model;
-use PDO;
-use PDOException;
+use Atsmacode\Framework\Collection\Collection;
+use Atsmacode\PokerGame\Models\PokerGameModel;
 
-class Player extends Model
+class Player extends PokerGameModel
 {
     use Collection;
 
@@ -61,13 +59,13 @@ class Player extends Model
 
         try {
             $stmt = $this->connection->prepare($query);
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->bindParam(':hand_id', $handId);
             $stmt->bindParam(':player_id', $playerId);
-            $stmt->execute();
 
-            return $stmt->fetchAll();
-        } catch(PDOException $e) {
+            $results = $stmt->executeQuery();
+
+            return $results->fetchAllAssociative();
+        } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }

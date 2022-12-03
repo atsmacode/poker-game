@@ -2,12 +2,10 @@
 
 namespace Atsmacode\PokerGame\Models;
 
-use Atsmacode\Orm\Classes\Collection;
-use Atsmacode\Orm\Classes\Model;
-use PDO;
-use PDOException;
+use Atsmacode\Framework\Collection\Collection;
+use Atsmacode\PokerGame\Models\PokerGameModel;
 
-class HandStreetCard extends Model
+class HandStreetCard extends PokerGameModel
 {
     use Collection;
 
@@ -42,12 +40,12 @@ class HandStreetCard extends Model
 
         try {
             $stmt = $this->connection->prepare($query);
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->bindParam(':id', $this->id);
-            $stmt->execute();
 
-            return $stmt->fetch();
-        } catch(PDOException $e) {
+            $results = $stmt->executeQuery();
+
+            return $results->fetchAllAssociative();
+        } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }

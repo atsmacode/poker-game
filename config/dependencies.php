@@ -2,7 +2,6 @@
 
 return [
     'invokables' => [
-        Atsmacode\PokerGame\GameData\GameData::class,
         Atsmacode\PokerGame\HandStep\Start::class,
         Atsmacode\PokerGame\HandStep\NewStreet::class,
         Atsmacode\PokerGame\HandStep\Showdown::class,
@@ -11,6 +10,8 @@ return [
         Atsmacode\PokerGame\Game\PotLimitOmaha::class,
     ],
     'factories' => [
+        Atsmacode\PokerGame\GameData\GameData::class
+            => Atsmacode\PokerGame\GameData\GameDataFactory::class,
         Atsmacode\PokerGame\GamePlay\GamePlay::class 
             => Atsmacode\PokerGame\GamePlay\GamePlayFactory::class,
         Atsmacode\PokerGame\GameState\GameState::class 

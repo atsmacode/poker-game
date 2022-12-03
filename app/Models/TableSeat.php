@@ -3,12 +3,10 @@
 namespace Atsmacode\PokerGame\Models;
 
 use Atsmacode\PokerGame\Constants\Action;
-use Atsmacode\Orm\Classes\Collection;
-use Atsmacode\Orm\Classes\Model;
-use PDO;
-use PDOException;
+use Atsmacode\Framework\Collection\Collection;
+use Atsmacode\PokerGame\Models\PokerGameModel;
 
-class TableSeat extends Model
+class TableSeat extends PokerGameModel
 {
     use Collection;
 
@@ -47,18 +45,17 @@ class TableSeat extends Model
 
         try {
             $stmt = $this->connection->prepare($query);
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->bindParam(':hand_id', $handId);
             $stmt->bindParam(':dealer', $dealer);
-            $stmt->execute();
 
-            $rows          = $stmt->fetchAll();
+            $results       = $stmt->executeQuery();
+            $rows          = $results->fetchAllAssociative();
             $this->content = $rows;
 
             $this->setModelProperties($rows);
 
             return $this;
-        } catch(PDOException $e) {
+        } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
@@ -87,12 +84,11 @@ class TableSeat extends Model
 
         try {
             $stmt = $this->connection->prepare($query);
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->bindParam(':hand_id', $handId);
-            $stmt->execute();
+            $stmt->executeQuery();
 
             return true;
-        } catch(PDOException $e) {
+        } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
@@ -121,14 +117,14 @@ class TableSeat extends Model
 
         try {
             $stmt = $this->connection->prepare($query);
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->bindParam(':hand_id', $handId);
-            $stmt->execute();
 
-            $this->content = $stmt->fetchAll();
+            $results       = $stmt->executeQuery();
+            $rows          = $results->fetchAllAssociative();
+            $this->content = $rows;
 
             return $this;
-        } catch(PDOException $e) {
+        } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
@@ -161,15 +157,15 @@ class TableSeat extends Model
 
         try {
             $stmt = $this->connection->prepare($query);
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->bindParam(':hand_id', $handId);
             $stmt->bindParam(':raise_id', $raiseId);
             $stmt->bindParam(':bet_id', $betId);
             $stmt->bindParam(':call_id', $callId);
-            $stmt->execute();
 
-            return $stmt->fetchAll();
-        } catch(PDOException $e) {
+            $results = $stmt->executeQuery();
+
+            return $results->fetchAllAssociative();
+        } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }

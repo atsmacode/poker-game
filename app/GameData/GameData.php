@@ -2,7 +2,7 @@
 
 namespace Atsmacode\PokerGame\GameData;
 
-use Atsmacode\Orm\Classes\Database;
+use Atsmacode\Framework\Dbal\Database;
 use Atsmacode\PokerGame\Models\HandStreet;
 use Atsmacode\PokerGame\Models\Player;
 
@@ -21,12 +21,12 @@ class GameData extends Database
 
         try {
             $stmt = $this->connection->prepare($query);
-            $stmt->setFetchMode(\PDO::FETCH_ASSOC);
             $stmt->bindParam(':table_id', $tableId);
-            $stmt->execute();
 
-            return $stmt->fetchAll();
-        } catch(\PDOException $e) {
+            $results = $stmt->executeQuery();
+
+            return $results->fetchAllAssociative();
+        } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
@@ -70,12 +70,12 @@ class GameData extends Database
 
         try {
             $stmt = $this->connection->prepare($query);
-            $stmt->setFetchMode(\PDO::FETCH_ASSOC);
             $stmt->bindParam(':hand_id', $handId);
-            $stmt->execute();
+            
+            $results = $stmt->executeQuery();
 
-            return $stmt->fetchAll();
-        } catch(\PDOException $e) {
+            return $results->fetchAllAssociative();
+        } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }

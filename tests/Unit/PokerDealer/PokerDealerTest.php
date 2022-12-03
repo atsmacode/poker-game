@@ -102,7 +102,7 @@ class PokerDealerTest extends BaseTest
     {
         $handStreet = HandStreet::create([
             'street_id' => Street::find(['name' => 'Flop'])->id,
-            'hand_id' => Hand::create(['table_id' => 1])->id
+            'hand_id'   => Hand::create(['table_id' => 1])->id
         ]);
 
         $card = CardFactory::create(Card::ACE_HEARTS);

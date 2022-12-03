@@ -2,7 +2,7 @@
 
 namespace Atsmacode\PokerGame\Database\Migrations;
 
-use Atsmacode\Orm\Classes\Database;
+use Atsmacode\Framework\Dbal\Database;
 
 class CreateWholeCards extends Database
 {

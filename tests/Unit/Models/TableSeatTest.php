@@ -56,15 +56,14 @@ class TableSeatTest extends BaseTest
             'player_id' => $this->player3->id
         ]);
 
-        $this->gameState = new GameState(new GameData(), $this->hand);
-        $this->gamePlay  = new GamePlay(
-            $this->gameState,
-            new PotLimitHoldEm(),
-            new Start(),
-            new NewStreet(),
-            new Showdown(),
-            new PlayerHandler()
-        );
+        $this->gameState = $this->container->build(GameState::class, [
+            'hand' => $this->hand,
+        ]);
+        
+        $this->gamePlay  = $this->container->build(GamePlay::class, [
+            'game'      => $this->container->get(PotLimitHoldEm::class),
+            'gameState' => $this->gameState,
+        ]);
     }
 
     /**
