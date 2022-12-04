@@ -3,11 +3,11 @@
 namespace Atsmacode\PokerGame\Models;
 
 use Atsmacode\Framework\Collection\Collection;
-use Atsmacode\PokerGame\Models\PokerGameModel;
+use Atsmacode\Framework\Dbal\Model;
 
-class Hand extends PokerGameModel
+class Hand extends Model
 {
-    use Collection;
+    use Collection, CanBeModelled;
 
     protected $table = 'hands';
     public $id;

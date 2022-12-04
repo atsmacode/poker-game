@@ -4,11 +4,11 @@ namespace Atsmacode\PokerGame\Models;
 
 use Atsmacode\PokerGame\Constants\Action;
 use Atsmacode\Framework\Collection\Collection;
-use Atsmacode\PokerGame\Models\PokerGameModel;
+use Atsmacode\Framework\Dbal\Model;
 
-class TableSeat extends PokerGameModel
+class TableSeat extends Model
 {
-    use Collection;
+    use Collection, CanBeModelled;
 
     protected $table = 'table_seats';
     public string $name;

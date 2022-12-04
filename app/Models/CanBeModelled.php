@@ -2,10 +2,9 @@
 
 namespace Atsmacode\PokerGame\Models;
 
-use Atsmacode\Framework\Dbal\Model;
 use Atsmacode\PokerGame\PokerGameConfigProvider;
 
-class PokerGameModel extends Model
+trait CanBeModelled
 {
     public function __construct(array $data = null)
     {
