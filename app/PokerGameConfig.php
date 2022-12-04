@@ -4,18 +4,12 @@ namespace Atsmacode\PokerGame;
 
 class PokerGameConfig
 {
+    const CONFIG_REF = 'config/poker_game.php';
+
     public function __invoke()
     {
-        $dbTest = require($GLOBALS['THE_ROOT'] . 'config/db_poker_game_test.php');
-        $db     = require($GLOBALS['THE_ROOT'] . 'config/db_poker_game.php');
+        $config  = require($GLOBALS['THE_ROOT'] . PokerGameConfig::CONFIG_REF);
 
-        $dbConfig = [
-            'db' => [
-                'test' => $dbTest,
-                'live' => $db,
-            ],
-        ];
-
-        return $dbConfig;
+        return $config['poker_game'];
     }
 }

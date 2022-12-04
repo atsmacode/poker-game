@@ -15,11 +15,11 @@ use Atsmacode\PokerGame\Database\Migrations\CreateTables;
 use Atsmacode\PokerGame\Database\Migrations\CreateWholeCards;
 use Atsmacode\PokerGame\Database\Seeders\SeedActions;
 use Atsmacode\Framework\ConfigProvider;
+use Atsmacode\Framework\DatabaseProvider;
 use Atsmacode\PokerGame\Database\Seeders\SeedHandTypes;
 use Atsmacode\PokerGame\Database\Seeders\SeedPlayers;
 use Atsmacode\PokerGame\Database\Seeders\SeedStreets;
 use Atsmacode\PokerGame\Database\Seeders\SeedTables;
-use Doctrine\DBAL\DriverManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -79,13 +79,7 @@ class BuildPokerGame extends Command
 
         if (isset($GLOBALS['dev'])) { $env = 'test'; }
 
-        $GLOBALS['connection'] = DriverManager::getConnection([
-            'dbname'   => $config['db'][$env]['database'],
-            'user'     => $config['db'][$env]['username'],
-            'password' => $config['db'][$env]['password'],
-            'host'     => $config['db'][$env]['servername'],
-            'driver'   => $config['db'][$env]['driver'],
-        ]); 
+        $GLOBALS['connection'] = DatabaseProvider::getConnection($config, $env);
 
         foreach($this->buildClasses as $class){
             foreach($class::$methods as $method){

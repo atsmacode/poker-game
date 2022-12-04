@@ -2,8 +2,8 @@
 
 namespace Atsmacode\PokerGame\Tests;
 
+use Atsmacode\Framework\DatabaseProvider;
 use Atsmacode\PokerGame\PokerGameConfigProvider;
-use Doctrine\DBAL\DriverManager;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 
@@ -19,13 +19,7 @@ abstract class BaseTest extends TestCase
         $config              = (new PokerGameConfigProvider)->get();
         $env                 = 'test';
 
-        $GLOBALS['connection'] = DriverManager::getConnection([
-            'dbname'   => $config['db'][$env]['database'],
-            'user'     => $config['db'][$env]['username'],
-            'password' => $config['db'][$env]['password'],
-            'host'     => $config['db'][$env]['servername'],
-            'driver'   => $config['db'][$env]['driver'],
-        ]);
+        $GLOBALS['connection'] = DatabaseProvider::getConnection($config, $env);
 
         $pokerGameDependencyMap  = require('config/dependencies.php');
 

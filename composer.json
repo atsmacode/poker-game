@@ -22,7 +22,7 @@
     },
     "require": {
         "symfony/console": "^6.0",
-        "atsmacode/card-games": "v1.0.6",
+        "atsmacode/card-games": "^v1.0",
         "laminas/laminas-servicemanager": "^3.19",
         "doctrine/dbal": "^3.5"
     },
