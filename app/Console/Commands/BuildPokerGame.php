@@ -19,6 +19,7 @@ use Atsmacode\PokerGame\Database\Seeders\SeedHandTypes;
 use Atsmacode\PokerGame\Database\Seeders\SeedPlayers;
 use Atsmacode\PokerGame\Database\Seeders\SeedStreets;
 use Atsmacode\PokerGame\Database\Seeders\SeedTables;
+use Doctrine\DBAL\DriverManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -68,11 +69,23 @@ class BuildPokerGame extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $GLOBALS['THE_ROOT'] = '';
-        
         unset($GLOBALS['dev']);
-        $dev    = $input->getOption('-d') === 'true' ?: false;
-        $GLOBALS['dev'] = $dev ? $dev : null; 
+
+        $GLOBALS['THE_ROOT'] = '';
+        $dev                 = $input->getOption('-d') === 'true' ?: false;
+        $GLOBALS['dev']      = $dev ? $dev : null;
+        $config              = $this->configProvider->get();
+        $env                 = 'live';
+
+        if (isset($GLOBALS['dev'])) { $env = 'test'; }
+
+        $GLOBALS['connection'] = DriverManager::getConnection([
+            'dbname'   => $config['db'][$env]['database'],
+            'user'     => $config['db'][$env]['username'],
+            'password' => $config['db'][$env]['password'],
+            'host'     => $config['db'][$env]['servername'],
+            'driver'   => $config['db'][$env]['driver'],
+        ]); 
 
         foreach($this->buildClasses as $class){
             foreach($class::$methods as $method){

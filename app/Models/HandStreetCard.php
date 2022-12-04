@@ -44,7 +44,7 @@ class HandStreetCard extends PokerGameModel
 
             $results = $stmt->executeQuery();
 
-            return $results->fetchAllAssociative();
+            return $results->fetchAssociative();
         } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
