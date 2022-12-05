@@ -9,6 +9,7 @@ return [
                 'password'   => 'PASSWORD',
                 'database'   => 'poker_game',
                 'driver'     => 'pdo_mysql',
+                'provider'   => Doctrine\DBAL\Connection::class
             ],
             'test' => [
                 'servername' => 'localhost',
@@ -16,6 +17,7 @@ return [
                 'password'   => 'PASSWORD',
                 'database'   => 'poker_game_test',
                 'driver'     => 'pdo_mysql',
+                'provider'   => Doctrine\DBAL\Connection::class
             ],
         ],
     ],

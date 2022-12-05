@@ -14,12 +14,13 @@ use Atsmacode\PokerGame\Database\Migrations\CreateStreets;
 use Atsmacode\PokerGame\Database\Migrations\CreateTables;
 use Atsmacode\PokerGame\Database\Migrations\CreateWholeCards;
 use Atsmacode\PokerGame\Database\Seeders\SeedActions;
-use Atsmacode\Framework\ConfigProvider;
-use Atsmacode\Framework\DatabaseProvider;
 use Atsmacode\PokerGame\Database\Seeders\SeedHandTypes;
 use Atsmacode\PokerGame\Database\Seeders\SeedPlayers;
 use Atsmacode\PokerGame\Database\Seeders\SeedStreets;
 use Atsmacode\PokerGame\Database\Seeders\SeedTables;
+use Atsmacode\PokerGame\DbalTestFactory;
+use Doctrine\DBAL\Connection;
+use Laminas\ServiceManager\ServiceManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -54,11 +55,11 @@ class BuildPokerGame extends Command
     ];
     protected static $defaultName = 'app:build-poker-game';
 
-    public function __construct(string $name = null, ConfigProvider $configProvider)
+    public function __construct(string $name = null, ServiceManager $container)
     {
         parent::__construct($name);
 
-        $this->configProvider = $configProvider;
+        $this->container = $container;
     }
 
     protected function configure(): void
@@ -69,21 +70,17 @@ class BuildPokerGame extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        unset($GLOBALS['dev']);
+        $dev = $input->getOption('-d') === 'true' ?: false;
 
-        $GLOBALS['THE_ROOT'] = '';
-        $dev                 = $input->getOption('-d') === 'true' ?: false;
-        $GLOBALS['dev']      = $dev ? $dev : null;
-        $config              = $this->configProvider->get();
-        $env                 = 'live';
+        if ($dev) { $this->container->setFactory(Connection::class, new DbalTestFactory()); }
 
-        if (isset($GLOBALS['dev'])) { $env = 'test'; }
+        $connection = $this->container->get(Connection::class);
 
-        $GLOBALS['connection'] = DatabaseProvider::getConnection($config, $env);
+        var_dump($connection);
 
         foreach($this->buildClasses as $class){
             foreach($class::$methods as $method){
-                (new $class($this->configProvider))->{$method}();
+                (new $class($connection))->{$method}();
             }
         }
 
