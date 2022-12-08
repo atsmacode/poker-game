@@ -2,7 +2,7 @@
 
 namespace Atsmacode\PokerGame\Database\Seeders;
 
-use Atsmacode\Framework\Dbal\Database;
+use Atsmacode\Framework\Database\Database;
 use Atsmacode\PokerGame\Constants\HandType;
 
 class SeedHandTypes extends Database

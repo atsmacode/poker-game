@@ -11,6 +11,10 @@ return [
         Atsmacode\PokerGame\PokerGameConfigProvider::class,
     ],
     'factories' => [
+        Atsmacode\Framework\Database\ConnectionInterface::class
+            => Atsmacode\PokerGame\Database\DbalLiveFactory::class,
+        PDO::class
+            => Atsmacode\PokerGame\Database\PdoLiveFactory::class,
         Atsmacode\PokerGame\GameData\GameData::class
             => Atsmacode\PokerGame\GameData\GameDataFactory::class,
         Atsmacode\PokerGame\GamePlay\GamePlay::class 
@@ -25,7 +29,5 @@ return [
             => Atsmacode\PokerGame\HandStep\NewStreetFactory::class,
         Atsmacode\PokerGame\HandStep\Start::class
             => Atsmacode\PokerGame\HandStep\StartFactory::class,
-        Doctrine\DBAL\Connection::class
-            => Atsmacode\PokerGame\DbalLiveFactory::class,
     ]
 ];

@@ -2,7 +2,7 @@
 
 namespace Atsmacode\PokerGame\Database\Seeders;
 
-use Atsmacode\Framework\Dbal\Database;
+use Atsmacode\Framework\Database\Database;
 use Atsmacode\PokerGame\Constants\Action;
 
 class SeedActions extends Database

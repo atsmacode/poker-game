@@ -8,7 +8,7 @@ class PokerGameConfig
 
     public function __invoke()
     {
-        $config = require($GLOBALS['THE_ROOT'] . PokerGameConfig::CONFIG_REF);
+        $config = require(PokerGameConfig::CONFIG_REF);
 
         return $config['poker_game'];
     }

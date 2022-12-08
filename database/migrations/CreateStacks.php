@@ -2,7 +2,7 @@
 
 namespace Atsmacode\PokerGame\Database\Migrations;
 
-use Atsmacode\Framework\Dbal\Database;
+use Atsmacode\Framework\Database\Database;
 
 class CreateStacks extends Database
 {
