@@ -7,14 +7,35 @@ use Atsmacode\Framework\Dbal\Model;
 
 class Hand extends Model
 {
-    use Collection, CanBeModelled;
+    use Collection;
 
     protected $table = 'hands';
-    public $id;
+    public    $id;
 
     public function streets()
     {
-        return HandStreet::find(['hand_id' => $this->id]);
+        $query = sprintf("
+            SELECT
+                hs.*
+            FROM
+                hand_streets AS hs
+            LEFT JOIN
+                hands AS h ON hs.hand_id = h.id
+            WHERE
+                hs.hand_id = :hand_id
+        ");
+
+        try {
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':hand_id', $this->id);
+
+            $results = $stmt->executeQuery();
+            $rows    = $results->fetchAllAssociative();
+
+            return $rows;
+        } catch(\Exception $e) {
+            error_log(__METHOD__ . ': ' . $e->getMessage());
+        }
     }
 
     public function table()
@@ -29,7 +50,28 @@ class Hand extends Model
 
     public function pot()
     {
-        return Pot::find(['hand_id' => $this->id]);
+        $query = sprintf("
+            SELECT
+                p.*
+            FROM
+                pots AS p
+            LEFT JOIN
+                hands AS h ON p.hand_id = h.id
+            WHERE
+                p.hand_id = :hand_id
+        ");
+
+        try {
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':hand_id', $this->id);
+
+            $results = $stmt->executeQuery();
+            $rows    = $results->fetchAssociative();
+
+            return $rows;
+        } catch(\Exception $e) {
+            error_log(__METHOD__ . ': ' . $e->getMessage());
+        }
     }
 
     public function complete()

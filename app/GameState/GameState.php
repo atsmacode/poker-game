@@ -17,23 +17,22 @@ class GameState
     private array         $wholeCards = [];
     private ?array        $winner = null;
     private ?PlayerAction $latestAction;
-    private Hand          $hand;
     private int           $tableId;
     private int           $handId;
     private array         $seats;
     private ?array        $actions;
-    private HandStreet    $handStreets;
+    private array         $handStreets;
     private array         $players;
     private array         $stacks;
     private bool          $newStreet = false;
-    private GameData      $gameData;
     private Game          $game;
     private PokerDealer   $dealer;
 
-    public function __construct(GameData $gameData, Hand $hand = null)
-    {
-        $this->gameData = $gameData;
-        
+    public function __construct(
+        private GameData $gameData,
+        private PokerDealer $pokerDealer,
+        private ?Hand $hand
+    ) {
         if ($hand) {
             $this->initiate($hand);
         }
@@ -116,7 +115,7 @@ class GameState
         return $this->seats;
     }
 
-    public function getHandStreets(): HandStreet
+    public function getHandStreets(): array
     {
         return $this->handStreets;
     }
@@ -130,12 +129,12 @@ class GameState
 
     public function incrementedHandStreets(): int
     {
-        return count($this->handStreets->content) + 1;
+        return count($this->handStreets) + 1;
     }
 
     public function handStreetCount(): int
     {
-        return count($this->handStreets->content);
+        return count($this->handStreets);
     }
 
     public function setLatestAction(PlayerAction $playerAction): void
@@ -162,7 +161,7 @@ class GameState
     {
         $pot = $this->hand->pot();
 
-        return isset($pot->amount) ? $pot->amount : 0;
+        return isset($pot['amount']) ? $pot['amount'] : 0;
     }
 
     public function setCommunityCards(): self
@@ -266,9 +265,9 @@ class GameState
         return $this->game;
     }
 
-    public function setGameDealer(PokerDealer $dealer): void
+    public function setGameDealer(?array $deck): void
     {
-        $this->dealer = $dealer;
+        $this->dealer = $this->pokerDealer->setDeck($deck);
     }
 
     public function getGameDealer(): PokerDealer

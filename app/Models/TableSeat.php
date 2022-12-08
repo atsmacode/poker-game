@@ -8,7 +8,7 @@ use Atsmacode\Framework\Dbal\Model;
 
 class TableSeat extends Model
 {
-    use Collection, CanBeModelled;
+    use Collection;
 
     protected $table = 'table_seats';
     public string $name;

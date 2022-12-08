@@ -7,7 +7,7 @@ use Atsmacode\Framework\Dbal\Model;
 
 class Player extends Model
 {
-    use Collection, CanBeModelled;
+    use Collection;
 
     protected $table = 'players';
     public $id;
@@ -27,12 +27,7 @@ class Player extends Model
         return Stack::find(['player_id' => $this->id]);
     }
 
-    public static function getWholeCards(int $handId, int $playerId)
-    {
-        return (new static())->wholeCardsQuery($handId, $playerId);
-    }
-
-    private function wholeCardsQuery(int $handId, int $playerId)
+    public function getWholeCards(int $handId, int $playerId)
     {
         $query = sprintf("
             SELECT

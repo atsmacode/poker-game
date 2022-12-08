@@ -2,6 +2,7 @@
 
 namespace Atsmacode\PokerGame\GameState;
 
+use Atsmacode\PokerGame\Dealer\PokerDealer;
 use Atsmacode\PokerGame\GameData\GameData;
 use Atsmacode\PokerGame\GameState\GameState;
 use Laminas\ServiceManager\Factory\FactoryInterface;
@@ -13,6 +14,7 @@ class GameStateFactory implements FactoryInterface
     {
         return new GameState(
             $container->get(GameData::class),
+            $container->get(PokerDealer::class),
             isset($options['hand']) ? $options['hand'] : null
         );
     }

@@ -3,13 +3,8 @@
 namespace Atsmacode\PokerGame\Tests\Unit;
 
 use Atsmacode\PokerGame\Game\PotLimitHoldEm;
-use Atsmacode\PokerGame\GameData\GameData;
 use Atsmacode\PokerGame\GamePlay\GamePlay;
 use Atsmacode\PokerGame\GameState\GameState;
-use Atsmacode\PokerGame\HandStep\NewStreet;
-use Atsmacode\PokerGame\HandStep\Showdown;
-use Atsmacode\PokerGame\HandStep\Start;
-use Atsmacode\PokerGame\PlayerHandler\PlayerHandler;
 use Atsmacode\PokerGame\Models\Hand;
 use Atsmacode\PokerGame\Models\Player;
 use Atsmacode\PokerGame\Models\Table;

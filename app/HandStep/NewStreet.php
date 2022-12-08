@@ -13,12 +13,19 @@ use Atsmacode\PokerGame\Models\TableSeat;
  */
 class NewStreet extends HandStep
 {
+    private Street $streetModel;
+
+    public function __construct(Street $streetModel)
+    {
+        $this->streetModel = $streetModel;
+    }
+    
     public function handle(GameState $gameState, TableSeat $currentDealer = null): GameState
     {
         $this->gameState = $gameState;
 
         $street = HandStreet::create([
-            'street_id' => Street::find(['name' => $this->gameState->getGame()->streets[$this->gameState->handStreetCount()]['name']])->id,
+            'street_id' => $this->streetModel->find(['name' => $this->gameState->getGame()->streets[$this->gameState->handStreetCount()]['name']])->id,
             'hand_id'   => $this->gameState->handId()
         ]);
 

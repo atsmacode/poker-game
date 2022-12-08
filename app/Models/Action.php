@@ -7,9 +7,9 @@ use Atsmacode\Framework\Dbal\Model;
 
 class Action extends Model
 {
-    use Collection, CanBeModelled;
+    use Collection;
 
-    public $table = 'actions';
+    public        $table = 'actions';
     public string $name;
-    public int $id;
+    public int    $id;
 }

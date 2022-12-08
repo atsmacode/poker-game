@@ -8,12 +8,17 @@ use Atsmacode\CardGames\Dealer\Dealer;
 
 class PokerDealer extends Dealer
 {
+    public function __construct(
+        private WholeCard      $wholeCardModel,
+        private HandStreetCard $handStreetCardModel
+    ) {}
+
     public function dealTo(array $players, int $cardCount, $hand = null)
     {
         $dealtCards = 0;
         while($dealtCards < $cardCount){
             foreach($players as $player){
-                WholeCard::create([
+                $this->wholeCardModel->create([
                     'player_id' => $player['player_id'],
                     'card_id'   => $this->pickCard()->getCard()['id'],
                     'hand_id'   => $hand ? $hand->id : null
@@ -32,7 +37,7 @@ class PokerDealer extends Dealer
         while($dealtCards < $cardCount){
             $cardId = $this->pickCard()->getCard()['id'];
 
-            HandStreetCard::create([
+            $this->handStreetCardModel->create([
                 'card_id' => $cardId,
                 'hand_street_id' => $handStreet->id
             ]);
@@ -53,7 +58,7 @@ class PokerDealer extends Dealer
     {
         $cardId = $this->pickCard($rank, $suit)->getCard()['id'];
 
-        HandStreetCard::create([
+        $this->handStreetCardModel->create([
             'card_id' => $cardId,
             'hand_street_id' => $handStreet->id
         ]);

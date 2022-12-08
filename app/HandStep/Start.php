@@ -2,6 +2,7 @@
 
 namespace Atsmacode\PokerGame\HandStep;
 
+use Atsmacode\PokerGame\BetHandler\BetHandler;
 use Atsmacode\PokerGame\GameState\GameState;
 use Atsmacode\PokerGame\Helpers\BetHelper;
 use Atsmacode\PokerGame\Models\HandStreet;
@@ -15,6 +16,15 @@ use Atsmacode\PokerGame\Models\TableSeat;
  */
 class Start extends HandStep
 {
+    public function __construct(
+        private Street       $streetModel,
+        private HandStreet   $handStreetModel,
+        private PlayerAction $playerActionModel,
+        private Stack        $stackModel,
+        private TableSeat    $tableSeatModel,
+        private BetHandler   $betHandler
+    ) {}
+    
     public function handle(GameState $gameState, TableSeat $currentDealer = null): GameState
     {
         $this->gameState = $gameState;
@@ -36,10 +46,10 @@ class Start extends HandStep
 
     public function initiateStreetActions(): self
     {
-        $street = HandStreet::create(['street_id' => Street::find(['name' => 'Pre-flop'])->id, 'hand_id' => $this->gameState->handId()]);
+        $street = $this->handStreetModel->create(['street_id' => $this->streetModel->find(['name' => 'Pre-flop'])->id, 'hand_id' => $this->gameState->handId()]);
 
         foreach($this->gameState->getSeats() as $seat){
-            PlayerAction::create([
+            $this->playerActionModel->create([
                 'player_id'      => $seat['player_id'],
                 'hand_street_id' => $street->id,
                 'table_seat_id'  => $seat['id'],
@@ -57,10 +67,10 @@ class Start extends HandStep
 
         foreach($this->gameState->getSeats() as $seat){
             /** Looks like the count() check was added as there's only 1 table being handled. */
-            $playerTableStack = Stack::find(['player_id' => $seat['player_id'], 'table_id'  => $this->gameState->tableId()]);
+            $playerTableStack = $this->stackModel->find(['player_id' => $seat['player_id'], 'table_id'  => $this->gameState->tableId()]);
 
             if (0 === count($playerTableStack->content)) {
-                $tableStacks[$seat['player_id']] = Stack::create([
+                $tableStacks[$seat['player_id']] = $this->stackModel->create([
                     'amount' => 1000,
                     'player_id' => $seat['player_id'],
                     'table_id' => $this->gameState->tableId()
@@ -78,7 +88,7 @@ class Start extends HandStep
     public function setDealerAndBlindSeats($currentDealer = null): self
     {
         if($this->gameState->handStreetCount() === 1){
-            $bigBlind = PlayerAction::find(['hand_id' => $this->gameState->handId(), 'big_blind' => 1]);
+            $bigBlind = $this->playerActionModel->find(['hand_id' => $this->gameState->handId(), 'big_blind' => 1]);
 
             if ($bigBlind->isNotEmpty()) { $bigBlind->update(['big_blind' => 0]); }
         }
@@ -91,25 +101,25 @@ class Start extends HandStep
         ] = $this->identifyTheNextDealerAndBlindSeats($currentDealer);
 
         if($currentDealer){
-            $currentDealerSeat = TableSeat::find(['id' => $currentDealer['id'], 'table_id' => $this->gameState->tableId()]);
+            $currentDealerSeat = $this->tableSeatModel->find(['id' => $currentDealer['id'], 'table_id' => $this->gameState->tableId()]);
             $currentDealerSeat->update(['is_dealer'  => 0]);
         }
 
-        $newDealerSeat = TableSeat::find(['id' => $dealer['id'], 'table_id' => $this->gameState->tableId()]);
+        $newDealerSeat = $this->tableSeatModel->find(['id' => $dealer['id'], 'table_id' => $this->gameState->tableId()]);
         $newDealerSeat->update(['is_dealer'  => 1]);
 
-        $handStreetId = HandStreet::find([
-            'street_id'  => Street::find(['name' => $this->gameState->getGame()->streets[0]['name']])->id,
+        $handStreetId = $this->handStreetModel->find([
+            'street_id'  => $this->streetModel->find(['name' => $this->gameState->getGame()->streets[0]['name']])->id,
             'hand_id' => $this->gameState->handId()
         ])->id;
 
-        $smallBlind = PlayerAction::find([
+        $smallBlind = $this->playerActionModel->find([
             'player_id'      => $smallBlindSeat['player_id'],
             'table_seat_id'  => $smallBlindSeat['id'],
             'hand_street_id' => $handStreetId,
         ]);
 
-        $bigBlind = PlayerAction::find([
+        $bigBlind = $this->playerActionModel->find([
             'player_id'      => $bigBlindSeat['player_id'],
             'table_seat_id'  => $bigBlindSeat['id'],
             'hand_street_id' => $handStreetId,
@@ -117,7 +127,7 @@ class Start extends HandStep
         
         $this->gameState->setLatestAction($bigBlind);
 
-        BetHelper::postBlinds($this->gameState->getHand(), $smallBlind, $bigBlind, $this->gameState);
+        $this->betHandler->postBlinds($this->gameState->getHand(), $smallBlind, $bigBlind, $this->gameState);
 
         return $this;
     }

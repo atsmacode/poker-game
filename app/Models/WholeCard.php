@@ -6,7 +6,7 @@ use Atsmacode\Framework\Collection\Collection;
 use Atsmacode\Framework\Dbal\Model;
 class WholeCard extends Model
 {
-    use Collection, CanBeModelled;
+    use Collection;
 
     protected $table = 'whole_cards';
 }

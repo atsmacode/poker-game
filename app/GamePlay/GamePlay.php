@@ -28,7 +28,7 @@ class GamePlay
                 array         $deck = null
     ) {
         $this->gameState->setGame($game);
-        $this->gameState->setGameDealer((new PokerDealer())->setDeck($deck));
+        $this->gameState->setGameDealer($deck);
     }
 
     public function setGameState(GameState $gameState): void

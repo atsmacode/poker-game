@@ -6,7 +6,7 @@ use Atsmacode\Framework\Collection\Collection;
 use Atsmacode\Framework\Dbal\Model;
 class Pot extends Model
 {
-    use Collection, CanBeModelled;
+    use Collection;
 
     public $table = 'pots';
     public string $name;

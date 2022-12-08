@@ -2,7 +2,7 @@
 
 namespace Atsmacode\PokerGame\GameData;
 
-use Atsmacode\Framework\Dbal\Database;
+use Atsmacode\Framework\Database\Database;
 use Atsmacode\PokerGame\Models\HandStreet;
 use Atsmacode\PokerGame\Models\Player;
 
@@ -105,11 +105,11 @@ class GameData extends Database
         return $wholeCards;
     }
 
-    public function getCommunityCards(HandStreet $handStreets): array
+    public function getCommunityCards(array $handStreets): array
     {
         $communityCards = [];
 
-        foreach ($handStreets->collect()->content as $street) {
+        foreach ($handStreets as $street) {
             foreach ($street->cards()->collect()->content as $streetCard) {
                 $communityCards[] = [
                     'rankAbbreviation' => $streetCard->getCard()['rankAbbreviation'],

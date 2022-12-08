@@ -4,19 +4,15 @@ namespace Atsmacode\PokerGame\Models;
 
 use Atsmacode\Framework\Collection\Collection;
 use Atsmacode\Framework\Dbal\Model;
+
 class Stack extends Model
 {
-    use Collection, CanBeModelled;
+    use Collection;
 
     public $table = 'stacks';
     public string $name;
 
-    public static function change(int $amount, int $playerId, int $tableId)
-    {
-        return (new static())->changeQuery($amount, $playerId, $tableId);
-    }
-
-    private function changeQuery(int $amount, int $playerId, int $tableId)
+    public function change(int $amount, int $playerId, int $tableId)
     {
         $query = sprintf("
             UPDATE

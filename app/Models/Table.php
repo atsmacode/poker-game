@@ -6,7 +6,7 @@ use Atsmacode\Framework\Collection\Collection;
 use Atsmacode\Framework\Dbal\Model;
 class Table extends Model
 {
-    use Collection, CanBeModelled;
+    use Collection;
 
     protected $table = 'tables';
     public string $name;
