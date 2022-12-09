@@ -6,7 +6,6 @@ use Atsmacode\PokerGame\Dealer\PokerDealer;
 use Atsmacode\PokerGame\Game\Game;
 use Atsmacode\PokerGame\GameData\GameData;
 use Atsmacode\PokerGame\Models\Hand;
-use Atsmacode\PokerGame\Models\HandStreet;
 use Atsmacode\PokerGame\Models\PlayerAction;
 use Atsmacode\PokerGame\Models\Table;
 
@@ -29,9 +28,9 @@ class GameState
     private PokerDealer   $dealer;
 
     public function __construct(
-        private GameData $gameData,
+        private GameData    $gameData,
         private PokerDealer $pokerDealer,
-        private ?Hand $hand
+        private ?Hand       $hand
     ) {
         if ($hand) {
             $this->initiate($hand);

@@ -76,7 +76,7 @@ class GamePlay
 
     protected function readyForShowdown()
     {
-        return count($this->gameState->getHandStreets()->content) === count($this->gameState->getGame()->streets) &&
+        return count($this->gameState->getHandStreets()) === count($this->gameState->getGame()->streets) &&
             count($this->gameState->getActivePlayers()) === count($this->gameState->getContinuingPlayers());
     }
 

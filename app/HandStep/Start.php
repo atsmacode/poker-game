@@ -4,7 +4,6 @@ namespace Atsmacode\PokerGame\HandStep;
 
 use Atsmacode\PokerGame\BetHandler\BetHandler;
 use Atsmacode\PokerGame\GameState\GameState;
-use Atsmacode\PokerGame\Helpers\BetHelper;
 use Atsmacode\PokerGame\Models\HandStreet;
 use Atsmacode\PokerGame\Models\PlayerAction;
 use Atsmacode\PokerGame\Models\Stack;
@@ -119,11 +118,15 @@ class Start extends HandStep
             'hand_street_id' => $handStreetId,
         ]);
 
+        //var_dump($smallBlind);
+
         $bigBlind = $this->playerActionModel->find([
             'player_id'      => $bigBlindSeat['player_id'],
             'table_seat_id'  => $bigBlindSeat['id'],
             'hand_street_id' => $handStreetId,
         ]);
+
+        //var_dump($bigBlind);
         
         $this->gameState->setLatestAction($bigBlind);
 
@@ -184,6 +187,8 @@ class Start extends HandStep
             $bigBlindSeat   = $this->gameState->getSeats()[1];
 
         }
+
+        //var_dump($this->gameState->getSeats());
 
         return [
             'currentDealer'  => $currentDealer,

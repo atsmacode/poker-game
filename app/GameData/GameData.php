@@ -2,82 +2,31 @@
 
 namespace Atsmacode\PokerGame\GameData;
 
-use Atsmacode\Framework\Database\Database;
-use Atsmacode\PokerGame\Models\HandStreet;
+use Atsmacode\PokerGame\Models\Hand;
+use Atsmacode\PokerGame\Models\HandStreetCard;
 use Atsmacode\PokerGame\Models\Player;
+use Atsmacode\PokerGame\Models\TableSeat;
 
-class GameData extends Database
+/**
+ * Responsible for providing the baseline data a Hand needs throught the process.
+ */
+class GameData
 {
-    public function getSeats($tableId)
+    public function __construct(
+        private Hand           $handModel,
+        private TableSeat      $tableSeatModel,
+        private HandStreetCard $handStreetCardModel,
+        private Player         $playerModel
+    ) {}
+
+    public function getSeats(int $tableId): array
     {
-        $query = sprintf("
-            SELECT
-                *
-            FROM
-                table_seats
-            WHERE
-                table_id = :table_id 
-        ");
-
-        try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':table_id', $tableId);
-
-            $results = $stmt->executeQuery();
-
-            return $results->fetchAllAssociative();
-        } catch(\Exception $e) {
-            error_log(__METHOD__ . ': ' . $e->getMessage());
-        }
+        return $this->tableSeatModel->getSeats($tableId);
     }
 
-    public function getPlayers($handId)
+    public function getPlayers(int $handId): array
     {
-        $query = sprintf("
-            SELECT
-                ts.can_continue,
-                ts.is_dealer,
-                ts.player_id,
-                ts.table_id,
-                pa.bet_amount,
-                pa.active,
-                pa.has_acted,
-                pa.big_blind,
-                pa.small_blind,
-                pa.action_id,
-                pa.hand_id,
-                pa.hand_street_id,
-                pa.id AS player_action_id,
-                ts.id AS table_seat_id,
-                s.amount AS stack,
-                a.name AS actionName,
-                p.name AS playerName
-            FROM
-                table_seats AS ts
-            LEFT JOIN
-                player_actions AS pa ON ts.id = pa.table_seat_id
-            LEFT JOIN
-                players AS p ON pa.player_id = p.id
-            LEFT JOIN
-                stacks AS s ON pa.player_id = s.player_id AND ts.table_id = s.table_id
-            LEFT JOIN
-                actions AS a ON pa.action_id = a.id
-            WHERE
-                pa.hand_id = :hand_id
-            ORDER BY
-                ts.id ASC
-        ");
-
-        try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':hand_id', $handId);
-            
-            $results = $stmt->executeQuery();
-
-            return $results->fetchAllAssociative();
-        } catch(\Exception $e) {
-            error_log(__METHOD__ . ': ' . $e->getMessage());
-        }
+        return $this->handModel->getPlayers($handId);
     }
 
     public function getWholeCards(array $players, int $handId): array
@@ -85,7 +34,7 @@ class GameData extends Database
         $wholeCards = [];
 
         foreach ($players as $player) {
-            foreach (Player::getWholeCards($handId, $player['player_id']) as $wholeCard) {
+            foreach ($this->playerModel->getWholeCards($handId, $player['player_id']) as $wholeCard) {
                 $data = [
                     'player_id'        => $wholeCard['player_id'],
                     'rank'             => $wholeCard['rank'],

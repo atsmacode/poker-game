@@ -10,21 +10,16 @@ class TableSeat extends Model
 {
     use Collection;
 
-    protected $table = 'table_seats';
+    protected     $table = 'table_seats';
     public string $name;
-    public $player_id;
+    public        $player_id;
 
     public function player()
     {
         return Player::find(['id' => $this->player_id]);
     }
 
-    public static function playerAfterDealer($handId, $dealer)
-    {
-        return (new static())->playerAfterDealerQuery($handId, $dealer);
-    }
-
-    private function playerAfterDealerQuery($handId, $dealer)
+    public function playerAfterDealer(int $handId, int $dealer): self
     {
         $query = sprintf("
             SELECT
@@ -60,12 +55,7 @@ class TableSeat extends Model
         }
     }
 
-    public static function bigBlindWins($handId)
-    {
-        return (new static())->bigBlindWinsQuery($handId);
-    }
-
-    private function bigBlindWinsQuery($handId)
+    public function bigBlindWins(int $handId): bool
     {
         $query = sprintf("
             UPDATE
@@ -93,12 +83,7 @@ class TableSeat extends Model
         }
     }
 
-    public static function getContinuingPlayerSeats($handId)
-    {
-        return (new static())->getContinuingPlayerSeatsQuery($handId);
-    }
-
-    private function getContinuingPlayerSeatsQuery($handId)
+    public function getContinuingPlayerSeats(string $handId): self
     {
         $query = sprintf("
             SELECT
@@ -129,12 +114,7 @@ class TableSeat extends Model
         }
     }
 
-    public static function getContinuingBetters($handId)
-    {
-        return (new static())->getContinuingBettersQuery($handId);
-    }
-
-    private function getContinuingBettersQuery($handId)
+    public function getContinuingBetters(string $handId): array
     {
         $raiseId = Action::RAISE_ID;
         $betId   = Action::BET_ID;
@@ -161,6 +141,30 @@ class TableSeat extends Model
             $stmt->bindParam(':raise_id', $raiseId);
             $stmt->bindParam(':bet_id', $betId);
             $stmt->bindParam(':call_id', $callId);
+
+            $results = $stmt->executeQuery();
+
+            return $results->fetchAllAssociative();
+        } catch(\Exception $e) {
+            error_log(__METHOD__ . ': ' . $e->getMessage());
+        }
+    }
+
+    public function getSeats(int $tableId): array
+    {
+        var_dump($tableId);
+        $query = sprintf("
+            SELECT
+                *
+            FROM
+                table_seats
+            WHERE
+                table_id = :table_id 
+        ");
+
+        try {
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':table_id', $tableId);
 
             $results = $stmt->executeQuery();
 

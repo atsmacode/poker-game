@@ -13,18 +13,18 @@ use Atsmacode\PokerGame\Models\TableSeat;
  */
 class NewStreet extends HandStep
 {
-    private Street $streetModel;
-
-    public function __construct(Street $streetModel)
-    {
-        $this->streetModel = $streetModel;
-    }
+    public function __construct(
+        private Street       $streetModel,
+        private TableSeat    $tableSeatModel,
+        private HandStreet   $handStreetModel,
+        private PlayerAction $playerActionModel
+    ) {}
     
     public function handle(GameState $gameState, TableSeat $currentDealer = null): GameState
     {
         $this->gameState = $gameState;
 
-        $street = HandStreet::create([
+        $street = $this->handStreetModel->create([
             'street_id' => $this->streetModel->find(['name' => $this->gameState->getGame()->streets[$this->gameState->handStreetCount()]['name']])->id,
             'hand_id'   => $this->gameState->handId()
         ]);
@@ -43,12 +43,12 @@ class NewStreet extends HandStep
 
     private function updatePlayerStatusesOnNewStreet(int $handStreetId): void
     {
-        TableSeat::find(['table_id' => $this->gameState->tableId()])
+        $this->tableSeatModel->find(['table_id' => $this->gameState->tableId()])
             ->updateBatch([
                 'can_continue' => 0
             ], 'table_id = ' . $this->gameState->tableId());
 
-        PlayerAction::find(['hand_id' => $this->gameState->handId()])
+        $this->playerActionModel->find(['hand_id' => $this->gameState->handId()])
             ->updateBatch([
                 'action_id'      => null,
                 'hand_street_id' => $handStreetId

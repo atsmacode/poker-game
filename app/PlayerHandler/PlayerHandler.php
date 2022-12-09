@@ -11,6 +11,10 @@ use Atsmacode\PokerGame\Models\TableSeat;
  */
 class PlayerHandler implements PlayerHandlerInterface
 {
+    public function __construct(
+        private TableSeat $tableSeatModel
+    ) {}
+
     public function handle(GameState $gameState): array
     {
         $this->gameState = $gameState; $playerData  = []; $actionOnGet = $this->getActionOn();
@@ -69,7 +73,7 @@ class PlayerHandler implements PlayerHandlerInterface
     private function getThePlayerActionShouldBeOnForANewStreet(array $firstActivePlayer)
     {
         $dealer            = $this->gameState->getHand()->getDealer();
-        $playerAfterDealer = TableSeat::playerAfterDealer($this->gameState->handId(), $dealer->table_seat_id);
+        $playerAfterDealer = $this->tableSeatModel->playerAfterDealer($this->gameState->handId(), $dealer->table_seat_id);
 
         if (!isset($playerAfterDealer->player_id)) { $playerAfterDealer = null; }
 
@@ -81,12 +85,12 @@ class PlayerHandler implements PlayerHandlerInterface
         if ($this->gameState->isNewStreet()) { return [Action::FOLD, Action::CHECK, Action::BET]; }
 
         /** BB is the only player that can fold / check / raise pre-flop */
-        if (count($this->gameState->getHandStreets()->content) === 1 && !$playerAction['big_blind']) {
+        if (count($this->gameState->getHandStreets()) === 1 && !$playerAction['big_blind']) {
             return [Action::FOLD, Action::CALL, Action::RAISE];
         }
 
         $latestAction      = $this->gameState->getLatestAction();
-        $continuingBetters = TableSeat::getContinuingBetters($this->gameState->getHand()->id);
+        $continuingBetters = $this->tableSeatModel->getContinuingBetters($this->gameState->getHand()->id);
 
         switch($latestAction->action_id){
             case Action::CALL['id']:

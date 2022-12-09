@@ -16,7 +16,7 @@ return [
         PDO::class
             => Atsmacode\PokerGame\Database\PdoLiveFactory::class,
         Atsmacode\PokerGame\GameData\GameData::class
-            => Atsmacode\Framework\Models\ModelFactory::class,
+            => Atsmacode\PokerGame\GameData\GameDataFactory::class,
         Atsmacode\PokerGame\GamePlay\GamePlay::class 
             => Atsmacode\PokerGame\GamePlay\GamePlayFactory::class,
         Atsmacode\PokerGame\GameState\GameState::class 
@@ -49,6 +49,8 @@ return [
             => Atsmacode\Framework\Models\ModelFactory::class,
         Atsmacode\PokerGame\Models\HandStreetCard::class
             => Atsmacode\Framework\Models\ModelFactory::class,
+        Atsmacode\PokerGame\PlayerHandler\PlayerHandler::class
+            => Atsmacode\PokerGame\PlayerHandler\PlayerHandlerFactory::class,
         Atsmacode\PokerGame\BetHandler\BetHandler::class
             => Atsmacode\PokerGame\BetHandler\BetHandlerFactory::class,
         Atsmacode\PokerGame\PotHandler\PotHandler::class

@@ -30,25 +30,35 @@ class GamePlayTest extends BaseTest
             'email' => 'player1@rrh.com'
         ]);
 
+        var_dump($this->player1->id);
+
         $this->player2 = $this->playerModel->create([
             'name' => 'Player 2',
             'email' => 'player2@rrh.com'
         ]);
+
+        var_dump($this->player2->id);
 
         $this->player3 = $this->playerModel->create([
             'name' => 'Player 3',
             'email' => 'player3@rrh.com'
         ]);
 
+        var_dump($this->player3->id);
+
         $this->tableSeatModel->create([
             'table_id' => $this->table->id,
             'player_id' => $this->player1->id
         ]);
 
+        var_dump($this->player1->id);
+
         $this->tableSeatModel->create([
             'table_id' => $this->table->id,
             'player_id' => $this->player2->id
         ]);
+
+        var_dump($this->player2->id);
 
         $this->tableSeatModel->create([
             'table_id' => $this->table->id,
@@ -68,7 +78,26 @@ class GamePlayTest extends BaseTest
     /** @test */
     public function itCanStartAGame()
     {
-        $this->gamePlay->start();
+        $response = $this->gamePlay->start();
+
+        //var_dump($response);
+
+        // The small blind was posted
+        $this->assertEquals(25, $response['players'][1]['bet_amount']);
+        $this->assertEquals('Bet', $response['players'][1]['action_name']);
+
+        // The big blind was posted
+        $this->assertEquals(50, $response['players'][2]['bet_amount']);
+        $this->assertEquals('Bet', $response['players'][2]['action_name']);
+
+        // The dealer, seat 1, has not acted yet
+        $this->assertEquals(null, $response['players'][0]['bet_amount']);
+        $this->assertEquals(null, $response['players'][0]['action_id']);
+
+        // Each player in the hand has 2 whole cards
+        foreach($response['players'] as $player){
+            $this->assertCount(2, $player['whole_cards']);
+        }
 
     }
 }
