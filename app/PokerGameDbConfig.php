@@ -2,7 +2,7 @@
 
 namespace Atsmacode\PokerGame;
 
-class PokerGameDependencyMap
+class PokerGameDbConfig
 {
     const CONFIG_REF = 'config/poker_game.php';
 
