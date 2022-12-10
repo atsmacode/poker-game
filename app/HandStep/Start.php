@@ -189,8 +189,6 @@ class Start extends HandStep
 
         }
 
-        //var_dump($this->gameState->getSeats());
-
         return [
             'currentDealer'  => $currentDealer,
             'dealer'         => $dealer,

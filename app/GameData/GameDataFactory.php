@@ -16,7 +16,7 @@ class GameDataFactory implements FactoryInterface
     {
         $handModel           = $container->get(Hand::class);
         $handStreetCardModel = $container->get(HandStreetCard::class);
-        $tableModel      = $container->get(Table::class);
+        $tableModel          = $container->get(Table::class);
         $playerModel         = $container->get(Player::class);
 
         return new GameData(

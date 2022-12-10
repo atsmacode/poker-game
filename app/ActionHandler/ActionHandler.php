@@ -2,9 +2,9 @@
 
 namespace Atsmacode\PokerGame\ActionHandler;
 
+use Atsmacode\PokerGame\BetHandler\BetHandler;
 use Atsmacode\PokerGame\GameState\GameState;
 use Atsmacode\PokerGame\Constants\Action;
-use Atsmacode\PokerGame\Helpers\BetHelper;
 use Atsmacode\PokerGame\Models\Hand;
 use Atsmacode\PokerGame\Models\PlayerAction;
 use Atsmacode\PokerGame\Models\PlayerActionLog;
@@ -12,12 +12,13 @@ use Atsmacode\PokerGame\Models\TableSeat;
 
 class ActionHandler implements ActionHandlerInterface
 {
-    public GameState $gameState;
-
-    public function __construct(GameState $gameState = null)
-    {
-        $this->gameState = $gameState;
-    }
+    public function __construct(
+        private ?GameState      $gameState,
+        private PlayerAction    $playerActions,
+        private PlayerActionLog $playerActionLogs,
+        private BetHandler      $betHandler,
+        private TableSeat       $tableSeats
+    ) {}
 
     /**
      * @param $int|null $betAmount
@@ -32,13 +33,13 @@ class ActionHandler implements ActionHandlerInterface
         int  $active,
         int  $stack
     ): GameState {
-        $playerAction = PlayerAction::find([
+        $playerAction = $this->playerActions->find([
             'player_id'      =>  $playerId,
             'table_seat_id'  =>  $tableSeatId,
             'hand_street_id' =>  $handStreetId
         ]);
 
-        BetHelper::handle($hand, $stack, $playerId, $hand->table_id, $betAmount);
+        $this->betHandler->handle($hand, $stack, $playerId, $hand->table_id, $betAmount);
 
         $playerAction->update([
             'action_id'  => $actionId,
@@ -47,7 +48,7 @@ class ActionHandler implements ActionHandlerInterface
             'updated_at' => date('Y-m-d H:i:s', time())
         ]);
 
-        PlayerActionLog::create([
+        $this->playerActionLogs->create([
             'player_status_id' => $playerAction->id,
             'bet_amount'       => $betAmount,
             'big_blind'        => $playerAction->big_blind,
@@ -83,7 +84,7 @@ class ActionHandler implements ActionHandlerInterface
                 break;
         }
 
-        TableSeat::find(['id' => $this->gameState->getLatestAction()->table_seat_id])
+        $this->tableSeats->find(['id' => $this->gameState->getLatestAction()->table_seat_id])
             ->update([
                 'can_continue' => $canContinue
             ]);
@@ -101,7 +102,7 @@ class ActionHandler implements ActionHandlerInterface
         }
 
         if(isset($canContinue)){
-            $tableSeats = TableSeat::find(['table_id' => $this->gameState->getHand()->table()->id]);
+            $tableSeats = $this->tableSeats->find(['table_id' => $this->gameState->getHand()->table()->id]);
             $tableSeats->updateBatch([
                 'can_continue' => $canContinue
             ], 'id != ' . $this->gameState->getLatestAction()->table_seat_id);

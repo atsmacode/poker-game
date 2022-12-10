@@ -55,8 +55,6 @@ class BetHandler extends Database
             'updated_at'  => date('Y-m-d H:i:s', strtotime('- 10 seconds'))
         ]);
 
-        //var_dump($smallBlind);
-
         $this->playerActionLogModel->create([
             'player_status_id' => $smallBlind->id,
             'bet_amount'       => 25.0,
@@ -89,8 +87,6 @@ class BetHandler extends Database
             'big_blind'  => 1,
             'updated_at' => date('Y-m-d H:i:s', strtotime('- 5 seconds'))
         ]);
-
-        //var_dump($bigBlind);
 
         $this->playerActionLogModel->create([
             'player_status_id' => $bigBlind->id,

@@ -54,18 +54,16 @@ class GameData
         return $wholeCards;
     }
 
-    public function getCommunityCards(array $handStreets): array
+    public function getCommunityCards(int $handId): array
     {
         $communityCards = [];
 
-        foreach ($handStreets as $street) {
-            foreach ($street->cards()->collect()->content as $streetCard) {
-                $communityCards[] = [
-                    'rankAbbreviation' => $streetCard->getCard()['rankAbbreviation'],
-                    'suit'             => $streetCard->getCard()['suit'],
-                    'suitAbbreviation' => $streetCard->getCard()['suitAbbreviation']
-                ];
-            }
+        foreach ($this->handModel->getCommunityCards($handId) as $communityCard) {
+            $communityCards[] = [
+                'rankAbbreviation' => $communityCard['rankAbbreviation'],
+                'suit'             => $communityCard['suit'],
+                'suitAbbreviation' => $communityCard['suitAbbreviation']
+            ];
         }
 
         return $communityCards;

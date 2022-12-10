@@ -59,5 +59,7 @@ return [
             => Atsmacode\PokerGame\HandStep\NewStreetFactory::class,
         Atsmacode\PokerGame\HandStep\Start::class
             => Atsmacode\PokerGame\HandStep\StartFactory::class,
+        Atsmacode\PokerGame\Factory\PlayerActionFactory::class
+            => Atsmacode\PokerGame\Factory\PlayerActionFactoryFactory::class
     ]
 ];

@@ -220,4 +220,43 @@ class Hand extends Model
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
+
+    public function getCommunityCards(int $handId = null)
+    {
+        $handId = $handId ?? $this->id;
+        $query  = sprintf("
+            SELECT
+                c.*, 
+                r.name AS 'rank',
+                r.abbreviation AS rankAbbreviation,
+                s.name AS suit,
+                s.abbreviation AS suitAbbreviation,
+                r.ranking AS ranking 
+            FROM
+                hand_street_cards AS hsc
+            LEFT JOIN
+                hand_streets AS hs ON hsc.hand_street_id = hs.id
+            LEFT JOIN
+                hands AS h ON hs.hand_id = h.id
+            LEFT JOIN
+                cards AS c ON hsc.card_id = c.id
+            LEFT OUTER JOIN 
+                ranks r ON c.rank_id = r.id
+            LEFT OUTER JOIN 
+                suits s ON c.suit_id = s.id
+            WHERE
+                h.id = :id
+        ");
+
+        try {
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':id', $handId);
+
+            $results = $stmt->executeQuery();
+
+            return $results->fetchAllAssociative();
+        } catch(\Exception $e) {
+            error_log(__METHOD__ . ': ' . $e->getMessage());
+        }
+    }
 }

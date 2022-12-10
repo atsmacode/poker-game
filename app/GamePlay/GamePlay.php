@@ -2,7 +2,6 @@
 
 namespace Atsmacode\PokerGame\GamePlay;
 
-use Atsmacode\PokerGame\Dealer\PokerDealer;
 use Atsmacode\PokerGame\Game\Game;
 use Atsmacode\PokerGame\GameState\GameState;
 use Atsmacode\PokerGame\HandStep\HandStep;
@@ -25,6 +24,7 @@ class GamePlay
         private NewStreet     $newStreet,
         private Showdown      $showdown,
         private PlayerHandler $playerHandler,
+        private TableSeat     $tableSeats,
                 array         $deck = null
     ) {
         $this->gameState->setGame($game);
@@ -62,7 +62,7 @@ class GamePlay
         if ($this->theLastHandWasCompleted()) { return $this->response($this->start, $currentDealer); }
 
         if ($this->theBigBlindIsTheOnlyActivePlayerRemainingPreFlop()) {
-            TableSeat::bigBlindWins($this->gameState->handId());
+            $this->tableSeats->bigBlindWins($this->gameState->handId());
 
             return $this->response($this->showdown);
         }

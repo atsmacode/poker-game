@@ -37,6 +37,32 @@ class GamePlayTest extends BaseTest
         foreach($response['players'] as $player){
             $this->assertCount(2, $player['whole_cards']);
         }
+    }
 
+    /** @test */
+    public function itCanDealANewStreet() 
+    {
+        $this->gamePlay->start();
+
+        $this->executeActionsToContinue();
+
+        $this->gameState->setPlayers();
+
+        $response = $this->gamePlay->play($this->gameState);
+
+        $this->assertCount(2, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
+        $this->assertCount(3, $response['communityCards']);
+    }
+
+    protected function executeActionsToContinue()
+    {
+        $this->givenPlayerOneCalls();
+        $this->givenPlayerOneCanContinue();
+
+        $this->givenPlayerTwoFolds();
+        $this->givenPlayerTwoCanNotContinue();
+
+        $this->givenPlayerThreeChecks();
+        $this->givenPlayerThreeCanContinue();
     }
 }

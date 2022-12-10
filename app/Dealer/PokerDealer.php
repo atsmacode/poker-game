@@ -40,7 +40,7 @@ class PokerDealer extends Dealer
             $cardId = $this->pickCard()->getCard()['id'];
 
             $this->handStreetCardModel->create([
-                'card_id' => $cardId,
+                'card_id'        => $cardId,
                 'hand_street_id' => $handStreet->id
             ]);
 
@@ -61,7 +61,7 @@ class PokerDealer extends Dealer
         $cardId = $this->pickCard($rank, $suit)->getCard()['id'];
 
         $this->handStreetCardModel->create([
-            'card_id' => $cardId,
+            'card_id'        => $cardId,
             'hand_street_id' => $handStreet->id
         ]);
 

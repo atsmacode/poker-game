@@ -32,16 +32,14 @@ class GameState
         private PokerDealer $pokerDealer,
         private ?Hand       $hand
     ) {
-        if ($hand) {
-            $this->initiate($hand);
-        }
+        if ($hand) { $this->initiate($hand); }
     }
 
     public function initiate(Hand $hand)
     {
         $this->hand        = $hand;
         $this->tableId     = $hand->table_id;
-        $this->handId      = $hand->id;
+        $this->handId      = (int) $hand->id;
         $this->seats       = $this->gameData->getSeats($this->tableId);
         $this->handStreets = $this->hand->streets();
     }
@@ -50,9 +48,7 @@ class GameState
     {
         $key = array_search($seatId, array_column($this->seats, 'id'));
 
-        if ($key !== false) {
-            return $this->seats[$key];
-        }
+        if ($key !== false) { return $this->seats[$key]; }
 
         return false;
     }
@@ -61,9 +57,7 @@ class GameState
     {
         $key = array_search(1, array_column($this->seats, 'is_dealer'));
 
-        if ($key !== false) {
-            return $this->seats[$key];
-        }
+        if ($key !== false) { return $this->seats[$key]; }
 
         return false;
     }
@@ -72,9 +66,7 @@ class GameState
     {
         $key = array_search($seatId, array_column($this->actions, 'table_seat_id'));
 
-        if ($key !== false) {
-            return $this->actions[$key];
-        }
+        if ($key !== false) { return $this->actions[$key]; }
 
         return false;
     }
@@ -165,7 +157,7 @@ class GameState
 
     public function setCommunityCards(): self
     {
-        $this->communityCards = $this->gameData->getCommunityCards($this->getHandStreets());
+        $this->communityCards = $this->gameData->getCommunityCards($this->handId);
 
         return $this;
     }

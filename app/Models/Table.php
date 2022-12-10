@@ -13,9 +13,10 @@ class Table extends Model
     public        $content;
     public        $id;
 
-    public function getSeats(): array
+    public function getSeats(int $tableId = null): array
     {
-        $query = sprintf("
+        $tableId = $tableId ?? $this->id;
+        $query   = sprintf("
             SELECT
                 *
             FROM
@@ -26,7 +27,7 @@ class Table extends Model
 
         try {
             $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':table_id', $this->id);
+            $stmt->bindParam(':table_id', $tableId);
 
             $results = $stmt->executeQuery();
 
