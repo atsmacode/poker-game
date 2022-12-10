@@ -102,7 +102,7 @@ class ActionHandler implements ActionHandlerInterface
         }
 
         if(isset($canContinue)){
-            $tableSeats = $this->tableSeats->find(['table_id' => $this->gameState->getHand()->table()->id]);
+            $tableSeats = $this->tableSeats->find(['table_id' => $this->gameState->tableId()]);
             $tableSeats->updateBatch([
                 'can_continue' => $canContinue
             ], 'id != ' . $this->gameState->getLatestAction()->table_seat_id);
