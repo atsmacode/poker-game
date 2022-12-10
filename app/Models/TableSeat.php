@@ -14,11 +14,6 @@ class TableSeat extends Model
     public string $name;
     public        $player_id;
 
-    public function player()
-    {
-        return Player::find(['id' => $this->player_id]);
-    }
-
     public function playerAfterDealer(int $handId, int $dealer): self
     {
         $query = sprintf("
@@ -141,30 +136,6 @@ class TableSeat extends Model
             $stmt->bindParam(':raise_id', $raiseId);
             $stmt->bindParam(':bet_id', $betId);
             $stmt->bindParam(':call_id', $callId);
-
-            $results = $stmt->executeQuery();
-
-            return $results->fetchAllAssociative();
-        } catch(\Exception $e) {
-            error_log(__METHOD__ . ': ' . $e->getMessage());
-        }
-    }
-
-    public function getSeats(int $tableId): array
-    {
-        var_dump($tableId);
-        $query = sprintf("
-            SELECT
-                *
-            FROM
-                table_seats
-            WHERE
-                table_id = :table_id 
-        ");
-
-        try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':table_id', $tableId);
 
             $results = $stmt->executeQuery();
 

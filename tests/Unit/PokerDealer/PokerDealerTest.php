@@ -5,21 +5,24 @@ namespace Atsmacode\PokerGame\Tests\Unit\PokerDealer;
 use Atsmacode\PokerGame\Dealer\PokerDealer;
 use Atsmacode\CardGames\Constants\Card;
 use Atsmacode\CardGames\Factory\CardFactory;
-use Atsmacode\PokerGame\Models\Hand;
 use Atsmacode\PokerGame\Models\HandStreet;
-use Atsmacode\PokerGame\Models\Player;
 use Atsmacode\PokerGame\Models\Street;
-use Atsmacode\PokerGame\Models\Table;
-use Atsmacode\PokerGame\Models\TableSeat;
 use Atsmacode\PokerGame\Tests\BaseTest;
+use Atsmacode\PokerGame\Tests\Unit\HasGamePlay;
 
 class PokerDealerTest extends BaseTest
 {
+    use HasGamePlay;
+
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->dealer = new PokerDealer();
+        $this->isThreeHanded();
+
+        $this->dealer          = $this->container->get(PokerDealer::class);
+        $this->handStreetModel = $this->container->get(HandStreet::class);
+        $this->streetModel     = $this->container->get(Street::class);
     }
 
     /**
@@ -30,47 +33,14 @@ class PokerDealerTest extends BaseTest
     public function it_can_deal_cards_to_multiple_players_at_a_table()
     {
 
-        $table = Table::create(['name' => 'Test Table', 'seats' => 3]);
-        $hand  = Hand::create(['table_id' => $table->id]);
-
-        $player1 = Player::create([
-            'name' => 'Player 1',
-            'email' => 'player1@rrh.com'
-        ]);
-
-        $player2 = Player::create([
-            'name' => 'Player 2',
-            'email' => 'player2@rrh.com'
-        ]);
-
-        $player3 = Player::create([
-            'name' => 'Player 3',
-            'email' => 'player3@rrh.com'
-        ]);
-
-        TableSeat::create([
-            'table_id' => $table->id,
-            'player_id' => $player1->id
-        ]);
-
-        TableSeat::create([
-            'table_id' => $table->id,
-            'player_id' => $player2->id
-        ]);
-
-        TableSeat::create([
-            'table_id' => $table->id,
-            'player_id' => $player3->id
-        ]);
-
-        foreach($table->players()->collect()->content as $player){
-            $this->assertCount(0, $player->wholeCards()->content);
+        foreach($this->table->getSeats() as $tableSeat){
+            $this->assertCount(0, $this->playerModel->getWholeCards($this->hand->id, $tableSeat['player_id']));
         }
 
-        $this->dealer->setDeck()->shuffle()->dealTo($table->seats()->content, 1, $hand);
+        $this->dealer->setDeck()->shuffle()->dealTo($this->table->getSeats(), 1, $this->hand->id);
 
-        foreach($table->players()->collect()->content as $player){
-            $this->assertCount(1, $player->wholeCards()->content);
+        foreach($this->table->getSeats() as $tableSeat){
+            $this->assertCount(1, $this->playerModel->getWholeCards($this->hand->id, $tableSeat['player_id']));
         }
     }
 
@@ -81,9 +51,9 @@ class PokerDealerTest extends BaseTest
     public function it_can_deal_a_street_card()
     {
 
-        $handStreet = HandStreet::create([
-            'street_id' => Street::find(['name' => 'Flop'])->id,
-            'hand_id' => Hand::create(['table_id' => 1])->id
+        $handStreet = $this->handStreetModel->create([
+            'street_id' => $this->streetModel->find(['name' => 'Flop'])->id,
+            'hand_id'   => $this->handModel->create(['table_id' => $this->table->id])->id
         ]);
 
         $this->dealer->setDeck()->dealStreetCards(
@@ -91,7 +61,7 @@ class PokerDealerTest extends BaseTest
             1
         );
 
-        $this->assertCount(1, $handStreet->cards()->content);
+        $this->assertCount(1, $handStreet->cards());
     }
 
     /**
@@ -100,15 +70,15 @@ class PokerDealerTest extends BaseTest
      */
     public function it_can_deal_a_specific_street_card()
     {
-        $handStreet = HandStreet::create([
-            'street_id' => Street::find(['name' => 'Flop'])->id,
-            'hand_id'   => Hand::create(['table_id' => 1])->id
+        $handStreet = $this->handStreetModel->create([
+            'street_id' => $this->streetModel->find(['name' => 'Flop'])->id,
+            'hand_id'   => $this->handModel->create(['table_id' => $this->table->id])->id
         ]);
 
         $card = CardFactory::create(Card::ACE_HEARTS);
 
         $this->dealer->setDeck()->dealThisStreetCard($card['rank'], $card['suit'], $handStreet);
 
-        $this->assertNotEmpty($handStreet->cards()->collect()->searchMultiple('card_id', $card['id']));
+        $this->assertContains($card['id'], array_column($handStreet->cards(), 'card_id'));
     }
 }

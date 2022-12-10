@@ -1,7 +1,5 @@
 <?php
 
-use Atsmacode\PokerGame\Dealer\PokerDealer;
-
 return [
     'invokables' => [
         Atsmacode\PokerGame\HandStep\Showdown::class,
@@ -48,6 +46,8 @@ return [
         Atsmacode\PokerGame\Models\WholeCard::class
             => Atsmacode\Framework\Models\ModelFactory::class,
         Atsmacode\PokerGame\Models\HandStreetCard::class
+            => Atsmacode\Framework\Models\ModelFactory::class,
+        Atsmacode\PokerGame\Models\HandType::class
             => Atsmacode\Framework\Models\ModelFactory::class,
         Atsmacode\PokerGame\PlayerHandler\PlayerHandler::class
             => Atsmacode\PokerGame\PlayerHandler\PlayerHandlerFactory::class,

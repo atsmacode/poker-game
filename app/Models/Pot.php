@@ -11,14 +11,4 @@ class Pot extends Model
     public $table = 'pots';
     public string $name;
     public $id;
-
-    public function hand()
-    {
-        return Hand::find(['id' => $this->hand_id]);
-    }
-
-    public function table()
-    {
-        return $this->hand()->table();
-    }
 }

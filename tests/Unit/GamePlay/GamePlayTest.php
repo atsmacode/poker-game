@@ -2,85 +2,24 @@
 
 namespace Atsmacode\PokerGame\Tests\Unit\GamePlay;
 
-use Atsmacode\PokerGame\Game\PotLimitHoldEm;
-use Atsmacode\PokerGame\GamePlay\GamePlay;
-use Atsmacode\PokerGame\GameState\GameState;
-use Atsmacode\PokerGame\Models\Hand;
-use Atsmacode\PokerGame\Models\Player;
-use Atsmacode\PokerGame\Models\Table;
-use Atsmacode\PokerGame\Models\TableSeat;
 use Atsmacode\PokerGame\Tests\BaseTest;
+use Atsmacode\PokerGame\Tests\Unit\HasGamePlay;
 
 class GamePlayTest extends BaseTest
 {
+    use HasGamePlay;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->tableModel     = $this->container->get(Table::class);
-        $this->handModel      = $this->container->get(Hand::class);
-        $this->playerModel    = $this->container->get(Player::class);
-        $this->tableSeatModel = $this->container->get(TableSeat::class);
-
-        $this->table = $this->tableModel->create(['name' => 'Test Table', 'seats' => 3]);
-        $this->hand  = $this->handModel->create(['table_id' => $this->table->id]);
-
-        $this->player1 = $this->playerModel->create([
-            'name' => 'Player 1',
-            'email' => 'player1@rrh.com'
-        ]);
-
-        var_dump($this->player1->id);
-
-        $this->player2 = $this->playerModel->create([
-            'name' => 'Player 2',
-            'email' => 'player2@rrh.com'
-        ]);
-
-        var_dump($this->player2->id);
-
-        $this->player3 = $this->playerModel->create([
-            'name' => 'Player 3',
-            'email' => 'player3@rrh.com'
-        ]);
-
-        var_dump($this->player3->id);
-
-        $this->tableSeatModel->create([
-            'table_id' => $this->table->id,
-            'player_id' => $this->player1->id
-        ]);
-
-        var_dump($this->player1->id);
-
-        $this->tableSeatModel->create([
-            'table_id' => $this->table->id,
-            'player_id' => $this->player2->id
-        ]);
-
-        var_dump($this->player2->id);
-
-        $this->tableSeatModel->create([
-            'table_id' => $this->table->id,
-            'player_id' => $this->player3->id
-        ]);
-
-        $this->gameState = $this->container->build(GameState::class, [
-            'hand' => $this->hand,
-        ]);
-        
-        $this->gamePlay  = $this->container->build(GamePlay::class, [
-            'game'      => $this->container->get(PotLimitHoldEm::class),
-            'gameState' => $this->gameState,
-        ]);
+        $this->isThreeHanded();
     }
 
     /** @test */
     public function itCanStartAGame()
     {
         $response = $this->gamePlay->start();
-
-        //var_dump($response);
 
         // The small blind was posted
         $this->assertEquals(25, $response['players'][1]['bet_amount']);

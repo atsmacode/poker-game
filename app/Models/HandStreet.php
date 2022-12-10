@@ -14,15 +14,28 @@ class HandStreet extends Model
 
     public function cards()
     {
-        return HandStreetCard::find(['hand_street_id' => $this->id]);
+       $query = sprintf("
+            SELECT
+                *
+            FROM
+                hand_street_cards
+            WHERE
+                hand_street_id = :hand_street_id
+        ");
+
+        try {
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':hand_street_id', $this->id);
+
+            $results = $stmt->executeQuery();
+            
+            return $results->fetchAllAssociative();
+        } catch(\Exception $e) {
+            error_log(__METHOD__ . ': ' . $e->getMessage());
+        }
     }
 
-    public static function getStreetCards($handId, $streetId)
-    {
-        return (new static())->getStreetCardsQuery($handId, $streetId);
-    }
-
-    private function getStreetCardsQuery($handId, $streetId)
+    public function getStreetCards($handId, $streetId)
     {
         $query = sprintf("
             SELECT

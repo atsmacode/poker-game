@@ -12,19 +12,27 @@ class Player extends Model
     protected $table = 'players';
     public $id;
 
-    public function wholeCards()
-    {
-        return WholeCard::find(['player_id' => $this->id]);
-    }
-
-    public function actions()
-    {
-        return PlayerAction::find(['player_id' => $this->id]);
-    }
-
     public function stacks()
     {
-        return Stack::find(['player_id' => $this->id]);
+        $query = sprintf("
+            SELECT
+                *
+            FROM
+                stacks
+            WHERE
+                player_id = :player_id
+        ");
+
+        try {
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':player_id', $this->id);
+
+            $results = $stmt->executeQuery();
+
+            return $results->fetchAllAssociative();
+        } catch(\Exception $e) {
+            error_log(__METHOD__ . ': ' . $e->getMessage());
+        }
     }
 
     public function getWholeCards(int $handId, int $playerId)

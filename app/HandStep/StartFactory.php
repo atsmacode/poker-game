@@ -23,6 +23,7 @@ class StartFactory implements FactoryInterface
         $betHandler        = $container->get(BetHandler::class);
 
         return new Start(
+            $container,
             $streetModel,
             $handStreetModel,
             $playerActionModel,

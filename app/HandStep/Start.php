@@ -9,6 +9,7 @@ use Atsmacode\PokerGame\Models\PlayerAction;
 use Atsmacode\PokerGame\Models\Stack;
 use Atsmacode\PokerGame\Models\Street;
 use Atsmacode\PokerGame\Models\TableSeat;
+use Psr\Container\ContainerInterface;
 
 /**
  * Responsible for the actions required to start a new hand.
@@ -16,12 +17,13 @@ use Atsmacode\PokerGame\Models\TableSeat;
 class Start extends HandStep
 {
     public function __construct(
-        private Street       $streetModel,
-        private HandStreet   $handStreetModel,
-        private PlayerAction $playerActionModel,
-        private Stack        $stackModel,
-        private TableSeat    $tableSeatModel,
-        private BetHandler   $betHandler
+        private ContainerInterface $container,
+        private Street             $streetModel,
+        private HandStreet         $handStreetModel,
+        private PlayerAction       $playerActionModel,
+        private Stack              $stackModel,
+        private TableSeat          $tableSeatModel,
+        private BetHandler         $betHandler
     ) {}
     
     public function handle(GameState $gameState, TableSeat $currentDealer = null): GameState
@@ -36,7 +38,7 @@ class Start extends HandStep
             $this->gameState->getGameDealer()->dealTo(
                 $this->gameState->getSeats(),
                 $this->gameState->getGame()->streets[0]['whole_cards'],
-                $this->gameState->getHand(),
+                $this->gameState->getHand()->id,
             );
         }
 
@@ -112,27 +114,26 @@ class Start extends HandStep
             'hand_id' => $this->gameState->handId()
         ])->id;
 
-        $smallBlind = $this->playerActionModel->find([
-            'player_id'      => $smallBlindSeat['player_id'],
-            'table_seat_id'  => $smallBlindSeat['id'],
-            'hand_street_id' => $handStreetId,
-        ]);
-
-        //var_dump($smallBlind);
-
-        $bigBlind = $this->playerActionModel->find([
-            'player_id'      => $bigBlindSeat['player_id'],
-            'table_seat_id'  => $bigBlindSeat['id'],
-            'hand_street_id' => $handStreetId,
-        ]);
-
-        //var_dump($bigBlind);
+        $smallBlind = $this->findPlayerAction($smallBlindSeat['player_id'], $smallBlindSeat['id'], $handStreetId); 
+        $bigBlind   = $this->findPlayerAction($bigBlindSeat['player_id'], $bigBlindSeat['id'], $handStreetId); 
         
         $this->gameState->setLatestAction($bigBlind);
 
         $this->betHandler->postBlinds($this->gameState->getHand(), $smallBlind, $bigBlind, $this->gameState);
 
         return $this;
+    }
+
+    /** Needed a way to create unique instances of the model in the container */
+    private function findPlayerAction(int $playerId, int $tableSeatId, int $handStreetId)
+    {
+        $playerActionModel = $this->container->build(PlayerAction::class);
+
+        return $playerActionModel->find([
+            'player_id'      => $playerId,
+            'table_seat_id'  => $tableSeatId,
+            'hand_street_id' => $handStreetId,
+        ]);
     }
 
     protected function noDealerIsSetOrThereIsNoSeatAfterTheCurrentDealer($currentDealer)

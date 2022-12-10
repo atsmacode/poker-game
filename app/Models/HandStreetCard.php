@@ -13,11 +13,6 @@ class HandStreetCard extends Model
 
     public function getCard()
     {
-        return $this->getCardQuery();
-    }
-
-    private function getCardQuery()
-    {
         $query = sprintf("
             SELECT
                 c.*, 

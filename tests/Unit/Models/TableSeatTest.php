@@ -2,63 +2,17 @@
 
 namespace Atsmacode\PokerGame\Tests\Unit;
 
-use Atsmacode\PokerGame\Game\PotLimitHoldEm;
-use Atsmacode\PokerGame\GamePlay\GamePlay;
-use Atsmacode\PokerGame\GameState\GameState;
-use Atsmacode\PokerGame\Models\Hand;
-use Atsmacode\PokerGame\Models\Player;
-use Atsmacode\PokerGame\Models\Table;
-use Atsmacode\PokerGame\Models\TableSeat;
 use Atsmacode\PokerGame\Tests\BaseTest;
 
 class TableSeatTest extends BaseTest
 {
+    use HasGamePlay;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->table = Table::create(['name' => 'Test Table', 'seats' => 3]);
-        $this->hand  = Hand::create(['table_id' => $this->table->id]);
-
-        $this->player1 = Player::create([
-            'name' => 'Player 1',
-            'email' => 'player1@rrh.com'
-        ]);
-
-        $this->player2 = Player::create([
-            'name' => 'Player 2',
-            'email' => 'player2@rrh.com'
-        ]);
-
-        $this->player3 = Player::create([
-            'name' => 'Player 3',
-            'email' => 'player3@rrh.com'
-        ]);
-
-        TableSeat::create([
-            'table_id' => $this->table->id,
-            'player_id' => $this->player1->id
-        ]);
-
-        TableSeat::create([
-            'table_id' => $this->table->id,
-            'player_id' => $this->player2->id
-        ]);
-
-        TableSeat::create([
-            'table_id' => $this->table->id,
-            'player_id' => $this->player3->id
-        ]);
-
-        $this->gameState = $this->container->build(GameState::class, [
-            'hand' => $this->hand,
-        ]);
-        
-        $this->gamePlay  = $this->container->build(GamePlay::class, [
-            'game'      => $this->container->get(PotLimitHoldEm::class),
-            'gameState' => $this->gameState,
-        ]);
+        $this->isThreeHanded();
     }
 
     /**
@@ -67,7 +21,7 @@ class TableSeatTest extends BaseTest
      */
     public function a_table_seat_can_be_updated()
     {
-        $tableSeat = TableSeat::find(['id' => $this->gameState->getSeats()[0]['id']]);
+        $tableSeat = $this->tableSeatModel->find(['id' => $this->gameState->getSeats()[0]['id']]);
 
         $this->assertEquals(0, $tableSeat->can_continue);
 
@@ -82,11 +36,11 @@ class TableSeatTest extends BaseTest
      */
     public function it_can_select_first_active_player_after_dealer()
     {
-        $this->gamePlay->start(TableSeat::find([
+        $this->gamePlay->start($this->tableSeatModel->find([
             'id' => $this->gameState->getSeats()[0]['id']
         ]));
 
-        $tableSeat = TableSeat::playerAfterDealer(
+        $tableSeat = $this->tableSeatModel->playerAfterDealer(
             $this->gameState->handId(),
             $this->gameState->getSeats()[0]['id']
         );

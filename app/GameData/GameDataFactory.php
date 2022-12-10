@@ -6,7 +6,7 @@ use Atsmacode\PokerGame\GameData\GameData;
 use Atsmacode\PokerGame\Models\Hand;
 use Atsmacode\PokerGame\Models\HandStreetCard;
 use Atsmacode\PokerGame\Models\Player;
-use Atsmacode\PokerGame\Models\TableSeat;
+use Atsmacode\PokerGame\Models\Table;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 
@@ -16,12 +16,12 @@ class GameDataFactory implements FactoryInterface
     {
         $handModel           = $container->get(Hand::class);
         $handStreetCardModel = $container->get(HandStreetCard::class);
-        $tableSeatModel      = $container->get(TableSeat::class);
+        $tableModel      = $container->get(Table::class);
         $playerModel         = $container->get(Player::class);
 
         return new GameData(
             $handModel,
-            $tableSeatModel,
+            $tableModel,
             $handStreetCardModel,
             $playerModel
         );

@@ -8,25 +8,31 @@ class Table extends Model
 {
     use Collection;
 
-    protected $table = 'tables';
+    protected     $table = 'tables';
     public string $name;
-    public $content;
-    public $id;
+    public        $content;
+    public        $id;
 
-    public function seats()
+    public function getSeats(): array
     {
-        return TableSeat::find(['table_id' => $this->id]);
-    }
+        $query = sprintf("
+            SELECT
+                *
+            FROM
+                table_seats
+            WHERE
+                table_id = :table_id 
+        ");
 
-    public function players()
-    {
-        $players = new Player([]);
+        try {
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':table_id', $this->id);
 
-        foreach($this->seats()->collect()->content as $seat){
-            $players->content[] = $seat->player();
+            $results = $stmt->executeQuery();
+
+            return $results->fetchAllAssociative();
+        } catch(\Exception $e) {
+            error_log(__METHOD__ . ': ' . $e->getMessage());
         }
-
-        return $players;
     }
-
 }

@@ -6,13 +6,22 @@ use Atsmacode\PokerGame\Models\Player;
 use Atsmacode\PokerGame\Models\Stack;
 use Atsmacode\PokerGame\Models\Table;
 use Atsmacode\PokerGame\Tests\BaseTest;
+use Atsmacode\PokerGame\Tests\Unit\HasGamePlay;
 
 class StackTest extends BaseTest
 {
+    use HasGamePlay;
 
     public function setUp(): void
     {
         parent::setUp();
+
+        $this->stackModel  = $this->container->get(Stack::class);
+        $this->tableModel  = $this->container->get(Table::class);
+        $this->playerModel = $this->container->get(Player::class);
+
+        $this->table   = $this->tableModel->create(['name' => 'Test Table', 'seats' => 1]);
+        $this->player1 = $this->createPlayer(1);
     }
 
     /**
@@ -21,16 +30,12 @@ class StackTest extends BaseTest
      */
     public function a_player_can_have_a_stack()
     {
-        $table = Table::find(['id' => 1]);
-
-        $player = Player::find(['id' => 1]);
-
-        $stack = Stack::create([
+        $stack = $this->stackModel->create([
             'amount' => 1000,
-            'table_id' => $table->id,
-            'player_id' => $player->id
+            'table_id' => $this->table->id,
+            'player_id' => $this->player1->id
         ]);
 
-        $this->assertNotEmpty($player->stacks()->collect()->searchMultiple('id', $stack->id));
+        $this->assertContains($stack->id, array_column($this->player1->stacks(), 'id'));
     }
 }

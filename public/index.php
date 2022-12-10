@@ -8,4 +8,4 @@ $GLOBALS['THE_ROOT'] = '../';
 require('../vendor/autoload.php');
 require('../config/container.php');
 
-var_dump($serviceManager->get(Connection::class));
+//dump($serviceManager->get(Connection::class));

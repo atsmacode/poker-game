@@ -13,17 +13,19 @@ class PokerDealer extends Dealer
         private HandStreetCard $handStreetCardModel
     ) {}
 
-    public function dealTo(array $players, int $cardCount, $hand = null)
+    public function dealTo(array $players, int $cardCount, ?int $handId)
     {
         $dealtCards = 0;
+
         while($dealtCards < $cardCount){
             foreach($players as $player){
                 $this->wholeCardModel->create([
                     'player_id' => $player['player_id'],
                     'card_id'   => $this->pickCard()->getCard()['id'],
-                    'hand_id'   => $hand ? $hand->id : null
+                    'hand_id'   => $handId ?? null
                 ]);
             }
+
             $dealtCards++;
         }
 

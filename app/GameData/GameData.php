@@ -5,7 +5,7 @@ namespace Atsmacode\PokerGame\GameData;
 use Atsmacode\PokerGame\Models\Hand;
 use Atsmacode\PokerGame\Models\HandStreetCard;
 use Atsmacode\PokerGame\Models\Player;
-use Atsmacode\PokerGame\Models\TableSeat;
+use Atsmacode\PokerGame\Models\Table;
 
 /**
  * Responsible for providing the baseline data a Hand needs throught the process.
@@ -14,14 +14,14 @@ class GameData
 {
     public function __construct(
         private Hand           $handModel,
-        private TableSeat      $tableSeatModel,
+        private Table          $tableModel,
         private HandStreetCard $handStreetCardModel,
         private Player         $playerModel
     ) {}
 
     public function getSeats(int $tableId): array
     {
-        return $this->tableSeatModel->getSeats($tableId);
+        return $this->tableModel->getSeats($tableId);
     }
 
     public function getPlayers(int $handId): array
