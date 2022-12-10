@@ -91,11 +91,12 @@ class PlayerHandler implements PlayerHandlerInterface
 
         $latestAction      = $this->gameState->getLatestAction();
         $continuingBetters = $this->tableSeatModel->getContinuingBetters($this->gameState->getHand()->id);
+        $playerActions     = $this->gameState->getPlayers();
 
         switch($latestAction->action_id){
             case Action::CALL['id']:
                 /** BB can only check if there were no raises before the latest call action. */
-                if ($playerAction['big_blind'] && !$this->gameState->getHand()->actions()->search('action_id', Action::RAISE['id'])) {
+                if ($playerAction['big_blind'] && !in_array(Action::RAISE['id'], array_column($playerActions, 'action_id'))) {
                     return [Action::FOLD, Action::CHECK, Action::RAISE];
                 } else {
                     return [Action::FOLD, Action::CALL, Action::RAISE];
