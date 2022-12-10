@@ -93,12 +93,7 @@ class Hand extends Model
         }
     }
 
-    public static function latest()
-    {
-        return (new static())->latestQuery();
-    }
-
-    private function latestQuery()
+    public function latest()
     {
         $query = sprintf("
             SELECT * FROM hands ORDER BY id DESC LIMIT 1
