@@ -2,18 +2,13 @@
 
 namespace Atsmacode\PokerGame;
 
-use Atsmacode\Framework\ConfigProvider;
-use Laminas\ConfigAggregator\ConfigAggregator;
-
-class PokerGameConfigProvider extends ConfigProvider
+class PokerGameConfigProvider
 {
-    public function get()
+    public function get(string $rootDir = null): array
     {
-        $aggregator = new ConfigAggregator([
-            ConfigDb::class,
-            DependencyConfig::class
-        ]);
+        $dbConfig         = require($rootDir . 'config/poker_game.php');
+        $dependencyConfig = require($rootDir . 'config/dependencies.php');
 
-        return $aggregator->getMergedConfig(); 
+        return array_merge($dbConfig['poker_game'], $dependencyConfig); 
     }
 }
