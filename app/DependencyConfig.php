@@ -18,7 +18,7 @@ class DependencyConfig
                         => \Atsmacode\PokerGame\PokerGameConfigProviderFactory::class,
                     \Atsmacode\Framework\Database\ConnectionInterface::class
                         => \Atsmacode\PokerGame\Database\DbalLiveFactory::class,
-                    PDO::class
+                    \PDO::class
                         => \Atsmacode\PokerGame\Database\PdoLiveFactory::class,
                     \Atsmacode\PokerGame\Dealer\PokerDealer::class
                         => \Atsmacode\PokerGame\Dealer\PokerDealerFactory::class,
