@@ -3,6 +3,7 @@
 namespace Atsmacode\PokerGame\Tests;
 
 use Atsmacode\Framework\Database\ConnectionInterface;
+use Atsmacode\PokerGame\ActionHandler\ActionHandler;
 use Atsmacode\PokerGame\Database\DbalTestFactory;
 use Atsmacode\PokerGame\Dealer\PokerDealer;
 use Atsmacode\PokerGame\Factory\PlayerActionFactory;
@@ -36,5 +37,6 @@ abstract class BaseTest extends TestCase
         $this->wholeCardModel      = $this->container->build(WholeCard::class);
         $this->streetModel         = $this->container->build(Street::class);
         $this->pokerDealer         = $this->container->build(PokerDealer::class);
+        $this->actionHandler       = $this->container->build(ActionHandler::class);
     }
 }

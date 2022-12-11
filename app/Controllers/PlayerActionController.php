@@ -5,6 +5,7 @@ namespace Atsmacode\PokerGame\Controllers;
 use Atsmacode\PokerGame\ActionHandler\ActionHandler;
 use Atsmacode\PokerGame\GamePlay\GamePlay;
 use Atsmacode\PokerGame\Models\Hand;
+use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\ServiceManager\ServiceManager;
 
 abstract class PlayerActionController
@@ -20,7 +21,7 @@ abstract class PlayerActionController
         ActionHandler $actionHandler
     ) {
         $this->actionHandler = $actionHandler;
-        $this->handModel = $container->get(Hand::class);
+        $this->handModel     = $container->get(Hand::class);
     }
 
     public function action()
@@ -43,14 +44,15 @@ abstract class PlayerActionController
 
         $gamePlayService = $this->container->build(GamePlay::class, [
             'game'      => $this->container->get($this->game),
-            'gameState' => $gameState
+            'gameState' => $gameState,
+            'deck'      => $requestBody['deck'],
         ]);
         $gamePlay = $gamePlayService->play($gameState);
 
-        if (!isset($GLOBALS['dev'])) {
-            header("Content-Type: application/json");
-            http_response_code(200);
-        }
+        // if (!isset($GLOBALS['dev'])) {
+        //     header("Content-Type: application/json");
+        //     http_response_code(200);
+        // }
 
         $responseBody = [
             'deck'           => $gamePlay['deck'],
@@ -61,10 +63,12 @@ abstract class PlayerActionController
         ];
 
         /** @todo Remove all isset($dev)s */
-        if (isset($GLOBALS['dev'])) {
-            return json_encode(['body' => $responseBody]);
-        } else {
-            echo json_encode(['body' => $responseBody]);
-        }
+        // if (isset($GLOBALS['dev'])) {
+        //     return json_encode(['body' => $responseBody]);
+        // } else {
+        //     echo json_encode(['body' => $responseBody]);
+        // }
+
+        return new JsonResponse($responseBody);
     }
 }

@@ -51,7 +51,7 @@ trait HasGamePlay
             'player_id' => $this->player2->id
         ]);
 
-        $this->tableSeatThree =$this->tableSeatModel->create([
+        $this->tableSeatThree = $this->tableSeatModel->create([
             'table_id'  => $this->table->id,
             'player_id' => $this->player3->id
         ]);

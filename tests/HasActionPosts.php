@@ -7,11 +7,12 @@ use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\PlayerActionController as Pot
 
 trait HasActionPosts
 {
-    private function jsonResponse(): array
+    private function jsonResponse()
     {
         $response = (new PotLimitHoldEmPlayerActionController($this->container, $this->actionHandler))->action();
 
-        return json_decode($response, true)['body'];
+        //var_dump($response->getBody()->getContents());
+        return $response->getBody()->getContents();
     }
 
     private function setPost()
@@ -94,7 +95,7 @@ trait HasActionPosts
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player3->id,
             'table_seat_id'  => $this->gameState->getSeats()[2]['id'],
-            'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()->slice(0, 1)->id,
+            'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()[0]['id'],
             'action_id'      => Action::CHECK_ID,
             'bet_amount'     => null,
             'active'         => 1,

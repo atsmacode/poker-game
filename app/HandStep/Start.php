@@ -68,7 +68,7 @@ class Start extends HandStep
 
         foreach($this->gameState->getSeats() as $seat){
             /** Looks like the count() check was added as there's only 1 table being handled. */
-            $playerTableStack = $this->stackModel->find(['player_id' => $seat['player_id'], 'table_id'  => $this->gameState->tableId()]);
+            $playerTableStack = $this->findPlayerStack($seat['player_id'], $this->gameState->tableId());
 
             if (0 === count($playerTableStack->content)) {
                 $tableStacks[$seat['player_id']] = $this->stackModel->create([
@@ -133,6 +133,17 @@ class Start extends HandStep
             'player_id'      => $playerId,
             'table_seat_id'  => $tableSeatId,
             'hand_street_id' => $handStreetId,
+        ]);
+    }
+
+    /** Needed a way to create unique instances of the model in the container */
+    private function findPlayerStack(int $playerId, int $tableId)
+    {
+        $stackModel = $this->container->build(Stack::class);
+
+        return $stackModel->find([
+            'player_id' => $playerId,
+            'table_id'  => $tableId,
         ]);
     }
 
