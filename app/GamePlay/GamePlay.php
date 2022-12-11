@@ -38,6 +38,8 @@ class GamePlay
 
     public function response(HandStep $step = null, $currentDealer = null): array
     {
+        $this->gameState->setCommunityCards();
+        
         $this->gameState = $step ? $step->handle($this->gameState, $currentDealer) : $this->gameState;
 
         return [
