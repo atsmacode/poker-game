@@ -4,9 +4,14 @@ namespace Atsmacode\PokerGame;
 
 class PokerGameConfigProvider
 {
-    public function get(string $rootDir = null): array
+    public function __construct(?string $rootDir = null)
     {
-        $dbConfig         = require($rootDir . 'config/poker_game.php');
+        $this->rootDir = $rootDir ?? '';
+    }
+
+    public function get(): array
+    {
+        $dbConfig         = require($this->rootDir . 'config/poker_game.php');
         $dependencyConfig = (new DependencyConfig())->get();
 
         return array_merge($dbConfig['poker_game'], $dependencyConfig); 

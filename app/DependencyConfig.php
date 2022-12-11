@@ -12,9 +12,10 @@ class DependencyConfig
                     \Atsmacode\PokerGame\PlayerHandler\PlayerHandler::class,
                     \Atsmacode\PokerGame\Game\PotLimitHoldEm::class,
                     \Atsmacode\PokerGame\Game\PotLimitOmaha::class,
-                    \Atsmacode\PokerGame\PokerGameConfigProvider::class,
                 ],
                 'factories' => [
+                    \Atsmacode\PokerGame\PokerGameConfigProvider::class
+                        => \Atsmacode\PokerGame\PokerGameConfigProviderFactory::class,
                     \Atsmacode\Framework\Database\ConnectionInterface::class
                         => \Atsmacode\PokerGame\Database\DbalLiveFactory::class,
                     PDO::class
