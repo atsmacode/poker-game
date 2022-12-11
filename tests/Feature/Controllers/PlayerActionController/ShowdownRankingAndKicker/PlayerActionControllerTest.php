@@ -2,25 +2,14 @@
 
 namespace Atsmacode\PokerGame\Tests\Feature\Controllers\PlayerActionController\ShowdownRankingAndKicker;
 
-use Atsmacode\PokerGame\ActionHandler\ActionHandler;
-use Atsmacode\PokerGame\GameData\GameData;
-use Atsmacode\PokerGame\GamePlay\GamePlay;
-use Atsmacode\PokerGame\GameState\GameState;
 use Atsmacode\PokerGame\HandStep\Start;
 use Atsmacode\CardGames\Constants\Card;
 use Atsmacode\PokerGame\Constants\HandType;
-use Atsmacode\PokerGame\Models\Hand;
-use Atsmacode\PokerGame\Models\HandStreet;
 use Atsmacode\PokerGame\Models\HandStreetCard;
-use Atsmacode\PokerGame\Models\Player;
-use Atsmacode\PokerGame\Models\Street;
-use Atsmacode\PokerGame\Models\Table;
-use Atsmacode\PokerGame\Models\TableSeat;
 use Atsmacode\PokerGame\Tests\BaseTest;
 use Atsmacode\PokerGame\Tests\HasActionPosts;
 use Atsmacode\PokerGame\Tests\HasGamePlay;
 use Atsmacode\PokerGame\Tests\HasStreets;
-use Atsmacode\PokerGame\Game\PotLimitHoldEm;
 
 /**
  * In these tests, we are not calling GamePlay->start()
@@ -34,47 +23,10 @@ class PlayerActionControllerTest extends BaseTest
     {
         parent::setUp();
 
-        $this->table         = Table::create(['name' => 'Test Table', 'seats' => 3]);
-        $this->hand          = Hand::create(['table_id' => $this->table->id]);
+        $this->isThreeHanded();
 
-        $this->player1 = Player::create([
-            'name' => 'Player 1',
-            'email' => 'player1@rrh.com'
-        ]);
-
-        $this->player2 = Player::create([
-            'name' => 'Player 2',
-            'email' => 'player2@rrh.com'
-        ]);
-
-        $this->player3 = Player::create([
-            'name' => 'Player 3',
-            'email' => 'player3@rrh.com'
-        ]);
-
-        TableSeat::create([
-            'table_id' => $this->table->id,
-            'player_id' => $this->player1->id
-        ]);
-
-        TableSeat::create([
-            'table_id' => $this->table->id,
-            'player_id' => $this->player2->id
-        ]);
-
-        TableSeat::create([
-            'table_id' => $this->table->id,
-            'player_id' => $this->player3->id
-        ]);
-
-        $this->gameState = new GameState($this->container->get(GameData::class), $this->hand);
-        $this->gamePlay  = $this->container->build(GamePlay::class, [
-            'game'      => $this->container->get(PotLimitHoldEm::class),
-            'gameState' => $this->gameState
-        ]);
-
-        $this->start         = new Start($this->gameState->getGame(), $this->gameState->getGameDealer());
-        $this->actionHandler = new ActionHandler($this->gameState);
+        $this->start               = $this->container->build(Start::class);
+        $this->handStreetCardModel = $this->container->build(HandStreetCard::class);
     }
 
    /**
@@ -217,13 +169,13 @@ class PlayerActionControllerTest extends BaseTest
 
     protected function setflop($flopCards)
     {
-        $flop = HandStreet::create([
-            'street_id' => Street::find(['name' => $this->gameState->getGame()->streets[1]['name']])->id,
+        $flop = $this->handStreetModel->create([
+            'street_id' => $this->streetModel->find(['name' => $this->gameState->getGame()->streets[1]['name']])->id,
             'hand_id'   => $this->gameState->handId()
         ]);
 
         foreach($flopCards as $card){
-            HandStreetCard::create([
+            $this->handStreetCardModel->create([
                 'hand_street_id' => $flop->id,
                 'card_id'        => $card['card_id']
             ]);
@@ -232,12 +184,12 @@ class PlayerActionControllerTest extends BaseTest
 
     protected function setTurn($turnCard)
     {
-        $turn = HandStreet::create([
-            'street_id' => Street::find(['name' => $this->gameState->getGame()->streets[2]['name']])->id,
+        $turn = $this->handStreetModel->create([
+            'street_id' => $this->streetModel->find(['name' => $this->gameState->getGame()->streets[2]['name']])->id,
             'hand_id'   => $this->gameState->handId()
         ]);
 
-        HandStreetCard::create([
+        $this->handStreetCardModel->create([
             'hand_street_id' => $turn->id,
             'card_id'        => $turnCard['card_id']
         ]);
@@ -245,12 +197,12 @@ class PlayerActionControllerTest extends BaseTest
 
     protected function setRiver($riverCard)
     {
-        $river = HandStreet::create([
-            'street_id' => Street::find(['name' => $this->gameState->getGame()->streets[3]['name']])->id,
+        $river = $this->handStreetModel->create([
+            'street_id' => $this->streetModel->find(['name' => $this->gameState->getGame()->streets[3]['name']])->id,
             'hand_id'   => $this->gameState->handId()
         ]);
 
-        HandStreetCard::create([
+        $this->handStreetCardModel->create([
             'hand_street_id' => $river->id,
             'card_id'        => $riverCard['card_id']
         ]);

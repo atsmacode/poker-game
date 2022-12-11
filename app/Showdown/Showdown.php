@@ -89,17 +89,7 @@ class Showdown
 
     public function compileHands(): self
     {
-        //var_dump($this->communityCards);
-
         foreach ($this->getContinuingPlayerSeats($this->gameState->getPlayers()) as $player) {
-            $wholeCards = [];
-
-            //var_dump($this->gameState->getWholeCards()[$player['player_id']]);
-
-            // foreach (Player::getWholeCards($this->gameState->handId(), $player['player_id']) as $wholeCard) {
-            //     $wholeCards[] = $wholeCard;
-            // }
-
             $compileInfo = (new HandIdentifier())->identify(
                 $this->gameState->getWholeCards()[$player['player_id']],
                 $this->communityCards
@@ -119,17 +109,6 @@ class Showdown
             return 1 === $player['active'] && 1 === $player['can_continue'];
         });
     }
-
-    // public function getCommunityCards(): void
-    // {
-    //     var_dump($this->gameState->getCommunityCards());
-    //     foreach($this->gameState->getCommunityCards() as $handStreet){
-    //         var_dump($handStreet);
-    //         foreach($handStreet->cards() as $handStreetCard){
-    //             $this->communityCards[] = $handStreetCard->getCard();
-    //         }
-    //     }
-    // }
 
     /**
      * @param int $handTypeId

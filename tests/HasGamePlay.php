@@ -7,6 +7,7 @@ use Atsmacode\PokerGame\Game\PotLimitHoldEm;
 use Atsmacode\PokerGame\GamePlay\GamePlay;
 use Atsmacode\PokerGame\GameState\GameState;
 use Atsmacode\PokerGame\Models\Player;
+use Atsmacode\PokerGame\Models\TableSeat;
 
 trait HasGamePlay
 {
@@ -17,6 +18,16 @@ trait HasGamePlay
         return $playerModel->create([
             'name'  => 'Player ' . $player,
             'email' => sprintf('player%d@rrh.com', $player)
+        ]);
+    }
+
+    private function createTableSeat(int $tableId, int $playerId)
+    {
+        $tableSeatModel = $this->container->build(TableSeat::class);
+
+        return $tableSeatModel->create([
+            'table_id'  => $tableId,
+            'player_id' => $playerId
         ]);
     }
 
@@ -41,20 +52,49 @@ trait HasGamePlay
         $this->player2 = $this->createPlayer(2);
         $this->player3 = $this->createPlayer(3);
 
-        $this->tableSeatOne = $this->tableSeatModel->create([
-            'table_id'  => $this->table->id,
-            'player_id' => $this->player1->id
-        ]);
+        $this->tableSeatOne   = $this->createTableSeat($this->table->id, $this->player1->id);
+        $this->tableSeatTwo   = $this->createTableSeat($this->table->id, $this->player2->id);
+        $this->tableSeatThree = $this->createTableSeat($this->table->id, $this->player3->id);
 
-        $this->tableSeatTwo = $this->tableSeatModel->create([
-            'table_id'  => $this->table->id,
-            'player_id' => $this->player2->id
-        ]);
+        $this->setGamePlay();
+    }
 
-        $this->tableSeatThree = $this->tableSeatModel->create([
-            'table_id'  => $this->table->id,
-            'player_id' => $this->player3->id
-        ]);
+    private function isFourHanded()
+    {
+        $this->table = $this->tableModel->create(['name' => 'Test Table', 'seats' => 4]);
+        $this->hand  = $this->handModel->create(['table_id' => $this->table->id]);
+
+        $this->player1 = $this->createPlayer(1);
+        $this->player2 = $this->createPlayer(2);
+        $this->player3 = $this->createPlayer(3);
+        $this->player4 = $this->createPlayer(4);
+
+        $this->tableSeatOne   = $this->createTableSeat($this->table->id, $this->player1->id);
+        $this->tableSeatTwo   = $this->createTableSeat($this->table->id, $this->player2->id);
+        $this->tableSeatThree = $this->createTableSeat($this->table->id, $this->player3->id);
+        $this->tableSeatFour  = $this->createTableSeat($this->table->id, $this->player4->id);
+
+        $this->setGamePlay();
+    }
+
+    private function isSixHanded()
+    {
+        $this->table = $this->tableModel->create(['name' => 'Test Table', 'seats' => 6]);
+        $this->hand  = $this->handModel->create(['table_id' => $this->table->id]);
+
+        $this->player1 = $this->createPlayer(1);
+        $this->player2 = $this->createPlayer(2);
+        $this->player3 = $this->createPlayer(3);
+        $this->player4 = $this->createPlayer(4);
+        $this->player5 = $this->createPlayer(5);
+        $this->player6 = $this->createPlayer(6);
+
+        $this->tableSeatOne   = $this->createTableSeat($this->table->id, $this->player1->id);
+        $this->tableSeatTwo   = $this->createTableSeat($this->table->id, $this->player2->id);
+        $this->tableSeatThree = $this->createTableSeat($this->table->id, $this->player3->id);
+        $this->tableSeatFour  = $this->createTableSeat($this->table->id, $this->player4->id);
+        $this->tableSeatFive  = $this->createTableSeat($this->table->id, $this->player5->id);
+        $this->tableSeatSix   = $this->createTableSeat($this->table->id, $this->player6->id);
 
         $this->setGamePlay();
     }

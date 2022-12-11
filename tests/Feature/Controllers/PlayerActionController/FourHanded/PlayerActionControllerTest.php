@@ -2,19 +2,9 @@
 
 namespace Atsmacode\PokerGame\Tests\Feature\Controllers\PlayerActionController\FourHanded;
 
-use Atsmacode\PokerGame\ActionHandler\ActionHandler;
-use Atsmacode\PokerGame\GameData\GameData;
-use Atsmacode\PokerGame\GamePlay\GamePlay;
-use Atsmacode\PokerGame\GameState\GameState;
-use Atsmacode\PokerGame\Models\Hand;
-use Atsmacode\PokerGame\Models\HandStreet;
-use Atsmacode\PokerGame\Models\Player;
-use Atsmacode\PokerGame\Models\Table;
-use Atsmacode\PokerGame\Models\TableSeat;
 use Atsmacode\PokerGame\Tests\BaseTest;
 use Atsmacode\PokerGame\Tests\HasActionPosts;
 use Atsmacode\PokerGame\Tests\HasGamePlay;
-use Atsmacode\PokerGame\Game\PotLimitHoldEm;
 
 class PlayerActionControllerTest extends BaseTest
 {
@@ -24,56 +14,7 @@ class PlayerActionControllerTest extends BaseTest
     {
         parent::setUp();
 
-        $this->table         = Table::create(['name' => 'Test Table', 'seats' => 3]);
-        $this->hand          = Hand::create(['table_id' => $this->table->id]);
-
-        $this->player1 = Player::create([
-            'name' => 'Player 1',
-            'email' => 'player1@rrh.com'
-        ]);
-
-        $this->player2 = Player::create([
-            'name' => 'Player 2',
-            'email' => 'player2@rrh.com'
-        ]);
-
-        $this->player3 = Player::create([
-            'name' => 'Player 3',
-            'email' => 'player3@rrh.com'
-        ]);
-
-        $this->player4 = Player::create([
-            'name' => 'Player 4',
-            'email' => 'player4@rrh.com'
-        ]);
-
-        TableSeat::create([
-            'table_id'  => $this->table->id,
-            'player_id' => $this->player1->id
-        ]);
-
-        TableSeat::create([
-            'table_id'  => $this->table->id,
-            'player_id' => $this->player2->id
-        ]);
-
-        TableSeat::create([
-            'table_id'  => $this->table->id,
-            'player_id' => $this->player3->id
-        ]);
-
-        TableSeat::create([
-            'table_id'  => $this->table->id,
-            'player_id' => $this->player4->id
-        ]); 
-
-        $this->gameState = new GameState($this->container->get(GameData::class), $this->hand);
-        $this->gamePlay  = $this->container->build(GamePlay::class, [
-            'game'      => $this->container->get(PotLimitHoldEm::class),
-            'gameState' => $this->gameState
-        ]);
-
-        $this->actionHandler = new ActionHandler($this->gameState);
+        $this->isFourHanded();
     }
 
     /**
@@ -117,13 +58,13 @@ class PlayerActionControllerTest extends BaseTest
     {
         $this->gamePlay->start();
 
-        $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets()->content);
+        $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
 
         $this->givenActionsMeanNewStreetIsDealt();
 
         $this->jsonResponse();
 
-        $this->assertCount(2, HandStreet::find(['hand_id' => $this->gameState->handId()])->content);
+        $this->assertCount(2, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
     }
 
     /**
@@ -134,7 +75,7 @@ class PlayerActionControllerTest extends BaseTest
     {
         $this->gamePlay->start();
 
-        $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets()->content);
+        $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
 
         $this->givenPlayerFourFolds();
         $this->givenPlayerFourCanNotContinue();
@@ -146,7 +87,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $response = $this->jsonResponse();
 
-        $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets()->content);
+        $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
         $this->assertEquals(1, $response['players'][2]['can_continue']);
         $this->assertEquals($this->player3->id, $response['winner']['player']['player_id']);
     }
@@ -159,14 +100,14 @@ class PlayerActionControllerTest extends BaseTest
     {
         $this->gamePlay->start();
 
-        $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets() ->content);
+        $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
 
         $this->givenBigBlindRaisesPreFlopCaller();
 
         $response = $this->jsonResponse();
 
         // We are still on the pre-flop action
-        $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets() ->content);
+        $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
 
         $this->assertTrue($response['players'][3]['action_on']);
     }
@@ -177,17 +118,17 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function if_the_dealer_is_seat_two_and_the_first_active_seat_on_a_new_street_the_first_active_seat_after_them_will_be_first_to_act()
     {
-        $this->gamePlay->start(TableSeat::find([
+        $this->gamePlay->start($this->tableSeatModel->find([
             'id' => $this->gameState->getSeats()[0]['id']
         ]));
 
-        $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets()->content);
+        $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
 
         $this->givenActionsMeanNewStreetIsDealtWhenDealerIsSeatTwo();
 
         $response = $this->jsonResponse();
 
-        $this->assertCount(2, HandStreet::find(['hand_id' => $this->gameState->handId()])->content);
+        $this->assertCount(2, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
 
         $this->assertTrue($response['players'][2]['action_on']);
     }
@@ -198,11 +139,11 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function if_there_is_one_seat_after_current_dealer_big_blind_will_be_seat_two()
     {
-        $this->gamePlay->start(TableSeat::find([
+        $this->gamePlay->start($this->tableSeatModel->find([
             'id' => $this->gameState->getSeats()[2]['id']
         ]));
 
-        $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets()->content);
+        $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
 
         /**
          * TODO, why did this not work without the POST 'all of a sudden'
@@ -222,7 +163,7 @@ class PlayerActionControllerTest extends BaseTest
     {
         $this->gamePlay->start();
 
-        $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets()->content);
+        $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
 
         $this->givenActionsMeanNewStreetIsDealt();
 

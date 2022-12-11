@@ -3,48 +3,18 @@
 namespace Atsmacode\PokerGame\Tests\Feature\Controllers\HandController\ThreeHanded;
 
 use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\HandController as PotLimitHoldEmHandController;
-use Atsmacode\PokerGame\Models\Player;
-use Atsmacode\PokerGame\Models\Table;
-use Atsmacode\PokerGame\Models\TableSeat;
 use Atsmacode\PokerGame\Tests\BaseTest;
+use Atsmacode\PokerGame\Tests\HasGamePlay;
 
 class HandControllerTest extends BaseTest
 {
+    use HasGamePlay;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->table = Table::create(['name' => 'Test Table', 'seats' => 3]);
-
-        $this->player1 = Player::create([
-            'name' => 'Player 1',
-            'email' => 'player1@rrh.com'
-        ]);
-
-        $this->player2 = Player::create([
-            'name' => 'Player 2',
-            'email' => 'player2@rrh.com'
-        ]);
-
-        $this->player3 = Player::create([
-            'name' => 'Player 3',
-            'email' => 'player3@rrh.com'
-        ]);
-
-        TableSeat::create([
-            'table_id' => $this->table->id,
-            'player_id' => $this->player1->id
-        ]);
-
-        TableSeat::create([
-            'table_id' => $this->table->id,
-            'player_id' => $this->player2->id
-        ]);
-
-        TableSeat::create([
-            'table_id' => $this->table->id,
-            'player_id' => $this->player3->id
-        ]);
+        $this->isThreeHanded();
     }
 
     /**
@@ -90,6 +60,6 @@ class HandControllerTest extends BaseTest
 
         $response = (new PotLimitHoldEmHandController($this->container))->play($this->table->id);
 
-        return json_decode($response, true)['body'];
+        return json_decode($response->getBody()->getContents(), true);
     }
 }

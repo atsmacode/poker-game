@@ -5,6 +5,7 @@ namespace Atsmacode\PokerGame\Controllers;
 use Atsmacode\PokerGame\GamePlay\GamePlay;
 use Atsmacode\PokerGame\GameState\GameState;
 use Atsmacode\PokerGame\Models\Hand;
+use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\ServiceManager\ServiceManager;
 
 abstract class HandController
@@ -31,24 +32,13 @@ abstract class HandController
             ]);
             $gamePlay = $gamePlayService->start($currentDealer ?? null);
 
-            if (!isset($GLOBALS['dev'])) {
-                header("Content-Type: application/json");
-                http_response_code(200);
-            }
-
-            $responseBody = [
+            return new JsonResponse([
                 'deck'           => $gamePlay['deck'],
                 'pot'            => $gamePlay['pot'],
                 'communityCards' => $gamePlay['communityCards'],
                 'players'        => $gamePlay['players'],
                 'winner'         => $gamePlay['winner']
-            ];
-
-            if (isset($GLOBALS['dev'])) {
-                return json_encode(['body' => $responseBody]);
-            } else {
-                echo json_encode(['body' => $responseBody]);
-            }
+            ]);
         }
 
         if ($_SERVER['REQUEST_METHOD'] == 'GET') { 
