@@ -27,7 +27,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->setPost();
 
-        $response = $this->jsonResponse();
+        $response = $this->actionControllerResponse();
 
         $this->assertEquals(
             $this->validResponseKeys(),

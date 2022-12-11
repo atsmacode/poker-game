@@ -28,7 +28,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->setPlayerFourRaisesPost();
 
-        $response = $this->jsonResponse();
+        $response = $this->actionControllerResponse();
 
         $this->assertTrue($response['players'][0]['action_on']);
 
@@ -48,7 +48,7 @@ class PlayerActionControllerTest extends BaseTest
         $this->givenPlayerFourRaises();
         $this->setPlayerOneFoldsPost();
 
-        $response = $this->jsonResponse();
+        $response = $this->actionControllerResponse();
 
         $this->assertTrue($response['players'][1]['action_on']);
 
@@ -67,7 +67,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->setPlayerFourFoldsPost();
 
-        $response = $this->jsonResponse();
+        $response = $this->actionControllerResponse();
 
         $this->assertTrue($response['players'][0]['action_on']);
         $this->assertEmpty($response['players'][3]['availableOptions']);
@@ -83,7 +83,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->setPlayerTwoCallsPost();
 
-        $response = $this->jsonResponse();
+        $response = $this->actionControllerResponse();
 
         $this->assertTrue($response['players'][2]['action_on']);
 
@@ -103,7 +103,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->setPlayerFourCallsPost();
 
-        $response = $this->jsonResponse();
+        $response = $this->actionControllerResponse();
 
         $this->assertTrue($response['players'][0]['action_on']);
 
@@ -124,7 +124,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->givenActionsMeanNewStreetIsDealt();
 
-        $response = $this->jsonResponse();
+        $response = $this->actionControllerResponse();
 
         $this->assertTrue($response['players'][2]['action_on']);
 

@@ -2,13 +2,13 @@
 
 namespace Atsmacode\PokerGame\Tests\Feature\Controllers\HandController\FourHanded;
 
-use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\HandController as PotLimitHoldEmHandController;
 use Atsmacode\PokerGame\Tests\BaseTest;
+use Atsmacode\PokerGame\Tests\HasActionPosts;
 use Atsmacode\PokerGame\Tests\HasGamePlay;
 
 class HandControllerTest extends BaseTest
 {
-    use HasGamePlay;
+    use HasGamePlay, HasActionPosts;
 
     protected function setUp(): void
     {
@@ -23,7 +23,7 @@ class HandControllerTest extends BaseTest
      */
     public function it_can_start_the_game()
     {
-        $response = $this->jsonResponse();
+        $response = $this->handControllerResponse();
 
         // The small blind was posted
         $this->assertEquals(25, $response['players'][1]['bet_amount']);
@@ -49,17 +49,8 @@ class HandControllerTest extends BaseTest
      */
     public function the_pre_flop_action_will_initially_be_on_the_player_four()
     {
-        $response = $this->jsonResponse();
+        $response = $this->handControllerResponse();
 
         $this->assertTrue($response['players'][3]['action_on']);
-    }
-
-    private function jsonResponse(): array
-    {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        
-        $response = (new PotLimitHoldEmHandController($this->container))->play($this->table->id);
-
-        return json_decode($response->getBody()->getContents(), true);
     }
 }

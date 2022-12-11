@@ -4,12 +4,22 @@ namespace Atsmacode\PokerGame\Tests;
 
 use Atsmacode\PokerGame\Constants\Action;
 use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\PlayerActionController as PotLimitHoldEmPlayerActionController;
+use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\HandController as PotLimitHoldEmHandController;
 
 trait HasActionPosts
 {
-    private function jsonResponse()
+    private function actionControllerResponse()
     {
         $response = (new PotLimitHoldEmPlayerActionController($this->container, $this->actionHandler))->action();
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    private function handControllerResponse($currentDealer = null): array
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        
+        $response = (new PotLimitHoldEmHandController($this->container))->play($this->table->id, $currentDealer);
 
         return json_decode($response->getBody()->getContents(), true);
     }

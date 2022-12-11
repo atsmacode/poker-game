@@ -92,7 +92,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->executeActionsToContinue();
 
-        $response = $this->jsonResponse();
+        $response = $this->actionControllerResponse();
 
         $this->assertEquals($this->player3->id, $response['winner']['player']['player_id']);
         $this->assertEquals(HandType::HIGH_CARD['id'], $response['winner']['handType']['id']);
@@ -161,7 +161,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->executeActionsToContinue();
 
-        $response = $this->jsonResponse();
+        $response = $this->actionControllerResponse();
 
         $this->assertEquals($this->player3->id, $response['winner']['player']['player_id']);
         $this->assertEquals(HandType::HIGH_CARD['id'], $response['winner']['handType']['id']);

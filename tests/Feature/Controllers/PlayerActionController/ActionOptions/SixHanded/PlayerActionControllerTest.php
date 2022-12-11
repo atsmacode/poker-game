@@ -37,7 +37,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->setPlayerSixFoldsPost();
 
-        $response = $this->jsonResponse();
+        $response = $this->actionControllerResponse();
 
         $this->assertTrue($response['players'][0]['action_on']);
 

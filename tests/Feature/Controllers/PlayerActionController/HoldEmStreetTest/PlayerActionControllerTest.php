@@ -28,7 +28,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->executeActionsToContinue();
 
-        $this->jsonResponse();
+        $this->actionControllerResponse();
 
         $this->assertCount(2, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
         $this->assertCount(3, $this->handStreetModel->getStreetCards($this->gameState->handId(), 2));
@@ -46,7 +46,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->executeActionsToContinue();
 
-        $this->jsonResponse();
+        $this->actionControllerResponse();
 
         $this->assertCount(3, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
         $this->assertCount(1, $this->handStreetModel->getStreetCards($this->gameState->handId(), 3));
@@ -66,7 +66,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->executeActionsToContinue();
 
-        $this->jsonResponse();
+        $this->actionControllerResponse();
 
         $this->assertCount(4, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
         $this->assertCount(1, $this->handStreetModel->getStreetCards($this->gameState->handId(), 4));
@@ -88,7 +88,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->executeActionsToContinue();
 
-        $response = $this->jsonResponse();
+        $response = $this->actionControllerResponse();
 
         $this->assertNotNull($response['winner']);
     }

@@ -26,7 +26,7 @@ class HandControllerTest extends BaseTest
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
-        $response = $this->jsonResponse();
+        $response = $this->handControllerResponse();
 
         $this->assertEquals(
             $this->validResponseKeys(),
@@ -40,7 +40,7 @@ class HandControllerTest extends BaseTest
      */
     public function with_blinds_25_and_50_the_pot_size_will_be_75_once_the_hand_is_started()
     {
-        $response = $this->jsonResponse();
+        $response = $this->handControllerResponse();
 
         $this->assertEquals(75, $response['pot']);
     }
@@ -54,12 +54,5 @@ class HandControllerTest extends BaseTest
             'players',
             'winner'
         ];
-    }
-
-    private function jsonResponse(): array
-    {
-        $response = (new PotLimitHoldEmHandController($this->container))->play($this->table->id);
-
-        return json_decode($response->getBody()->getContents(), true);
     }
 }

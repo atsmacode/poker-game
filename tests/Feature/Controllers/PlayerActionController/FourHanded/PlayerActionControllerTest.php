@@ -27,7 +27,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->setPlayerFourCallsPost();
 
-        $response = $this->jsonResponse();
+        $response = $this->actionControllerResponse();
 
         $this->assertEquals(1, $response['players'][3]['can_continue']);
     }
@@ -45,7 +45,7 @@ class PlayerActionControllerTest extends BaseTest
         $this->givenPlayerThreeCanContinue();
         $this->setPlayerFourFoldsPost();
 
-        $response = $this->jsonResponse();
+        $response = $this->actionControllerResponse();
 
         $this->assertEquals(0, $response['players'][3]['can_continue']);
     }
@@ -62,7 +62,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->givenActionsMeanNewStreetIsDealt();
 
-        $this->jsonResponse();
+        $this->actionControllerResponse();
 
         $this->assertCount(2, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
     }
@@ -85,7 +85,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->setPlayerTwoFoldsPost();
 
-        $response = $this->jsonResponse();
+        $response = $this->actionControllerResponse();
 
         $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
         $this->assertEquals(1, $response['players'][2]['can_continue']);
@@ -104,7 +104,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->givenBigBlindRaisesPreFlopCaller();
 
-        $response = $this->jsonResponse();
+        $response = $this->actionControllerResponse();
 
         // We are still on the pre-flop action
         $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
@@ -126,7 +126,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->givenActionsMeanNewStreetIsDealtWhenDealerIsSeatTwo();
 
-        $response = $this->jsonResponse();
+        $response = $this->actionControllerResponse();
 
         $this->assertCount(2, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
 
@@ -149,7 +149,7 @@ class PlayerActionControllerTest extends BaseTest
          * TODO, why did this not work without the POST 'all of a sudden'
          */
         $this->setPost();
-        $response = $this->jsonResponse();
+        $response = $this->actionControllerResponse();
 
         $this->assertEquals(1, $response['players'][0]['small_blind']);
         $this->assertEquals(1, $response['players'][1]['big_blind']);
@@ -167,7 +167,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->givenActionsMeanNewStreetIsDealt();
 
-        $response = $this->jsonResponse();
+        $response = $this->actionControllerResponse();
 
         $this->assertTrue($response['players'][2]['action_on']);
     }

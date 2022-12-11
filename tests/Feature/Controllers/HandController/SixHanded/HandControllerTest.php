@@ -2,8 +2,6 @@
 
 namespace Atsmacode\PokerGame\Tests\Feature\Controllers\HandController\SixHanded;
 
-use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\HandController as PotLimitHoldEmHandController;
-use Atsmacode\PokerGame\Models\TableSeat;
 use Atsmacode\PokerGame\Tests\BaseTest;
 use Atsmacode\PokerGame\Tests\HasActionPosts;
 use Atsmacode\PokerGame\Tests\HasGamePlay;
@@ -25,7 +23,7 @@ class HandControllerTest extends BaseTest
      */
     public function the_pre_flop_action_will_initially_be_on_player_four()
     {
-        $response = $this->jsonResponse();
+        $response = $this->handControllerResponse();
 
         $this->assertTrue($response['players'][3]['action_on']);
     }
@@ -38,7 +36,7 @@ class HandControllerTest extends BaseTest
     {
         $currentDealer = $this->tableSeatFour;
 
-        $response = $this->jsonResponse($currentDealer);
+        $response = $this->handControllerResponse($currentDealer);
 
         $this->assertEquals(1, $response['players'][5]['small_blind']);
         $this->assertEquals(1, $response['players'][0]['big_blind']);
@@ -52,18 +50,9 @@ class HandControllerTest extends BaseTest
     {
         $currentDealer = $this->tableSeatFive;
 
-        $response = $this->jsonResponse($currentDealer);
+        $response = $this->handControllerResponse($currentDealer);
 
         $this->assertEquals(1, $response['players'][0]['small_blind']);
         $this->assertEquals(1, $response['players'][1]['big_blind']);
-    }
-
-    private function jsonResponse(TableSeat $currentDealer = null): array
-    {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-
-        $response = (new PotLimitHoldEmHandController($this->container))->play($this->table->id, $currentDealer);
-
-        return json_decode($response->getBody()->getContents(), true);
     }
 }
