@@ -1,6 +1,8 @@
 <?php
 
+use Atsmacode\PokerGame\PokerGameConfigProvider;
 use Laminas\ServiceManager\ServiceManager;
 
-$dependencyMap  = require_once('dependencies.php');
-$serviceManager = new ServiceManager($dependencyMap);
+$config                 = (new PokerGameConfigProvider())->get();
+$pokerGameDependencyMap = $config['dependencies'];
+$serviceManager         = new ServiceManager($pokerGameDependencyMap);

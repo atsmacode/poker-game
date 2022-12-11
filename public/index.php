@@ -6,8 +6,6 @@ use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\PlayerActionController as Pot
 use Atsmacode\PokerGame\Controllers\PotLimitOmaha\HandController as PotLimitOmahaHandController;
 use Atsmacode\PokerGame\Controllers\PotLimitOmaha\PlayerActionController as PotLimitOmahaPlayerActionController;
 
-$GLOBALS['THE_ROOT'] = '../';
-
 require('../vendor/autoload.php');
 require('../config/container.php');
 
