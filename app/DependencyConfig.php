@@ -4,7 +4,7 @@ namespace Atsmacode\PokerGame;
 
 class DependencyConfig
 {
-    public function __invoke()
+    public function get()
     {
         return [
             'dependencies' => [
