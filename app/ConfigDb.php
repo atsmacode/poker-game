@@ -4,7 +4,7 @@ namespace Atsmacode\PokerGame;
 
 class ConfigDb
 {
-    const CONFIG_REF = 'config/poker_game.php';
+    const CONFIG_REF = '../config/poker_game.php';
 
     public function __invoke()
     {
