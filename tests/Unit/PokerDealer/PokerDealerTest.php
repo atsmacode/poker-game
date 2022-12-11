@@ -8,7 +8,7 @@ use Atsmacode\CardGames\Factory\CardFactory;
 use Atsmacode\PokerGame\Models\HandStreet;
 use Atsmacode\PokerGame\Models\Street;
 use Atsmacode\PokerGame\Tests\BaseTest;
-use Atsmacode\PokerGame\Tests\Unit\HasGamePlay;
+use Atsmacode\PokerGame\Tests\HasGamePlay;
 
 class PokerDealerTest extends BaseTest
 {
@@ -19,10 +19,6 @@ class PokerDealerTest extends BaseTest
         parent::setUp();
 
         $this->isThreeHanded();
-
-        $this->dealer          = $this->container->get(PokerDealer::class);
-        $this->handStreetModel = $this->container->get(HandStreet::class);
-        $this->streetModel     = $this->container->get(Street::class);
     }
 
     /**
@@ -37,7 +33,7 @@ class PokerDealerTest extends BaseTest
             $this->assertCount(0, $this->playerModel->getWholeCards($this->hand->id, $tableSeat['player_id']));
         }
 
-        $this->dealer->setDeck()->shuffle()->dealTo($this->table->getSeats(), 1, $this->hand->id);
+        $this->pokerDealer->setDeck()->shuffle()->dealTo($this->table->getSeats(), 1, $this->hand->id);
 
         foreach($this->table->getSeats() as $tableSeat){
             $this->assertCount(1, $this->playerModel->getWholeCards($this->hand->id, $tableSeat['player_id']));
@@ -56,7 +52,7 @@ class PokerDealerTest extends BaseTest
             'hand_id'   => $this->handModel->create(['table_id' => $this->table->id])->id
         ]);
 
-        $this->dealer->setDeck()->dealStreetCards(
+        $this->pokerDealer->setDeck()->dealStreetCards(
             $handStreet,
             1
         );
@@ -77,7 +73,7 @@ class PokerDealerTest extends BaseTest
 
         $card = CardFactory::create(Card::ACE_HEARTS);
 
-        $this->dealer->setDeck()->dealThisStreetCard($card['rank'], $card['suit'], $handStreet);
+        $this->pokerDealer->setDeck()->dealThisStreetCard($card['rank'], $card['suit'], $handStreet);
 
         $this->assertContains($card['id'], array_column($handStreet->cards(), 'card_id'));
     }

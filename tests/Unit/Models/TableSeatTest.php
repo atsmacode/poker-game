@@ -3,6 +3,7 @@
 namespace Atsmacode\PokerGame\Tests\Unit;
 
 use Atsmacode\PokerGame\Tests\BaseTest;
+use Atsmacode\PokerGame\Tests\HasGamePlay;
 
 class TableSeatTest extends BaseTest
 {

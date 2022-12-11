@@ -3,7 +3,7 @@
 namespace Atsmacode\PokerGame\Tests\Unit\GamePlay;
 
 use Atsmacode\PokerGame\Tests\BaseTest;
-use Atsmacode\PokerGame\Tests\Unit\HasGamePlay;
+use Atsmacode\PokerGame\Tests\HasGamePlay;
 
 class GamePlayTest extends BaseTest
 {

@@ -6,7 +6,7 @@ use Atsmacode\PokerGame\Models\Player;
 use Atsmacode\PokerGame\Models\Stack;
 use Atsmacode\PokerGame\Models\Table;
 use Atsmacode\PokerGame\Tests\BaseTest;
-use Atsmacode\PokerGame\Tests\Unit\HasGamePlay;
+use Atsmacode\PokerGame\Tests\HasGamePlay;
 
 class StackTest extends BaseTest
 {
