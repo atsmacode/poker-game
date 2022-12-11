@@ -2,14 +2,10 @@
 
 namespace Atsmacode\PokerGame;
 
-class PokerGameDependencyMap
+class DependencyConfig
 {
-    const CONFIG_REF = 'config/poker_game.php';
-
     public function __invoke()
     {
-        //$config = require(PokerGameConfig::CONFIG_REF);
-
         return [
             'dependencies' => [
                 'invokables' => [

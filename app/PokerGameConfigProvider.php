@@ -10,8 +10,8 @@ class PokerGameConfigProvider extends ConfigProvider
     public function get()
     {
         $aggregator = new ConfigAggregator([
-            PokerGameDbConfig::class,
-            PokerGameDependencyMap::class
+            ConfigDb::class,
+            DependencyConfig::class
         ]);
 
         return $aggregator->getMergedConfig(); 
