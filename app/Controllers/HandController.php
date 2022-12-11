@@ -21,28 +21,22 @@ abstract class HandController
         $this->handModel = $container->build(Hand::class);
     }
 
-    public function play($tableId = null, $currentDealer = null)
+    public function play($tableId = null, $currentDealer = null): JsonResponse
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $hand = $this->handModel->create(['table_id' => $tableId ?? 1]);
+        $hand = $this->handModel->create(['table_id' => $tableId ?? 1]);
 
-            $gamePlayService = $this->container->build(GamePlay::class, [
-                'game'      => $this->container->get($this->game),
-                'gameState' => $this->container->build(GameState::class, ['hand' => $hand])
-            ]);
-            $gamePlay = $gamePlayService->start($currentDealer ?? null);
+        $gamePlayService = $this->container->build(GamePlay::class, [
+            'game'      => $this->container->get($this->game),
+            'gameState' => $this->container->build(GameState::class, ['hand' => $hand])
+        ]);
+        $gamePlay = $gamePlayService->start($currentDealer ?? null);
 
-            return new JsonResponse([
-                'deck'           => $gamePlay['deck'],
-                'pot'            => $gamePlay['pot'],
-                'communityCards' => $gamePlay['communityCards'],
-                'players'        => $gamePlay['players'],
-                'winner'         => $gamePlay['winner']
-            ]);
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] == 'GET') { 
-            include($GLOBALS['THE_ROOT'] . 'public/index.php'); 
-        }
+        return new JsonResponse([
+            'deck'           => $gamePlay['deck'],
+            'pot'            => $gamePlay['pot'],
+            'communityCards' => $gamePlay['communityCards'],
+            'players'        => $gamePlay['players'],
+            'winner'         => $gamePlay['winner']
+        ]);
     }
 }
