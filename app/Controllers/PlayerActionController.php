@@ -24,7 +24,7 @@ abstract class PlayerActionController
         $this->handModel     = $container->get(Hand::class);
     }
 
-    public function action()
+    public function action(): JsonResponse
     {
         $requestBody = file_get_contents('php://input')
             ? json_decode(file_get_contents('php://input'), true)['body']
@@ -49,26 +49,12 @@ abstract class PlayerActionController
         ]);
         $gamePlay = $gamePlayService->play($gameState);
 
-        // if (!isset($GLOBALS['dev'])) {
-        //     header("Content-Type: application/json");
-        //     http_response_code(200);
-        // }
-
-        $responseBody = [
+        return new JsonResponse([
             'deck'           => $gamePlay['deck'],
             'pot'            => $gamePlay['pot'],
             'communityCards' => $gamePlay['communityCards'],
             'players'        => $gamePlay['players'],
             'winner'         => $gamePlay['winner']
-        ];
-
-        /** @todo Remove all isset($dev)s */
-        // if (isset($GLOBALS['dev'])) {
-        //     return json_encode(['body' => $responseBody]);
-        // } else {
-        //     echo json_encode(['body' => $responseBody]);
-        // }
-
-        return new JsonResponse($responseBody);
+        ]);
     }
 }

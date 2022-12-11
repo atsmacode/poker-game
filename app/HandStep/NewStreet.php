@@ -40,6 +40,7 @@ class NewStreet extends HandStep
         $this->updatePlayerStatusesOnNewStreet($handStreet->id);
         $this->gameState->updateHandStreets();
         $this->gameState->setPlayers();
+        $this->gameState->setCommunityCards();
 
         return $this->gameState;
     }

@@ -46,7 +46,10 @@ class HandIdentifier
 
     public function identify(array $wholeCards, array $communityCards): self
     {
+        //var_dump($wholeCards);
         $this->allCards = array_merge($wholeCards, $communityCards);
+
+        //var_dump($this->allCards);
 
         foreach ($this->handMethods as $handMethod) {
             if ($this->{$handMethod}() === true) {

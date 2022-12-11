@@ -13,7 +13,6 @@ class PokerGameDependencyMap
         return [
             'dependencies' => [
                 'invokables' => [
-                    \Atsmacode\PokerGame\HandStep\Showdown::class,
                     \Atsmacode\PokerGame\PlayerHandler\PlayerHandler::class,
                     \Atsmacode\PokerGame\Game\PotLimitHoldEm::class,
                     \Atsmacode\PokerGame\Game\PotLimitOmaha::class,
@@ -24,14 +23,6 @@ class PokerGameDependencyMap
                         => \Atsmacode\PokerGame\Database\DbalLiveFactory::class,
                     PDO::class
                         => \Atsmacode\PokerGame\Database\PdoLiveFactory::class,
-                    \Atsmacode\PokerGame\GameData\GameData::class
-                        => \Atsmacode\PokerGame\GameData\GameDataFactory::class,
-                    \Atsmacode\PokerGame\GamePlay\GamePlay::class 
-                        => \Atsmacode\PokerGame\GamePlay\GamePlayFactory::class,
-                    \Atsmacode\PokerGame\GameState\GameState::class 
-                        => \Atsmacode\PokerGame\GameState\GameStateFactory::class,
-                    \Atsmacode\PokerGame\ActionHandler\ActionHandler::class
-                        => \Atsmacode\PokerGame\ActionHandler\ActionHandlerFactory::class,
                     \Atsmacode\PokerGame\Dealer\PokerDealer::class
                         => \Atsmacode\PokerGame\Dealer\PokerDealerFactory::class,
                     \Atsmacode\PokerGame\Models\Street::class
@@ -70,8 +61,18 @@ class PokerGameDependencyMap
                         => \Atsmacode\PokerGame\HandStep\NewStreetFactory::class,
                     \Atsmacode\PokerGame\HandStep\Start::class
                         => \Atsmacode\PokerGame\HandStep\StartFactory::class,
+                    \Atsmacode\PokerGame\HandStep\Showdown::class
+                        => \Atsmacode\PokerGame\HandStep\ShowdownFactory::class,
                     \Atsmacode\PokerGame\Factory\PlayerActionFactory::class
-                        => \Atsmacode\PokerGame\Factory\PlayerActionFactoryFactory::class
+                        => \Atsmacode\PokerGame\Factory\PlayerActionFactoryFactory::class,
+                    \Atsmacode\PokerGame\GameData\GameData::class
+                        => \Atsmacode\PokerGame\GameData\GameDataFactory::class,
+                    \Atsmacode\PokerGame\GamePlay\GamePlay::class 
+                        => \Atsmacode\PokerGame\GamePlay\GamePlayFactory::class,
+                    \Atsmacode\PokerGame\GameState\GameState::class 
+                        => \Atsmacode\PokerGame\GameState\GameStateFactory::class,
+                    \Atsmacode\PokerGame\ActionHandler\ActionHandler::class
+                        => \Atsmacode\PokerGame\ActionHandler\ActionHandlerFactory::class,
                 ],
             ],
         ];

@@ -11,8 +11,7 @@ trait HasActionPosts
     {
         $response = (new PotLimitHoldEmPlayerActionController($this->container, $this->actionHandler))->action();
 
-        //var_dump($response->getBody()->getContents());
-        return $response->getBody()->getContents();
+        return json_decode($response->getBody()->getContents(), true);
     }
 
     private function setPost()

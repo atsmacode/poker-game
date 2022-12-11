@@ -169,6 +169,7 @@ class GameState
 
     public function setWholeCards(): self
     {
+        //var_dump($this->getPlayers());
         $this->wholeCards = $this->gameData->getWholeCards($this->getPlayers(), $this->handId);
 
         return $this;

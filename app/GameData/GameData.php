@@ -35,18 +35,10 @@ class GameData
 
         foreach ($players as $player) {
             foreach ($this->playerModel->getWholeCards($handId, $player['player_id']) as $wholeCard) {
-                $data = [
-                    'player_id'        => $wholeCard['player_id'],
-                    'rank'             => $wholeCard['rank'],
-                    'rankAbbreviation' => $wholeCard['rankAbbreviation'],
-                    'suit'             => $wholeCard['suit'],
-                    'suitAbbreviation' => $wholeCard['suitAbbreviation']
-                ];
-
                 if (array_key_exists($wholeCard['player_id'], $wholeCards)) {
-                    array_push($wholeCards[$wholeCard['player_id']], $data);
+                    array_push($wholeCards[$wholeCard['player_id']], $wholeCard);
                 } else {
-                    $wholeCards[$wholeCard['player_id']][] = $data;
+                    $wholeCards[$wholeCard['player_id']][] = $wholeCard;
                 }
             }
         }
@@ -56,16 +48,6 @@ class GameData
 
     public function getCommunityCards(int $handId): array
     {
-        $communityCards = [];
-
-        foreach ($this->handModel->getCommunityCards($handId) as $communityCard) {
-            $communityCards[] = [
-                'rankAbbreviation' => $communityCard['rankAbbreviation'],
-                'suit'             => $communityCard['suit'],
-                'suitAbbreviation' => $communityCard['suitAbbreviation']
-            ];
-        }
-
-        return $communityCards;
+        return $this->handModel->getCommunityCards($handId);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Atsmacode\PokerGame\Tests\Feature\Controllers\PlayerActionController\HoldEmStreetTest;
 
-use Atsmacode\PokerGame\Models\HandStreet;
 use Atsmacode\PokerGame\Tests\BaseTest;
 use Atsmacode\PokerGame\Tests\HasActionPosts;
 use Atsmacode\PokerGame\Tests\HasGamePlay;
@@ -49,8 +48,8 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->jsonResponse();
 
-        $this->assertCount(3, HandStreet::find(['hand_id' => $this->gameState->handId()])->content);
-        $this->assertCount(1, HandStreet::getStreetCards($this->gameState->handId(), 3));
+        $this->assertCount(3, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
+        $this->assertCount(1, $this->handStreetModel->getStreetCards($this->gameState->handId(), 3));
     }
 
     /**
@@ -69,8 +68,8 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->jsonResponse();
 
-        $this->assertCount(4, HandStreet::find(['hand_id' => $this->gameState->handId()])->content);
-        $this->assertCount(1, HandStreet::getStreetCards($this->gameState->handId(), 4));
+        $this->assertCount(4, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
+        $this->assertCount(1, $this->handStreetModel->getStreetCards($this->gameState->handId(), 4));
     }
 
     /**

@@ -4,7 +4,6 @@ namespace Atsmacode\PokerGame\Showdown;
 
 use Atsmacode\PokerGame\GameState\GameState;
 use Atsmacode\PokerGame\HandIdentifier\HandIdentifier;
-use Atsmacode\PokerGame\Models\Player;
 
 class Showdown
 {
@@ -13,7 +12,7 @@ class Showdown
     public $winner;
 
     /**
-     * @var array<Card>
+     * @var array
      */
     public $communityCards = [];
 
@@ -29,6 +28,7 @@ class Showdown
     {
         $this->handIdentifier = new HandIdentifier();
         $this->gameState      = $gameState;
+        $this->communityCards = $this->gameState->getCommunityCards();
     }
 
     public function decideWinner(): array
@@ -89,16 +89,22 @@ class Showdown
 
     public function compileHands(): self
     {
-        $this->getCommunityCards();
+        //var_dump($this->communityCards);
 
         foreach ($this->getContinuingPlayerSeats($this->gameState->getPlayers()) as $player) {
             $wholeCards = [];
 
-            foreach (Player::getWholeCards($this->gameState->handId(), $player['player_id']) as $wholeCard) {
-                $wholeCards[] = $wholeCard;
-            }
+            //var_dump($this->gameState->getWholeCards()[$player['player_id']]);
 
-            $compileInfo = (new HandIdentifier())->identify($wholeCards, $this->communityCards)->identifiedHandType;
+            // foreach (Player::getWholeCards($this->gameState->handId(), $player['player_id']) as $wholeCard) {
+            //     $wholeCards[] = $wholeCard;
+            // }
+
+            $compileInfo = (new HandIdentifier())->identify(
+                $this->gameState->getWholeCards()[$player['player_id']],
+                $this->communityCards
+            )->identifiedHandType;
+
             $compileInfo['highestActiveCard'] = max($compileInfo['activeCards']);
             $compileInfo['player']            = $player;
 
@@ -114,14 +120,16 @@ class Showdown
         });
     }
 
-    public function getCommunityCards(): void
-    {
-        foreach($this->gameState->getHandStreets()->collect()->content as $handStreet){
-            foreach($handStreet->cards()->collect()->content as $handStreetCard){
-                $this->communityCards[] = $handStreetCard->getCard();
-            }
-        }
-    }
+    // public function getCommunityCards(): void
+    // {
+    //     var_dump($this->gameState->getCommunityCards());
+    //     foreach($this->gameState->getCommunityCards() as $handStreet){
+    //         var_dump($handStreet);
+    //         foreach($handStreet->cards() as $handStreetCard){
+    //             $this->communityCards[] = $handStreetCard->getCard();
+    //         }
+    //     }
+    // }
 
     /**
      * @param int $handTypeId

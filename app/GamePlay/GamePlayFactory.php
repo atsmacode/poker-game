@@ -2,6 +2,7 @@
 
 namespace Atsmacode\PokerGame\GamePlay;
 
+use Atsmacode\PokerGame\Dealer\PokerDealer;
 use Atsmacode\PokerGame\GameData\GameData;
 use Atsmacode\PokerGame\GameState\GameState;
 use Atsmacode\PokerGame\HandStep\NewStreet;
@@ -19,6 +20,7 @@ class GamePlayFactory implements FactoryInterface
         $deck      = isset($options['deck']) ? $options['deck'] : null;
         $gameState = isset($options['gameState']) ? $options['gameState'] : new GameState(
             $container->get(GameData::class),
+            $container->get(PokerDealer::class),
             isset($options['hand']) ? $options['hand'] : null
         );
 

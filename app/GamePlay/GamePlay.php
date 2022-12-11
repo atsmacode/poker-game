@@ -43,7 +43,7 @@ class GamePlay
         return [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'pot'            => $this->gameState->getPot(),
-            'communityCards' => $this->gameState->setCommunityCards()->getCommunityCards(),
+            'communityCards' => $this->gameState->getCommunityCards(),
             'players'        => $this->playerHandler->handle($this->gameState),
             'winner'         => $this->gameState->getWinner()
         ];
