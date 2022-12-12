@@ -4,24 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fbe46f212468cbb672f8ef0285dbf52b",
+    "content-hash": "282681c4d892c1001677294b9429dfbe",
     "packages": [
         {
             "name": "atsmacode/card-games",
-            "version": "dev-PKR-9",
+            "version": "v1.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/atsmacode/card-games.git",
-                "reference": "3054edf4a31bb07048fd291117dcda2f76531f35"
+                "reference": "4c3d241e59944ebe7a37b7b6e7adbb8fff9d54fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atsmacode/card-games/zipball/3054edf4a31bb07048fd291117dcda2f76531f35",
-                "reference": "3054edf4a31bb07048fd291117dcda2f76531f35",
+                "url": "https://api.github.com/repos/atsmacode/card-games/zipball/4c3d241e59944ebe7a37b7b6e7adbb8fff9d54fc",
+                "reference": "4c3d241e59944ebe7a37b7b6e7adbb8fff9d54fc",
                 "shasum": ""
             },
             "require": {
-                "atsmacode/framework": "dev-PKR-9",
+                "atsmacode/framework": "^v1.0",
                 "laminas/laminas-servicemanager": "^3.20",
                 "symfony/console": "^6.0"
             },
@@ -46,22 +46,22 @@
             "description": "Base package to support any type of card based game",
             "support": {
                 "issues": "https://github.com/atsmacode/card-games/issues",
-                "source": "https://github.com/atsmacode/card-games/tree/PKR-9"
+                "source": "https://github.com/atsmacode/card-games/tree/v1.0.9"
             },
-            "time": "2022-12-08T13:32:54+00:00"
+            "time": "2022-12-12T06:18:47+00:00"
         },
         {
             "name": "atsmacode/framework",
-            "version": "dev-PKR-9",
+            "version": "v1.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/atsmacode/framework.git",
-                "reference": "69daa416dcd8f1ef8fb66f98a668b93d50242960"
+                "reference": "eb5dd082fb70753b296da71b443a96f45b1ba487"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atsmacode/framework/zipball/69daa416dcd8f1ef8fb66f98a668b93d50242960",
-                "reference": "69daa416dcd8f1ef8fb66f98a668b93d50242960",
+                "url": "https://api.github.com/repos/atsmacode/framework/zipball/eb5dd082fb70753b296da71b443a96f45b1ba487",
+                "reference": "eb5dd082fb70753b296da71b443a96f45b1ba487",
                 "shasum": ""
             },
             "require": {
@@ -90,9 +90,9 @@
             "description": "Repo with base DB, Model and Config resources",
             "support": {
                 "issues": "https://github.com/atsmacode/framework/issues",
-                "source": "https://github.com/atsmacode/framework/tree/PKR-9"
+                "source": "https://github.com/atsmacode/framework/tree/v1.0.10"
             },
-            "time": "2022-12-08T13:51:30+00:00"
+            "time": "2022-12-07T07:12:48+00:00"
         },
         {
             "name": "brick/varexporter",
@@ -3528,7 +3528,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "atsmacode/card-games": 20,
         "laminas/laminas-diactoros": 20
     },
     "prefer-stable": false,
