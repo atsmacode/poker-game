@@ -77,7 +77,7 @@ class PlayerHandler implements PlayerHandlerInterface
 
         if (!isset($playerAfterDealer->player_id)) { $playerAfterDealer = null; }
 
-        return $playerAfterDealer ? $playerAfterDealer->content[0] : $firstActivePlayer;
+        return 0 < count($playerAfterDealer->content) ? $playerAfterDealer->content[0] : $firstActivePlayer;
     }
 
     private function getAvailableOptionsBasedOnLatestAction($playerAction)
