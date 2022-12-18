@@ -110,8 +110,8 @@ class PlayerHandler implements PlayerHandlerInterface
                 return [Action::FOLD, Action::CHECK, Action::BET];
                 break;
             default:
-                /** BB can only check if there were no raises before the latest call action. */
-                if ($playerAction['big_blind'] && !in_array(Action::RAISE['id'], array_column($playerActions, 'action_id'))) {
+                /** BB can only check if there were no raises before the latest fold action. */
+                if (count($this->gameState->getHandStreets()) === 1 && $playerAction['big_blind'] && !in_array(Action::RAISE['id'], array_column($playerActions, 'action_id'))) {
                     return [Action::FOLD, Action::CHECK, Action::RAISE];
                 }
                 
