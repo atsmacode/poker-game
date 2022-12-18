@@ -88,14 +88,6 @@ class PlayerHandler implements PlayerHandlerInterface
 
         if ($this->gameState->isNewStreet()) { error_log('new street'); return [Action::FOLD, Action::CHECK, Action::BET]; }
 
-        if (
-            !in_array(Action::RAISE['id'], array_column($playerActions, 'action_id')) &&
-            count($this->gameState->getHandStreets()) === 1 &&
-            $playerAction['big_blind']
-        ) {
-            return [Action::FOLD, Action::CHECK, Action::BET];
-        }
-
         /** BB is the only player that can fold / check / raise pre-flop */
         if (count($this->gameState->getHandStreets()) === 1 && !$playerAction['big_blind']) {
             return [Action::FOLD, Action::CALL, Action::RAISE];
@@ -118,8 +110,13 @@ class PlayerHandler implements PlayerHandlerInterface
                 return [Action::FOLD, Action::CHECK, Action::BET];
                 break;
             default:
+                /** BB can only check if there were no raises before the latest call action. */
+                if ($playerAction['big_blind'] && !in_array(Action::RAISE['id'], array_column($playerActions, 'action_id'))) {
+                    return [Action::FOLD, Action::CHECK, Action::RAISE];
+                }
+                
                 /** Latest action may be a fold, so we need to check for raisers/callers/bettters before the folder. */
-                if (0 < count($continuingBetters)) { return [Action::FOLD, Action::CALL, Action::RAISE]; break; }
+                if (0 < count($continuingBetters)) { var_dump('fold'); return [Action::FOLD, Action::CALL, Action::RAISE]; break; }
 
                 return [Action::FOLD, Action::CHECK, Action::BET];
                 break;

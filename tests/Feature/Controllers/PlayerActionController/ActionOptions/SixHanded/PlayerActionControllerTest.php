@@ -50,7 +50,7 @@ class PlayerActionControllerTest extends BaseTest
      * @test
      * @return void
      */
-    public function theBigBlindCanFoldCheckOrBetIfDealerCallsAndSmallBlindFolds()
+    public function theBigBlindCanFoldCheckOrRaiseIfDealerCallsAndSmallBlindFolds()
     {
         $this->gamePlay->start();
 
@@ -76,6 +76,6 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->assertContains(Action::FOLD, $response['players'][2]['availableOptions']);
         $this->assertContains(Action::CHECK, $response['players'][2]['availableOptions']);
-        $this->assertContains(Action::BET, $response['players'][2]['availableOptions']);
+        $this->assertContains(Action::RAISE, $response['players'][2]['availableOptions']);
     }
 }
