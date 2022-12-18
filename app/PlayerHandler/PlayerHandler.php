@@ -86,7 +86,7 @@ class PlayerHandler implements PlayerHandlerInterface
         $continuingBetters = $this->tableSeatModel->getContinuingBetters((string) $this->gameState->getHand()->id);
         $playerActions     = $this->gameState->getPlayers();
 
-        if ($this->gameState->isNewStreet()) { error_log('new street'); return [Action::FOLD, Action::CHECK, Action::BET]; }
+        if ($this->gameState->isNewStreet()) { return [Action::FOLD, Action::CHECK, Action::BET]; }
 
         /** BB is the only player that can fold / check / raise pre-flop */
         if (count($this->gameState->getHandStreets()) === 1 && !$playerAction['big_blind']) {
@@ -95,8 +95,8 @@ class PlayerHandler implements PlayerHandlerInterface
 
         switch($latestAction->action_id){
             case Action::CALL['id']:
-                /** BB can only check if there were no raises before the latest call action. */
-                if ($playerAction['big_blind'] && !in_array(Action::RAISE['id'], array_column($playerActions, 'action_id'))) {
+                /** BB can only check if there were no raises before the latest call action on first street. */
+                if (count($this->gameState->getHandStreets()) === 1 && $playerAction['big_blind'] && !in_array(Action::RAISE['id'], array_column($playerActions, 'action_id'))) {
                     return [Action::FOLD, Action::CHECK, Action::RAISE];
                 } else {
                     return [Action::FOLD, Action::CALL, Action::RAISE];
