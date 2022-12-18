@@ -54,8 +54,6 @@ class PlayerActionControllerTest extends BaseTest
     {
         $this->gamePlay->start();
 
-        $this->setFlop();
-
         $this->givenPlayerFourFolds();
         $this->givenPlayerFourCanNotContinue();
 

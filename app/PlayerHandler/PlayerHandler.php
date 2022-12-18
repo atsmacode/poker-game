@@ -95,8 +95,7 @@ class PlayerHandler implements PlayerHandlerInterface
 
         switch($latestAction->action_id){
             case Action::CALL['id']:
-                /** BB can only check if there were no raises before the latest call action on first street. */
-                if (count($this->gameState->getHandStreets()) === 1 && $playerAction['big_blind'] && !in_array(Action::RAISE['id'], array_column($playerActions, 'action_id'))) {
+                if ($this->isBigBlindOnUnRaisedFirstStreet($playerActions, $playerAction)) {
                     return [Action::FOLD, Action::CHECK, Action::RAISE];
                 } else {
                     return [Action::FOLD, Action::CALL, Action::RAISE];
@@ -110,8 +109,7 @@ class PlayerHandler implements PlayerHandlerInterface
                 return [Action::FOLD, Action::CHECK, Action::BET];
                 break;
             default:
-                /** BB can only check if there were no raises before the latest fold action. */
-                if (count($this->gameState->getHandStreets()) === 1 && $playerAction['big_blind'] && !in_array(Action::RAISE['id'], array_column($playerActions, 'action_id'))) {
+                if ($this->isBigBlindOnUnRaisedFirstStreet($playerActions, $playerAction)) {
                     return [Action::FOLD, Action::CHECK, Action::RAISE];
                 }
                 
@@ -121,5 +119,12 @@ class PlayerHandler implements PlayerHandlerInterface
                 return [Action::FOLD, Action::CHECK, Action::BET];
                 break;
         }
+    }
+
+    private function isBigBlindOnUnRaisedFirstStreet(array $playerActions, array $playerAction)
+    {
+        return count($this->gameState->getHandStreets()) === 1 &&
+            $playerAction['big_blind'] &&
+            !in_array(Action::RAISE['id'], array_column($playerActions, 'action_id'));
     }
 }
