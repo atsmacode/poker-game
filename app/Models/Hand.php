@@ -241,6 +241,8 @@ class Hand extends Model
                 suits s ON c.suit_id = s.id
             WHERE
                 h.id = :id
+            ORDER BY
+                hsc.id
         ");
 
         try {
