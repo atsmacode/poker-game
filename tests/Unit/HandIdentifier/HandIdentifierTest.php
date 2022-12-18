@@ -4,6 +4,7 @@ namespace Atsmacode\PokerGame\Tests\Unit\HandIdentifier;
 
 use Atsmacode\PokerGame\HandIdentifier\HandIdentifier;
 use Atsmacode\CardGames\Constants\Card;
+use Atsmacode\CardGames\Constants\Rank;
 use Atsmacode\PokerGame\Constants\HandType;
 use Atsmacode\CardGames\Factory\CardFactory;
 use Atsmacode\PokerGame\Tests\BaseTest;
@@ -21,7 +22,7 @@ class HandIdentifierTest extends BaseTest
      * @test
      * @return void
      */
-    public function it_can_identify_the_card_with_the_highest_rank()
+    public function itCanIdentifyTheCardWithTheHighestRank()
     {
         $highestCard = CardFactory::create(Card::KING_SPADES);
 
@@ -52,7 +53,7 @@ class HandIdentifierTest extends BaseTest
      * @test
      * @return void
      */
-    public function it_can_identify_an_ace_as_the_card_with_the_highest_rank()
+    public function itCanIdentifyAceAsTheHighestRankedCard()
     {
         $highestCard = CardFactory::create(Card::ACE_SPADES);
 
@@ -83,7 +84,7 @@ class HandIdentifierTest extends BaseTest
      * @test
      * @return void
      */
-    public function it_can_identify_a_pair()
+    public function itCanIdentifyAPair()
     {
         $wholeCards = [
             CardFactory::create(Card::ACE_CLUBS),
@@ -107,7 +108,7 @@ class HandIdentifierTest extends BaseTest
      * @test
      * @return void
      */
-    public function it_can_identify_two_pair()
+    public function itCanIdentifyTwoPair()
     {
         $wholeCards = [
             CardFactory::create(Card::ACE_SPADES),
@@ -125,5 +126,101 @@ class HandIdentifierTest extends BaseTest
         $this->handIdentifier->identify($wholeCards, $communityCards);
         $this->assertEquals(HandType::TWO_PAIR['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
         $this->assertCount(2, $this->handIdentifier->pairs);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function itCanIdentifyTrips()
+    {
+        $wholeCards = [
+            CardFactory::create(Card::ACE_SPADES),
+            CardFactory::create(Card::KING_SPADES),
+        ];
+
+        $communityCards = [
+            CardFactory::create(Card::ACE_HEARTS),
+            CardFactory::create(Card::KING_HEARTS),
+            CardFactory::create(Card::KING_DIAMONDS),
+            CardFactory::create(Card::NINE_CLUBS),
+            CardFactory::create(Card::EIGHT_DIAMONDS),
+        ];
+
+        $this->handIdentifier->identify($wholeCards, $communityCards);
+        $this->assertEquals(HandType::TRIPS['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
+        $this->assertEquals(Rank::KING, $this->handIdentifier->threeOfAKind);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function itCanIdentifyFiveHighStraight()
+    {
+        $wholeCards = [
+            CardFactory::create(Card::FIVE_CLUBS),
+            CardFactory::create(Card::FOUR_DIAMONDS),
+        ];
+
+        $communityCards = [
+            CardFactory::create(Card::ACE_HEARTS),
+            CardFactory::create(Card::DEUCE_HEARTS),
+            CardFactory::create(Card::KING_DIAMONDS),
+            CardFactory::create(Card::NINE_CLUBS),
+            CardFactory::create(Card::THREE_CLUBS),
+        ];
+
+        $this->handIdentifier->identify($wholeCards, $communityCards);
+        $this->assertEquals(HandType::STRAIGHT['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
+        $this->assertEquals(Rank::FIVE['ranking'], $this->handIdentifier->identifiedHandType['kicker']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function itCanIdentifyAceHighStraight()
+    {
+        $wholeCards = [
+            CardFactory::create(Card::JACK_CLUBS),
+            CardFactory::create(Card::TEN_DIAMONDS),
+        ];
+
+        $communityCards = [
+            CardFactory::create(Card::ACE_HEARTS),
+            CardFactory::create(Card::QUEEN_HEARTS),
+            CardFactory::create(Card::KING_DIAMONDS),
+            CardFactory::create(Card::NINE_CLUBS),
+            CardFactory::create(Card::THREE_CLUBS),
+        ];
+
+        $this->handIdentifier->identify($wholeCards, $communityCards);
+        $this->assertEquals(HandType::STRAIGHT['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
+        $this->assertEquals(14, $this->handIdentifier->identifiedHandType['kicker']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function itCanIdentifyAStraightWithADuplicateRank()
+    {
+        $wholeCards = [
+            CardFactory::create(Card::JACK_CLUBS),
+            CardFactory::create(Card::TEN_DIAMONDS),
+        ];
+
+        $communityCards = [
+            CardFactory::create(Card::NINE_HEARTS),
+            CardFactory::create(Card::QUEEN_HEARTS),
+            CardFactory::create(Card::KING_DIAMONDS),
+            CardFactory::create(Card::JACK_HEARTS),
+            CardFactory::create(Card::THREE_CLUBS),
+        ];
+
+        $this->handIdentifier->identify($wholeCards, $communityCards);
+        $this->assertEquals(HandType::STRAIGHT['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
+        $this->assertEquals(Rank::KING['ranking'], $this->handIdentifier->identifiedHandType['kicker']);
     }
 }

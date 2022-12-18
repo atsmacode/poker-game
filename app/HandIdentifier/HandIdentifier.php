@@ -31,9 +31,9 @@ class HandIdentifier
         'hasStraightFlush',
         'hasFourOfAKind',
         'hasFullHouse',
-        'hasFlush',
+        'hasFlush',*/
         'hasStraight',
-        'hasThreeOfAKind',*/
+        'hasThreeOfAKind',
         'hasTwoPair',
         'hasPair',
         'highestCard'
@@ -74,19 +74,14 @@ class HandIdentifier
      */
     private function checkForHighAceActiveCardRanking(array $rank): int|bool
     {
-        if ($rank['ranking'] === 1) {
-            return 14;
-        }
+        if ($rank['ranking'] === 1) { return 14; }
 
         return false;
     }
 
     protected function thereIsNoAceInTheActiveCardsUnlessHandIsFlush($forHandCheck, $activeCards)
     {
-        /**
-         * TODO: Replace 1 & 14 with HIGH_ACE_ID
-         * & LOW_ACE_ID constants.
-         */
+        /** @todo Replace 1 & 14 with HIGH_ACE_ID & LOW_ACE_ID constants.*/
         return (
             $activeCards && count($this->filterAllCards('ranking', 1)) > 1
             && !in_array(1, $activeCards)
@@ -120,7 +115,7 @@ class HandIdentifier
          * Check against $this->highCard & activeCards so only
          * inactive cards are used as kickers kickers.
          * 
-         * TODO: This won't yet cover all cases as it will return
+         * @todo This won't yet cover all cases as it will return
          * null if none of the player's inactive cards meet the
          * two conditions.
          */
@@ -149,24 +144,21 @@ class HandIdentifier
 
     private function filterAllCards(string $column, $filter)
     {
-        return array_filter($this->allCards, function($value) use($column, $filter){
+        return array_filter($this->allCards, function ($value) use ($column, $filter) {
             return $value[$column] === $filter;
         });
     }
 
-    /**
-     * @return array<Card>
-     */
-    private function sortCardsByDescRanking()
+    private function sortCardsByDescRanking(): array
     {
-        uasort($this->allCards, function ($a, $b){
+        usort($this->allCards, function ($a, $b){
             if ($a['ranking'] == $b['ranking']) {
                 return 0;
             }
             return ($a['ranking'] > $b['ranking']) ? -1 : 1;
         });
 
-        return $this->allCards;
+        return array_values($this->allCards);
     }
 
     public function highestCard(): self
@@ -238,5 +230,158 @@ class HandIdentifier
         $this->pairs = [];
 
         return $this;
+    }
+
+    public function hasThreeOfAKind()
+    {
+
+        foreach(Rank::ALL as $rank){
+            if(3 === count($this->filterAllCards('rank_id', $rank['rank_id']))){
+                $this->threeOfAKind                        = $rank;
+                $this->identifiedHandType['handType']      = $this->getHandType('Three of a Kind');
+                $this->identifiedHandType['activeCards'][] = $this->checkForHighAceActiveCardRanking($rank) ?: $rank['ranking'];
+
+                $this->identifiedHandType['kicker'] = $this->checkForAceKicker(__FUNCTION__, $this->identifiedHandType['activeCards'])
+                    ?: $this->getKicker($this->identifiedHandType['activeCards']);
+
+                return true;
+            }
+        }
+
+        /** @todo There could be 2 trips - add handling for this */
+        return $this;
+    }
+
+    /** @return bool|self */
+    public function hasStraight()
+    {
+        if (true === $this->hasFiveHighStraight()) { return true; }
+
+        if (true === $this->hasAceHighStraight()) { return true; }
+
+        if (true === $this->hasAnyOtherStraight()) { return true; }
+
+        return $this;
+    }
+
+    private function hasFiveHighStraight(): bool
+    {
+        $sortedCardsDesc = array_filter($this->sortCardsByDescRanking(), function ($value, $key) {
+            $previousCardRanking = null;
+
+            /* Remove duplicates. */
+            if (array_key_exists($key - 1, $this->allCards)) {
+                $previousCardRanking = $this->allCards[$key - 1]['ranking'];
+            }
+
+            switch ($value['ranking']) {
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                    if ($value['ranking'] !== $previousCardRanking) { return true; }
+                    break;
+            }
+        }, ARRAY_FILTER_USE_BOTH);
+
+        $straight = array_slice($sortedCardsDesc, 0, 5);
+
+        if ($straight && 5 === count($straight)) {
+            $this->straight                       = $straight;
+            $this->identifiedHandType['handType'] = $this->getHandType('Straight');
+            $this->identifiedHandType['kicker']   = array_shift($straight)['ranking'];
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private function hasAceHighStraight(): bool
+    {
+        $sortedCardsDesc = array_filter($this->sortCardsByDescRanking(), function ($value, $key) {
+            $previousCardRanking = null;
+
+            /* Remove duplicates. */
+            if (array_key_exists($key - 1, $this->allCards)) {
+                $previousCardRanking = $this->allCards[$key - 1]['ranking'];
+            }
+
+            switch ($value['ranking']) {
+                case 1:
+                case 13:
+                case 12:
+                case 11:
+                case 10:
+                    if ($value['ranking'] !== $previousCardRanking) { return true; }
+                    break;
+            }
+        }, ARRAY_FILTER_USE_BOTH);
+
+        $straight = array_slice($sortedCardsDesc, 0, 5);
+
+        if ($straight && 5 === count($straight)) {
+            $this->straight                       = $straight;
+            $this->identifiedHandType['handType'] = $this->getHandType('Straight');
+            $this->identifiedHandType['kicker']   = 14;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private function hasAnyOtherStraight(): bool
+    {
+        $cardsSortByDesc  = $this->sortCardsByDescRanking();
+        $removeDuplicates = array_values(array_filter($cardsSortByDesc, function ($value, $key) use ($cardsSortByDesc) {
+            if (array_key_exists($key - 1, $cardsSortByDesc)) {
+                return $value['ranking'] !== $cardsSortByDesc[$key - 1]['ranking'];
+            }
+
+            return true;
+        }, ARRAY_FILTER_USE_BOTH));
+
+        $straight = array_filter($removeDuplicates, function($value, $key) use ($removeDuplicates) {
+            $nextCardRankingPlusOne      = null;
+            $previousCardRankingMinusOne = null;
+            $previousCardRanking         = null;
+
+            if(array_key_exists($key + 1, $removeDuplicates)){
+                $nextCardRankingPlusOne = $removeDuplicates[$key + 1]['ranking'] + 1;
+            }
+
+            if(array_key_exists($key - 1, $removeDuplicates)){
+                $previousCardRankingMinusOne = $removeDuplicates[$key - 1]['ranking'] - 1;
+                $previousCardRanking         = $removeDuplicates[$key - 1]['ranking'];
+            }
+
+            /** Had to add extra logic to prevent K,Q,9,8,7 being set as a straight, for example. */
+            $twoCardsInFrontRankingPlusTwo   = null;
+            $twoCardsPreviousRankingMinusTwo = null;
+
+            if(array_key_exists($key + 2, $removeDuplicates)){
+                $twoCardsInFrontRankingPlusTwo = $removeDuplicates[$key + 2]['ranking'] + 2;
+            }
+
+            if(array_key_exists($key - 2, $removeDuplicates)){
+                $twoCardsPreviousRankingMinusTwo = $removeDuplicates[$key - 2]['ranking'] - 2;
+            }
+
+            return ($value['ranking'] !== $previousCardRanking) &&
+                (($value['ranking'] === $previousCardRankingMinusOne || $value['ranking'] === $nextCardRankingPlusOne) &&
+                    ($value['ranking'] === $twoCardsPreviousRankingMinusTwo || $value['ranking'] === $twoCardsInFrontRankingPlusTwo));
+        }, ARRAY_FILTER_USE_BOTH);
+
+        if ($straight && 5 === count($straight)) {
+            $this->straight                       = $straight;
+            $this->identifiedHandType['handType'] = $this->getHandType('Straight');
+            $this->identifiedHandType['kicker']   = array_shift($straight)['ranking'];
+
+            return true;
+        }
+
+        return false;
     }
 }
