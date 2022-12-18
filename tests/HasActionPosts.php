@@ -78,6 +78,24 @@ trait HasActionPosts
         $_POST['body'] = $requestBody;
     }
 
+    private function setPlayerTwoChecksPost()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+
+        $requestBody = [
+            'deck'           => $this->gameState->getGameDealer()->getDeck(),
+            'player_id'      => $this->player2->id,
+            'table_seat_id'  => $this->gameState->getSeats()[1]['id'],
+            'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()[0]['id'],
+            'action_id'      => Action::CHECK_ID,
+            'bet_amount'     => null,
+            'active'         => 1,
+            'stack'          => $this->gameState->getPlayers()[1]['stack']
+        ];
+
+        $_POST['body'] = $requestBody;
+    }
+
     private function setPlayerTwoFoldsPost()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';

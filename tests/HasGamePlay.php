@@ -209,6 +209,27 @@ trait HasGamePlay
         $this->gameState->setLatestAction($playerAction);
     }
 
+    private function givenPlayerThreeFolds()
+    {
+        $playerAction = $this->playerActionFactory->create(
+            playerActionId: $this->gameState->getPlayers()[2]['player_action_id'],
+            handId:         $this->gameState->handId(),
+            actionId:       Action::FOLD_ID,
+            betAmount:      null,
+            active:         0,
+        );
+
+        $this->gameState->setLatestAction($playerAction);
+    }
+
+    private function givenPlayerThreeCanNotContinue()
+    {
+        $this->tableSeatModel->find(['id' => $this->gameState->getSeats()[2]['id']])
+            ->update([
+                'can_continue' => 0
+            ]);
+    }
+
     private function givenPlayerThreeCallsSmallBlind()
     {
         $playerAction = $this->playerActionFactory->create(
@@ -324,11 +345,61 @@ trait HasGamePlay
         $this->gameState->setLatestAction($playerAction);
     }
 
+    private function givenPlayerFiveFolds()
+    {
+        $playerAction = $this->playerActionFactory->create(
+            playerActionId: $this->gameState->getPlayers()[4]['player_action_id'],
+            handId:         $this->gameState->handId(),
+            actionId:       Action::FOLD_ID,
+            betAmount:      null,
+            active:         0,
+        );
+
+        $this->gameState->setLatestAction($playerAction);
+    }
+
     private function givenPlayerFiveCanContinue()
     {
         $this->tableSeatModel->find(['id' => $this->gameState->getSeats()[4]['id']])
             ->update([
                 'can_continue' => 1
+            ]);
+    }
+
+    private function givenPlayerFiveCanNotContinue()
+    {
+        $this->tableSeatModel->find(['id' => $this->gameState->getSeats()[4]['id']])
+            ->update([
+                'can_continue' => 0
+            ]);
+    }
+
+    private function givenPlayerSixFolds()
+    {
+        $playerAction = $this->playerActionFactory->create(
+            playerActionId: $this->gameState->getPlayers()[5]['player_action_id'],
+            handId:         $this->gameState->handId(),
+            actionId:       Action::FOLD_ID,
+            betAmount:      null,
+            active:         0,
+        );
+
+        $this->gameState->setLatestAction($playerAction);
+    }
+
+    private function givenPlayerSixCanContinue()
+    {
+        $this->tableSeatModel->find(['id' => $this->gameState->getSeats()[5]['id']])
+            ->update([
+                'can_continue' => 1
+            ]);
+    }
+
+    private function givenPlayerSixCanNotContinue()
+    {
+        $this->tableSeatModel->find(['id' => $this->gameState->getSeats()[5]['id']])
+            ->update([
+                'can_continue' => 0
             ]);
     }
 

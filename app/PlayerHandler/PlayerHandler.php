@@ -82,16 +82,24 @@ class PlayerHandler implements PlayerHandlerInterface
 
     private function getAvailableOptionsBasedOnLatestAction($playerAction)
     {
-        if ($this->gameState->isNewStreet()) { return [Action::FOLD, Action::CHECK, Action::BET]; }
+        $latestAction      = $this->gameState->getLatestAction();
+        $continuingBetters = $this->tableSeatModel->getContinuingBetters((string) $this->gameState->getHand()->id);
+        $playerActions     = $this->gameState->getPlayers();
+
+        if ($this->gameState->isNewStreet()) { error_log('new street'); return [Action::FOLD, Action::CHECK, Action::BET]; }
+
+        if (
+            !in_array(Action::RAISE['id'], array_column($playerActions, 'action_id')) &&
+            count($this->gameState->getHandStreets()) === 1 &&
+            $playerAction['big_blind']
+        ) {
+            return [Action::FOLD, Action::CHECK, Action::BET];
+        }
 
         /** BB is the only player that can fold / check / raise pre-flop */
         if (count($this->gameState->getHandStreets()) === 1 && !$playerAction['big_blind']) {
             return [Action::FOLD, Action::CALL, Action::RAISE];
         }
-
-        $latestAction      = $this->gameState->getLatestAction();
-        $continuingBetters = $this->tableSeatModel->getContinuingBetters($this->gameState->getHand()->id);
-        $playerActions     = $this->gameState->getPlayers();
 
         switch($latestAction->action_id){
             case Action::CALL['id']:

@@ -45,4 +45,37 @@ class PlayerActionControllerTest extends BaseTest
         $this->assertContains(Action::CALL, $response['players'][0]['availableOptions']);
         $this->assertContains(Action::RAISE, $response['players'][0]['availableOptions']);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function theBigBlindCanFoldCheckOrBetIfDealerCallsAndSmallBlindFolds()
+    {
+        $this->gamePlay->start();
+
+        $this->setFlop();
+
+        $this->givenPlayerFourFolds();
+        $this->givenPlayerFourCanNotContinue();
+
+        $this->givenPlayerFiveFolds();
+        $this->givenPlayerFiveCanNotContinue();
+
+        $this->givenPlayerSixFolds();
+        $this->givenPlayerSixCanNotContinue();
+
+        $this->givenPlayerOneCalls();
+        $this->givenPlayerOneCanContinue();
+
+        $this->setPlayerTwoFoldsPost();
+
+        $response = $this->actionControllerResponse();
+
+        $this->assertTrue($response['players'][2]['action_on']);
+
+        $this->assertContains(Action::FOLD, $response['players'][2]['availableOptions']);
+        $this->assertContains(Action::CHECK, $response['players'][2]['availableOptions']);
+        $this->assertContains(Action::BET, $response['players'][2]['availableOptions']);
+    }
 }

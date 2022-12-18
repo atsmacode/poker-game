@@ -91,6 +91,27 @@ class PlayerActionControllerTest extends BaseTest
         $this->assertContains(Action::CHECK, $response['players'][2]['availableOptions']);
         $this->assertContains(Action::RAISE, $response['players'][2]['availableOptions']);
     }
+    /**
+     * @test
+     * @return void
+     */
+    public function the_big_blind_facing_a_call_fold_can_fold_check_or_raise()
+    {
+        $this->gamePlay->start();
+
+        $this->givenPlayerOneCalls();
+        $this->givenPlayerOneCanContinue();
+
+        $this->setPlayerTwoFoldsPost();
+
+        $response = $this->actionControllerResponse();
+
+        $this->assertTrue($response['players'][2]['action_on']);
+
+        $this->assertContains(Action::FOLD, $response['players'][2]['availableOptions']);
+        $this->assertContains(Action::CHECK, $response['players'][2]['availableOptions']);
+        $this->assertContains(Action::RAISE, $response['players'][2]['availableOptions']);
+    }
 
     /**
      * @test
