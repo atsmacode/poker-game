@@ -116,7 +116,7 @@ class PlayerHandler implements PlayerHandlerInterface
                 }
                 
                 /** Latest action may be a fold, so we need to check for raisers/callers/bettters before the folder. */
-                if (0 < count($continuingBetters)) { var_dump('fold'); return [Action::FOLD, Action::CALL, Action::RAISE]; break; }
+                if (0 < count($continuingBetters)) { return [Action::FOLD, Action::CALL, Action::RAISE]; break; }
 
                 return [Action::FOLD, Action::CHECK, Action::BET];
                 break;
