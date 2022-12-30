@@ -5,20 +5,20 @@ namespace Atsmacode\PokerGame\Tests;
 use Atsmacode\PokerGame\Constants\Action;
 use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\PlayerActionController as PotLimitHoldEmPlayerActionController;
 use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\HandController as PotLimitHoldEmHandController;
+use Symfony\Component\HttpFoundation\Request;
 
 trait HasActionPosts
 {
-    private function actionControllerResponse()
+    private function actionControllerResponse(Request $request)
     {
-        $response = (new PotLimitHoldEmPlayerActionController($this->container, $this->actionHandler))->action();
+        $response = (new PotLimitHoldEmPlayerActionController($this->container, $this->actionHandler))->action($request);
 
         return json_decode($response->getBody()->getContents(), true);
     }
 
     private function handControllerResponse($currentDealer = null): array
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        
+       
         $response = (new PotLimitHoldEmHandController($this->container))->play($this->table->id, $currentDealer);
 
         return json_decode($response->getBody()->getContents(), true);
@@ -26,8 +26,6 @@ trait HasActionPosts
 
     private function setPost()
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player1->id,
@@ -39,13 +37,15 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[0]['stack']
         ];
 
-        $_POST['body'] = $requestBody;
+        return Request::create(
+            uri: '',
+            method: 'POST',
+            content: json_encode($requestBody)
+        );
     }
 
     private function setPlayerOneFoldsPost()
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player1->id,
@@ -57,13 +57,15 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[0]['stack']
         ];
 
-        $_POST['body'] = $requestBody;
+        return Request::create(
+            uri: '',
+            method: 'POST',
+            content: json_encode($requestBody)
+        );
     }
 
     private function setPlayerTwoCallsPost()
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player2->id,
@@ -75,13 +77,15 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[1]['stack']
         ];
 
-        $_POST['body'] = $requestBody;
+        return Request::create(
+            uri: '',
+            method: 'POST',
+            content: json_encode($requestBody)
+        );
     }
 
     private function setPlayerTwoChecksPost()
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player2->id,
@@ -93,13 +97,15 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[1]['stack']
         ];
 
-        $_POST['body'] = $requestBody;
+        return Request::create(
+            uri: '',
+            method: 'POST',
+            content: json_encode($requestBody)
+        );
     }
 
     private function setPlayerTwoFoldsPost()
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player2->id,
@@ -111,13 +117,15 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[1]['stack']
         ];
 
-        $_POST['body'] = $requestBody;
+        return Request::create(
+            uri: '',
+            method: 'POST',
+            content: json_encode($requestBody)
+        );
     }
 
     private function setPlayerThreeChecksPost()
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player3->id,
@@ -129,13 +137,15 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[2]['stack']
         ];
 
-        $_POST['body'] = $requestBody;
+        return Request::create(
+            uri: '',
+            method: 'POST',
+            content: json_encode($requestBody)
+        );
     }
 
     private function setPlayerThreeRaisesPost()
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player3->id,
@@ -147,13 +157,15 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[2]['stack']
         ];
 
-        $_POST['body'] = $requestBody;
+        return Request::create(
+            uri: '',
+            method: 'POST',
+            content: json_encode($requestBody)
+        );
     }
 
     private function setPlayerFourCallsPost()
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player4->id,
@@ -165,13 +177,15 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[3]['stack']
         ];
 
-        $_POST['body'] = $requestBody;
+        return Request::create(
+            uri: '',
+            method: 'POST',
+            content: json_encode($requestBody)
+        );
     }
 
     private function setPlayerFourFoldsPost()
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player4->id,
@@ -183,13 +197,15 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[3]['stack']
         ];
 
-        $_POST['body'] = $requestBody;
+        return Request::create(
+            uri: '',
+            method: 'POST',
+            content: json_encode($requestBody)
+        );
     }
 
     private function setPlayerFourRaisesPost()
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player4->id,
@@ -201,13 +217,15 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[3]['stack']
         ];
 
-        $_POST['body'] = $requestBody;
+        return Request::create(
+            uri: '',
+            method: 'POST',
+            content: json_encode($requestBody)
+        );
     }
 
     private function setPlayerFourChecksPost()
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player4->id,
@@ -219,13 +237,15 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[3]['stack']
         ];
 
-        $_POST['body'] = $requestBody;
+        return Request::create(
+            uri: '',
+            method: 'POST',
+            content: json_encode($requestBody)
+        );
     }
 
     private function setPlayerSixFoldsPost()
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'player_id'      => $this->player6->id,
@@ -237,6 +257,10 @@ trait HasActionPosts
             'stack'          => $this->gameState->getPlayers()[5]['stack']
         ];
 
-        $_POST['body'] = $requestBody;
+        return Request::create(
+            uri: '',
+            method: 'POST',
+            content: json_encode($requestBody)
+        );
     }
 }

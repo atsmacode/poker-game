@@ -7,6 +7,7 @@ use Atsmacode\PokerGame\GamePlay\GamePlay;
 use Atsmacode\PokerGame\Models\Hand;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\ServiceManager\ServiceManager;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class PlayerActionController
 {
@@ -24,14 +25,11 @@ abstract class PlayerActionController
         $this->handModel     = $container->get(Hand::class);
     }
 
-    public function action(): JsonResponse
+    public function action(Request $request): JsonResponse
     {
-        $requestBody = file_get_contents('php://input')
-            ? json_decode(file_get_contents('php://input'), true)['body']
-            : $_POST['body'];
-
-        $hand      = $this->handModel->latest();
-        $gameState = $this->actionHandler->handle(
+        $requestBody = $request->toArray();
+        $hand        = $this->handModel->latest();
+        $gameState   = $this->actionHandler->handle(
             $hand,
             $requestBody['player_id'],
             $requestBody['table_seat_id'],

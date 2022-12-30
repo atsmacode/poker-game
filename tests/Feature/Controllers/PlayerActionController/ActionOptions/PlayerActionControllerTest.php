@@ -26,9 +26,8 @@ class PlayerActionControllerTest extends BaseTest
     {
         $this->gamePlay->start();
 
-        $this->setPlayerFourRaisesPost();
-
-        $response = $this->actionControllerResponse();
+        $request  = $this->setPlayerFourRaisesPost();
+        $response = $this->actionControllerResponse($request);
 
         $this->assertTrue($response['players'][0]['action_on']);
 
@@ -46,9 +45,9 @@ class PlayerActionControllerTest extends BaseTest
         $this->gamePlay->start();
 
         $this->givenPlayerFourRaises();
-        $this->setPlayerOneFoldsPost();
 
-        $response = $this->actionControllerResponse();
+        $request  = $this->setPlayerOneFoldsPost();
+        $response = $this->actionControllerResponse($request);
 
         $this->assertTrue($response['players'][1]['action_on']);
 
@@ -65,9 +64,8 @@ class PlayerActionControllerTest extends BaseTest
     {
         $this->gamePlay->start();
 
-        $this->setPlayerFourFoldsPost();
-
-        $response = $this->actionControllerResponse();
+        $request  = $this->setPlayerFourFoldsPost();
+        $response = $this->actionControllerResponse($request);
 
         $this->assertTrue($response['players'][0]['action_on']);
         $this->assertEmpty($response['players'][3]['availableOptions']);
@@ -81,9 +79,8 @@ class PlayerActionControllerTest extends BaseTest
     {
         $this->gamePlay->start();
 
-        $this->setPlayerTwoCallsPost();
-
-        $response = $this->actionControllerResponse();
+        $request  = $this->setPlayerTwoCallsPost();
+        $response = $this->actionControllerResponse($request);
 
         $this->assertTrue($response['players'][2]['action_on']);
 
@@ -102,9 +99,8 @@ class PlayerActionControllerTest extends BaseTest
         $this->givenPlayerOneCalls();
         $this->givenPlayerOneCanContinue();
 
-        $this->setPlayerTwoFoldsPost();
-
-        $response = $this->actionControllerResponse();
+        $request  = $this->setPlayerTwoFoldsPost();
+        $response = $this->actionControllerResponse($request);
 
         $this->assertTrue($response['players'][2]['action_on']);
 
@@ -122,9 +118,8 @@ class PlayerActionControllerTest extends BaseTest
         
         $this->gamePlay->start();
 
-        $this->setPlayerFourCallsPost();
-
-        $response = $this->actionControllerResponse();
+        $request  = $this->setPlayerFourCallsPost();
+        $response = $this->actionControllerResponse($request);
 
         $this->assertTrue($response['players'][0]['action_on']);
 
@@ -145,7 +140,8 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->givenActionsMeanNewStreetIsDealt();
 
-        $response = $this->actionControllerResponse();
+        $request  = $this->setPlayerThreeChecksPost();
+        $response = $this->actionControllerResponse($request);
 
         $this->assertTrue($response['players'][2]['action_on']);
 
@@ -164,7 +160,5 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->givenPlayerTwoFolds();
         $this->givenPlayerTwoCanNotContinue();
-
-        $this->setPlayerThreeChecksPost();
     }
 }
