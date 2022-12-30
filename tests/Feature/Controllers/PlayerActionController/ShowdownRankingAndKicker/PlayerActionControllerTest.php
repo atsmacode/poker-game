@@ -90,9 +90,8 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->gameState->setPlayers();
 
-        $this->executeActionsToContinue();
-
-        $response = $this->actionControllerResponse();
+        $request  = $this->executeActionsToContinue();
+        $response = $this->actionControllerResponse($request);
 
         $this->assertEquals($this->player3->id, $response['winner']['player']['player_id']);
         $this->assertEquals(HandType::HIGH_CARD['id'], $response['winner']['handType']['id']);
@@ -159,9 +158,8 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->gameState->setPlayers();
 
-        $this->executeActionsToContinue();
-
-        $response = $this->actionControllerResponse();
+        $request  = $this->executeActionsToContinue();
+        $response = $this->actionControllerResponse($request);
 
         $this->assertEquals($this->player3->id, $response['winner']['player']['player_id']);
         $this->assertEquals(HandType::HIGH_CARD['id'], $response['winner']['handType']['id']);
@@ -216,6 +214,6 @@ class PlayerActionControllerTest extends BaseTest
         $this->givenPlayerTwoFolds();
         $this->givenPlayerTwoCanNotContinue();
 
-        $this->setPlayerThreeChecksPost();
+        return $this->setPlayerThreeChecksPost();
     }
 }

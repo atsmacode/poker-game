@@ -26,9 +26,9 @@ class PlayerActionControllerTest extends BaseTest
     {
         $this->gamePlay->start();
 
-        $this->executeActionsToContinue();
+        $request = $this->executeActionsToContinue();
 
-        $this->actionControllerResponse();
+        $this->actionControllerResponse($request);
 
         $this->assertCount(2, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
         $this->assertCount(3, $this->handStreetModel->getStreetCards($this->gameState->handId(), 2));
@@ -44,9 +44,9 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->setFlop();
 
-        $this->executeActionsToContinue();
+        $request = $this->executeActionsToContinue();
 
-        $this->actionControllerResponse();
+        $this->actionControllerResponse($request);
 
         $this->assertCount(3, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
         $this->assertCount(1, $this->handStreetModel->getStreetCards($this->gameState->handId(), 3));
@@ -64,9 +64,9 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->setTurn();
 
-        $this->executeActionsToContinue();
+        $request = $this->executeActionsToContinue();
 
-        $this->actionControllerResponse();
+        $this->actionControllerResponse($request);
 
         $this->assertCount(4, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
         $this->assertCount(1, $this->handStreetModel->getStreetCards($this->gameState->handId(), 4));
@@ -86,9 +86,9 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->setRiver();
 
-        $this->executeActionsToContinue();
+        $request = $this->executeActionsToContinue();
 
-        $response = $this->actionControllerResponse();
+        $response = $this->actionControllerResponse($request);
 
         $this->assertNotNull($response['winner']);
     }
@@ -101,6 +101,6 @@ class PlayerActionControllerTest extends BaseTest
         $this->givenPlayerTwoFolds();
         $this->givenPlayerTwoCanNotContinue();
 
-        $this->setPlayerThreeChecksPost();
+        return $this->setPlayerThreeChecksPost();
     }
 }

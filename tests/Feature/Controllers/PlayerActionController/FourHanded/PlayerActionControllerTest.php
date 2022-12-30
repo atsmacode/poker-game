@@ -25,9 +25,8 @@ class PlayerActionControllerTest extends BaseTest
     {
         $this->gamePlay->start();
 
-        $this->setPlayerFourCallsPost();
-
-        $response = $this->actionControllerResponse();
+        $request  = $this->setPlayerFourCallsPost();
+        $response = $this->actionControllerResponse($request);
 
         $this->assertEquals(1, $response['players'][3]['can_continue']);
     }
@@ -41,11 +40,10 @@ class PlayerActionControllerTest extends BaseTest
         $this->gamePlay->start();
 
         $this->givenBigBlindRaisesPreFlopCaller();
-
         $this->givenPlayerThreeCanContinue();
-        $this->setPlayerFourFoldsPost();
 
-        $response = $this->actionControllerResponse();
+        $request  = $this->setPlayerFourFoldsPost();
+        $response = $this->actionControllerResponse($request);
 
         $this->assertEquals(0, $response['players'][3]['can_continue']);
     }
@@ -60,9 +58,9 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
 
-        $this->givenActionsMeanNewStreetIsDealt();
+        $request = $this->givenActionsMeanNewStreetIsDealt();
 
-        $this->actionControllerResponse();
+        $this->actionControllerResponse($request);
 
         $this->assertCount(2, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
     }
@@ -83,9 +81,8 @@ class PlayerActionControllerTest extends BaseTest
         $this->givenPlayerOneFolds();
         $this->givenPlayerOneCanNotContinue();
 
-        $this->setPlayerTwoFoldsPost();
-
-        $response = $this->actionControllerResponse();
+        $request  = $this->setPlayerTwoFoldsPost();
+        $response = $this->actionControllerResponse($request);
 
         $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
         $this->assertEquals(1, $response['players'][2]['can_continue']);
@@ -102,9 +99,8 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
 
-        $this->givenBigBlindRaisesPreFlopCaller();
-
-        $response = $this->actionControllerResponse();
+        $request  = $this->givenBigBlindRaisesPreFlopCaller();
+        $response = $this->actionControllerResponse($request);
 
         // We are still on the pre-flop action
         $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
@@ -124,9 +120,8 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
 
-        $this->givenActionsMeanNewStreetIsDealtWhenDealerIsSeatTwo();
-
-        $response = $this->actionControllerResponse();
+        $request  = $this->givenActionsMeanNewStreetIsDealtWhenDealerIsSeatTwo();
+        $response = $this->actionControllerResponse($request);
 
         $this->assertCount(2, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
 
@@ -145,11 +140,8 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
 
-        /**
-         * TODO, why did this not work without the POST 'all of a sudden'
-         */
-        $this->setPost();
-        $response = $this->actionControllerResponse();
+        $request  = $this->setPost();
+        $response = $this->actionControllerResponse($request);
 
         $this->assertEquals(1, $response['players'][0]['small_blind']);
         $this->assertEquals(1, $response['players'][1]['big_blind']);
@@ -165,9 +157,8 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
 
-        $this->givenActionsMeanNewStreetIsDealt();
-
-        $response = $this->actionControllerResponse();
+        $request  = $this->givenActionsMeanNewStreetIsDealt();
+        $response = $this->actionControllerResponse($request);
 
         $this->assertTrue($response['players'][2]['action_on']);
     }
@@ -183,7 +174,7 @@ class PlayerActionControllerTest extends BaseTest
         $this->givenPlayerTwoFolds();
         $this->givenPlayerTwoCanNotContinue();
 
-        $this->setPlayerThreeRaisesPost();
+        return $this->setPlayerThreeRaisesPost();
     }
 
     private function givenActionsMeanNewStreetIsDealt()
@@ -197,7 +188,7 @@ class PlayerActionControllerTest extends BaseTest
         $this->givenPlayerTwoFolds();
         $this->givenPlayerTwoCanNotContinue();
 
-        $this->setPlayerThreeChecksPost();
+        return $this->setPlayerThreeChecksPost();
     }
 
     private function givenActionsMeanNewStreetIsDealtWhenDealerIsSeatTwo()
@@ -211,6 +202,6 @@ class PlayerActionControllerTest extends BaseTest
         $this->givenPlayerThreeCallsSmallBlind();
         $this->givenPlayerThreeCanContinue();
 
-        $this->setPlayerFourChecksPost();
+        return $this->setPlayerFourChecksPost();
     }
 }

@@ -35,9 +35,8 @@ class PlayerActionControllerTest extends BaseTest
         $this->givenPlayerFiveCalls();
         $this->givenPlayerFiveCanContinue();
 
-        $this->setPlayerSixFoldsPost();
-
-        $response = $this->actionControllerResponse();
+        $request  = $this->setPlayerSixFoldsPost();
+        $response = $this->actionControllerResponse($request);
 
         $this->assertTrue($response['players'][0]['action_on']);
 
@@ -66,9 +65,8 @@ class PlayerActionControllerTest extends BaseTest
         $this->givenPlayerOneCalls();
         $this->givenPlayerOneCanContinue();
 
-        $this->setPlayerTwoFoldsPost();
-
-        $response = $this->actionControllerResponse();
+        $request  = $this->setPlayerTwoFoldsPost();
+        $response = $this->actionControllerResponse($request);
 
         $this->assertTrue($response['players'][2]['action_on']);
 

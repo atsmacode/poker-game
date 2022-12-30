@@ -25,8 +25,7 @@ class PlayerActionControllerTest extends BaseTest
     {
         $this->gamePlay->start();
 
-        $request = $this->setPost();
-
+        $request  = $this->setPost();
         $response = $this->actionControllerResponse($request);
 
         $this->assertEquals(

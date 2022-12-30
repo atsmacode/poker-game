@@ -138,9 +138,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
 
-        $this->givenActionsMeanNewStreetIsDealt();
-
-        $request  = $this->setPlayerThreeChecksPost();
+        $request  = $this->givenActionsMeanNewStreetIsDealt();
         $response = $this->actionControllerResponse($request);
 
         $this->assertTrue($response['players'][2]['action_on']);
@@ -160,5 +158,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->givenPlayerTwoFolds();
         $this->givenPlayerTwoCanNotContinue();
+
+        return $this->setPlayerThreeChecksPost();
     }
 }

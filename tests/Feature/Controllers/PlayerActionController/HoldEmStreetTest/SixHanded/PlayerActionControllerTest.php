@@ -41,9 +41,9 @@ class PlayerActionControllerTest extends BaseTest
         $this->givenPlayerOneCalls();
         $this->givenPlayerOneCanContinue();
 
-        $this->setPlayerTwoChecksPost();
+        $request = $this->setPlayerTwoChecksPost();
 
-        $this->actionControllerResponse();
+        $this->actionControllerResponse($request);
 
         $this->assertCount(2, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
         $this->assertCount(3, $this->handStreetModel->getStreetCards($this->gameState->handId(), 2));
