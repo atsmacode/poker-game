@@ -15,7 +15,7 @@ class DependencyConfig
                 ],
                 'factories' => [
                     \Atsmacode\PokerGame\PokerGameConfigProvider::class
-                        => \Atsmacode\PokerGame\PokerGameConfigProviderFactory::class,
+                        => \Atsmacode\PokerGame\PokerGameRelConfigProviderFactory::class,
                     \Atsmacode\Framework\Database\ConnectionInterface::class
                         => \Atsmacode\PokerGame\Database\DbalLiveFactory::class,
                     \PDO::class
@@ -70,6 +70,14 @@ class DependencyConfig
                         => \Atsmacode\PokerGame\GameState\GameStateFactory::class,
                     \Atsmacode\PokerGame\ActionHandler\ActionHandler::class
                         => \Atsmacode\PokerGame\ActionHandler\ActionHandlerFactory::class,
+                    \Atsmacode\PokerGame\Controllers\PotLimitHoldEm\HandController::class
+                        => \Atsmacode\PokerGame\Controllers\HandControllerFactory::class,
+                    \Atsmacode\PokerGame\Controllers\PotLimitOmaha\HandController::class
+                        => \Atsmacode\PokerGame\Controllers\HandControllerFactory::class,
+                    \Atsmacode\PokerGame\Controllers\PotLimitHoldEm\PlayerActionController::class
+                        => \Atsmacode\PokerGame\Controllers\PlayerActionControllerFactory::class,
+                    \Atsmacode\PokerGame\Controllers\PotLimitOmaha\PlayerActionController::class
+                        => \Atsmacode\PokerGame\Controllers\PlayerActionControllerFactory::class
                 ],
             ],
         ];

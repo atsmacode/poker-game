@@ -13,7 +13,7 @@ trait HasActionPosts
     {
         $response = (new PotLimitHoldEmPlayerActionController($this->container, $this->actionHandler))->action($request);
 
-        return json_decode($response->getBody()->getContents(), true);
+        return json_decode($response->getContent(), true);
     }
 
     private function handControllerResponse($currentDealer = null): array
@@ -21,7 +21,7 @@ trait HasActionPosts
        
         $response = (new PotLimitHoldEmHandController($this->container))->play($this->table->id, $currentDealer);
 
-        return json_decode($response->getBody()->getContents(), true);
+        return json_decode($response->getContent(), true);
     }
 
     private function setPost()

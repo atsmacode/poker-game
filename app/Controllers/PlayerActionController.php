@@ -5,9 +5,9 @@ namespace Atsmacode\PokerGame\Controllers;
 use Atsmacode\PokerGame\ActionHandler\ActionHandler;
 use Atsmacode\PokerGame\GamePlay\GamePlay;
 use Atsmacode\PokerGame\Models\Hand;
-use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\ServiceManager\ServiceManager;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 abstract class PlayerActionController
 {
@@ -25,7 +25,7 @@ abstract class PlayerActionController
         $this->handModel     = $container->get(Hand::class);
     }
 
-    public function action(Request $request): JsonResponse
+    public function action(Request $request): Response
     {
         $requestBody = $request->toArray();
         $hand        = $this->handModel->latest();
@@ -47,12 +47,12 @@ abstract class PlayerActionController
         ]);
         $gamePlay = $gamePlayService->play($gameState);
 
-        return new JsonResponse([
+        return new Response(json_encode([
             'deck'           => $gamePlay['deck'],
             'pot'            => $gamePlay['pot'],
             'communityCards' => $gamePlay['communityCards'],
             'players'        => $gamePlay['players'],
             'winner'         => $gamePlay['winner']
-        ]);
+        ]));
     }
 }

@@ -5,8 +5,8 @@ namespace Atsmacode\PokerGame\Controllers;
 use Atsmacode\PokerGame\GamePlay\GamePlay;
 use Atsmacode\PokerGame\GameState\GameState;
 use Atsmacode\PokerGame\Models\Hand;
-use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\ServiceManager\ServiceManager;
+use Symfony\Component\HttpFoundation\Response;
 
 abstract class HandController
 {
@@ -21,7 +21,7 @@ abstract class HandController
         $this->handModel = $container->build(Hand::class);
     }
 
-    public function play($tableId = null, $currentDealer = null): JsonResponse
+    public function play($tableId = null, $currentDealer = null): Response
     {
         $hand = $this->handModel->create(['table_id' => $tableId ?? 1]);
 
@@ -31,12 +31,12 @@ abstract class HandController
         ]);
         $gamePlay = $gamePlayService->start($currentDealer ?? null);
 
-        return new JsonResponse([
+        return new Response(json_encode([
             'deck'           => $gamePlay['deck'],
             'pot'            => $gamePlay['pot'],
             'communityCards' => $gamePlay['communityCards'],
             'players'        => $gamePlay['players'],
             'winner'         => $gamePlay['winner']
-        ]);
+        ]));
     }
 }
