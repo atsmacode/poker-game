@@ -15,6 +15,7 @@ use Atsmacode\PokerGame\Models\Table;
 use Atsmacode\PokerGame\Models\TableSeat;
 use Atsmacode\PokerGame\Models\WholeCard;
 use Atsmacode\PokerGame\PokerGameConfigProvider;
+use Atsmacode\PokerGame\PokerGameConfigProviderFactory;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +29,7 @@ abstract class BaseTest extends TestCase
         $pokerGameDependencyMap  = $config['dependencies'];
 
         $this->container = new ServiceManager($pokerGameDependencyMap);
+        $this->container->setFactory(PokerGameConfigProvider::class, new PokerGameConfigProviderFactory());
         $this->container->setFactory(ConnectionInterface::class, new DbalTestFactory());
 
         $this->tableModel          = $this->container->build(Table::class);
