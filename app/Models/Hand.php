@@ -82,31 +82,6 @@ class Hand extends Model
         }
     }
 
-    public function getNullActions()
-    {
-        $query = sprintf("
-                SELECT
-                    *
-                FROM
-                    player_actions
-                WHERE
-                    hand_id = :hand_id
-                AND
-                    action_id IS NULL
-        ");
-
-        try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':hand_id', $this->id);
-
-            $results = $stmt->executeQuery();
-
-            return $results->fetchAllAssociative();
-        } catch(\Exception $e) {
-            error_log(__METHOD__ . ': ' . $e->getMessage());
-        }
-    }
-
     public function getDealer()
     {
         $query = sprintf("
