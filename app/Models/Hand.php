@@ -38,16 +38,6 @@ class Hand extends Model
         }
     }
 
-    public function table()
-    {
-        return Table::find(['id' => $this->table_id]);
-    }
-
-    public function actions()
-    {
-        return PlayerAction::find(['hand_id' => $this->id]);
-    }
-
     public function pot()
     {
         $query = sprintf("
