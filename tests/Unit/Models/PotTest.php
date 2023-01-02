@@ -24,7 +24,7 @@ class PotTest extends BaseTest
     {
         $hand = $this->handModel->create(['table_id' => 1]);
 
-        $this->assertFalse($hand->pot());
+        $this->assertEmpty($hand->pot());
 
         $pot = $this->potModel->create([
             'amount' => 75,

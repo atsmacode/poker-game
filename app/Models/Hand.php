@@ -12,53 +12,33 @@ class Hand extends Model
     protected $table = 'hands';
     public    $id;
 
-    public function streets()
+    public function streets(): array
     {
-        $query = sprintf("
-            SELECT
-                hs.*
-            FROM
-                hand_streets AS hs
-            LEFT JOIN
-                hands AS h ON hs.hand_id = h.id
-            WHERE
-                hs.hand_id = :hand_id
-        ");
-
         try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':hand_id', $this->id);
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder
+                ->select('hs.*')
+                ->from('hand_streets', 'hs')
+                ->leftJoin('hs', 'hands', 'h', 'hs.hand_id = h.id')
+                ->where('hs.hand_id = ' . $queryBuilder->createNamedParameter($this->id));
 
-            $results = $stmt->executeQuery();
-            $rows    = $results->fetchAllAssociative();
-
-            return $rows;
+            return $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
         } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
 
-    public function pot()
+    public function pot(): array
     {
-        $query = sprintf("
-            SELECT
-                p.*
-            FROM
-                pots AS p
-            LEFT JOIN
-                hands AS h ON p.hand_id = h.id
-            WHERE
-                p.hand_id = :hand_id
-        ");
-
         try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':hand_id', $this->id);
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder
+                ->select('p.*')
+                ->from('pots', 'p')
+                ->leftJoin('p', 'hands', 'h', 'p.hand_id = h.id')
+                ->where('p.hand_id = ' . $queryBuilder->createNamedParameter($this->id));
 
-            $results = $stmt->executeQuery();
-            $rows    = $results->fetchAssociative();
-
-            return $rows;
+            return $queryBuilder->executeStatement() ? $queryBuilder->fetchAssociative() : [];
         } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
