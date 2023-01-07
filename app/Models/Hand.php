@@ -10,7 +10,10 @@ class Hand extends Model
     use Collection;
 
     protected $table = 'hands';
-    public    $id;
+    public    int $id;
+    public    int $table_id;
+    public    ?int $game_type_id;
+    public    ?string $completed_on;
 
     public function streets(): array
     {
@@ -44,7 +47,7 @@ class Hand extends Model
         }
     }
 
-    public function complete()
+    public function complete(): void
     {
         $query = sprintf("
             UPDATE
@@ -63,13 +66,30 @@ class Hand extends Model
         }
     }
 
-    public function latest()
+    public function latest(): self
     {
         $query = sprintf("
             SELECT * FROM hands ORDER BY id DESC LIMIT 1
         ");
 
         try {
+            /**
+             * @todo Using query builder here returns no results and causes:
+             * SQLSTATE[HY000]: General error: 2014 Cannot execute queries while
+             * other unbuffered queries are active.
+             */
+            // $queryBuilder = $this->connection->createQueryBuilder();
+            // $queryBuilder
+            //     ->select('*')
+            //     ->from('hands')
+            //     ->orderBy('id', 'DESC')
+            //     ->setMaxResults(1);
+
+            // $rows = $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
+
+            // $this->setModelProperties($rows);
+
+            // return $this;
             $stmt    = $this->connection->prepare($query);
             $results = $stmt->executeQuery();
             $rows    = $results->fetchAllAssociative();
