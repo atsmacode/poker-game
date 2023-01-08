@@ -9,7 +9,7 @@ class Hand extends Model
 {
     use Collection;
 
-    protected $table = 'hands';
+    protected     $table = 'hands';
     public    int $id;
     public    int $table_id;
     public    ?int $game_type_id;

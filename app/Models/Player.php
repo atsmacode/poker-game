@@ -9,65 +9,48 @@ class Player extends Model
 {
     use Collection;
 
-    protected $table = 'players';
-    public $id;
+    protected     $table = 'players';
+    public int    $id;
+    public string $name;
+    public string $email;  
 
-    public function stacks()
+    public function stacks(): array
     {
-        $query = sprintf("
-            SELECT
-                *
-            FROM
-                stacks
-            WHERE
-                player_id = :player_id
-        ");
-
         try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':player_id', $this->id);
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder
+                ->select('*')
+                ->from('stacks')
+                ->where('player_id = ' . $queryBuilder->createNamedParameter($this->id));
 
-            $results = $stmt->executeQuery();
-
-            return $results->fetchAllAssociative();
+            return $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
         } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
 
-    public function getWholeCards(int $handId, int $playerId)
+    public function getWholeCards(int $handId, int $playerId): array
     {
-        $query = sprintf("
-            SELECT
-                c.*, 
-                wc.player_id,
-                r.name AS 'rank',
-                r.abbreviation AS rankAbbreviation,
-                s.name AS suit,
-                s.abbreviation AS suitAbbreviation,
-                r.ranking AS ranking 
-            FROM
-                whole_cards AS wc
-            LEFT JOIN
-                cards AS c ON wc.card_id = c.id
-            LEFT OUTER JOIN 
-                ranks r ON c.rank_id = r.id
-            LEFT OUTER JOIN 
-                suits s ON c.suit_id = s.id
-            WHERE
-                wc.hand_id = :hand_id
-            AND
-                wc.player_id = :player_id
-        ");
-
         try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':hand_id', $handId);
-            $stmt->bindParam(':player_id', $playerId);
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder
+                ->select(
+                    'c.*',
+                    'wc.player_id',
+                    'r.name rank',
+                    'r.abbreviation rankAbbreviation',
+                    's.name suit',
+                    's.abbreviation suitAbbreviation',
+                    'r.ranking ranking '
+                )
+                ->from('whole_cards', 'wc')
+                ->leftJoin('wc', 'cards', 'c', 'wc.card_id = c.id')
+                ->leftJoin('c', 'ranks', 'r', 'c.rank_id = r.id')
+                ->leftJoin('c', 'suits', 's', 'c.suit_id = s.id')
+                ->where('wc.hand_id = ' . $queryBuilder->createNamedParameter($handId))
+                ->andWhere('wc.player_id = ' . $queryBuilder->createNamedParameter($playerId));
 
-            $results = $stmt->executeQuery();
-
-            return $results->fetchAllAssociative();
+            return $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
         } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }

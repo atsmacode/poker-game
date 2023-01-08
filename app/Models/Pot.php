@@ -8,7 +8,8 @@ class Pot extends Model
 {
     use Collection;
 
-    public $table = 'pots';
-    public string $name;
-    public $id;
+    public     $table = 'pots';
+    public int $id;
+    public int $amount;
+    public int $hand_id;
 }

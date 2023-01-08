@@ -10,38 +10,31 @@ class TableSeat extends Model
 {
     use Collection;
 
-    protected     $table = 'table_seats';
-    public string $name;
-    public        $player_id;
+    protected      $table = 'table_seats';
+    public int     $id;
+    public ?int    $number;
+    public int     $can_continue;
+    public int     $is_dealer;
+    public int     $player_id;
+    public int     $table_id;
+    public ?string $updated_at;
 
     public function playerAfterDealer(int $handId, int $dealer): self
     {
-        $query = sprintf("
-            SELECT
-                ts.*
-            FROM
-                table_seats AS ts
-            LEFT JOIN
-                player_actions AS pa ON ts.id = pa.table_seat_id
-            WHERE
-                pa.hand_id = :hand_id
-            AND
-                pa.active = 1
-            AND
-                ts.id > :dealer
-            LIMIT
-                1
-        ");
-
         try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':hand_id', $handId);
-            $stmt->bindParam(':dealer', $dealer);
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder
+                ->select('ts.*')
+                ->from('table_seats', 'ts')
+                ->leftJoin('ts', 'player_actions', 'pa', 'ts.id = pa.table_seat_id')
+                ->where('pa.hand_id = ' . $queryBuilder->createNamedParameter($handId))
+                ->andWhere('ts.id > ' . $queryBuilder->createNamedParameter($dealer))
+                ->andWhere('pa.active = 1')
+                ->setMaxResults(1);
 
-            $results       = $stmt->executeQuery();
-            $rows          = $results->fetchAllAssociative();
+            $rows = $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
+
             $this->content = $rows;
-
             $this->setModelProperties($rows);
 
             return $this;
@@ -80,28 +73,20 @@ class TableSeat extends Model
 
     public function getContinuingPlayerSeats(string $handId): self
     {
-        $query = sprintf("
-            SELECT
-                ts.*
-            FROM
-                player_actions AS pa
-            LEFT JOIN
-                table_seats AS ts ON pa.table_seat_id = ts.id
-            WHERE
-                pa.hand_id = :hand_id
-            AND
-                pa.active = 1
-            AND
-                ts.can_continue = 1
-        ");
-
         try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':hand_id', $handId);
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder
+                ->select('ts.*')
+                ->from('player_actions', 'pa')
+                ->leftJoin('pa', 'table_seats', 'ts', 'pa.table_seat_id = ts.id')
+                ->where('pa.hand_id = ' . $queryBuilder->createNamedParameter($handId))
+                ->andWhere('pa.active = 1')
+                ->andWhere('ts.can_continue = 1');
 
-            $results       = $stmt->executeQuery();
-            $rows          = $results->fetchAllAssociative();
+            $rows = $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
+
             $this->content = $rows;
+            $this->setModelProperties($rows);
 
             return $this;
         } catch(\Exception $e) {
@@ -115,31 +100,28 @@ class TableSeat extends Model
         $betId   = Action::BET_ID;
         $callId  = Action::CALL_ID;
 
-        $query = sprintf("
-            SELECT
-                ts.*
-            FROM
-                player_actions AS pa
-            LEFT JOIN
-                table_seats AS ts ON pa.table_seat_id = ts.id
-            WHERE
-                pa.hand_id = :hand_id
-            AND
-                ts.can_continue = 1
-            AND
-                pa.action_id IN (:raise_id, :bet_id, :call_id)
-        ");
-
         try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':hand_id', $handId);
-            $stmt->bindParam(':raise_id', $raiseId);
-            $stmt->bindParam(':bet_id', $betId);
-            $stmt->bindParam(':call_id', $callId);
+            $queryBuilder      = $this->connection->createQueryBuilder();
+            $expressionBuilder = $this->connection->createExpressionBuilder();
 
-            $results = $stmt->executeQuery();
+            $queryBuilder
+                ->select('ts.*')
+                ->from('player_actions', 'pa')
+                ->leftJoin('pa', 'table_seats', 'ts', 'pa.table_seat_id = ts.id')
+                ->where('pa.hand_id = ' . $queryBuilder->createNamedParameter($handId))
+                ->andWhere('ts.can_continue = 1')
+                ->andWhere(
+                    $expressionBuilder->in(
+                        'pa.action_id',
+                        [
+                            $queryBuilder->createNamedParameter($raiseId),
+                            $queryBuilder->createNamedParameter($betId),
+                            $queryBuilder->createNamedParameter($callId),
+                        ]
+                    )
+                );
 
-            return $results->fetchAllAssociative();
+            return $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
         } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }

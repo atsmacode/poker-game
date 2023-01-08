@@ -9,37 +9,31 @@ class HandStreetCard extends Model
 {
     use Collection;
 
-    protected $table = 'hand_street_cards';
+    protected     $table = 'hand_street_cards';
+    public    int $id;
+    public    int $hand_street_id;
+    public    int $card_id;
 
-    public function getCard()
+    public function getCard(): array
     {
-        $query = sprintf("
-            SELECT
-                c.*, 
-                r.name AS 'rank',
-                r.abbreviation AS rankAbbreviation,
-                s.name AS suit,
-                s.abbreviation AS suitAbbreviation,
-                r.ranking AS ranking 
-            FROM
-                hand_street_cards AS hsc
-            LEFT JOIN
-                cards AS c ON hsc.card_id = c.id
-            LEFT OUTER JOIN 
-                ranks r ON c.rank_id = r.id
-            LEFT OUTER JOIN 
-                suits s ON c.suit_id = s.id
-            WHERE
-                hsc.id = :id
-        ");
-
         try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':id', $this->id);
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder
+                ->select(
+                    'c.*',
+                    'r.name rank',
+                    'r.abbreviation rankAbbreviation',
+                    's.name suit',
+                    's.abbreviation suitAbbreviation',
+                    'r.ranking ranking '
+                )
+                ->from('hand_street_cards', 'hsc')
+                ->leftJoin('hsc', 'cards', 'c', 'hsc.card_id = c.id')
+                ->leftJoin('c', 'ranks', 'r', 'c.rank_id = r.id')
+                ->leftJoin('c', 'suits', 's', 'c.suit_id = s.id')
+                ->where('hsc.id = ' . $queryBuilder->createNamedParameter($this->id));
 
-            $results = $stmt->executeQuery();
-
-            return $results->fetchAssociative();
+            return $queryBuilder->executeStatement() ? $queryBuilder->fetchAssociative() : [];
         } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }

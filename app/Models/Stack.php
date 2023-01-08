@@ -10,7 +10,10 @@ class Stack extends Model
     use Collection;
 
     public $table = 'stacks';
-    public string $name;
+    public int $id;
+    public int $amount;
+    public int $player_id;
+    public int $table_id;
 
     public function change(int $amount, int $playerId, int $tableId)
     {

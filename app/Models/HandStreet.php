@@ -9,55 +9,38 @@ class HandStreet extends Model
 {
     use Collection;
 
-    protected $table = 'hand_streets';
-    public $id;
+    protected     $table = 'hand_streets';
+    public    int $id;
+    public    int $street_id;
+    public    int $hand_id;
 
-    public function cards()
+    public function cards(): array
     {
-       $query = sprintf("
-            SELECT
-                *
-            FROM
-                hand_street_cards
-            WHERE
-                hand_street_id = :hand_street_id
-        ");
-
         try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':hand_street_id', $this->id);
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder
+                ->select('*')
+                ->from('hand_street_cards')
+                ->where('hand_street_id = ' . $queryBuilder->createNamedParameter($this->id));
 
-            $results = $stmt->executeQuery();
-            
-            return $results->fetchAllAssociative();
+            return $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
         } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
 
-    public function getStreetCards($handId, $streetId)
+    public function getStreetCards($handId, $streetId): array
     {
-        $query = sprintf("
-            SELECT
-                *
-            FROM
-                hand_streets AS hs
-            LEFT JOIN
-                hand_street_cards AS hsc ON hs.id = hsc.hand_street_id
-            WHERE
-                hs.hand_id = :hand_id
-            AND
-                street_id  = :street_id
-        ");
-
         try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':hand_id', $handId);
-            $stmt->bindParam(':street_id', $streetId);
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder
+                ->select('*')
+                ->from('hand_streets', 'hs')
+                ->leftJoin('hs', 'hand_street_cards', 'hsc', 'hs.id = hsc.hand_street_id')
+                ->where('hs.hand_id = ' . $queryBuilder->createNamedParameter($handId))
+                ->andWhere('hs.street_id = ' . $queryBuilder->createNamedParameter($streetId));
 
-            $results = $stmt->executeQuery();
-            
-            return $results->fetchAllAssociative();
+            return $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
         } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
