@@ -47,20 +47,16 @@ class Hand extends Model
         }
     }
 
-    public function complete(): void
+    public function complete(): int
     {
-        $query = sprintf("
-            UPDATE
-                hands
-            SET
-                completed_on = NOW()
-            WHERE
-                id = {$this->id}
-        ");
-
         try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->executeQuery();
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder
+                ->update('hands')
+                ->set('completed_on', 'NOW()')
+                ->where('id = ' . $queryBuilder->createNamedParameter($this->id));
+
+            return $queryBuilder->executeStatement();
         } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }

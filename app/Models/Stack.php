@@ -15,27 +15,17 @@ class Stack extends Model
     public int $player_id;
     public int $table_id;
 
-    public function change(int $amount, int $playerId, int $tableId)
+    public function change(int $amount, int $playerId, int $tableId): int
     {
-        $query = sprintf("
-            UPDATE
-                stacks AS s
-            SET
-                s.amount = :amount
-            WHERE
-                s.table_id = :table_id
-            AND
-                s.player_id = :player_id
-        ");
-
         try {
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':table_id', $tableId);
-            $stmt->bindParam(':player_id', $playerId);
-            $stmt->bindParam(':amount', $amount);
-            $stmt->executeQuery();
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder
+                ->update('stacks')
+                ->set('amount', $queryBuilder->createNamedParameter($amount))
+                ->where('table_id = ' . $queryBuilder->createNamedParameter($tableId))
+                ->andWhere('player_id = ' . $queryBuilder->createNamedParameter($playerId));
 
-            return true;
+            return $queryBuilder->executeStatement();
         } catch(\PDOException $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }

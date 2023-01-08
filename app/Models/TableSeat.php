@@ -61,6 +61,17 @@ class TableSeat extends Model
         ");
 
         try {
+            /** @todo Might need subquery here for sing a join with update */
+            // $queryBuilder = $this->connection->createQueryBuilder();
+            // $queryBuilder
+            //     ->update('table_seats', 'ts')
+            //     ->leftJoin('ts', 'player_actions', 'pa', 'ts.id = pa.table_seat_id')
+            //     ->set('ts.can_continue', 1)
+            //     ->where('pa.hand_id = ' . $queryBuilder->createNamedParameter($handId))
+            //     ->andWhere('pa.active = 1')
+            //     ->andWhere('pa.big_blind = 1');
+
+            // return $queryBuilder->executeStatement();
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(':hand_id', $handId);
             $stmt->executeQuery();
