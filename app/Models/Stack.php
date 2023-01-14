@@ -9,7 +9,7 @@ class Stack extends Model
 {
     use Collection;
 
-    public $table = 'stacks';
+    public     $table = 'stacks';
     public int $id;
     public int $amount;
     public int $player_id;
