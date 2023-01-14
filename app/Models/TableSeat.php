@@ -43,40 +43,33 @@ class TableSeat extends Model
         }
     }
 
-    public function bigBlindWins(int $handId): bool
+    public function bigBlindWins(int $tableSeatId): int
     {
-        $query = sprintf("
-            UPDATE
-                table_seats AS ts
-            LEFT JOIN
-                player_actions AS pa ON ts.id = pa.table_seat_id
-            SET
-                ts.can_continue = 1
-            WHERE
-                pa.hand_id = :hand_id
-            AND
-                pa.active = 1
-            AND
-                pa.big_blind = 1
-        ");
-
         try {
-            /** @todo Might need subquery here for sing a join with update */
-            // $queryBuilder = $this->connection->createQueryBuilder();
-            // $queryBuilder
-            //     ->update('table_seats', 'ts')
-            //     ->leftJoin('ts', 'player_actions', 'pa', 'ts.id = pa.table_seat_id')
-            //     ->set('ts.can_continue', 1)
-            //     ->where('pa.hand_id = ' . $queryBuilder->createNamedParameter($handId))
-            //     ->andWhere('pa.active = 1')
-            //     ->andWhere('pa.big_blind = 1');
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder
+                ->update('table_seats')
+                ->set('can_continue', 1)
+                ->where('id = ' . $queryBuilder->createNamedParameter($tableSeatId));
 
-            // return $queryBuilder->executeStatement();
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':hand_id', $handId);
-            $stmt->executeQuery();
+            return $queryBuilder->executeStatement();
+        } catch(\Exception $e) {
+            error_log(__METHOD__ . ': ' . $e->getMessage());
+        }
+    }
 
-            return true;
+    public function getBigBlind(string $handId): array
+    {
+        try {
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder
+                ->select('pa.*')
+                ->from('player_actions', 'pa')
+                ->leftJoin('pa', 'table_seats', 'ts', 'pa.table_seat_id = ts.id')
+                ->where('pa.hand_id = ' . $queryBuilder->createNamedParameter($handId))
+                ->andWhere('pa.big_blind = 1');
+
+            return $queryBuilder->executeStatement() ? $queryBuilder->fetchAssociative() : [];
         } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }

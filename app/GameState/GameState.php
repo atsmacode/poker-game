@@ -26,6 +26,7 @@ class GameState
     private bool          $newStreet = false;
     private Game          $game;
     private PokerDealer   $dealer;
+    private array         $bigBlind;
 
     public function __construct(
         private GameData    $gameData,
@@ -264,5 +265,15 @@ class GameState
     public function getGameDealer(): PokerDealer
     {
         return $this->dealer;
+    }
+
+    public function setBigBlind(): void
+    {
+        $this->bigBlind = $this->gameData->getBigBlind($this->handId);
+    }
+
+    public function getBigBlind(): array
+    {
+        return $this->bigBlind;
     }
 }

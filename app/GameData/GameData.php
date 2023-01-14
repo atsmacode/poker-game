@@ -6,6 +6,7 @@ use Atsmacode\PokerGame\Models\Hand;
 use Atsmacode\PokerGame\Models\HandStreetCard;
 use Atsmacode\PokerGame\Models\Player;
 use Atsmacode\PokerGame\Models\Table;
+use Atsmacode\PokerGame\Models\TableSeat;
 
 /**
  * Responsible for providing the baseline data a Hand needs throught the process.
@@ -16,7 +17,8 @@ class GameData
         private Hand           $handModel,
         private Table          $tableModel,
         private HandStreetCard $handStreetCardModel,
-        private Player         $playerModel
+        private Player         $playerModel,
+        private TableSeat      $tableSeatModel
     ) {}
 
     public function getSeats(int $tableId): array
@@ -49,5 +51,10 @@ class GameData
     public function getCommunityCards(int $handId): array
     {
         return $this->handModel->getCommunityCards($handId);
+    }
+
+    public function getBigBlind(int $handId): array
+    {
+        return $this->tableSeatModel->getBigBlind($handId);
     }
 }
