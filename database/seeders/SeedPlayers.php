@@ -10,30 +10,32 @@ class SeedPlayers extends Database
         'seed'
     ];
 
-    public function seed()
+    public function seed(): void
     {
         $this->createPlayers();
     }
 
-    private function createPlayers()
+    private function createPlayers(): void
     {
-        $seats = 6;
-
         try {
-
+            $seats    = 6;
             $inserted = 0;
 
             while($inserted < $seats){
-
                 $seatId = $inserted + 1;
                 $name = 'Player ' . $seatId;
                 $email = 'player' . $seatId . '@rrh.com';
 
-                $stmt = $this->connection->prepare("INSERT INTO players (name, email) VALUES (:name, :email)");
-                $stmt->bindParam(':name', $name);
-                $stmt->bindParam(':email', $email);
+                $queryBuilder = $this->connection->createQueryBuilder();
 
-                $stmt->execute();
+                $queryBuilder
+                    ->insert('players')
+                    ->setValue('name', $queryBuilder->createNamedParameter($name))
+                    ->setValue('email', $queryBuilder->createNamedParameter($email))
+                    ->setParameter($queryBuilder->createNamedParameter($name), $name)
+                    ->setParameter($queryBuilder->createNamedParameter($email), $email);
+
+                $queryBuilder->executeStatement();
 
                 $playerId = $this->connection->lastInsertId();
 
@@ -44,27 +46,20 @@ class SeedPlayers extends Database
         } catch(\PDOException $e) {
             error_log($e->getMessage());
         }
-        $this->connection = null;
-
-        return $this;
     }
 
-    private function addPlayerToSeat($playerId, $seatId)
+    private function addPlayerToSeat(int $playerId, int $seatId): void
     {
         try {
-            $stmt = $this->connection->prepare("
-                    UPDATE table_seats SET player_id = :playerId
-                    WHERE id = :seatId
-                ");
-            $stmt->bindParam(':playerId', $playerId);
-            $stmt->bindParam(':seatId', $seatId);
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder
+                ->update('table_seats')
+                ->set('player_id', $queryBuilder->createNamedParameter($playerId))
+                ->where('id = ' . $queryBuilder->createNamedParameter($seatId));
 
-            $stmt->execute();
-
+            $queryBuilder->executeStatement();
         } catch(\PDOException $e) {
             error_log($e->getMessage());
         }
-
-        return $this;
     }
 }

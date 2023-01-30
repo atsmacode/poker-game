@@ -11,19 +11,21 @@ class SeedActions extends Database
         'seed'
     ];
 
-    public function seed()
+    public function seed(): void
     {
         try {
             foreach(Action::ALL as $action) {
-                $name = $action['name'];
-                $stmt = $this->connection->prepare("INSERT INTO actions (name) VALUES (:name)");
-                $stmt->bindParam(':name', $name);
-                $stmt->execute();
+                $queryBuilder = $this->connection->createQueryBuilder();
+
+                $queryBuilder
+                    ->insert('actions')
+                    ->setValue('name', $queryBuilder->createNamedParameter($action['name']))
+                    ->setParameter($queryBuilder->createNamedParameter($action['name']), $action['name']);
+
+                $queryBuilder->executeStatement();
             }
         } catch(\PDOException $e) {
             error_log($e->getMessage());
         }
-
-        $this->connection = null;
     }
 }

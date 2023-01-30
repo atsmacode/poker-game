@@ -10,54 +10,56 @@ class SeedTables extends Database
         'seed'
     ];
 
-    public function seed()
+    private int $seats   = 6;
+    private int $tableId = 1;
+
+    public function seed(): void
     {
-        $this->createTable()->createTableSeats();
+        $this->createTable();
     }
 
-    private function createTable()
+    private function createTable(): void
     {
-        /**
-         * TODO: only supporting 1 table for the time being.
-         */
+        /** TODO: only supporting 1 table for the time being. */
         $name  = 'Table 1';
-        $seats = 6;
 
         try {
-            $stmt = $this->connection->prepare("INSERT INTO tables (name, seats) VALUES (:name, :seats)");
-            $stmt->bindParam(':name', $name);
-            $stmt->bindParam(':seats', $seats);
+            $queryBuilder = $this->connection->createQueryBuilder();
 
-            $stmt->execute();
+            $queryBuilder
+                ->insert('tables')
+                ->setValue('name', $queryBuilder->createNamedParameter($name))
+                ->setValue('seats', $queryBuilder->createNamedParameter($this->seats))
+                ->setParameter($queryBuilder->createNamedParameter($name), $name)
+                ->setParameter($queryBuilder->createNamedParameter($this->seats), $this->seats);
+
+            $queryBuilder->executeStatement();
+
+            $this->createTableSeats();
         } catch(\PDOException $e) {
             error_log($e->getMessage());
         }
-
-        return $this;
     }
 
-    private function createTableSeats()
+    private function createTableSeats(): void
     {
-        $seats = 6;
-
         try {
             $inserted = 0;
 
-            while($inserted < $seats){
+            while($inserted < $this->seats){
+                $queryBuilder = $this->connection->createQueryBuilder();
 
-                $stmt = $this->connection->prepare("
-                        INSERT INTO table_seats (table_id) VALUES (1)
-                    ");
-                $stmt->execute();
+                $queryBuilder
+                    ->insert('table_seats')
+                    ->setValue('table_id', $queryBuilder->createNamedParameter($this->tableId))
+                    ->setParameter($queryBuilder->createNamedParameter($this->tableId), $this->tableId);
+
+                $queryBuilder->executeStatement();
 
                 $inserted++;
             }
         } catch(\PDOException $e) {
             error_log($e->getMessage());;
         }
-
-        $this->connection = null;
-
-        return $this;
     }
 }

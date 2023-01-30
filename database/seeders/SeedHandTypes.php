@@ -11,23 +11,23 @@ class SeedHandTypes extends Database
         'seed'
     ];
 
-    public function seed()
+    public function seed(): void
     {
         try {
             foreach(HandType::ALL as $handType) {
-                $name    = $handType['name'];
-                $ranking = $handType['ranking'];
-                $stmt    = $this->connection->prepare("INSERT INTO hand_types (name, ranking) VALUES (:name, :ranking)");
-                
-                $stmt->bindParam(':name', $name);
-                $stmt->bindParam(':ranking', $ranking);
-                $stmt->execute();
+                $queryBuilder = $this->connection->createQueryBuilder();
+
+                $queryBuilder
+                    ->insert('hand_types')
+                    ->setValue('name', $queryBuilder->createNamedParameter($handType['name']))
+                    ->setValue('ranking', $queryBuilder->createNamedParameter($handType['ranking']))
+                    ->setParameter($queryBuilder->createNamedParameter($handType['name']), $handType['name'])
+                    ->setParameter($queryBuilder->createNamedParameter($handType['ranking']), $handType['ranking']);
+
+                $queryBuilder->executeStatement();
             }
         } catch(\PDOException $e) {
             error_log($e->getMessage());
-
         }
-        
-        $this->connection = null;
     }
 }

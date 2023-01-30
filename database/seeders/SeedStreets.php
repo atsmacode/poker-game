@@ -10,22 +10,23 @@ class SeedStreets extends Database
         'seed'
     ];
 
-    public function seed()
+    public function seed(): void
     {
         $streets = require('config/streets.php');
 
         try {
             foreach($streets as $street) {
-                $name = $street['name'];
-                $stmt = $this->connection->prepare("INSERT INTO streets (name) VALUES (:name)");
-                
-                $stmt->bindParam(':name', $name);
-                $stmt->execute();
+                $queryBuilder = $this->connection->createQueryBuilder();
+
+                $queryBuilder
+                    ->insert('streets')
+                    ->setValue('name', $queryBuilder->createNamedParameter($street['name']))
+                    ->setParameter($queryBuilder->createNamedParameter($street['name']), $street['name']);
+
+                $queryBuilder->executeStatement();
             }
         } catch(\PDOException $e) {
             error_log($e->getMessage());
         }
-
-        $this->connection = null;
     }
 }
