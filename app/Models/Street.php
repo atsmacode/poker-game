@@ -9,7 +9,7 @@ class Street extends Model
 {
     use Collection;
 
-    public        $table = 'streets';
-    public int    $id;
-    public string $name;
+    protected string $table = 'streets';
+    public int       $id;
+    public string    $name;
 }

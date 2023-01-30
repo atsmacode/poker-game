@@ -9,11 +9,11 @@ class Stack extends Model
 {
     use Collection;
 
-    public     $table = 'stacks';
-    public int $id;
-    public int $amount;
-    public int $player_id;
-    public int $table_id;
+    protected string $table = 'stacks';
+    public int       $id;
+    public int       $amount;
+    public int       $player_id;
+    public int       $table_id;
 
     public function change(int $amount, int $playerId, int $tableId): int
     {

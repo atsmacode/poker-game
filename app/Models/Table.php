@@ -8,10 +8,10 @@ class Table extends Model
 {
     use Collection;
 
-    protected     $table = 'tables';
-    public int    $id;
-    public string $name;
-    public int    $seats;
+    protected string $table = 'tables';
+    public int       $id;
+    public string    $name;
+    public int       $seats;
 
     public function getSeats(int $tableId = null): array
     {

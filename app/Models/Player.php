@@ -9,10 +9,10 @@ class Player extends Model
 {
     use Collection;
 
-    protected     $table = 'players';
-    public int    $id;
-    public string $name;
-    public string $email;  
+    protected string $table = 'players';
+    public int       $id;
+    public string    $name;
+    public string    $email;  
 
     public function stacks(): array
     {

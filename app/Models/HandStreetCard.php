@@ -9,10 +9,10 @@ class HandStreetCard extends Model
 {
     use Collection;
 
-    protected     $table = 'hand_street_cards';
-    public    int $id;
-    public    int $hand_street_id;
-    public    int $card_id;
+    protected string $table = 'hand_street_cards';
+    public int       $id;
+    public int       $hand_street_id;
+    public int       $card_id;
 
     public function getCard(): array
     {

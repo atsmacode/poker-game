@@ -10,14 +10,14 @@ class TableSeat extends Model
 {
     use Collection;
 
-    protected      $table = 'table_seats';
-    public int     $id;
-    public ?int    $number;
-    public int     $can_continue;
-    public int     $is_dealer;
-    public int     $player_id;
-    public int     $table_id;
-    public ?string $updated_at;
+    protected string $table = 'table_seats';
+    public int       $id;
+    public ?int      $number;
+    public int       $can_continue;
+    public int       $is_dealer;
+    public int       $player_id;
+    public int       $table_id;
+    public ?string   $updated_at;
 
     public function playerAfterDealer(int $handId, int $dealer): self
     {

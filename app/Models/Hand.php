@@ -9,11 +9,11 @@ class Hand extends Model
 {
     use Collection;
 
-    protected         $table = 'hands';
-    public    int     $id;
-    public    int     $table_id;
-    public    ?int    $game_type_id;
-    public    ?string $completed_on;
+    protected string $table = 'hands';
+    public int       $id;
+    public int       $table_id;
+    public ?int      $game_type_id;
+    public ?string   $completed_on;
 
     public function streets(): array
     {

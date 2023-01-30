@@ -9,7 +9,7 @@ class Action extends Model
 {
     use Collection;
 
-    public        $table = 'actions';
-    public int    $id;
-    public string $name;
+    protected string $table = 'actions';
+    public int       $id;
+    public string    $name;
 }
