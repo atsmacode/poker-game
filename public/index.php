@@ -4,8 +4,6 @@ use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\HandController as PlheHandCon
 use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\PlayerActionController as PlhePlayerActionController;
 use Atsmacode\PokerGame\Controllers\PotLimitOmaha\HandController as PlomHandController;
 use Atsmacode\PokerGame\Controllers\PotLimitOmaha\PlayerActionController as PlomPlayerActionController;
-use Atsmacode\PokerGame\Game\PotLimitHoldEm;
-use Atsmacode\PokerGame\Game\PotLimitOmaha;
 use Symfony\Component\HttpFoundation\Request;
 
 require('../vendor/autoload.php');
