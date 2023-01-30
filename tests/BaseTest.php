@@ -29,7 +29,6 @@ abstract class BaseTest extends TestCase
         $pokerGameDependencyMap  = $config['dependencies'];
 
         $this->container = new ServiceManager($pokerGameDependencyMap);
-        $this->container->setFactory(PokerGameConfigProvider::class, new PokerGameConfigProviderFactory());
         $this->container->setFactory(ConnectionInterface::class, new DbalTestFactory());
 
         $this->tableModel          = $this->container->build(Table::class);

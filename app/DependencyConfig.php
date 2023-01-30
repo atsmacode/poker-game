@@ -15,7 +15,7 @@ class DependencyConfig
                 ],
                 'factories' => [
                     \Atsmacode\PokerGame\PokerGameConfigProvider::class
-                        => \Atsmacode\PokerGame\PokerGameRelConfigProviderFactory::class,
+                        => \Atsmacode\PokerGame\PokerGameConfigProviderFactory::class,
                     \Atsmacode\Framework\Database\ConnectionInterface::class
                         => \Atsmacode\PokerGame\Database\DbalLiveFactory::class,
                     \PDO::class
