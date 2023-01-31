@@ -3,6 +3,7 @@
 namespace Atsmacode\PokerGame\Database\Migrations;
 
 use Atsmacode\Framework\Database\Database;
+use Doctrine\DBAL\Schema\Schema;
 
 class CreateHandTypes extends Database
 {
@@ -10,20 +11,23 @@ class CreateHandTypes extends Database
         'createHandTypesTable',
     ];
 
-    public function createHandTypesTable()
+    public function createHandTypesTable(): void
     {
-        $sql = "CREATE TABLE hand_types (
-                id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(30) NOT NULL,
-                ranking INT(2) NULL
-            )";
-
         try {
-            $this->connection->exec($sql);
-        } catch(\PDOException $e) {
+            $schema = new Schema();
+            $table  = $schema->createTable('hand_types');
+
+            $table->addColumn('id', 'integer', ['unsigned' => true])->setAutoincrement(true);
+            $table->addColumn('name', 'string', ['length' => 32])->setNotnull(true);
+            $table->addColumn('ranking', 'integer', ['length' => 2])->setNotnull(true);
+            $table->setPrimaryKey(['id']);
+
+            $dbPlatform = $this->connection->getDatabasePlatform();
+            $sql        = $schema->toSql($dbPlatform);
+
+            $this->connection->exec(array_shift($sql));
+        } catch(\Exception $e) {
             error_log($e->getMessage());
         }
-
-        $this->connection = null;
     }
 }

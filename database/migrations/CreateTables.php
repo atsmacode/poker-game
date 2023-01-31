@@ -3,6 +3,7 @@
 namespace Atsmacode\PokerGame\Database\Migrations;
 
 use Atsmacode\Framework\Database\Database;
+use Doctrine\DBAL\Schema\Schema;
 
 class CreateTables extends Database
 {
@@ -11,24 +12,27 @@ class CreateTables extends Database
         'createTableSeatsTable'
     ];
 
-    public function createTablesTable()
+    public function createTablesTable(): void
     {
-        $sql = "CREATE TABLE tables (
-                id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(30) NOT NULL,
-                seats INT(2) NOT NULL
-            )";
-
         try {
-            $this->connection->exec($sql);
+            $schema = new Schema();
+            $table  = $schema->createTable('tables');
+
+            $table->addColumn('id', 'integer', ['unsigned' => true])->setAutoincrement(true);
+            $table->addColumn('name', 'string')->setNotnull(true);
+            $table->addColumn('seats', 'integer')->setNotnull(true);
+            $table->setPrimaryKey(['id']);
+
+            $dbPlatform = $this->connection->getDatabasePlatform();
+            $sql        = $schema->toSql($dbPlatform);
+
+            $this->connection->exec(array_shift($sql));
         } catch(\PDOException $e) {
             error_log($e->getMessage());
         }
-
-        $this->connection = null;
     }
 
-    public function createTableSeatsTable()
+    public function createTableSeatsTable(): void
     {
         $sql = "CREATE TABLE table_seats (
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -47,7 +51,5 @@ class CreateTables extends Database
         } catch(\PDOException $e) {
             error_log($e->getMessage());
         }
-
-        $this->connection = null;
     }
 }

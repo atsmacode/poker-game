@@ -3,6 +3,7 @@
 namespace Atsmacode\PokerGame\Database\Migrations;
 
 use Atsmacode\Framework\Database\Database;
+use Doctrine\DBAL\Schema\Schema;
 
 class CreatePlayers extends Database
 {
@@ -10,21 +11,23 @@ class CreatePlayers extends Database
         'createPlayersTable',
     ];
 
-    public function createPlayersTable()
+    public function createPlayersTable(): void
     {
-        $sql = "CREATE TABLE players (
-                id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(30) NOT NULL,
-                email VARCHAR(30) NOT NULL,
-                ai BOOLEAN DEFAULT 0
-            )";
-
         try {
-            $this->connection->exec($sql);
-        } catch(\PDOException $e) {
+            $schema = new Schema();
+            $table  = $schema->createTable('players');
+
+            $table->addColumn('id', 'integer', ['unsigned' => true])->setAutoincrement(true);
+            $table->addColumn('name', 'string', ['length' => 32])->setNotnull(true);
+            $table->addColumn('email', 'string', ['length' => 32])->setNotnull(true);
+            $table->setPrimaryKey(['id']);
+
+            $dbPlatform = $this->connection->getDatabasePlatform();
+            $sql        = $schema->toSql($dbPlatform);
+
+            $this->connection->exec(array_shift($sql));
+        } catch(\Exception $e) {
             error_log($e->getMessage());
         }
-
-        $this->connection = null;
     }
 }

@@ -3,6 +3,7 @@
 namespace Atsmacode\PokerGame\Database\Migrations;
 
 use Atsmacode\Framework\Database\Database;
+use Doctrine\DBAL\Schema\Schema;
 
 class CreatePots extends Database
 {
@@ -10,22 +11,24 @@ class CreatePots extends Database
         'createPotsTable',
     ];
 
-    public function createPotsTable()
+    public function createPotsTable(): void
     {
-        $sql = "CREATE TABLE pots (
-            id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            amount INT(12) UNSIGNED NULL,
-            hand_id INT(6) UNSIGNED NOT NULL,
-            FOREIGN KEY (hand_id) REFERENCES hands(id),
-            INDEX (hand_id)
-        )";
-
         try {
-            $this->connection->exec($sql);
+            $schema = new Schema();
+            $table  = $schema->createTable('pots');
+
+            $table->addColumn('id', 'integer', ['unsigned' => true])->setAutoincrement(true);
+            $table->addColumn('amount', 'integer')->setNotnull(false);
+            $table->addColumn('hand_id', 'integer', ['unsigned' => true])->setNotnull(true);
+            $table->addForeignKeyConstraint('hands', ['hand_id'], ['id']);
+            $table->setPrimaryKey(['id']);
+
+            $dbPlatform = $this->connection->getDatabasePlatform();
+            $sql        = $schema->toSql($dbPlatform);
+
+            $this->connection->exec(array_shift($sql));
         } catch(\PDOException $e) {
             error_log($e->getMessage());
         }
-
-        $this->connection = null;
     }
 }

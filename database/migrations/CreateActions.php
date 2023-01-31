@@ -11,19 +11,15 @@ class CreateActions extends Database
         'createActionsTable',
     ];
 
-    public function createActionsTable()
+    public function createActionsTable(): void
     {
         try {
-            $schema  = new Schema();
-            $myTable = $schema->createTable('actions');
+            $schema = new Schema();
+            $table  = $schema->createTable('actions');
 
-            $myTable->addColumn('id', 'integer', ['unsigned' => true])
-                ->setAutoincrement(true);
-
-            $myTable->addColumn('name', 'string', ['length' => 32])
-                ->setNotnull(true);
-
-            $myTable->setPrimaryKey(['id']);
+            $table->addColumn('id', 'integer', ['unsigned' => true])->setAutoincrement(true);
+            $table->addColumn('name', 'string', ['length' => 32])->setNotnull(true);
+            $table->setPrimaryKey(['id']);
 
             $dbPlatform = $this->connection->getDatabasePlatform();
             $sql        = $schema->toSql($dbPlatform);
