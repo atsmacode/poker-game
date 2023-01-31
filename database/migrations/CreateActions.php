@@ -3,6 +3,7 @@
 namespace Atsmacode\PokerGame\Database\Migrations;
 
 use Atsmacode\Framework\Database\Database;
+use Doctrine\DBAL\Schema\Schema;
 
 class CreateActions extends Database
 {
@@ -12,17 +13,24 @@ class CreateActions extends Database
 
     public function createActionsTable()
     {
-        $sql = "CREATE TABLE actions (
-                id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(30) NOT NULL
-            )";
-
         try {
-            $this->connection->exec($sql);
-        } catch(\PDOException $e) {
+            $schema  = new Schema();
+            $myTable = $schema->createTable('actions');
+
+            $myTable->addColumn('id', 'integer', ['unsigned' => true])
+                ->setAutoincrement(true);
+
+            $myTable->addColumn('name', 'string', ['length' => 32])
+                ->setNotnull(true);
+
+            $myTable->setPrimaryKey(['id']);
+
+            $dbPlatform = $this->connection->getDatabasePlatform();
+            $sql        = $schema->toSql($dbPlatform);
+
+            $this->connection->exec(array_shift($sql));
+        } catch(\Exception $e) {
             error_log($e->getMessage());
         }
-
-        $this->connection = null;
     }
 }
