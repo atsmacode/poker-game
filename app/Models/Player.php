@@ -37,7 +37,7 @@ class Player extends Model
                 ->select(
                     'c.*',
                     'wc.player_id',
-                    'r.name rank',
+                    'r.name rankName',
                     'r.abbreviation rankAbbreviation',
                     's.name suit',
                     's.abbreviation suitAbbreviation',
