@@ -19,49 +19,75 @@
 # Commands
 
 ## Linux
+
+Build the test DB:
+
+>dev/builddb
+
 Run the unit test suite:
 
 >dev/phpunit
 
-Drop, Create and Seed all tables. '-d true' is required to run this in test DB:
+Individual Drop, Create and Seed commands. Remove '-d true' for prodution:
 
-> php dev/SymfonyApplication.php app:build-poker-game -d true
+> php dev/PokerGameApp.php app:create-database -d true
+> php dev/PokerGameApp.php app:build-card-games -d true
+> php dev/PokerGameApp.php app:build-poker-game -d true
 
 ## Windows
+
+Drop, Create and Seed all tables:
+
+>.\dev\builddb.bat
+
 Run the unit test suite:
 
 >.\dev\runtests.bat
 
-Drop, Create and Seed all tables. '-d true' is required to run this in test DB
+Individual Drop, Create and Seed commands. Remove '-d true' for prodution:
 
->.\dev\builddb.bat
+> php dev/PokerGameApp.php app:create-database -d true
+> php dev/PokerGameApp.php app:build-card-games -d true
+> php dev/PokerGameApp.php app:build-poker-game -d true
 
 ## Laragon
 
-Using Larago, the following path to run PHP might be useful:
+Using Laragon, the following path to run PHP might be useful:
 
 > C:\laragon\bin\php\php-8.1.3-nts-Win32-vs16-x64/php
 
 # Configs
 
-You need to add db.php and db-test.php to configure your local DB credentials, like so:
+You need to add poker_game.php to configure your local DB credentials, like so:
 
 ```
 <?php
 
 return [
-    'servername' => "localhost",
-    'username'   => "DB_USER",
-    'password'   => "DB_PASSWORD",
-    'database'   => "poker_game_test"
+    'poker_game' => [
+        'db' => [
+            'live' => [
+                'servername' => 'localhost',
+                'username'   => 'DB_USER',
+                'password'   => 'DB_PASSWORD',
+                'database'   => 'poker_game',
+                'driver'     => 'pdo_mysql',
+            ],
+            'test' => [
+                'servername' => 'localhost',
+                'username'   => 'DB_USER',
+                'password'   => 'DB_PASSWORD',
+                'database'   => 'poker_game_test',
+                'driver'     => 'pdo_mysql',
+            ],
+        ],
+    ],
 ];
+
 ```
 
 # Todo:
-- Review Showdown kickers/rankings logic, need to retain all hand types and rank after the highest of each type is included in the array
-- Errors during showdown - probably due to that fact it's not yet fully implemented
-- Add custom join queries for relationships
-    - Rather than multiple chained model calls resulting in a lot of queries - in progress, requires review of duplicated methods accrosss models - can implement gameSate object that is passed through pipeline
+
 - Review all TODO comments and implement solution
 - Once everything above is tidied/finalised, add remaining unit tests from original app
 - Add DB indexes, tests get slower once DB gets fuller
