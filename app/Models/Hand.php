@@ -131,7 +131,6 @@ class Hand extends Model
                     'ts.table_id',
                     'pa.bet_amount',
                     'pa.active',
-                    'pa.has_acted',
                     'pa.big_blind',
                     'pa.small_blind',
                     'pa.action_id',
@@ -166,7 +165,7 @@ class Hand extends Model
             $queryBuilder
                 ->select(
                     'c.*',
-                    'r.name rank',
+                    'r.name rankName',
                     'r.abbreviation rankAbbreviation',
                     's.name suit',
                     's.abbreviation suitAbbreviation',
