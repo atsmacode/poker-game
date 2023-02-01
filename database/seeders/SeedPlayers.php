@@ -58,7 +58,7 @@ class SeedPlayers extends Database
                 ->where('id = ' . $queryBuilder->createNamedParameter($seatId));
 
             $queryBuilder->executeStatement();
-        } catch(\PDOException $e) {
+        } catch(\Exception $e) {
             error_log($e->getMessage());
         }
     }

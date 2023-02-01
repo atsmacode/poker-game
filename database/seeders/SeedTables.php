@@ -36,7 +36,7 @@ class SeedTables extends Database
             $queryBuilder->executeStatement();
 
             $this->createTableSeats();
-        } catch(\PDOException $e) {
+        } catch(\Exception $e) {
             error_log($e->getMessage());
         }
     }
@@ -58,7 +58,7 @@ class SeedTables extends Database
 
                 $inserted++;
             }
-        } catch(\PDOException $e) {
+        } catch(\Exception $e) {
             error_log($e->getMessage());;
         }
     }

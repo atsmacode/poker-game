@@ -26,7 +26,7 @@ class SeedHandTypes extends Database
 
                 $queryBuilder->executeStatement();
             }
-        } catch(\PDOException $e) {
+        } catch(\Exception $e) {
             error_log($e->getMessage());
         }
     }
