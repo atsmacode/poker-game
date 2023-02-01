@@ -27,28 +27,33 @@ class CreateTables extends Database
             $sql        = $schema->toSql($dbPlatform);
 
             $this->connection->exec(array_shift($sql));
-        } catch(\PDOException $e) {
+        } catch(\Exception $e) {
             error_log($e->getMessage());
         }
     }
 
     public function createTableSeatsTable(): void
     {
-        $sql = "CREATE TABLE table_seats (
-            id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            number INT(6) UNSIGNED NULL,
-            can_continue BOOLEAN DEFAULT 0,
-            is_dealer BOOLEAN DEFAULT 0,
-            player_id INT(6) UNSIGNED NULL,
-            table_id INT(6) UNSIGNED NOT NULL,
-            updated_at DATETIME NULL,
-            FOREIGN KEY (table_id) REFERENCES tables(id),
-            FOREIGN KEY (player_id) REFERENCES players(id)
-        )";
-
         try {
-            $this->connection->exec($sql);
-        } catch(\PDOException $e) {
+            $schema = new Schema();
+            $table  = $schema->createTable('table_seats');
+
+            $table->addColumn('id', 'integer', ['unsigned' => true])->setAutoincrement(true);
+            $table->addColumn('number', 'integer')->setNotnull(false);
+            $table->addColumn('can_continue', 'boolean', ['default' => 0]);
+            $table->addColumn('is_dealer', 'boolean', ['default' => 0]);
+            $table->addColumn('player_id', 'integer', ['unsigned' => true])->setNotnull(false);
+            $table->addColumn('table_id', 'integer', ['unsigned' => true])->setNotnull(true);
+            $table->addColumn('updated_at', 'datetime')->setNotnull(false);
+            $table->addForeignKeyConstraint('players', ['player_id'], ['id']);
+            $table->addForeignKeyConstraint('tables', ['table_id'], ['id']);
+            $table->setPrimaryKey(['id']);
+
+            $dbPlatform = $this->connection->getDatabasePlatform();
+            $sql        = $schema->toSql($dbPlatform);
+
+            $this->connection->exec(array_shift($sql));
+        } catch(\Exception $e) {
             error_log($e->getMessage());
         }
     }

@@ -25,7 +25,7 @@ class CreateStreets extends Database
             $sql        = $schema->toSql($dbPlatform);
 
             $this->connection->exec(array_shift($sql));
-        } catch(\PDOException $e) {
+        } catch(\Exception $e) {
             error_log($e->getMessage());
         }
     }

@@ -3,6 +3,7 @@
 namespace Atsmacode\PokerGame\Database\Migrations;
 
 use Atsmacode\Framework\Database\Database;
+use Doctrine\DBAL\Schema\Schema;
 
 class CreateStacks extends Database
 {
@@ -10,30 +11,30 @@ class CreateStacks extends Database
         'createStacksTable',
     ];
 
-    public function createStacksTable()
+    /**
+     * TODO amount is not unsigned to allow negative values
+     * until 'player loses/zero-chips feature is added.
+     */
+    public function createStacksTable(): void
     {
-        /**
-         * TODO amount is not unsigned to allow negative
-         * values until 'player loses/zero-chips feature
-         * is added.
-         */
-        $sql = "CREATE TABLE stacks (
-            id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            amount BIGINT(12) NULL,
-            player_id INT(6) UNSIGNED NOT NULL,
-            table_id INT(6) UNSIGNED NOT NULL,
-            FOREIGN KEY (player_id) REFERENCES players(id),
-            FOREIGN KEY (table_id) REFERENCES tables(id),
-            INDEX (player_id),
-            INDEX (table_id)
-        )";
-
         try {
-            $this->connection->exec($sql);
-        } catch(\PDOException $e) {
+            $schema = new Schema();
+            $table  = $schema->createTable('stacks');
+
+            $table->addColumn('id', 'integer', ['unsigned' => true])->setAutoincrement(true);
+            $table->addColumn('amount', 'bigint')->setNotnull(false);
+            $table->addColumn('player_id', 'integer', ['unsigned' => true])->setNotnull(true);
+            $table->addColumn('table_id', 'integer', ['unsigned' => true])->setNotnull(true);
+            $table->addForeignKeyConstraint('players', ['player_id'], ['id']);
+            $table->addForeignKeyConstraint('tables', ['table_id'], ['id']);
+            $table->setPrimaryKey(['id']);
+
+            $dbPlatform = $this->connection->getDatabasePlatform();
+            $sql        = $schema->toSql($dbPlatform);
+
+            $this->connection->exec(array_shift($sql));
+        } catch(\Exception $e) {
             error_log($e->getMessage());
         }
-
-        $this->connection = null;
     }
 }

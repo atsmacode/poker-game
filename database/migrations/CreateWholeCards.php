@@ -3,6 +3,7 @@
 namespace Atsmacode\PokerGame\Database\Migrations;
 
 use Atsmacode\Framework\Database\Database;
+use Doctrine\DBAL\Schema\Schema;
 
 class CreateWholeCards extends Database
 {
@@ -10,26 +11,27 @@ class CreateWholeCards extends Database
         'createWholeCardsTable',
     ];
 
-    public function createWholeCardsTable()
+    public function createWholeCardsTable(): void
     {
-        $sql = "CREATE TABLE whole_cards (
-            id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            card_id INT(6) UNSIGNED NOT NULL,
-            hand_id INT(6) UNSIGNED NULL,
-            player_id INT(6) UNSIGNED NOT NULL,
-            FOREIGN KEY (card_id) REFERENCES cards(id),
-            FOREIGN KEY (hand_id) REFERENCES hands(id),
-            FOREIGN KEY (player_id) REFERENCES players(id),
-            INDEX (hand_id),
-            INDEX (player_id)
-        )";
-
         try {
-            $this->connection->exec($sql);
-        } catch(\PDOException $e) {
+            $schema = new Schema();
+            $table  = $schema->createTable('whole_cards');
+
+            $table->addColumn('id', 'integer', ['unsigned' => true])->setAutoincrement(true);
+            $table->addColumn('card_id', 'integer', ['unsigned' => true])->setNotnull(false);
+            $table->addColumn('hand_id', 'integer', ['unsigned' => true])->setNotnull(true);
+            $table->addColumn('player_id', 'integer', ['unsigned' => true])->setNotnull(true);
+            $table->addForeignKeyConstraint('cards', ['card_id'], ['id']);
+            $table->addForeignKeyConstraint('hands', ['hand_id'], ['id']);
+            $table->addForeignKeyConstraint('players', ['player_id'], ['id']);
+            $table->setPrimaryKey(['id']);
+
+            $dbPlatform = $this->connection->getDatabasePlatform();
+            $sql        = $schema->toSql($dbPlatform);
+
+            $this->connection->exec(array_shift($sql));
+        } catch(\Exception $e) {
             error_log($e->getMessage());
         }
-
-        $this->connection = null;
     }
 }
