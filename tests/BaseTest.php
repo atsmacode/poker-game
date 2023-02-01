@@ -15,7 +15,6 @@ use Atsmacode\PokerGame\Models\Table;
 use Atsmacode\PokerGame\Models\TableSeat;
 use Atsmacode\PokerGame\Models\WholeCard;
 use Atsmacode\PokerGame\PokerGameConfigProvider;
-use Atsmacode\PokerGame\PokerGameConfigProviderFactory;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 
