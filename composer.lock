@@ -46,6 +46,7 @@
             "description": "Base package to support any type of card based game",
             "support": {
                 "issues": "https://github.com/atsmacode/card-games/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/atsmacode/card-games/tree/v2.0.0"
             },
             "time": "2023-02-03T18:16:32+00:00"
@@ -62,6 +63,24 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/atsmacode/framework/zipball/654855e1bbe1dfcaa4395cdbc8067b18999bb9c5",
                 "reference": "654855e1bbe1dfcaa4395cdbc8067b18999bb9c5",
+=======
+                "source": "https://github.com/atsmacode/card-games/tree/v1.0.11"
+            },
+            "time": "2023-02-02T18:35:09+00:00"
+        },
+        {
+            "name": "atsmacode/framework",
+            "version": "v1.0.13",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/atsmacode/framework.git",
+                "reference": "c2277115159c7f72904d025bf54c1b0f03f7c770"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/atsmacode/framework/zipball/c2277115159c7f72904d025bf54c1b0f03f7c770",
+                "reference": "c2277115159c7f72904d025bf54c1b0f03f7c770",
+>>>>>>> bec52aa0eb8d3f1475708a3522ac4681ed5932b2
                 "shasum": ""
             },
             "require": {
@@ -90,9 +109,15 @@
             "description": "Repo with base DB, Model and Config resources",
             "support": {
                 "issues": "https://github.com/atsmacode/framework/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/atsmacode/framework/tree/v2.0.0"
             },
             "time": "2023-02-03T18:11:24+00:00"
+=======
+                "source": "https://github.com/atsmacode/framework/tree/v1.0.13"
+            },
+            "time": "2023-02-02T18:25:55+00:00"
+>>>>>>> bec52aa0eb8d3f1475708a3522ac4681ed5932b2
         },
         {
             "name": "brick/varexporter",
@@ -4270,5 +4295,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.2.0"
 }
