@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "atsmacode/card-games",
-            "version": "v2.0.0",
+            "version": "v2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/atsmacode/card-games.git",
-                "reference": "32152454895d035d8bd50ddad32ee183979673f5"
+                "reference": "b07727588f829a5d92f20f4c06d2d93254d63851"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atsmacode/card-games/zipball/32152454895d035d8bd50ddad32ee183979673f5",
-                "reference": "32152454895d035d8bd50ddad32ee183979673f5",
+                "url": "https://api.github.com/repos/atsmacode/card-games/zipball/b07727588f829a5d92f20f4c06d2d93254d63851",
+                "reference": "b07727588f829a5d92f20f4c06d2d93254d63851",
                 "shasum": ""
             },
             "require": {
@@ -46,22 +46,22 @@
             "description": "Base package to support any type of card based game",
             "support": {
                 "issues": "https://github.com/atsmacode/card-games/issues",
-                "source": "https://github.com/atsmacode/card-games/tree/v2.0.0"
+                "source": "https://github.com/atsmacode/card-games/tree/v2.0.3"
             },
-            "time": "2023-02-03T18:16:32+00:00"
+            "time": "2023-02-04T09:24:25+00:00"
         },
         {
             "name": "atsmacode/framework",
-            "version": "v2.0.0",
+            "version": "v2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/atsmacode/framework.git",
-                "reference": "654855e1bbe1dfcaa4395cdbc8067b18999bb9c5"
+                "reference": "ae93c09bf66704e706a9b21a17d0ae3222aa16a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atsmacode/framework/zipball/654855e1bbe1dfcaa4395cdbc8067b18999bb9c5",
-                "reference": "654855e1bbe1dfcaa4395cdbc8067b18999bb9c5",
+                "url": "https://api.github.com/repos/atsmacode/framework/zipball/ae93c09bf66704e706a9b21a17d0ae3222aa16a3",
+                "reference": "ae93c09bf66704e706a9b21a17d0ae3222aa16a3",
                 "shasum": ""
             },
             "require": {
@@ -90,9 +90,9 @@
             "description": "Repo with base DB, Model and Config resources",
             "support": {
                 "issues": "https://github.com/atsmacode/framework/issues",
-                "source": "https://github.com/atsmacode/framework/tree/v2.0.0"
+                "source": "https://github.com/atsmacode/framework/tree/v2.0.3"
             },
-            "time": "2023-02-03T18:11:24+00:00"
+            "time": "2023-02-04T09:23:17+00:00"
         },
         {
             "name": "brick/varexporter",
@@ -4270,5 +4270,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.0.0"
 }
