@@ -22,11 +22,11 @@
 
 Build the test DB:
 
->dev/builddb
+> dev/builddb
 
 Run the unit test suite:
 
->dev/phpunit
+> dev/phpunit
 
 Individual Drop, Create and Seed commands. Remove '-d true' for prodution:
 
@@ -38,11 +38,11 @@ Individual Drop, Create and Seed commands. Remove '-d true' for prodution:
 
 Drop, Create and Seed all tables:
 
->.\dev\builddb.bat
+> .\dev\builddb.bat
 
 Run the unit test suite:
 
->.\dev\runtests.bat
+> .\dev\runtests.bat
 
 Individual Drop, Create and Seed commands. Remove '-d true' for prodution:
 
