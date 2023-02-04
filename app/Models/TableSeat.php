@@ -48,7 +48,7 @@ class TableSeat extends Model
             $this->setModelProperties($rows);
 
             return $this;
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
@@ -63,7 +63,7 @@ class TableSeat extends Model
                 ->where('id = ' . $queryBuilder->createNamedParameter($tableSeatId));
 
             return $queryBuilder->executeStatement();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
@@ -80,7 +80,7 @@ class TableSeat extends Model
                 ->andWhere('pa.big_blind = 1');
 
             return $queryBuilder->executeStatement() ? $queryBuilder->fetchAssociative() : [];
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
@@ -103,7 +103,7 @@ class TableSeat extends Model
             $this->setModelProperties($rows);
 
             return $this;
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
@@ -136,7 +136,7 @@ class TableSeat extends Model
                 );
 
             return $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }

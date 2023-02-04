@@ -30,7 +30,7 @@ class Stack extends Model
                 ->andWhere('player_id = ' . $queryBuilder->createNamedParameter($playerId));
 
             return $queryBuilder->executeStatement();
-        } catch(\PDOException $e) {
+        } catch (\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }

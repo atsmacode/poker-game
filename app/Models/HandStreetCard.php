@@ -33,7 +33,7 @@ class HandStreetCard extends Model
                 ->where('hsc.id = ' . $queryBuilder->createNamedParameter($this->id));
 
             return $queryBuilder->executeStatement() ? $queryBuilder->fetchAssociative() : [];
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }

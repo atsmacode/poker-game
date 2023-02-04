@@ -23,7 +23,7 @@ class HandStreet extends Model
                 ->where('hand_street_id = ' . $queryBuilder->createNamedParameter($this->id));
 
             return $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
@@ -40,7 +40,7 @@ class HandStreet extends Model
                 ->andWhere('hs.street_id = ' . $queryBuilder->createNamedParameter($streetId));
 
             return $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }

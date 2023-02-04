@@ -23,7 +23,7 @@ class Player extends Model
                 ->where('player_id = ' . $queryBuilder->createNamedParameter($this->id));
 
             return $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
@@ -50,7 +50,7 @@ class Player extends Model
                 ->andWhere('wc.player_id = ' . $queryBuilder->createNamedParameter($playerId));
 
             return $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }

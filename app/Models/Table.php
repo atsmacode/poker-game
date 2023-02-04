@@ -24,7 +24,7 @@ class Table extends Model
                 ->where('table_id = ' . $queryBuilder->createNamedParameter($tableId));
 
             return $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }

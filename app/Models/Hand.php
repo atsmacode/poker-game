@@ -181,7 +181,7 @@ class Hand extends Model
                 ->orderBy('hsc.id', 'ASC');
 
             return $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }
     }
