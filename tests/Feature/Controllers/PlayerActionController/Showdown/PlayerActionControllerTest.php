@@ -93,7 +93,7 @@ class PlayerActionControllerTest extends BaseTest
         $request  = $this->executeActionsToContinue();
         $response = $this->actionControllerResponse($request);
 
-        $this->assertEquals($this->player3->id, $response['winner']['player']['player_id']);
+        $this->assertEquals($this->player3->getId(), $response['winner']['player']['player_id']);
         $this->assertEquals(HandType::PAIR['id'], $response['winner']['handType']['id']);
     }
 
@@ -161,20 +161,20 @@ class PlayerActionControllerTest extends BaseTest
         $request  = $this->executeActionsToContinue();
         $response = $this->actionControllerResponse($request);
 
-        $this->assertEquals($this->player3->id, $response['winner']['player']['player_id']);
+        $this->assertEquals($this->player3->getId(), $response['winner']['player']['player_id']);
         $this->assertEquals(HandType::TWO_PAIR['id'], $response['winner']['handType']['id']);
     }
 
     protected function setflop($flopCards)
     {
         $flop = $this->handStreetModel->create([
-            'street_id' => $this->streetModel->find(['name' => $this->gameState->getGame()->streets[1]['name']])->id,
+            'street_id' => $this->streetModel->find(['name' => $this->gameState->getGame()->streets[1]['name']])->getId(),
             'hand_id'   => $this->gameState->handId()
         ]);
 
         foreach($flopCards as $card){
             $this->handStreetCardModel->create([
-                'hand_street_id' => $flop->id,
+                'hand_street_id' => $flop->getId(),
                 'card_id'        => $card['card_id']
             ]);
         }
@@ -183,12 +183,12 @@ class PlayerActionControllerTest extends BaseTest
     protected function setTurn($turnCard)
     {
         $turn = $this->handStreetModel->create([
-            'street_id' => $this->streetModel->find(['name' => $this->gameState->getGame()->streets[2]['name']])->id,
+            'street_id' => $this->streetModel->find(['name' => $this->gameState->getGame()->streets[2]['name']])->getId(),
             'hand_id'   => $this->gameState->handId()
         ]);
 
         $this->handStreetCardModel->create([
-            'hand_street_id' => $turn->id,
+            'hand_street_id' => $turn->getId(),
             'card_id'        => $turnCard['card_id']
         ]);
     }
@@ -196,12 +196,12 @@ class PlayerActionControllerTest extends BaseTest
     protected function setRiver($riverCard)
     {
         $river = $this->handStreetModel->create([
-            'street_id' => $this->streetModel->find(['name' => $this->gameState->getGame()->streets[3]['name']])->id,
+            'street_id' => $this->streetModel->find(['name' => $this->gameState->getGame()->streets[3]['name']])->getId(),
             'hand_id'   => $this->gameState->handId()
         ]);
 
         $this->handStreetCardModel->create([
-            'hand_street_id' => $river->id,
+            'hand_street_id' => $river->getId(),
             'card_id'        => $riverCard['card_id']
         ]);
     }

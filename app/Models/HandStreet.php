@@ -10,9 +10,8 @@ class HandStreet extends Model
     use Collection;
 
     protected string $table = 'hand_streets';
-    public int       $id;
-    public int       $street_id;
-    public int       $hand_id;
+    private int      $street_id;
+    private int      $hand_id;
 
     public function cards(): array
     {

@@ -10,6 +10,5 @@ class Action extends Model
     use Collection;
 
     protected string $table = 'actions';
-    public int       $id;
-    public string    $name;
+    private string   $name;
 }

@@ -10,10 +10,14 @@ class Stack extends Model
     use Collection;
 
     protected string $table = 'stacks';
-    public int       $id;
-    public int       $amount;
-    public int       $player_id;
-    public int       $table_id;
+    private int      $amount;
+    private int      $player_id;
+    private int      $table_id;
+
+    public function getAmount(): int
+    {
+        return $this->amount;
+    }
 
     public function change(int $amount, int $playerId, int $tableId): int
     {

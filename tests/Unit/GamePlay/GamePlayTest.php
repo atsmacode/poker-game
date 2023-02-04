@@ -50,7 +50,7 @@ class GamePlayTest extends BaseTest
 
         $response = $this->gamePlay->play($this->gameState);
 
-        $this->assertCount(2, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
+        $this->assertCount(2, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->getContent());
         $this->assertCount(3, $response['communityCards']);
     }
 

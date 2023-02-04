@@ -27,13 +27,13 @@ class PokerDealerTest extends BaseTest
     {
 
         foreach($this->table->getSeats() as $tableSeat){
-            $this->assertCount(0, $this->playerModel->getWholeCards($this->hand->id, $tableSeat['player_id']));
+            $this->assertCount(0, $this->playerModel->getWholeCards($this->hand->getId(), $tableSeat['player_id']));
         }
 
-        $this->pokerDealer->setDeck()->shuffle()->dealTo($this->table->getSeats(), 1, $this->hand->id);
+        $this->pokerDealer->setDeck()->shuffle()->dealTo($this->table->getSeats(), 1, $this->hand->getId());
 
         foreach($this->table->getSeats() as $tableSeat){
-            $this->assertCount(1, $this->playerModel->getWholeCards($this->hand->id, $tableSeat['player_id']));
+            $this->assertCount(1, $this->playerModel->getWholeCards($this->hand->getId(), $tableSeat['player_id']));
         }
     }
 
@@ -45,8 +45,8 @@ class PokerDealerTest extends BaseTest
     {
 
         $handStreet = $this->handStreetModel->create([
-            'street_id' => $this->streetModel->find(['name' => 'Flop'])->id,
-            'hand_id'   => $this->handModel->create(['table_id' => $this->table->id])->id
+            'street_id' => $this->streetModel->find(['name' => 'Flop'])->getId(),
+            'hand_id'   => $this->handModel->create(['table_id' => $this->table->getId()])->getId()
         ]);
 
         $this->pokerDealer->setDeck()->dealStreetCards(
@@ -64,8 +64,8 @@ class PokerDealerTest extends BaseTest
     public function it_can_deal_a_specific_street_card()
     {
         $handStreet = $this->handStreetModel->create([
-            'street_id' => $this->streetModel->find(['name' => 'Flop'])->id,
-            'hand_id'   => $this->handModel->create(['table_id' => $this->table->id])->id
+            'street_id' => $this->streetModel->find(['name' => 'Flop'])->getId(),
+            'hand_id'   => $this->handModel->create(['table_id' => $this->table->getId()])->getId()
         ]);
 
         $card = CardFactory::create(Card::ACE_HEARTS);

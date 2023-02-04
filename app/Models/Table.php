@@ -9,9 +9,8 @@ class Table extends Model
     use Collection;
 
     protected string $table = 'tables';
-    public int       $id;
-    public string    $name;
-    public int       $seats;
+    private string   $name;
+    private int      $seats;
 
     public function getSeats(int $tableId = null): array
     {

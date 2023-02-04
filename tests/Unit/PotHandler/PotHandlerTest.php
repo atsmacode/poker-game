@@ -31,7 +31,7 @@ class PotHandlerTest extends BaseTest
     public function a_pot_can_be_initiated()
     {
         $table = $this->tableModel->create(['name' => 'Test Table', 'seats' => 3]);
-        $hand  = $this->handModel->create(['table_id' => $table->id]);
+        $hand  = $this->handModel->create(['table_id' => $table->getId()]);
 
         $this->assertNotInstanceOf(Pot::class, $this->potHandler->initiatePot($hand));
     }
@@ -51,20 +51,20 @@ class PotHandlerTest extends BaseTest
 
         $stack = $this->stackModel->create([
             'amount' => 1000,
-            'table_id' => $table->id,
-            'player_id' => $player->id
+            'table_id' => $table->getId(),
+            'player_id' => $player->getId()
         ]);
 
-        $hand = $this->handModel->create(['table_id' => $table->id]);
+        $hand = $this->handModel->create(['table_id' => $table->getId()]);
         $pot  = $this->potModel->create([
             'amount' => 75,
-            'hand_id' => $hand->id
+            'hand_id' => $hand->getId()
         ]);
 
-        $this->assertEquals(1000, $this->stackModel->find(['id' => $stack->id])->amount);
+        $this->assertEquals(1000, $this->stackModel->find(['id' => $stack->getId()])->getAmount());
 
-        $this->potHandler->awardPot($stack->amount, $pot->amount, $player->id, $table->id);
+        $this->potHandler->awardPot($stack->getAmount(), $pot->getAmount(), $player->getId(), $table->getId());
 
-        $this->assertEquals(1075, $this->stackModel->find(['id' => $stack->id])->amount);
+        $this->assertEquals(1075, $this->stackModel->find(['id' => $stack->getId()])->getAmount());
     }
 }

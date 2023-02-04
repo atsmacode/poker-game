@@ -55,7 +55,7 @@ class PlayerHandler implements PlayerHandlerInterface
     private function getActionOn()
     {
         $firstActivePlayer = $this->gameState->firstActivePlayer();
-        $lastToAct         = $this->gameState->getLatestAction()->table_seat_id;
+        $lastToAct         = $this->gameState->getLatestAction()->getTableSeatId();
 
         if ($this->gameState->isNewStreet()) {
             return $this->getThePlayerActionShouldBeOnForANewStreet($firstActivePlayer);
@@ -73,17 +73,15 @@ class PlayerHandler implements PlayerHandlerInterface
     private function getThePlayerActionShouldBeOnForANewStreet(array $firstActivePlayer)
     {
         $dealer            = $this->gameState->getHand()->getDealer();
-        $playerAfterDealer = $this->tableSeatModel->playerAfterDealer($this->gameState->handId(), $dealer->table_seat_id);
+        $playerAfterDealer = $this->tableSeatModel->playerAfterDealer($this->gameState->handId(), $dealer['table_seat_id']);
 
-        if (!isset($playerAfterDealer->player_id)) { $playerAfterDealer = null; }
-
-        return 0 < count($playerAfterDealer->content) ? $playerAfterDealer->content[0] : $firstActivePlayer;
+        return 0 < count($playerAfterDealer->getContent()) ? $playerAfterDealer->getContent()[0] : $firstActivePlayer;
     }
 
     private function getAvailableOptionsBasedOnLatestAction($playerAction)
     {
         $latestAction      = $this->gameState->getLatestAction();
-        $continuingBetters = $this->tableSeatModel->getContinuingBetters((string) $this->gameState->getHand()->id);
+        $continuingBetters = $this->tableSeatModel->getContinuingBetters((string) $this->gameState->getHand()->getId());
         $playerActions     = $this->gameState->getPlayers();
 
         if ($this->gameState->isNewStreet()) { return [Action::FOLD, Action::CHECK, Action::BET]; }
@@ -93,7 +91,7 @@ class PlayerHandler implements PlayerHandlerInterface
             return [Action::FOLD, Action::CALL, Action::RAISE];
         }
 
-        switch($latestAction->action_id){
+        switch($latestAction->getActionId()){
             case Action::CALL['id']:
                 if ($this->isBigBlindOnUnRaisedFirstStreet($playerActions, $playerAction)) {
                     return [Action::FOLD, Action::CHECK, Action::RAISE];

@@ -11,13 +11,22 @@ class TableSeat extends Model
     use Collection;
 
     protected string $table = 'table_seats';
-    public int       $id;
-    public ?int      $number;
-    public int       $can_continue;
-    public int       $is_dealer;
-    public int       $player_id;
-    public int       $table_id;
-    public ?string   $updated_at;
+    private ?int     $number;
+    private bool     $can_continue;
+    private int      $is_dealer;
+    private int      $player_id;
+    private int      $table_id;
+    private ?string  $updated_at;
+
+    public function canContinue(): bool
+    {
+        return $this->can_continue;
+    }
+
+    public function getPlayerId(): int
+    {
+        return $this->player_id;
+    }
 
     public function playerAfterDealer(int $handId, int $dealer): self
     {
@@ -35,6 +44,7 @@ class TableSeat extends Model
             $rows = $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
 
             $this->content = $rows;
+            
             $this->setModelProperties($rows);
 
             return $this;

@@ -9,7 +9,16 @@ class HandType extends Model
     use Collection;
 
     protected string $table = 'hand_types';
-    public int       $id;
-    public string    $name;
-    public int       $ranking;
+    private string   $name;
+    private int      $ranking;
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getRanking(): int
+    {
+        return $this->ranking;
+    }
 }

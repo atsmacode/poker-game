@@ -32,10 +32,10 @@ class StackTest extends BaseTest
     {
         $stack = $this->stackModel->create([
             'amount' => 1000,
-            'table_id' => $this->table->id,
-            'player_id' => $this->player1->id
+            'table_id' => $this->table->getId(),
+            'player_id' => $this->player1->getId()
         ]);
 
-        $this->assertContains($stack->id, array_column($this->player1->stacks(), 'id'));
+        $this->assertContains($stack->getId(), array_column($this->player1->stacks(), 'id'));
     }
 }

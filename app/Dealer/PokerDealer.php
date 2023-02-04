@@ -41,7 +41,7 @@ class PokerDealer extends Dealer
 
             $this->handStreetCardModel->create([
                 'card_id'        => $cardId,
-                'hand_street_id' => $handStreet->id
+                'hand_street_id' => $handStreet->getId()
             ]);
 
             $dealtCards++;
@@ -62,7 +62,7 @@ class PokerDealer extends Dealer
 
         $this->handStreetCardModel->create([
             'card_id'        => $cardId,
-            'hand_street_id' => $handStreet->id
+            'hand_street_id' => $handStreet->getId()
         ]);
 
         return $this;

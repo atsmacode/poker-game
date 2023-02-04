@@ -15,7 +15,7 @@ class PotHandler
 
     public function initiatePot(Hand $hand): void
     {
-        $this->potModel->create(['amount' => 0, 'hand_id' => $hand->id]);
+        $this->potModel->create(['amount' => 0, 'hand_id' => $hand->getId()]);
     }
 
     public function awardPot(int $stackAmount, int $potAmount, int $playerId, int $tableId): void
@@ -28,6 +28,6 @@ class PotHandler
     public function updatePot(int $betAmount, int $handId)
     {
         $pot = $this->potModel->find(['hand_id' => $handId]);
-        $pot->update(['amount' => $pot->amount + $betAmount]);
+        $pot->update(['amount' => $pot->getAmount() + $betAmount]);
     }
 }

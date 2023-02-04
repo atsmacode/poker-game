@@ -9,7 +9,11 @@ class Pot extends Model
     use Collection;
 
     protected string $table = 'pots';
-    public int       $id;
-    public int       $amount;
-    public int       $hand_id;
+    private int      $amount;
+    private int      $hand_id;
+
+    public function getAmount(): int
+    {
+        return $this->amount;
+    }
 }

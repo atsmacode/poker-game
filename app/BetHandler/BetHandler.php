@@ -33,7 +33,7 @@ class BetHandler extends Database
             $stack  = $stackAmount - $betAmount;
 
             $this->stackModel->change($stack, $playerId, $tableId);
-            $this->potHandler->updatePot($betAmount, $hand->id);
+            $this->potHandler->updatePot($betAmount, $hand->getId());
         }
         
         return null;
@@ -56,28 +56,28 @@ class BetHandler extends Database
         ]);
 
         $this->playerActionLogModel->create([
-            'player_status_id' => $smallBlind->id,
+            'player_status_id' => $smallBlind->getId(),
             'bet_amount'       => 25.0,
             'small_blind'      => 1,
-            'player_id'        => $smallBlind->player_id,
+            'player_id'        => $smallBlind->getPlayerId(),
             'action_id'        => Action::BET_ID,
-            'hand_id'          => $hand->id,
-            'hand_street_id'   => $smallBlind->hand_street_id,
-            'table_seat_id'    => $smallBlind->table_seat_id,
+            'hand_id'          => $hand->getId(),
+            'hand_street_id'   => $smallBlind->getHandStreetId(),
+            'table_seat_id'    => $smallBlind->getTableSeatId(),
             'created_at'       => date('Y-m-d H:i:s', time()),
         ]);
 
-        $this->tableSeatModel->find(['id' => $smallBlind->table_seat_id])
+        $this->tableSeatModel->find(['id' => $smallBlind->getTableSeatId()])
             ->update([
                 'can_continue' => 0
             ]);
 
         $this->handle(
             $hand,
-            $gameState->getStacks()[$smallBlind->player_id]->amount,
-            $smallBlind->player_id,
-            $hand->table_id,
-            $smallBlind->bet_amount
+            $gameState->getStacks()[$smallBlind->getPlayerId()]->getAmount(),
+            $smallBlind->getPlayerId(),
+            $hand->getTableId(),
+            $smallBlind->getBetAmount()
         );
 
         $bigBlind->update([
@@ -89,28 +89,28 @@ class BetHandler extends Database
         ]);
 
         $this->playerActionLogModel->create([
-            'player_status_id' => $bigBlind->id,
+            'player_status_id' => $bigBlind->getId(),
             'bet_amount'       => 50.0,
             'big_blind'        => 1,
-            'player_id'        => $bigBlind->player_id,
+            'player_id'        => $bigBlind->getPlayerId(),
             'action_id'        => Action::BET_ID,
-            'hand_id'          => $hand->id,
-            'hand_street_id'   => $bigBlind->hand_street_id,
-            'table_seat_id'    => $bigBlind->table_seat_id,
+            'hand_id'          => $hand->getId(),
+            'hand_street_id'   => $bigBlind->getHandStreetId(),
+            'table_seat_id'    => $bigBlind->getTableSeatId(),
             'created_at'       => date('Y-m-d H:i:s', time())
         ]);
 
-        $this->tableSeatModel->find(['id' => $bigBlind->table_seat_id])
+        $this->tableSeatModel->find(['id' => $bigBlind->getTableSeatId()])
             ->update([
                 'can_continue' => 0
             ]);
 
         $this->handle(
             $hand,
-            $gameState->getStacks()[$bigBlind->player_id]->amount,
-            $bigBlind->player_id,
-            $hand->table_id,
-            $bigBlind->bet_amount
+            $gameState->getStacks()[$bigBlind->getPlayerId()]->getAmount(),
+            $bigBlind->getPlayerId(),
+            $hand->getTableId(),
+            $bigBlind->getBetAmount()
         );
     }
 }

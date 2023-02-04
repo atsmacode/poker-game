@@ -30,7 +30,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->actionControllerResponse($request);
 
-        $this->assertCount(2, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
+        $this->assertCount(2, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->getContent());
         $this->assertCount(3, $this->handStreetModel->getStreetCards($this->gameState->handId(), 2));
     }
 
@@ -48,7 +48,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->actionControllerResponse($request);
 
-        $this->assertCount(3, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
+        $this->assertCount(3, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->getContent());
         $this->assertCount(1, $this->handStreetModel->getStreetCards($this->gameState->handId(), 3));
     }
 
@@ -68,7 +68,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->actionControllerResponse($request);
 
-        $this->assertCount(4, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
+        $this->assertCount(4, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->getContent());
         $this->assertCount(1, $this->handStreetModel->getStreetCards($this->gameState->handId(), 4));
     }
 

@@ -10,10 +10,14 @@ class Hand extends Model
     use Collection;
 
     protected string $table = 'hands';
-    public int       $id;
-    public int       $table_id;
-    public ?int      $game_type_id;
-    public ?string   $completed_on;
+    private int      $table_id;
+    private ?int     $game_type_id;
+    private ?string  $completed_on;
+
+    public function getTableId(): int
+    {
+        return $this->table_id;
+    }
 
     public function streets(): array
     {
@@ -98,7 +102,7 @@ class Hand extends Model
         }
     }
 
-    public function getDealer(): self
+    public function getDealer(): array
     {
         try {
             $queryBuilder = $this->connection->createQueryBuilder();
@@ -109,11 +113,7 @@ class Hand extends Model
                 ->where('pa.hand_id = ' . $queryBuilder->createNamedParameter($this->id))
                 ->andWhere('ts.is_dealer = 1');
 
-            $rows = $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
-
-            $this->setModelProperties($rows);
-
-            return $this;
+            return $queryBuilder->executeStatement() ? $queryBuilder->fetchAssociative() : [];
         } catch(\Exception $e) {
             error_log(__METHOD__ . ': ' . $e->getMessage());
         }

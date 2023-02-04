@@ -24,11 +24,11 @@ class TableSeatTest extends BaseTest
     {
         $tableSeat = $this->tableSeatModel->find(['id' => $this->gameState->getSeats()[0]['id']]);
 
-        $this->assertEquals(0, $tableSeat->can_continue);
+        $this->assertEquals(0, (int) $tableSeat->canContinue());
 
         $tableSeat->update(['can_continue' => 1]);
 
-        $this->assertEquals(1, $tableSeat->can_continue);
+        $this->assertEquals(1, (int) $tableSeat->canContinue());
     }
 
     /**
@@ -46,6 +46,6 @@ class TableSeatTest extends BaseTest
             $this->gameState->getSeats()[0]['id']
         );
 
-        $this->assertEquals($this->gameState->getSeats()[1]['id'], $tableSeat->id);
+        $this->assertEquals($this->gameState->getSeats()[1]['id'], $tableSeat->getId());
     }
 }

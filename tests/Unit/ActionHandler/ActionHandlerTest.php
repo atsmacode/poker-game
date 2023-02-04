@@ -33,8 +33,8 @@ class ActionHandlerTest extends BaseTest
 
         $response = $this->actionHandler->handle(
             $this->hand,
-            $this->player1->id,
-            $this->tableSeatOne->id,
+            $this->player1->getId(),
+            $this->tableSeatOne->getId(),
             1,
             50,
             Action::CALL_ID,

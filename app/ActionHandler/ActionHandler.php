@@ -39,7 +39,7 @@ class ActionHandler implements ActionHandlerInterface
             'hand_street_id' =>  $handStreetId
         ]);
 
-        $this->betHandler->handle($hand, $stack, $playerId, $hand->table_id, $betAmount);
+        $this->betHandler->handle($hand, $stack, $playerId, $hand->getTableId(), $betAmount);
 
         $playerAction->update([
             'action_id'  => $actionId,
@@ -49,13 +49,13 @@ class ActionHandler implements ActionHandlerInterface
         ]);
 
         $this->playerActionLogs->create([
-            'player_status_id' => $playerAction->id,
+            'player_status_id' => $playerAction->getId(),
             'bet_amount'       => $betAmount,
-            'big_blind'        => $playerAction->big_blind,
-            'small_blind'      => $playerAction->small_blind,
+            'big_blind'        => (int) $playerAction->isBigBlind(),
+            'small_blind'      => (int) $playerAction->isSmallBlind(),
             'player_id'        => $playerId,
             'action_id'        => $actionId,
-            'hand_id'          => $hand->id,
+            'hand_id'          => $hand->getId(),
             'hand_street_id'   => $handStreetId,
             'table_seat_id'    => $tableSeatId,
             'created_at'       => date('Y-m-d H:i:s', time())
@@ -73,7 +73,7 @@ class ActionHandler implements ActionHandlerInterface
 
     private function updateSeatStatusOfLatestAction()
     {
-        switch($this->gameState->getLatestAction()->action_id){
+        switch($this->gameState->getLatestAction()->getActionId()){
             case Action::CHECK['id']:
             case Action::CALL['id']:
             case Action::BET['id']:
@@ -85,7 +85,7 @@ class ActionHandler implements ActionHandlerInterface
                 break;
         }
 
-        $this->tableSeats->find(['id' => $this->gameState->getLatestAction()->table_seat_id])
+        $this->tableSeats->find(['id' => $this->gameState->getLatestAction()->getTableSeatId()])
             ->update([
                 'can_continue' => $canContinue
             ]);
@@ -93,7 +93,7 @@ class ActionHandler implements ActionHandlerInterface
 
     private function updateAllOtherSeatsBasedOnLatestAction()
     {
-        switch($this->gameState->getLatestAction()->action_id){
+        switch($this->gameState->getLatestAction()->getActionId()){
             case Action::BET['id']:
             case Action::RAISE['id']:
                 $canContinue = 0;
@@ -106,7 +106,7 @@ class ActionHandler implements ActionHandlerInterface
             $tableSeats = $this->tableSeats->find(['table_id' => $this->gameState->tableId()]);
             $tableSeats->updateBatch([
                 'can_continue' => $canContinue
-            ], 'id != ' . $this->gameState->getLatestAction()->table_seat_id);
+            ], 'id != ' . $this->gameState->getLatestAction()->getTableSeatId());
         }
     }
 }

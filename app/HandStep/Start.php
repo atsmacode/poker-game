@@ -38,7 +38,7 @@ class Start extends HandStep
             $this->gameState->getGameDealer()->dealTo(
                 $this->gameState->getSeats(),
                 $this->gameState->getGame()->streets[1]['whole_cards'],
-                $this->gameState->getHand()->id,
+                $this->gameState->getHand()->getId(),
             );
         }
 
@@ -47,12 +47,14 @@ class Start extends HandStep
 
     public function initiateStreetActions(): self
     {
-        $street = $this->handStreetModel->create(['street_id' => $this->streetModel->find(['name' => 'Pre-flop'])->id, 'hand_id' => $this->gameState->handId()]);
+        $street = $this->handStreetModel->create([
+            'street_id' => $this->streetModel->find(['name' => 'Pre-flop'])->getId(), 'hand_id' => $this->gameState->handId()
+        ]);
 
         foreach($this->gameState->getSeats() as $seat){
             $this->playerActionModel->create([
                 'player_id'      => $seat['player_id'],
-                'hand_street_id' => $street->id,
+                'hand_street_id' => $street->getId(),
                 'table_seat_id'  => $seat['id'],
                 'hand_id'        => $this->gameState->handId(),
                 'active'         => 1
@@ -70,7 +72,7 @@ class Start extends HandStep
             /** Looks like the count() check was added as there's only 1 table being handled. */
             $playerTableStack = $this->findPlayerStack($seat['player_id'], $this->gameState->tableId());
 
-            if (0 === count($playerTableStack->content)) {
+            if (0 === count($playerTableStack->getContent())) {
                 $tableStacks[$seat['player_id']] = $this->stackModel->create([
                     'amount' => 1000,
                     'player_id' => $seat['player_id'],
@@ -110,9 +112,9 @@ class Start extends HandStep
         $newDealerSeat->update(['is_dealer'  => 1]);
 
         $handStreetId = $this->handStreetModel->find([
-            'street_id'  => $this->streetModel->find(['name' => $this->gameState->getGame()->streets[1]['name']])->id,
+            'street_id'  => $this->streetModel->find(['name' => $this->gameState->getGame()->streets[1]['name']])->getId(),
             'hand_id' => $this->gameState->handId()
-        ])->id;
+        ])->getId();
 
         $smallBlind = $this->findPlayerAction($smallBlindSeat['player_id'], $smallBlindSeat['id'], $handStreetId); 
         $bigBlind   = $this->findPlayerAction($bigBlindSeat['player_id'], $bigBlindSeat['id'], $handStreetId); 
@@ -170,7 +172,7 @@ class Start extends HandStep
     protected function identifyTheNextDealerAndBlindSeats($currentDealerSet): array
     {
         $currentDealer = $currentDealerSet 
-            ? $this->gameState->getSeat($currentDealerSet->id) 
+            ? $this->gameState->getSeat($currentDealerSet->getId()) 
             : $this->gameState->getDealer();
 
         /** TODO: These must be called in order. Also will only work if all seats have a stack/player.*/

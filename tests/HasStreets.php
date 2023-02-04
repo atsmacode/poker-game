@@ -7,7 +7,7 @@ trait HasStreets
     protected function setFlop()
     {
         $flop = $this->handStreetModel->create([
-            'street_id' =>  $this->streetModel->find(['name' => 'Flop'])->id,
+            'street_id' =>  $this->streetModel->find(['name' => 'Flop'])->getId(),
             'hand_id' => $this->gameState->handId()
         ]);
 
@@ -20,7 +20,7 @@ trait HasStreets
     protected function setTurn()
     {
         $turn = $this->handStreetModel->create([
-            'street_id' =>  $this->streetModel->find(['name' => 'Turn'])->id,
+            'street_id' =>  $this->streetModel->find(['name' => 'Turn'])->getId(),
             'hand_id' => $this->gameState->handId()
         ]);
 
@@ -33,7 +33,7 @@ trait HasStreets
     protected function setRiver()
     {
         $river = $this->handStreetModel->create([
-            'street_id' =>  $this->streetModel->find(['name' => 'River'])->id,
+            'street_id' =>  $this->streetModel->find(['name' => 'River'])->getId(),
             'hand_id' => $this->gameState->handId()
         ]);
 

@@ -62,7 +62,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->actionControllerResponse($request);
 
-        $this->assertCount(2, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
+        $this->assertCount(2, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->getContent());
     }
 
     /**
@@ -86,7 +86,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
         $this->assertEquals(1, $response['players'][2]['can_continue']);
-        $this->assertEquals($this->player3->id, $response['winner']['player']['player_id']);
+        $this->assertEquals($this->player3->getId(), $response['winner']['player']['player_id']);
     }
 
     /**
@@ -123,7 +123,7 @@ class PlayerActionControllerTest extends BaseTest
         $request  = $this->givenActionsMeanNewStreetIsDealtWhenDealerIsSeatTwo();
         $response = $this->actionControllerResponse($request);
 
-        $this->assertCount(2, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->content);
+        $this->assertCount(2, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->getContent());
 
         $this->assertTrue($response['players'][2]['action_on']);
     }

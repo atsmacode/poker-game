@@ -23,8 +23,8 @@ class HandTypeTest extends BaseTest
     {
         $handType = $this->handTypeModel->create(['name' => 'High Card 24', 'ranking' => 16]);
 
-        $this->assertEquals('High Card 24', $handType->name);
-        $this->assertEquals(16, $handType->ranking);
+        $this->assertEquals('High Card 24', $handType->getName());
+        $this->assertEquals(16, $handType->getRanking());
     }
 
     /**
@@ -35,8 +35,8 @@ class HandTypeTest extends BaseTest
     {
         $handType = $this->handTypeModel->find(['name' => 'High Card', 'ranking' => 10]);
 
-        $this->assertEquals('High Card', $handType->name);
-        $this->assertEquals(10, $handType->ranking);
+        $this->assertEquals('High Card', $handType->getName());
+        $this->assertEquals(10, $handType->getRanking());
     }
 
 }

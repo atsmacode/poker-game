@@ -9,8 +9,7 @@ class WholeCard extends Model
     use Collection;
 
     protected string $table = 'whole_cards';
-    public int       $id;
-    public int       $card_id;
-    public int       $hand_id;
-    public int       $player_id;
+    private int      $card_id;
+    private int      $hand_id;
+    private int      $player_id;
 }

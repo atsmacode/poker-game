@@ -28,9 +28,9 @@ class PotTest extends BaseTest
 
         $pot = $this->potModel->create([
             'amount' => 75,
-            'hand_id' => $hand->id
+            'hand_id' => $hand->getId()
         ]);
 
-        $this->assertEquals($pot->id, $hand->pot()['id']);
+        $this->assertEquals($pot->getId(), $hand->pot()['id']);
     }
 }

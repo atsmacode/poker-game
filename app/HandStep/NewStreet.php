@@ -28,7 +28,7 @@ class NewStreet extends HandStep
 
         $newStreetId = $this->streetModel->find([
             'name' => $this->gameState->getGame()->streets[$handStreetCount + 1]['name']
-        ])->id;
+        ])->getId();
 
         $handStreet = $this->handStreetModel->create([
             'street_id' => $newStreetId,
@@ -39,7 +39,7 @@ class NewStreet extends HandStep
             $handStreet, $this->gameState->getGame()->streets[$handStreetCount + 1]['community_cards']
         );
 
-        $this->updatePlayerStatusesOnNewStreet($handStreet->id);
+        $this->updatePlayerStatusesOnNewStreet($handStreet->getId());
         $this->gameState->updateHandStreets();
         $this->gameState->setPlayers();
         $this->gameState->setCommunityCards();

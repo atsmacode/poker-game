@@ -38,21 +38,21 @@ class BetHandlerTest extends BaseTest
 
         $stack = $this->stackModel->create([
             'amount' => 1000,
-            'table_id' => $table->id,
-            'player_id' => $player->id
+            'table_id' => $table->getId(),
+            'player_id' => $player->getId()
         ]);
 
-        $hand = $this->handModel->create(['table_id' => $table->id]);
+        $hand = $this->handModel->create(['table_id' => $table->getId()]);
         $pot  = $this->potModel->create([
             'amount' => 0,
-            'hand_id' => $hand->id
+            'hand_id' => $hand->getId()
         ]);
 
-        $this->assertEquals(1000, $this->stackModel->find(['id' => $stack->id])->amount);
+        $this->assertEquals(1000, $this->stackModel->find(['id' => $stack->getId()])->getAmount());
 
-        $this->betHandler->handle($hand, $stack->amount, $player->id, $table->id, 150);
+        $this->betHandler->handle($hand, $stack->getAmount(), $player->getId(), $table->getId(), 150);
 
-        $this->assertEquals(150, $this->potModel->find(['id' => $pot->id])->amount);
-        $this->assertEquals(850, $this->stackModel->find(['id' => $stack->id])->amount);
+        $this->assertEquals(150, $this->potModel->find(['id' => $pot->getId()])->getAmount());
+        $this->assertEquals(850, $this->stackModel->find(['id' => $stack->getId()])->getAmount());
     }
 }
