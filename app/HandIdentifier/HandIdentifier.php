@@ -28,10 +28,10 @@ class HandIdentifier
     public $royalFlush     = false;
     
     protected $handMethods = [
-        /*'hasRoyalFlush',
-        'hasStraightFlush',
+        'hasRoyalFlush',
+        /*'hasStraightFlush',*/
         'hasFourOfAKind',
-        'hasFullHouse',*/
+        /*'hasFullHouse',*/
         'hasFlush',
         'hasStraight',
         'hasThreeOfAKind',
@@ -393,6 +393,46 @@ class HandIdentifier
                 $this->identifiedHandType['handType']      = $this->getHandType('Flush');
                 $this->identifiedHandType['kicker']        = $this->checkForAceKicker(__FUNCTION__, $this->identifiedHandType['activeCards'])
                     ?: $this->getKicker($this->identifiedHandType['activeCards']);
+
+                return true;
+            }
+        }
+
+        return $this;
+    }
+
+    public function hasFourOfAKind(): bool|self
+    {
+        foreach (Rank::ALL as $rank) {
+            if (4 === count($this->filterAllCards('rank_id', $rank['rank_id']))) {
+                $this->fourOfAKind                         = $rank;
+                $this->identifiedHandType['handType']      = $this->getHandType('Four of a Kind');
+                $this->identifiedHandType['activeCards'][] = $this->checkForHighAceActiveCardRanking($rank) ?: $rank['ranking'];
+                $this->identifiedHandType['kicker']        = $this->checkForAceKicker(__FUNCTION__, $this->identifiedHandType['activeCards'])
+                    ?: $this->getKicker($this->identifiedHandType['activeCards']);
+
+                return true;
+            }
+        }
+
+        return $this;
+    }
+
+    public function hasRoyalFlush(): bool|self
+    {
+        foreach (Suit::ALL as $suit) {
+            $royalFlush = array_filter($this->allCards, function($value) use ($suit) {
+                return $value['suit_id'] === $suit['suit_id'] && $value['rankAbbreviation'] === 'A' ||
+                    $value['suit_id'] === $suit['suit_id'] && $value['rankAbbreviation'] === 'K' ||
+                    $value['suit_id'] === $suit['suit_id'] && $value['rankAbbreviation'] === 'Q'||
+                    $value['suit_id'] === $suit['suit_id'] && $value['rankAbbreviation'] === 'J'||
+                    $value['suit_id'] === $suit['suit_id'] && $value['rankAbbreviation'] === '10';
+            });
+
+            if ($royalFlush && 5 === count($royalFlush)) {
+                $this->royalFlush                        = $royalFlush;
+                $this->identifiedHandType['activeCards'] = array_column($this->royalFlush, 'ranking');
+                $this->identifiedHandType['handType']    = $this->getHandType('Royal Flush');
 
                 return true;
             }

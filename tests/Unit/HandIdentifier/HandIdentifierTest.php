@@ -11,6 +11,7 @@ use Atsmacode\PokerGame\Tests\BaseTest;
 
 class HandIdentifierTest extends BaseTest
 {
+    private HandIdentifier $handIdentifier;
 
     protected function setUp(): void
     {
@@ -271,5 +272,52 @@ class HandIdentifierTest extends BaseTest
 
         $this->assertEquals(HandType::FLUSH['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
         $this->assertEquals(14, $this->handIdentifier->identifiedHandType['kicker']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function itCanIdentifyQuads()
+    {
+        $wholeCards = [
+            CardFactory::create(Card::KING_CLUBS),
+            CardFactory::create(Card::KING_SPADES),
+        ];
+
+        $communityCards = [
+            CardFactory::create(Card::ACE_HEARTS),
+            CardFactory::create(Card::KING_HEARTS),
+            CardFactory::create(Card::KING_DIAMONDS),
+            CardFactory::create(Card::NINE_CLUBS),
+            CardFactory::create(Card::EIGHT_DIAMONDS),
+        ];
+
+        $this->handIdentifier->identify($wholeCards, $communityCards);
+        $this->assertEquals(HandType::QUADS['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
+        $this->assertEquals(Rank::KING, $this->handIdentifier->fourOfAKind);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function itCanIdentifyARoyalFlush()
+    {
+        $wholeCards = [
+            CardFactory::create(Card::KING_HEARTS),
+            CardFactory::create(Card::QUEEN_HEARTS),
+        ];
+
+        $communityCards = [
+            CardFactory::create(Card::JACK_HEARTS),
+            CardFactory::create(Card::TEN_HEARTS),
+            CardFactory::create(Card::KING_DIAMONDS),
+            CardFactory::create(Card::NINE_CLUBS),
+            CardFactory::create(Card::ACE_HEARTS),
+        ];
+
+        $this->handIdentifier->identify($wholeCards, $communityCards);
+        $this->assertEquals(HandType::ROYAL_FLUSH['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
     }
 }
