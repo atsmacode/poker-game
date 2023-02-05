@@ -223,4 +223,53 @@ class HandIdentifierTest extends BaseTest
         $this->assertEquals(HandType::STRAIGHT['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
         $this->assertEquals(Rank::KING['ranking'], $this->handIdentifier->identifiedHandType['kicker']);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function itCanIdentifyAFlush()
+    {
+        $wholeCards = [
+            CardFactory::create(Card::JACK_CLUBS),
+            CardFactory::create(Card::TEN_CLUBS),
+        ];
+
+        $communityCards = [
+            CardFactory::create(Card::DEUCE_CLUBS),
+            CardFactory::create(Card::QUEEN_HEARTS),
+            CardFactory::create(Card::KING_DIAMONDS),
+            CardFactory::create(Card::FIVE_CLUBS),
+            CardFactory::create(Card::THREE_CLUBS),
+        ];
+
+        $this->handIdentifier->identify($wholeCards, $communityCards);
+
+        $this->assertEquals(HandType::FLUSH['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function itCanIdentifyAnAceHighFlush()
+    {
+        $wholeCards = [
+            CardFactory::create(Card::JACK_CLUBS),
+            CardFactory::create(Card::TEN_CLUBS),
+        ];
+
+        $communityCards = [
+            CardFactory::create(Card::DEUCE_CLUBS),
+            CardFactory::create(Card::ACE_CLUBS),
+            CardFactory::create(Card::KING_CLUBS),
+            CardFactory::create(Card::FIVE_CLUBS),
+            CardFactory::create(Card::THREE_CLUBS),
+        ];
+
+        $this->handIdentifier->identify($wholeCards, $communityCards);
+
+        $this->assertEquals(HandType::FLUSH['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
+        $this->assertEquals(14, $this->handIdentifier->identifiedHandType['kicker']);
+    }
 }
