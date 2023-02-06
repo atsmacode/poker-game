@@ -101,7 +101,7 @@ class HandIdentifierTest extends BaseTest
         ];
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
-        
+
         $this->assertEquals(HandType::PAIR['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
         $this->assertCount(1, $this->handIdentifier->pairs);
     }
@@ -327,6 +327,30 @@ class HandIdentifierTest extends BaseTest
 
         $this->assertEquals(HandType::QUADS['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
         $this->assertEquals(Rank::KING, $this->handIdentifier->fourOfAKind);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function itCanIdentifyAStraightFlush()
+    {
+        $wholeCards = [
+            CardFactory::create(Card::KING_HEARTS),
+            CardFactory::create(Card::QUEEN_HEARTS),
+        ];
+
+        $communityCards = [
+            CardFactory::create(Card::NINE_HEARTS),
+            CardFactory::create(Card::TEN_HEARTS),
+            CardFactory::create(Card::KING_DIAMONDS),
+            CardFactory::create(Card::NINE_CLUBS),
+            CardFactory::create(Card::JACK_HEARTS),
+        ];
+
+        $this->handIdentifier->identify($wholeCards, $communityCards);
+
+        $this->assertEquals(HandType::STRAIGHT_FLUSH['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
     }
 
     /**

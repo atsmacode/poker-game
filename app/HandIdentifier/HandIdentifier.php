@@ -29,7 +29,7 @@ class HandIdentifier
     
     protected $handMethods = [
         'hasRoyalFlush',
-        /*'hasStraightFlush',*/
+        'hasStraightFlush',
         'hasFourOfAKind',
         'hasFullHouse',
         'hasFlush',
@@ -460,6 +460,58 @@ class HandIdentifier
                 $this->identifiedHandType['activeCards'][] = $this->checkForHighAceActiveCardRanking($rank) ?: $rank['ranking'];
                 $this->identifiedHandType['kicker']        = $this->checkForAceKicker(__FUNCTION__, $this->identifiedHandType['activeCards'])
                     ?: $this->getKicker($this->identifiedHandType['activeCards']);
+
+                return true;
+            }
+        }
+
+        return $this;
+    }
+
+    public function hasStraightFlush(): bool|self
+    {
+        foreach(Suit::ALL as $suit){
+            /* Remove cards not in this suit. This also takes care of duplicates. */
+            $onlyThisSuit = array_values(array_filter($this->sortAllCardsByDescRanking(), function ($item) use ($suit) {
+                return $item['suit_id'] === $suit['suit_id'];
+            }));
+
+            $straightFlush = array_filter($onlyThisSuit, function($value, $key) use ($suit, $onlyThisSuit) {
+                $nextCardRankingPlusOne      = null;
+                $previousCardRankingMinusOne = null;
+
+                if (array_key_exists($key + 1, $onlyThisSuit)) {
+                    $nextCardRankingPlusOne = $onlyThisSuit[$key + 1]['ranking'] + 1;
+                }
+
+                if (array_key_exists($key - 1, $onlyThisSuit)) {
+                    $previousCardRankingMinusOne = $onlyThisSuit[$key - 1]['ranking'] - 1;
+                }
+
+                /*
+                 * Had to add extra logic to prevent K,Q,9,8,7 being set as a straight, for example.
+                 * And checking if the current rank has already been counted towards a straight.
+                 * Which makes this method quite long - extract or simplify.
+                 */
+                $twoCardsInFrontRankingPlusTwo = null;
+                $twoCardsPreviousRankingMinusTwo = null;
+
+                if (array_key_exists($key + 2, $onlyThisSuit)) {
+                    $twoCardsInFrontRankingPlusTwo = $onlyThisSuit[$key + 2]['ranking'] + 2;
+                }
+
+                if (array_key_exists($key - 2, $onlyThisSuit)) {
+                    $twoCardsPreviousRankingMinusTwo = $onlyThisSuit[$key - 2]['ranking'] - 2;
+                }
+
+                return ($value['ranking'] === $previousCardRankingMinusOne || $value['ranking'] === $nextCardRankingPlusOne) &&
+                    ($value['ranking'] === $twoCardsPreviousRankingMinusTwo || $value['ranking'] === $twoCardsInFrontRankingPlusTwo);
+            }, ARRAY_FILTER_USE_BOTH);
+
+            if ($straightFlush && 5 <= count($straightFlush)) {
+                $this->straightFlush                  = true;
+                $this->identifiedHandType['handType'] = $this->getHandType('Straight Flush');
+                $this->identifiedHandType['kicker']   = $this->getMax($straightFlush, 'ranking');
 
                 return true;
             }
