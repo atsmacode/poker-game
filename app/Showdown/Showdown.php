@@ -38,10 +38,10 @@ class Showdown
          * retain only the one with the highest kicker & active cards as appropriate
          * then compare the hand rankings of each remaining player hand.
          */
-        foreach($this->handIdentifier->handTypes as $handType){
+        foreach ($this->handIdentifier->handTypes as $handType) {
             $playerHandsOfType = $this->getPlayerhandsOfType($handType['id']);
 
-            if(count($playerHandsOfType) > 1){
+            if (count($playerHandsOfType) > 1) {
                 $this->identifyHighestRankedHandAndKickerOfThisType(
                     $this->playerHands,
                     $playerHandsOfType,
@@ -90,7 +90,7 @@ class Showdown
     public function compileHands(): self
     {
         foreach ($this->getContinuingPlayerSeats($this->gameState->getPlayers()) as $player) {
-            $compileInfo = (new HandIdentifier())->identify(
+            $compileInfo = $this->handIdentifier->identify(
                 $this->gameState->getWholeCards()[$player['player_id']],
                 $this->communityCards
             )->identifiedHandType;

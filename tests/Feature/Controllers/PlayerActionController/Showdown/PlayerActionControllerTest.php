@@ -209,7 +209,7 @@ class PlayerActionControllerTest extends BaseTest
                 'card_id' => Card::QUEEN_SPADES_ID
             ],
             [
-                'card_id' => Card::DEUCE_CLUBS_ID
+                'card_id' => Card::KING_SPADES_ID
             ]
         ];
 
