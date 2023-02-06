@@ -277,7 +277,7 @@ class HandIdentifierTest extends BaseTest
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
         $this->assertEquals(HandType::FLUSH['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
-        $this->assertEquals(14, $this->handIdentifier->identifiedHandType['kicker']);
+        $this->assertEquals(Rank::KING['ranking'], $this->handIdentifier->identifiedHandType['kicker']);
     }
 
     /**

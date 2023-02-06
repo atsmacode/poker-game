@@ -4,6 +4,7 @@ namespace Atsmacode\PokerGame\Tests\Unit\HandIdentifier;
 
 use Atsmacode\PokerGame\HandIdentifier\HandIdentifier;
 use Atsmacode\CardGames\Constants\Card;
+use Atsmacode\CardGames\Constants\Rank;
 use Atsmacode\CardGames\Factory\CardFactory;
 use Atsmacode\PokerGame\Tests\BaseTest;
 
@@ -19,7 +20,7 @@ class HandIdentifierKickerTest extends BaseTest
      * @test
      * @return void
      */
-    public function it_can_identify_the_kicker_and_active_ranks_for_a_high_card_hand()
+    public function itCanIdentifyTheKickerAndActiveRanksForAHighCardHand()
     {
         $wholeCards = [
             CardFactory::create(Card::KING_SPADES)
@@ -36,7 +37,7 @@ class HandIdentifierKickerTest extends BaseTest
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
         $this->assertEquals(
-            13,
+            Rank::KING['ranking'],
             $this->handIdentifier->highCard
         );
 
@@ -46,7 +47,7 @@ class HandIdentifierKickerTest extends BaseTest
         );
 
         $this->assertContains(
-            13,
+            Rank::KING['ranking'],
             $this->handIdentifier->identifiedHandType['activeCards']
         );
     }
@@ -55,7 +56,7 @@ class HandIdentifierKickerTest extends BaseTest
      * @test
      * @return void
      */
-    public function it_can_identify_the_kicker_and_active_ranks_for_a_pair()
+    public function itCanIdentifyTheKickerAndActiveRanksForAPair()
     {
         $wholeCards = [
             CardFactory::create(Card::KING_SPADES),

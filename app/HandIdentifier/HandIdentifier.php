@@ -392,7 +392,7 @@ class HandIdentifier
 
             if (5 <= count($flushCards)) {
                 $this->flush                               = $suit;
-                $this->identifiedHandType['activeCards']   = array_column($flushCards, 'ranking');
+                $this->identifiedHandType['activeCards'][] = array_column($flushCards, 'ranking');
                 $this->identifiedHandType['handType']      = $this->getHandType('Flush');
                 $this->identifiedHandType['kicker']        = $this->checkForAceKicker(__FUNCTION__, $this->identifiedHandType['activeCards'])
                     ?: $this->getKicker($this->identifiedHandType['activeCards']);

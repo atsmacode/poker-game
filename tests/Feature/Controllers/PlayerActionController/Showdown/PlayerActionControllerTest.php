@@ -301,6 +301,74 @@ class PlayerActionControllerTest extends BaseTest
         $this->assertEquals(HandType::STRAIGHT['id'], $response['winner']['handType']['id']);
     }
 
+    /**
+     * @test
+     * @return void
+     */
+    public function flushBeatsStraight()
+    {
+        $this->start->setGameState($this->gameState)
+            ->initiateStreetActions()
+            ->initiatePlayerStacks()
+            ->setDealerAndBlindSeats()
+            ->getGameState();
+
+        $wholeCards = [
+            [
+                'player' => $this->player3,
+                'card_id' => Card::QUEEN_DIAMONDS_ID
+            ],
+            [
+                'player' => $this->player3,
+                'card_id' => Card::JACK_DIAMONDS_ID
+            ],
+            [
+                'player' => $this->player1,
+                'card_id' => Card::KING_HEARTS_ID
+            ],
+            [
+                'player' => $this->player1,
+                'card_id' => Card::NINE_CLUBS_ID
+            ],
+        ];
+
+        $this->setWholeCards($wholeCards);
+
+        $flopCards = [
+            [
+                'card_id' => Card::TEN_DIAMONDS_ID
+            ],
+            [
+                'card_id' => Card::JACK_CLUBS_ID
+            ],
+            [
+                'card_id' => Card::QUEEN_CLUBS_ID
+            ]
+        ];
+
+        $this->setFlop($flopCards);
+
+        $turnCard = [
+            'card_id' => Card::SEVEN_DIAMONDS_ID
+        ];
+
+        $this->setTurn($turnCard);
+
+        $riverCard = [
+            'card_id' => Card::THREE_DIAMONDS_ID
+        ];
+
+        $this->setRiver($riverCard);
+
+        $this->gameState->setPlayers();
+
+        $request  = $this->executeActionsToContinue();
+        $response = $this->actionControllerResponse($request);
+
+        $this->assertEquals($this->player3->getId(), $response['winner']['player']['player_id']);
+        $this->assertEquals(HandType::FLUSH['id'], $response['winner']['handType']['id']);
+    }
+
     protected function setflop($flopCards)
     {
         $flop = $this->handStreetModel->create([
