@@ -35,7 +35,7 @@ class PlayerActionControllerTest extends BaseTest
      * @test
      * @return void
      */
-    public function high_card_king_beats_high_card_queen()
+    public function highCardKingBeatsHighCardQueen()
     {
         $this->start->setGameState($this->gameState)
             ->initiateStreetActions()
@@ -103,7 +103,7 @@ class PlayerActionControllerTest extends BaseTest
      * @test
      * @return void
      */
-    public function ace_king_beats_king_queen()
+    public function aceKingBeatsAceQueen()
     {
         $this->start->setGameState($this->gameState)
             ->initiateStreetActions()
@@ -165,6 +165,74 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->assertEquals($this->playerThree->getId(), $response['winner']['player']['player_id']);
         $this->assertEquals(HandType::HIGH_CARD['id'], $response['winner']['handType']['id']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function kingHighStraightBeatsQueenHighStraight()
+    {
+        $this->start->setGameState($this->gameState)
+            ->initiateStreetActions()
+            ->initiatePlayerStacks()
+            ->setDealerAndBlindSeats()
+            ->getGameState();
+
+        $wholeCards = [
+            [
+                'player'  => $this->playerThree,
+                'card_id' => Card::KING_SPADES_ID
+            ],
+            [
+                'player'  => $this->playerThree,
+                'card_id' => Card::QUEEN_DIAMONDS_ID
+            ],
+            [
+                'player'  => $this->playerOne,
+                'card_id' => Card::QUEEN_SPADES_ID
+            ],
+            [
+                'player'  => $this->playerOne,
+                'card_id' => Card::JACK_SPADES_ID
+            ],
+        ];
+
+        $this->setWholeCards($wholeCards);
+
+        $flopCards = [
+            [
+                'card_id' => Card::JACK_HEARTS_ID
+            ],
+            [
+                'card_id' => Card::TEN_CLUBS_ID
+            ],
+            [
+                'card_id' => Card::DEUCE_CLUBS_ID
+            ]
+        ];
+
+        $this->setFlop($flopCards);
+
+        $turnCard = [
+            'card_id' => Card::NINE_DIAMONDS_ID
+        ];
+
+        $this->setTurn($turnCard);
+
+        $riverCard = [
+            'card_id' => Card::EIGHT_SPADES_ID
+        ];
+
+        $this->setRiver($riverCard);
+
+        $this->gameState->setPlayers();
+
+        $request  = $this->executeActionsToContinue();
+        $response = $this->actionControllerResponse($request);
+
+        $this->assertEquals($this->playerThree->getId(), $response['winner']['player']['player_id']);
+        $this->assertEquals(HandType::STRAIGHT['id'], $response['winner']['handType']['id']);
     }
 
     protected function setflop($flopCards)

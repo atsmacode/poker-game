@@ -284,7 +284,7 @@ class HandIdentifier
 
         $straight = array_slice($sortedCardsDesc, 0, 5);
 
-        if ($straight && 5 === count($straight)) {
+        if ($straight && 5 <= count($straight)) {
             $this->straight                            = $straight;
             $this->identifiedHandType['handType']      = $this->getHandType('Straight');
             $this->identifiedHandType['activeCards'][] = $straight;
@@ -319,7 +319,7 @@ class HandIdentifier
 
         $straight = array_slice($sortedCardsDesc, 0, 5);
 
-        if ($straight && 5 === count($straight)) {
+        if ($straight && 5 <= count($straight)) {
             $this->straight                            = $straight;
             $this->identifiedHandType['handType']      = $this->getHandType('Straight');
             $this->identifiedHandType['activeCards'][] = $straight;
@@ -373,7 +373,7 @@ class HandIdentifier
                     ($value['ranking'] === $twoCardsPreviousRankingMinusTwo || $value['ranking'] === $twoCardsInFrontRankingPlusTwo));
         }, ARRAY_FILTER_USE_BOTH);
 
-        if ($straight && 5 === count($straight)) {
+        if ($straight && 5 <= count($straight)) {
             $this->straight                            = $straight;
             $this->identifiedHandType['handType']      = $this->getHandType('Straight');
             $this->identifiedHandType['activeCards'][] = $straight;

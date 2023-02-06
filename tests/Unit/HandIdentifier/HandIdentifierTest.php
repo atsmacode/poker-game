@@ -235,6 +235,31 @@ class HandIdentifierTest extends BaseTest
      * @test
      * @return void
      */
+    public function itCanIdentifyDisconnectedStraightCardsIsNotAStraight()
+    {
+        $wholeCards = [
+            CardFactory::create(Card::JACK_CLUBS),
+            CardFactory::create(Card::TEN_DIAMONDS),
+        ];
+
+        $communityCards = [
+            CardFactory::create(Card::SIX_CLUBS),
+            CardFactory::create(Card::SEVEN_DIAMONDS),
+            CardFactory::create(Card::KING_DIAMONDS),
+            CardFactory::create(Card::EIGHT_SPADES),
+            CardFactory::create(Card::THREE_CLUBS),
+        ];
+
+        $this->handIdentifier->identify($wholeCards, $communityCards);
+
+        $this->assertEquals(HandType::HIGH_CARD['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
+        $this->assertEquals(Rank::JACK['ranking'], $this->handIdentifier->identifiedHandType['kicker']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
     public function itCanIdentifyAFlush()
     {
         $wholeCards = [
