@@ -86,7 +86,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
         $this->assertEquals(1, $response['players'][2]['can_continue']);
-        $this->assertEquals($this->player3->getId(), $response['winner']['player']['player_id']);
+        $this->assertEquals($this->playerThree->getId(), $response['winner']['player']['player_id']);
     }
 
     /**

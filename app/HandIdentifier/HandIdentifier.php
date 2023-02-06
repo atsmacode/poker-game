@@ -287,7 +287,7 @@ class HandIdentifier
         if ($straight && 5 === count($straight)) {
             $this->straight                            = $straight;
             $this->identifiedHandType['handType']      = $this->getHandType('Straight');
-            $this->identifiedHandType['activeCards'][] = max($straight);
+            $this->identifiedHandType['activeCards'][] = $straight;
             $this->identifiedHandType['kicker']        = array_shift($straight)['ranking'];
 
             return true;
@@ -322,7 +322,7 @@ class HandIdentifier
         if ($straight && 5 === count($straight)) {
             $this->straight                            = $straight;
             $this->identifiedHandType['handType']      = $this->getHandType('Straight');
-            $this->identifiedHandType['activeCards'][] = max($straight);
+            $this->identifiedHandType['activeCards'][] = $straight;
             $this->identifiedHandType['kicker']        = 14;
 
             return true;
@@ -376,7 +376,7 @@ class HandIdentifier
         if ($straight && 5 === count($straight)) {
             $this->straight                            = $straight;
             $this->identifiedHandType['handType']      = $this->getHandType('Straight');
-            $this->identifiedHandType['activeCards'][] = max($straight);
+            $this->identifiedHandType['activeCards'][] = $straight;
             $this->identifiedHandType['kicker']        = array_shift($straight)['ranking'];
 
             return true;
@@ -513,8 +513,9 @@ class HandIdentifier
 
             if ($straightFlush && 5 <= count($straightFlush)) {
                 $this->straightFlush                  = true;
-                $this->identifiedHandType['handType'] = $this->getHandType('Straight Flush');
-                $this->identifiedHandType['kicker']   = $this->getMax($straightFlush, 'ranking');
+                $this->identifiedHandType['handType']      = $this->getHandType('Straight Flush');
+                $this->identifiedHandType['activeCards'][] = $straightFlush;
+                $this->identifiedHandType['kicker']        = $this->getMax($straightFlush, 'ranking');
 
                 return true;
             }

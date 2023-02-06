@@ -7,6 +7,8 @@ use Atsmacode\PokerGame\ActionHandler\ActionHandler;
 use Atsmacode\PokerGame\Database\DbalTestFactory;
 use Atsmacode\PokerGame\Dealer\PokerDealer;
 use Atsmacode\PokerGame\Factory\PlayerActionFactory;
+use Atsmacode\PokerGame\GamePlay\GamePlay;
+use Atsmacode\PokerGame\GameState\GameState;
 use Atsmacode\PokerGame\Models\Hand;
 use Atsmacode\PokerGame\Models\HandStreet;
 use Atsmacode\PokerGame\Models\Player;
@@ -20,6 +22,18 @@ use PHPUnit\Framework\TestCase;
 
 abstract class BaseTest extends TestCase
 {
+    protected ServiceManager      $container;
+    protected Table               $tableModel;
+    protected Hand                $handModel;
+    protected Player              $playerModel;
+    protected TableSeat           $tableSeatModel;
+    protected HandStreet          $handStreetModel;
+    protected PlayerActionFactory $playerActionFactory;
+    protected WholeCard           $wholeCardModel;
+    protected Street              $streetModel;
+    protected PokerDealer         $pokerDealer;
+    protected ActionHandler       $actionHandler;
+
     protected function setUp(): void
     {
         parent::setUp();

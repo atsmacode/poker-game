@@ -13,6 +13,8 @@ class ActionHandlerTest extends BaseTest
 {
     use HasGamePlay;
 
+    private Pot $potModel;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -33,7 +35,7 @@ class ActionHandlerTest extends BaseTest
 
         $response = $this->actionHandler->handle(
             $this->hand,
-            $this->player1->getId(),
+            $this->playerOne->getId(),
             $this->tableSeatOne->getId(),
             1,
             50,

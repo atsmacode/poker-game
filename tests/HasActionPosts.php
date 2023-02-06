@@ -28,7 +28,7 @@ trait HasActionPosts
     {
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
-            'player_id'      => $this->player1->getId(),
+            'player_id'      => $this->playerOne->getId(),
             'table_seat_id'  => $this->gameState->getSeats()[0]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()[0]['id'],
             'action_id'      => Action::CALL_ID,
@@ -48,7 +48,7 @@ trait HasActionPosts
     {
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
-            'player_id'      => $this->player1->getId(),
+            'player_id'      => $this->playerOne->getId(),
             'table_seat_id'  => $this->gameState->getSeats()[0]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()[0]['id'],
             'action_id'      => Action::FOLD_ID,
@@ -68,7 +68,7 @@ trait HasActionPosts
     {
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
-            'player_id'      => $this->player2->getId(),
+            'player_id'      => $this->playerTwo->getId(),
             'table_seat_id'  => $this->gameState->getSeats()[1]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()[0]['id'],
             'action_id'      => Action::CALL_ID,
@@ -88,7 +88,7 @@ trait HasActionPosts
     {
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
-            'player_id'      => $this->player2->getId(),
+            'player_id'      => $this->playerTwo->getId(),
             'table_seat_id'  => $this->gameState->getSeats()[1]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()[0]['id'],
             'action_id'      => Action::CHECK_ID,
@@ -108,7 +108,7 @@ trait HasActionPosts
     {
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
-            'player_id'      => $this->player2->getId(),
+            'player_id'      => $this->playerTwo->getId(),
             'table_seat_id'  => $this->gameState->getSeats()[1]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()[0]['id'],
             'action_id'      => Action::FOLD_ID,
@@ -128,7 +128,7 @@ trait HasActionPosts
     {
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
-            'player_id'      => $this->player3->getId(),
+            'player_id'      => $this->playerThree->getId(),
             'table_seat_id'  => $this->gameState->getSeats()[2]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()[0]['id'],
             'action_id'      => Action::CHECK_ID,
@@ -148,7 +148,7 @@ trait HasActionPosts
     {
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
-            'player_id'      => $this->player3->getId(),
+            'player_id'      => $this->playerThree->getId(),
             'table_seat_id'  => $this->gameState->getSeats()[2]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()[0]['id'],
             'action_id'      => Action::RAISE_ID,
@@ -168,7 +168,7 @@ trait HasActionPosts
     {
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
-            'player_id'      => $this->player4->getId(),
+            'player_id'      => $this->playerFour->getId(),
             'table_seat_id'  => $this->gameState->getSeats()[3]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()[0]['id'],
             'action_id'      => Action::CALL_ID,
@@ -188,7 +188,7 @@ trait HasActionPosts
     {
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
-            'player_id'      => $this->player4->getId(),
+            'player_id'      => $this->playerFour->getId(),
             'table_seat_id'  => $this->gameState->getSeats()[3]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()[0]['id'],
             'action_id'      => Action::FOLD_ID,
@@ -208,7 +208,7 @@ trait HasActionPosts
     {
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
-            'player_id'      => $this->player4->getId(),
+            'player_id'      => $this->playerFour->getId(),
             'table_seat_id'  => $this->gameState->getSeats()[3]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()[0]['id'],
             'action_id'      => Action::RAISE_ID,
@@ -228,7 +228,7 @@ trait HasActionPosts
     {
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
-            'player_id'      => $this->player4->getId(),
+            'player_id'      => $this->playerFour->getId(),
             'table_seat_id'  => $this->gameState->getSeats()[3]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()[0]['id'],
             'action_id'      => Action::CHECK_ID,
@@ -248,7 +248,7 @@ trait HasActionPosts
     {
         $requestBody = [
             'deck'           => $this->gameState->getGameDealer()->getDeck(),
-            'player_id'      => $this->player6->getId(),
+            'player_id'      => $this->playerSix->getId(),
             'table_seat_id'  => $this->gameState->getSeats()[5]['id'],
             'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()[0]['id'],
             'action_id'      => Action::FOLD_ID,
