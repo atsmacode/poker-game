@@ -136,7 +136,7 @@ class HandIdentifierTest extends BaseTest
     public function itCanIdentifyTrips()
     {
         $wholeCards = [
-            CardFactory::create(Card::ACE_SPADES),
+            CardFactory::create(Card::DEUCE_CLUBS),
             CardFactory::create(Card::KING_SPADES),
         ];
 
@@ -272,6 +272,31 @@ class HandIdentifierTest extends BaseTest
 
         $this->assertEquals(HandType::FLUSH['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
         $this->assertEquals(14, $this->handIdentifier->identifiedHandType['kicker']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function itCanIdentifyAFullHouse()
+    {
+        $wholeCards = [
+            CardFactory::create(Card::ACE_HEARTS),
+            CardFactory::create(Card::KING_SPADES),
+        ];
+
+        $communityCards = [
+            CardFactory::create(Card::KING_DIAMONDS),
+            CardFactory::create(Card::ACE_DIAMONDS),
+            CardFactory::create(Card::ACE_SPADES),
+            CardFactory::create(Card::NINE_CLUBS),
+            CardFactory::create(Card::EIGHT_DIAMONDS),
+        ];
+
+        $this->handIdentifier->identify($wholeCards, $communityCards);
+
+        var_dump($this->handIdentifier->identifiedHandType);
+        $this->assertEquals(HandType::FULL_HOUSE['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
     }
 
     /**

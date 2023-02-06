@@ -31,7 +31,7 @@ class HandIdentifier
         'hasRoyalFlush',
         /*'hasStraightFlush',*/
         'hasFourOfAKind',
-        /*'hasFullHouse',*/
+        'hasFullHouse',
         'hasFlush',
         'hasStraight',
         'hasThreeOfAKind',
@@ -395,6 +395,56 @@ class HandIdentifier
                     ?: $this->getKicker($this->identifiedHandType['activeCards']);
 
                 return true;
+            }
+        }
+
+        return $this;
+    }
+
+    public function hasFullHouse(): bool|self
+    {
+        $this->checkTripsForFullHouse()->checkPairsForFullHouse();
+
+        /*
+         * There could be 2 pairs here.
+         * Changed to === 1 as three_of_a_kind_beats_two_pair_test_was_failing.
+         * Needs looked into.
+         */
+        if ($this->threeOfAKind && 1 === count($this->pairs)) {
+            $this->fullHouse                           = true;
+            $this->identifiedHandType['handType']      = $this->getHandType('Full House');
+            $this->identifiedHandType['activeCards']   = array_merge(
+                $this->identifiedHandType['activeCards'],
+                $this->pairs
+            );
+
+            return true;
+        }
+
+        $this->pairs                             = [];
+        $this->threeOfAKind                      = false;
+        $this->identifiedHandType['activeCards'] = [];
+
+        return $this;
+    }
+
+    private function checkTripsForFullHouse(): self
+    {
+        foreach (Rank::ALL as $rank) {
+            if (3 === count($this->filterAllCards('rank_id', $rank['rank_id']))) {
+                $this->threeOfAKind                        = $rank;
+                $this->identifiedHandType['activeCards'][] = $this->checkForHighAceActiveCardRanking($rank) ?: $rank['ranking'];
+            }
+        }
+
+        return $this;
+    }
+
+    private function checkPairsForFullHouse(): self
+    {
+        foreach (Rank::ALL as $rank) {
+            if (2 === count($this->filterAllCards('rank_id', $rank['rank_id'])) && $this->threeOfAKind !== $rank) {
+                $this->pairs[] = $this->checkForHighAceActiveCardRanking($rank) ?: $rank['ranking'];
             }
         }
 
