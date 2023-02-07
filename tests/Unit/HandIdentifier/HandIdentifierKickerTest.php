@@ -13,6 +13,7 @@ class HandIdentifierKickerTest extends BaseTest
     protected function setUp(): void
     {
         parent::setUp();
+        
         $this->handIdentifier = new HandIdentifier();
     }
 

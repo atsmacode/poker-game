@@ -37,11 +37,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function highCardKingBeatsHighCardQueen()
     {
-        $this->start->setGameState($this->gameState)
-            ->initiateStreetActions()
-            ->initiatePlayerStacks()
-            ->setDealerAndBlindSeats()
-            ->getGameState();
+        $this->givenTheHandHasStarted();
 
         $wholeCards = [
             [
@@ -65,30 +61,20 @@ class PlayerActionControllerTest extends BaseTest
         $this->setWholeCards($wholeCards);
 
         $flopCards = [
-            [
-                'card_id' => Card::FOUR_CLUBS_ID
-            ],
-            [
-                'card_id' => Card::JACK_SPADES_ID
-            ],
-            [
-                'card_id' => Card::DEUCE_CLUBS_ID
-            ]
+            ['card_id' => Card::FOUR_CLUBS_ID],
+            ['card_id' => Card::JACK_SPADES_ID],
+            ['card_id' => Card::DEUCE_CLUBS_ID],
         ];
 
-        $this->setFlop($flopCards);
+        $this->setThisFlop($flopCards);
 
-        $turnCard = [
-            'card_id' => Card::NINE_DIAMONDS_ID
-        ];
+        $turnCard = ['card_id' => Card::NINE_DIAMONDS_ID];
 
-        $this->setTurn($turnCard);
+        $this->setThisTurn($turnCard);
 
-        $riverCard = [
-            'card_id' => Card::TEN_SPADES_ID
-        ];
+        $riverCard = ['card_id' => Card::TEN_SPADES_ID];
 
-        $this->setRiver($riverCard);
+        $this->setThisRiver($riverCard);
 
         $this->gameState->setPlayers();
 
@@ -105,11 +91,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function aceKingBeatsAceQueen()
     {
-        $this->start->setGameState($this->gameState)
-            ->initiateStreetActions()
-            ->initiatePlayerStacks()
-            ->setDealerAndBlindSeats()
-            ->getGameState();
+        $this->givenTheHandHasStarted();
 
         $wholeCards = [
             [
@@ -133,30 +115,20 @@ class PlayerActionControllerTest extends BaseTest
         $this->setWholeCards($wholeCards);
 
         $flopCards = [
-            [
-                'card_id' => Card::FOUR_CLUBS_ID
-            ],
-            [
-                'card_id' => Card::JACK_SPADES_ID
-            ],
-            [
-                'card_id' => Card::DEUCE_CLUBS_ID
-            ]
+            ['card_id' => Card::FOUR_CLUBS_ID],
+            ['card_id' => Card::JACK_SPADES_ID],
+            ['card_id' => Card::DEUCE_CLUBS_ID],
         ];
 
-        $this->setFlop($flopCards);
+        $this->setThisFlop($flopCards);
 
-        $turnCard = [
-            'card_id' => Card::NINE_DIAMONDS_ID
-        ];
+        $turnCard = ['card_id' => Card::NINE_DIAMONDS_ID];
 
-        $this->setTurn($turnCard);
+        $this->setThisTurn($turnCard);
 
-        $riverCard = [
-            'card_id' => Card::THREE_HEARTS_ID
-        ];
+        $riverCard = ['card_id' => Card::THREE_HEARTS_ID];
 
-        $this->setRiver($riverCard);
+        $this->setThisRiver($riverCard);
 
         $this->gameState->setPlayers();
 
@@ -173,11 +145,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function jacksBeatTens()
     {
-        $this->start->setGameState($this->gameState)
-            ->initiateStreetActions()
-            ->initiatePlayerStacks()
-            ->setDealerAndBlindSeats()
-            ->getGameState();
+        $this->givenTheHandHasStarted();
 
         $wholeCards = [
             [
@@ -201,30 +169,20 @@ class PlayerActionControllerTest extends BaseTest
         $this->setWholeCards($wholeCards);
 
         $flopCards = [
-            [
-                'card_id' => Card::JACK_HEARTS_ID
-            ],
-            [
-                'card_id' => Card::TEN_CLUBS_ID
-            ],
-            [
-                'card_id' => Card::DEUCE_CLUBS_ID
-            ]
+            ['card_id' => Card::JACK_HEARTS_ID],
+            ['card_id' => Card::TEN_CLUBS_ID],
+            ['card_id' => Card::DEUCE_CLUBS_ID],
         ];
 
-        $this->setFlop($flopCards);
+        $this->setThisFlop($flopCards);
 
-        $turnCard = [
-            'card_id' => Card::NINE_DIAMONDS_ID
-        ];
+        $turnCard = ['card_id' => Card::NINE_DIAMONDS_ID];
 
-        $this->setTurn($turnCard);
+        $this->setThisTurn($turnCard);
 
-        $riverCard = [
-            'card_id' => Card::FOUR_HEARTS_ID
-        ];
+        $riverCard = ['card_id' => Card::FOUR_HEARTS_ID];
 
-        $this->setRiver($riverCard);
+        $this->setThisRiver($riverCard);
 
         $this->gameState->setPlayers();
 
@@ -241,11 +199,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function threeSevensBeatsThreeSixes()
     {
-        $this->start->setGameState($this->gameState)
-            ->initiateStreetActions()
-            ->initiatePlayerStacks()
-            ->setDealerAndBlindSeats()
-            ->getGameState();
+        $this->givenTheHandHasStarted();
 
         $wholeCards = [
             [
@@ -269,30 +223,20 @@ class PlayerActionControllerTest extends BaseTest
         $this->setWholeCards($wholeCards);
 
         $flopCards = [
-            [
-                'card_id' => Card::SEVEN_DIAMONDS_ID
-            ],
-            [
-                'card_id' => Card::SIX_SPADES_ID
-            ],
-            [
-                'card_id' => Card::DEUCE_CLUBS_ID
-            ]
+            ['card_id' => Card::SEVEN_DIAMONDS_ID],
+            ['card_id' => Card::SIX_SPADES_ID],
+            ['card_id' => Card::DEUCE_CLUBS_ID],
         ];
 
-        $this->setFlop($flopCards);
+        $this->setThisFlop($flopCards);
 
-        $turnCard = [
-            'card_id' => Card::NINE_DIAMONDS_ID
-        ];
+        $turnCard = ['card_id' => Card::NINE_DIAMONDS_ID];
 
-        $this->setTurn($turnCard);
+        $this->setThisTurn($turnCard);
 
-        $riverCard = [
-            'card_id' => Card::FOUR_HEARTS_ID
-        ];
+        $riverCard = ['card_id' => Card::FOUR_HEARTS_ID];
 
-        $this->setRiver($riverCard);
+        $this->setThisRiver($riverCard);
 
         $this->gameState->setPlayers();
 
@@ -309,11 +253,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function kingHighStraightBeatsQueenHighStraight()
     {
-        $this->start->setGameState($this->gameState)
-            ->initiateStreetActions()
-            ->initiatePlayerStacks()
-            ->setDealerAndBlindSeats()
-            ->getGameState();
+        $this->givenTheHandHasStarted();
 
         $wholeCards = [
             [
@@ -337,30 +277,20 @@ class PlayerActionControllerTest extends BaseTest
         $this->setWholeCards($wholeCards);
 
         $flopCards = [
-            [
-                'card_id' => Card::JACK_HEARTS_ID
-            ],
-            [
-                'card_id' => Card::TEN_CLUBS_ID
-            ],
-            [
-                'card_id' => Card::DEUCE_CLUBS_ID
-            ]
+            ['card_id' => Card::JACK_HEARTS_ID],
+            ['card_id' => Card::TEN_CLUBS_ID],
+            ['card_id' => Card::DEUCE_CLUBS_ID],
         ];
 
-        $this->setFlop($flopCards);
+        $this->setThisFlop($flopCards);
 
-        $turnCard = [
-            'card_id' => Card::NINE_DIAMONDS_ID
-        ];
+        $turnCard = ['card_id' => Card::NINE_DIAMONDS_ID];
 
-        $this->setTurn($turnCard);
+        $this->setThisTurn($turnCard);
 
-        $riverCard = [
-            'card_id' => Card::EIGHT_SPADES_ID
-        ];
+        $riverCard = ['card_id' => Card::EIGHT_SPADES_ID];
 
-        $this->setRiver($riverCard);
+        $this->setThisRiver($riverCard);
 
         $this->gameState->setPlayers();
 
@@ -377,11 +307,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function aceHighFlushBeatsQueenHighFlush()
     {
-        $this->start->setGameState($this->gameState)
-            ->initiateStreetActions()
-            ->initiatePlayerStacks()
-            ->setDealerAndBlindSeats()
-            ->getGameState();
+        $this->givenTheHandHasStarted();
 
         $wholeCards = [
             [
@@ -405,30 +331,20 @@ class PlayerActionControllerTest extends BaseTest
         $this->setWholeCards($wholeCards);
 
         $flopCards = [
-            [
-                'card_id' => Card::KING_HEARTS_ID
-            ],
-            [
-                'card_id' => Card::FOUR_HEARTS_ID
-            ],
-            [
-                'card_id' => Card::DEUCE_CLUBS_ID
-            ]
+            ['card_id' => Card::KING_HEARTS_ID],
+            ['card_id' => Card::FOUR_HEARTS_ID],
+            ['card_id' => Card::DEUCE_CLUBS_ID],
         ];
 
-        $this->setFlop($flopCards);
+        $this->setThisFlop($flopCards);
 
-        $turnCard = [
-            'card_id' => Card::SEVEN_HEARTS_ID
-        ];
+        $turnCard = ['card_id' => Card::SEVEN_HEARTS_ID];
 
-        $this->setTurn($turnCard);
+        $this->setThisTurn($turnCard);
 
-        $riverCard = [
-            'card_id' => Card::EIGHT_SPADES_ID
-        ];
+        $riverCard = ['card_id' => Card::EIGHT_SPADES_ID];
 
-        $this->setRiver($riverCard);
+        $this->setThisRiver($riverCard);
 
         $this->gameState->setPlayers();
 
@@ -445,11 +361,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function aceHighFlushWithKingKickerBeatsAceHighFlushWithQueenKicker()
     {
-        $this->start->setGameState($this->gameState)
-            ->initiateStreetActions()
-            ->initiatePlayerStacks()
-            ->setDealerAndBlindSeats()
-            ->getGameState();
+        $this->givenTheHandHasStarted();
 
         $wholeCards = [
             [
@@ -473,30 +385,20 @@ class PlayerActionControllerTest extends BaseTest
         $this->setWholeCards($wholeCards);
 
         $flopCards = [
-            [
-                'card_id' => Card::ACE_HEARTS_ID
-            ],
-            [
-                'card_id' => Card::FOUR_HEARTS_ID
-            ],
-            [
-                'card_id' => Card::DEUCE_CLUBS_ID
-            ]
+            ['card_id' => Card::ACE_HEARTS_ID],
+            ['card_id' => Card::FOUR_HEARTS_ID],
+            ['card_id' => Card::DEUCE_CLUBS_ID],
         ];
 
-        $this->setFlop($flopCards);
+        $this->setThisFlop($flopCards);
 
-        $turnCard = [
-            'card_id' => Card::SEVEN_HEARTS_ID
-        ];
+        $turnCard = ['card_id' => Card::SEVEN_HEARTS_ID];
 
-        $this->setTurn($turnCard);
+        $this->setThisTurn($turnCard);
 
-        $riverCard = [
-            'card_id' => Card::THREE_HEARTS_ID
-        ];
+        $riverCard = ['card_id' => Card::THREE_HEARTS_ID];
 
-        $this->setRiver($riverCard);
+        $this->setThisRiver($riverCard);
 
         $this->gameState->setPlayers();
 
@@ -513,11 +415,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function tensFullOfFoursBeatsTensFullOfThrees()
     {
-        $this->start->setGameState($this->gameState)
-            ->initiateStreetActions()
-            ->initiatePlayerStacks()
-            ->setDealerAndBlindSeats()
-            ->getGameState();
+        $this->givenTheHandHasStarted();
 
         $wholeCards = [
             [
@@ -541,30 +439,20 @@ class PlayerActionControllerTest extends BaseTest
         $this->setWholeCards($wholeCards);
 
         $flopCards = [
-            [
-                'card_id' => Card::FOUR_SPADES_ID
-            ],
-            [
-                'card_id' => Card::TEN_SPADES_ID
-            ],
-            [
-                'card_id' => Card::THREE_HEARTS_ID
-            ]
+            [ 'card_id' => Card::FOUR_SPADES_ID],
+            ['card_id' => Card::TEN_SPADES_ID],
+            ['card_id' => Card::THREE_HEARTS_ID],
         ];
 
-        $this->setFlop($flopCards);
+        $this->setThisFlop($flopCards);
 
-        $turnCard = [
-            'card_id' => Card::JACK_SPADES_ID
-        ];
+        $turnCard = ['card_id' => Card::JACK_SPADES_ID];
 
-        $this->setTurn($turnCard);
+        $this->setThisTurn($turnCard);
 
-        $riverCard = [
-            'card_id' => Card::TEN_DIAMONDS_ID
-        ];
+        $riverCard = ['card_id' => Card::TEN_DIAMONDS_ID];
 
-        $this->setRiver($riverCard);
+        $this->setThisRiver($riverCard);
 
         $this->gameState->setPlayers();
 
@@ -581,11 +469,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function fourTensBeatsFourNines()
     {
-        $this->start->setGameState($this->gameState)
-            ->initiateStreetActions()
-            ->initiatePlayerStacks()
-            ->setDealerAndBlindSeats()
-            ->getGameState();
+        $this->givenTheHandHasStarted();
 
         $wholeCards = [
             [
@@ -609,30 +493,20 @@ class PlayerActionControllerTest extends BaseTest
         $this->setWholeCards($wholeCards);
 
         $flopCards = [
-            [
-                'card_id' => Card::NINE_SPADES_ID
-            ],
-            [
-                'card_id' => Card::NINE_DIAMONDS_ID
-            ],
-            [
-                'card_id' => Card::THREE_HEARTS_ID
-            ]
+            ['card_id' => Card::NINE_SPADES_ID],
+            ['card_id' => Card::NINE_DIAMONDS_ID],
+            ['card_id' => Card::THREE_HEARTS_ID],
         ];
 
-        $this->setFlop($flopCards);
+        $this->setThisFlop($flopCards);
 
-        $turnCard = [
-            'card_id' => Card::TEN_SPADES_ID
-        ];
+        $turnCard = ['card_id' => Card::TEN_SPADES_ID];
 
-        $this->setTurn($turnCard);
+        $this->setThisTurn($turnCard);
 
-        $riverCard = [
-            'card_id' => Card::TEN_DIAMONDS_ID
-        ];
+        $riverCard = ['card_id' => Card::TEN_DIAMONDS_ID];
 
-        $this->setRiver($riverCard);
+        $this->setThisRiver($riverCard);
 
         $this->gameState->setPlayers();
 
@@ -649,11 +523,7 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function kingHighStraightFlushBeatsQueenHighStraightFlush()
     {
-        $this->start->setGameState($this->gameState)
-            ->initiateStreetActions()
-            ->initiatePlayerStacks()
-            ->setDealerAndBlindSeats()
-            ->getGameState();
+        $this->givenTheHandHasStarted();
 
         $wholeCards = [
             [
@@ -677,30 +547,20 @@ class PlayerActionControllerTest extends BaseTest
         $this->setWholeCards($wholeCards);
 
         $flopCards = [
-            [
-                'card_id' => Card::TEN_HEARTS_ID
-            ],
-            [
-                'card_id' => Card::NINE_HEARTS_ID
-            ],
-            [
-                'card_id' => Card::QUEEN_HEARTS_ID
-            ]
+            ['card_id' => Card::TEN_HEARTS_ID],
+            ['card_id' => Card::NINE_HEARTS_ID],
+            ['card_id' => Card::QUEEN_HEARTS_ID],
         ];
 
-        $this->setFlop($flopCards);
+        $this->setThisFlop($flopCards);
 
-        $turnCard = [
-            'card_id' => Card::JACK_HEARTS_ID
-        ];
+        $turnCard = ['card_id' => Card::JACK_HEARTS_ID];
 
-        $this->setTurn($turnCard);
+        $this->setThisTurn($turnCard);
 
-        $riverCard = [
-            'card_id' => Card::DEUCE_CLUBS_ID
-        ];
+        $riverCard = ['card_id' => Card::DEUCE_CLUBS_ID];
 
-        $this->setRiver($riverCard);
+        $this->setThisRiver($riverCard);
 
         $this->gameState->setPlayers();
 
@@ -711,48 +571,69 @@ class PlayerActionControllerTest extends BaseTest
         $this->assertEquals(HandType::STRAIGHT_FLUSH['id'], $response['winner']['handType']['id']);
     }
 
-    protected function setflop($flopCards)
+    /**
+     * @test
+     * @return void
+     */
+    public function eightHighStraightBeatsTwoPlayersWithSevenHighStraight()
     {
-        $flop = $this->handStreetModel->create([
-            'street_id' => $this->streetModel->find(['name' => $this->gameState->getGame()->streets[1]['name']])->getId(),
-            'hand_id'   => $this->gameState->handId()
-        ]);
+        $this->givenTheHandHasStarted();
 
-        foreach($flopCards as $card){
-            $this->handStreetCardModel->create([
-                'hand_street_id' => $flop->getId(),
-                'card_id'        => $card['card_id']
-            ]);
-        }
+        $wholeCards = [
+            [
+                'player'  => $this->playerThree,
+                'card_id' => Card::ACE_DIAMONDS_ID
+            ],
+            [
+                'player'  => $this->playerThree,
+                'card_id' => Card::EIGHT_CLUBS_ID
+            ],
+            [
+                'player'  => $this->playerTwo,
+                'card_id' => Card::THREE_SPADES_ID
+            ],
+            [
+                'player'  => $this->playerTwo,
+                'card_id' => Card::SEVEN_CLUBS_ID
+            ],
+            [
+                'player'  => $this->playerOne,
+                'card_id' => Card::THREE_HEARTS_ID
+            ],
+            [
+                'player'  => $this->playerOne,
+                'card_id' => Card::DEUCE_DIAMONDS_ID
+            ],
+        ];
+
+        $this->setWholeCards($wholeCards);
+
+        $flopCards = [
+            ['card_id' => Card::SEVEN_SPADES_ID],
+            ['card_id' => Card::SIX_SPADES_ID],
+            ['card_id' => Card::FIVE_HEARTS_ID],
+        ];
+
+        $this->setThisFlop($flopCards);
+
+        $turnCard = ['card_id' => Card::FOUR_CLUBS_ID];
+
+        $this->setThisTurn($turnCard);
+
+        $riverCard = ['card_id' => Card::FIVE_DIAMONDS_ID];
+
+        $this->setThisRiver($riverCard);
+
+        $this->gameState->setPlayers();
+
+        $request  = $this->executeActionsForThreePlayersToContinue();
+        $response = $this->actionControllerResponse($request);
+
+        $this->assertEquals($this->playerThree->getId(), $response['winner']['player']['player_id']);
+        $this->assertEquals(HandType::STRAIGHT['id'], $response['winner']['handType']['id']);
     }
 
-    protected function setTurn($turnCard)
-    {
-        $turn = $this->handStreetModel->create([
-            'street_id' => $this->streetModel->find(['name' => $this->gameState->getGame()->streets[2]['name']])->getId(),
-            'hand_id'   => $this->gameState->handId()
-        ]);
-
-        $this->handStreetCardModel->create([
-            'hand_street_id' => $turn->getId(),
-            'card_id'        => $turnCard['card_id']
-        ]);
-    }
-
-    protected function setRiver($riverCard)
-    {
-        $river = $this->handStreetModel->create([
-            'street_id' => $this->streetModel->find(['name' => $this->gameState->getGame()->streets[3]['name']])->getId(),
-            'hand_id'   => $this->gameState->handId()
-        ]);
-
-        $this->handStreetCardModel->create([
-            'hand_street_id' => $river->getId(),
-            'card_id'        => $riverCard['card_id']
-        ]);
-    }
-
-    protected function executeActionsToContinue()
+    private function executeActionsToContinue()
     {
         $this->givenPlayerOneCalls();
         $this->givenPlayerOneCanContinue();
@@ -761,5 +642,25 @@ class PlayerActionControllerTest extends BaseTest
         $this->givenPlayerTwoCanNotContinue();
 
         return $this->setPlayerThreeChecksPost();
+    }
+
+    private function executeActionsForThreePlayersToContinue()
+    {
+        $this->givenPlayerOneCalls();
+        $this->givenPlayerOneCanContinue();
+
+        $this->givenPlayerTwoCalls();
+        $this->givenPlayerTwoCanContinue();
+
+        return $this->setPlayerThreeChecksPost();
+    }
+
+    private function givenTheHandHasStarted()
+    {
+        $this->start->setGameState($this->gameState)
+            ->initiateStreetActions()
+            ->initiatePlayerStacks()
+            ->setDealerAndBlindSeats()
+            ->getGameState();
     }
 }

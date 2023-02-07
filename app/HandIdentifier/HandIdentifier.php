@@ -271,10 +271,10 @@ class HandIdentifier
         $straight = array_slice($sortedCardsDesc, 0, 5);
 
         if ($straight && 5 <= count($straight)) {
-            $this->straight                            = $straight;
-            $this->identifiedHandType['handType']      = $this->getHandType('Straight');
-            $this->identifiedHandType['activeCards'][] = $straight;
-            $this->identifiedHandType['kicker']        = array_shift($straight)['ranking'];
+            $this->straight                          = $straight;
+            $this->identifiedHandType['handType']    = $this->getHandType('Straight');
+            $this->identifiedHandType['activeCards'] = array_column($straight, 'ranking');
+            $this->identifiedHandType['kicker']      = array_shift($straight)['ranking'];
 
             return true;
         }
@@ -306,10 +306,10 @@ class HandIdentifier
         $straight = array_slice($sortedCardsDesc, 0, 5);
 
         if ($straight && 5 <= count($straight)) {
-            $this->straight                            = $straight;
-            $this->identifiedHandType['handType']      = $this->getHandType('Straight');
-            $this->identifiedHandType['activeCards'][] = $straight;
-            $this->identifiedHandType['kicker']        = 14;
+            $this->straight                          = $straight;
+            $this->identifiedHandType['handType']    = $this->getHandType('Straight');
+            $this->identifiedHandType['activeCards'] = array_column($straight, 'ranking');
+            $this->identifiedHandType['kicker']      = 14;
 
             return true;
         }
@@ -360,10 +360,10 @@ class HandIdentifier
         }, ARRAY_FILTER_USE_BOTH);
 
         if ($straight && 5 <= count($straight)) {
-            $this->straight                            = $straight;
-            $this->identifiedHandType['handType']      = $this->getHandType('Straight');
-            $this->identifiedHandType['activeCards'][] = $straight;
-            $this->identifiedHandType['kicker']        = array_shift($straight)['ranking'];
+            $this->straight                          = $straight;
+            $this->identifiedHandType['handType']    = $this->getHandType('Straight');
+            $this->identifiedHandType['activeCards'] = array_column($straight, 'ranking');
+            $this->identifiedHandType['kicker']      = array_shift($straight)['ranking'];
 
             return true;
         }
