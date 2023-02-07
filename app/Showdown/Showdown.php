@@ -90,7 +90,7 @@ class Showdown
     public function compileHands(): self
     {
         foreach ($this->getContinuingPlayerSeats($this->gameState->getPlayers()) as $player) {
-            $compileInfo = $this->handIdentifier->identify(
+            $compileInfo = (new HandIdentifier())->identify(
                 $this->gameState->getWholeCards()[$player['player_id']],
                 $this->communityCards
             )->identifiedHandType;
