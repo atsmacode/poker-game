@@ -16,6 +16,8 @@ abstract class HandController
      */
     protected string $game = '';
 
+    private Hand $handModel;
+
     public function __construct(private ServiceManager $container)
     {
         $this->handModel = $container->build(Hand::class);

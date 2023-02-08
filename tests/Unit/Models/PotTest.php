@@ -8,7 +8,7 @@ use Atsmacode\PokerGame\Tests\BaseTest;
 
 class PotTest extends BaseTest
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

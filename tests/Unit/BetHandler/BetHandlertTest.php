@@ -12,7 +12,11 @@ use Atsmacode\PokerGame\Tests\BaseTest;
 
 class BetHandlerTest extends BaseTest
 {
-    public function setUp(): void
+    private BetHandler $betHandler;
+    private Pot        $potModel;
+    private Stack      $stackModel;
+
+    protected function setUp(): void
     {
         parent::setUp();
 

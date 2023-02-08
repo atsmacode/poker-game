@@ -7,8 +7,9 @@ use Atsmacode\PokerGame\Tests\BaseTest;
 
 class HandTypeTest extends BaseTest
 {
+    private HandType $handTypeModel;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

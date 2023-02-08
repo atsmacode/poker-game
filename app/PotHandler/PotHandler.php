@@ -25,7 +25,7 @@ class PotHandler
         $this->stackModel->change($amount, $playerId, $tableId);
     }
 
-    public function updatePot(int $betAmount, int $handId)
+    public function updatePot(int $betAmount, int $handId): void
     {
         $pot = $this->potModel->find(['hand_id' => $handId]);
         $pot->update(['amount' => $pot->getAmount() + $betAmount]);

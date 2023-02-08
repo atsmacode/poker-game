@@ -6,8 +6,6 @@ use Atsmacode\Framework\Collection\Collection;
 use Atsmacode\Framework\Dbal\Model;
 class PlayerAction extends Model
 {
-    use Collection;
-
     protected string $table = 'player_actions';
     private ?int     $bet_amount;
     private int      $active;

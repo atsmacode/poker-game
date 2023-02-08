@@ -7,8 +7,6 @@ use Atsmacode\Framework\Dbal\Model;
 
 class HandStreetCard extends Model
 {
-    use Collection;
-
     protected string $table = 'hand_street_cards';
     private int      $hand_street_id;
     private int      $card_id;

@@ -63,7 +63,7 @@ class Showdown
          * retain the highest rank/kicker-ed hand and put it back in to be 
          * compared against the other highest ranked/kicker-ed hand types.
          */
-        $this->playerHands = array_filter($playerHands, function($value) use($handType){
+        $this->playerHands = array_filter($playerHands, function($value) use($handType) {
             return $value['handType']['id'] !== $handType['id'];
         });
 
@@ -128,7 +128,7 @@ class Showdown
     {
         $maxActiveCard = max(array_column($playerHandsOfType, 'highestActiveCard'));
 
-        return array_filter($playerHandsOfType, function($value) use($maxActiveCard){
+        return array_filter($playerHandsOfType, function($value) use($maxActiveCard) {
             return $value['highestActiveCard'] == $maxActiveCard;
         });
     }
@@ -140,7 +140,7 @@ class Showdown
     {
         $maxKicker = max(array_column($playerHandsOfType, 'kicker'));
 
-        return array_filter($playerHandsOfType, function($value) use($maxKicker){
+        return array_filter($playerHandsOfType, function($value) use($maxKicker) {
             return $value['kicker'] == $maxKicker;
         });
     }
@@ -150,10 +150,7 @@ class Showdown
      */
     private function highestRankedPlayerHand(): array
     {
-        uasort($this->playerHands, function ($a, $b){
-            /**
-             * Why was this if statement added? TODO
-             */
+        uasort($this->playerHands, function ($a, $b) {
             if ($a['handType']['ranking'] == $b['handType']['ranking']) {
                 return 0;
             }

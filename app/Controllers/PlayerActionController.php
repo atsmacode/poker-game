@@ -16,10 +16,12 @@ abstract class PlayerActionController
      * implementation of the Game interface.
      */
     protected string $game = '';
+    
+    private Hand $handModel;
 
     public function __construct(
         private ServiceManager $container,
-        ActionHandler $actionHandler
+        private ActionHandler $actionHandler
     ) {
         $this->actionHandler = $actionHandler;
         $this->handModel     = $container->get(Hand::class);

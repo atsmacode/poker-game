@@ -71,7 +71,7 @@ class ActionHandler implements ActionHandlerInterface
         return $this->gameState;
     }
 
-    private function updateSeatStatusOfLatestAction()
+    private function updateSeatStatusOfLatestAction(): void
     {
         switch($this->gameState->getLatestAction()->getActionId()){
             case Action::CHECK['id']:
@@ -91,7 +91,7 @@ class ActionHandler implements ActionHandlerInterface
             ]);
     }
 
-    private function updateAllOtherSeatsBasedOnLatestAction()
+    private function updateAllOtherSeatsBasedOnLatestAction(): void
     {
         switch($this->gameState->getLatestAction()->getActionId()){
             case Action::BET['id']:

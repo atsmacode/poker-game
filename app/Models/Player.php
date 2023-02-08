@@ -7,8 +7,6 @@ use Atsmacode\Framework\Dbal\Model;
 
 class Player extends Model
 {
-    use Collection;
-
     protected string $table = 'players';
     private string   $name;
     private string   $email;

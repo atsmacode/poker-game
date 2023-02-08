@@ -6,8 +6,6 @@ use Atsmacode\Framework\Collection\Collection;
 use Atsmacode\Framework\Dbal\Model;
 class PlayerActionLog extends Model
 {
-    use Collection;
-
     protected string $table = 'player_action_logs';
     private int      $player_status_id;
     private int      $player_action_id;

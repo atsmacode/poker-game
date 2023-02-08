@@ -11,6 +11,8 @@ use Atsmacode\PokerGame\Models\TableSeat;
  */
 class PlayerHandler implements PlayerHandlerInterface
 {
+    private GameState $gameState;
+
     public function __construct(
         private TableSeat $tableSeatModel
     ) {}
@@ -52,7 +54,7 @@ class PlayerHandler implements PlayerHandlerInterface
         return $playerData;
     }
 
-    private function getActionOn()
+    private function getActionOn(): array
     {
         $firstActivePlayer = $this->gameState->firstActivePlayer();
         $lastToAct         = $this->gameState->getLatestAction()->getTableSeatId();
@@ -70,7 +72,7 @@ class PlayerHandler implements PlayerHandlerInterface
         return $playerAfterLastToAct ?: $firstActivePlayer;
     }
 
-    private function getThePlayerActionShouldBeOnForANewStreet(array $firstActivePlayer)
+    private function getThePlayerActionShouldBeOnForANewStreet(array $firstActivePlayer): array
     {
         $dealer            = $this->gameState->getHand()->getDealer();
         $playerAfterDealer = $this->tableSeatModel->playerAfterDealer($this->gameState->handId(), $dealer['table_seat_id']);
@@ -78,7 +80,7 @@ class PlayerHandler implements PlayerHandlerInterface
         return 0 < count($playerAfterDealer->getContent()) ? $playerAfterDealer->getContent()[0] : $firstActivePlayer;
     }
 
-    private function getAvailableOptionsBasedOnLatestAction($playerAction)
+    private function getAvailableOptionsBasedOnLatestAction($playerAction): array
     {
         $latestAction      = $this->gameState->getLatestAction();
         $continuingBetters = $this->tableSeatModel->getContinuingBetters((string) $this->gameState->getHand()->getId());
@@ -119,7 +121,7 @@ class PlayerHandler implements PlayerHandlerInterface
         }
     }
 
-    private function isBigBlindOnUnRaisedFirstStreet(array $playerActions, array $playerAction)
+    private function isBigBlindOnUnRaisedFirstStreet(array $playerActions, array $playerAction): bool
     {
         return count($this->gameState->getHandStreets()) === 1 &&
             $playerAction['big_blind'] &&

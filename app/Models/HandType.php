@@ -6,8 +6,6 @@ use Atsmacode\Framework\Collection\Collection;
 use Atsmacode\Framework\Dbal\Model;
 class HandType extends Model
 {
-    use Collection;
-
     protected string $table = 'hand_types';
     private string   $name;
     private int      $ranking;

@@ -10,6 +10,8 @@ use Atsmacode\PokerGame\Tests\BaseTest;
 
 class HandIdentifierKickerTest extends BaseTest
 {
+    private HandIdentifier $handIdentifier;
+    
     protected function setUp(): void
     {
         parent::setUp();

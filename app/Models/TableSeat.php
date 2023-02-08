@@ -8,8 +8,6 @@ use Atsmacode\Framework\Dbal\Model;
 
 class TableSeat extends Model
 {
-    use Collection;
-
     protected string $table = 'table_seats';
     private ?int     $number;
     private bool     $can_continue;

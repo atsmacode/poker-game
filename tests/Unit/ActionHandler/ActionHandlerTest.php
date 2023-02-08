@@ -15,7 +15,7 @@ class ActionHandlerTest extends BaseTest
 
     private Pot $potModel;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

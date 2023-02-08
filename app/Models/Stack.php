@@ -7,8 +7,6 @@ use Atsmacode\Framework\Dbal\Model;
 
 class Stack extends Model
 {
-    use Collection;
-
     protected string $table = 'stacks';
     private int      $amount;
     private int      $player_id;
