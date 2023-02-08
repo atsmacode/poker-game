@@ -8,8 +8,7 @@ use Atsmacode\PokerGame\HandIdentifier\HandIdentifier;
 class Showdown
 {
     public HandIdentifier $handIdentifier;
-    public GameState $gameState;
-    public $winner;
+    public GameState      $gameState;
 
     /**
      * @var array
