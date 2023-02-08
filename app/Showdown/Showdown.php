@@ -14,12 +14,12 @@ class Showdown
     /**
      * @var array
      */
-    public $communityCards = [];
+    private $communityCards = [];
 
     /**
      * @var array<mixed>
      */
-    public array $playerHands = [];
+    private array $playerHands = [];
 
     /**
      * @param GameState $gameState
@@ -38,7 +38,7 @@ class Showdown
          * retain only the one with the highest kicker & active cards as appropriate
          * then compare the hand rankings of each remaining player hand.
          */
-        foreach ($this->handIdentifier->handTypes as $handType) {
+        foreach ($this->handIdentifier->getHandTypes() as $handType) {
             $playerHandsOfType = $this->getPlayerhandsOfType($handType['id']);
 
             if (count($playerHandsOfType) > 1) {
@@ -93,7 +93,7 @@ class Showdown
             $compileInfo = (new HandIdentifier())->identify(
                 $this->gameState->getWholeCards()[$player['player_id']],
                 $this->communityCards
-            )->identifiedHandType;
+            )->getIdentifiedHandType();
 
             $compileInfo['highestActiveCard'] = max($compileInfo['activeCards']);
             $compileInfo['player']            = $player;
