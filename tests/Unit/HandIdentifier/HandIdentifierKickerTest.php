@@ -41,17 +41,17 @@ class HandIdentifierKickerTest extends BaseTest
 
         $this->assertEquals(
             Rank::KING['ranking'],
-            $this->handIdentifier->highCard
+            $this->handIdentifier->getHighCard()
         );
 
         $this->assertEquals(
             CardFactory::create(Card::QUEEN_HEARTS)['ranking'],
-            $this->handIdentifier->identifiedHandType['kicker']
+            $this->handIdentifier->getIdentifiedHandType()['kicker']
         );
 
         $this->assertContains(
             Rank::KING['ranking'],
-            $this->handIdentifier->identifiedHandType['activeCards']
+            $this->handIdentifier->getIdentifiedHandType()['activeCards']
         );
     }
 
@@ -78,17 +78,17 @@ class HandIdentifierKickerTest extends BaseTest
 
         $this->assertEquals(
             CardFactory::create(Card::KING_SPADES)['ranking'],
-            $this->handIdentifier->identifiedHandType['kicker']
+            $this->handIdentifier->getIdentifiedHandType()['kicker']
         );
 
         $this->assertContains(
             CardFactory::create(Card::NINE_DIAMONDS)['ranking'],
-            $this->handIdentifier->identifiedHandType['activeCards']
+            $this->handIdentifier->getIdentifiedHandType()['activeCards']
         );
 
         $this->assertContains(
             CardFactory::create(Card::NINE_CLUBS)['ranking'],
-            $this->handIdentifier->identifiedHandType['activeCards']
+            $this->handIdentifier->getIdentifiedHandType()['activeCards']
         );
     }
 }

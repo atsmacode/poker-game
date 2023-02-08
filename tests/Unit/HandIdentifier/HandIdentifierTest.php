@@ -43,11 +43,11 @@ class HandIdentifierTest extends BaseTest
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
-        $this->assertEquals('High Card', $this->handIdentifier->identifiedHandType['handType']['name']);
+        $this->assertEquals('High Card', $this->handIdentifier->getIdentifiedHandType()['handType']['name']);
 
         $this->assertEquals(
             $highestCard['ranking'],
-            $this->handIdentifier->highCard
+            $this->handIdentifier->getHighCard()
         );
     }
 
@@ -74,11 +74,11 @@ class HandIdentifierTest extends BaseTest
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
-        $this->assertEquals('High Card', $this->handIdentifier->identifiedHandType['handType']['name']);
+        $this->assertEquals('High Card', $this->handIdentifier->getIdentifiedHandType()['handType']['name']);
 
         $this->assertEquals(
             14,
-            $this->handIdentifier->highCard
+            $this->handIdentifier->getHighCard()
         );
     }
 
@@ -103,8 +103,8 @@ class HandIdentifierTest extends BaseTest
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
-        $this->assertEquals(HandType::PAIR['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
-        $this->assertCount(1, $this->handIdentifier->pairs);
+        $this->assertEquals(HandType::PAIR['id'], $this->handIdentifier->getIdentifiedHandType()['handType']['id']);
+        $this->assertCount(1, $this->handIdentifier->getPairs());
     }
 
     /**
@@ -128,8 +128,8 @@ class HandIdentifierTest extends BaseTest
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
-        $this->assertEquals(HandType::TWO_PAIR['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
-        $this->assertCount(2, $this->handIdentifier->pairs);
+        $this->assertEquals(HandType::TWO_PAIR['id'], $this->handIdentifier->getIdentifiedHandType()['handType']['id']);
+        $this->assertCount(2, $this->handIdentifier->getPairs());
     }
 
     /**
@@ -153,8 +153,8 @@ class HandIdentifierTest extends BaseTest
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
-        $this->assertEquals(HandType::TRIPS['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
-        $this->assertEquals(Rank::KING, $this->handIdentifier->threeOfAKind);
+        $this->assertEquals(HandType::TRIPS['id'], $this->handIdentifier->getIdentifiedHandType()['handType']['id']);
+        $this->assertEquals(Rank::KING, $this->handIdentifier->getThreeOfAKind());
     }
 
     /**
@@ -178,8 +178,8 @@ class HandIdentifierTest extends BaseTest
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
-        $this->assertEquals(HandType::STRAIGHT['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
-        $this->assertEquals(Rank::FIVE['ranking'], $this->handIdentifier->identifiedHandType['kicker']);
+        $this->assertEquals(HandType::STRAIGHT['id'], $this->handIdentifier->getIdentifiedHandType()['handType']['id']);
+        $this->assertEquals(Rank::FIVE['ranking'], $this->handIdentifier->getIdentifiedHandType()['kicker']);
     }
 
     /**
@@ -203,8 +203,8 @@ class HandIdentifierTest extends BaseTest
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
-        $this->assertEquals(HandType::STRAIGHT['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
-        $this->assertEquals(14, $this->handIdentifier->identifiedHandType['kicker']);
+        $this->assertEquals(HandType::STRAIGHT['id'], $this->handIdentifier->getIdentifiedHandType()['handType']['id']);
+        $this->assertEquals(14, $this->handIdentifier->getIdentifiedHandType()['kicker']);
     }
 
     /**
@@ -228,8 +228,8 @@ class HandIdentifierTest extends BaseTest
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
-        $this->assertEquals(HandType::STRAIGHT['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
-        $this->assertEquals(Rank::KING['ranking'], $this->handIdentifier->identifiedHandType['kicker']);
+        $this->assertEquals(HandType::STRAIGHT['id'], $this->handIdentifier->getIdentifiedHandType()['handType']['id']);
+        $this->assertEquals(Rank::KING['ranking'], $this->handIdentifier->getIdentifiedHandType()['kicker']);
     }
 
     /**
@@ -253,8 +253,8 @@ class HandIdentifierTest extends BaseTest
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
-        $this->assertEquals(HandType::HIGH_CARD['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
-        $this->assertEquals(Rank::JACK['ranking'], $this->handIdentifier->identifiedHandType['kicker']);
+        $this->assertEquals(HandType::HIGH_CARD['id'], $this->handIdentifier->getIdentifiedHandType()['handType']['id']);
+        $this->assertEquals(Rank::JACK['ranking'], $this->handIdentifier->getIdentifiedHandType()['kicker']);
     }
 
     /**
@@ -278,7 +278,7 @@ class HandIdentifierTest extends BaseTest
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
-        $this->assertEquals(HandType::FLUSH['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
+        $this->assertEquals(HandType::FLUSH['id'], $this->handIdentifier->getIdentifiedHandType()['handType']['id']);
     }
 
     /**
@@ -302,8 +302,8 @@ class HandIdentifierTest extends BaseTest
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
-        $this->assertEquals(HandType::FLUSH['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
-        $this->assertEquals(Rank::KING['ranking'], $this->handIdentifier->identifiedHandType['kicker']);
+        $this->assertEquals(HandType::FLUSH['id'], $this->handIdentifier->getIdentifiedHandType()['handType']['id']);
+        $this->assertEquals(Rank::KING['ranking'], $this->handIdentifier->getIdentifiedHandType()['kicker']);
     }
 
     /**
@@ -327,7 +327,7 @@ class HandIdentifierTest extends BaseTest
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
-        $this->assertEquals(HandType::FULL_HOUSE['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
+        $this->assertEquals(HandType::FULL_HOUSE['id'], $this->handIdentifier->getIdentifiedHandType()['handType']['id']);
     }
 
     /**
@@ -351,8 +351,8 @@ class HandIdentifierTest extends BaseTest
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
-        $this->assertEquals(HandType::QUADS['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
-        $this->assertEquals(Rank::KING, $this->handIdentifier->fourOfAKind);
+        $this->assertEquals(HandType::QUADS['id'], $this->handIdentifier->getIdentifiedHandType()['handType']['id']);
+        $this->assertEquals(Rank::KING, $this->handIdentifier->getFourOfAKind());
     }
 
     /**
@@ -376,7 +376,7 @@ class HandIdentifierTest extends BaseTest
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
-        $this->assertEquals(HandType::STRAIGHT_FLUSH['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
+        $this->assertEquals(HandType::STRAIGHT_FLUSH['id'], $this->handIdentifier->getIdentifiedHandType()['handType']['id']);
     }
 
     /**
@@ -400,6 +400,6 @@ class HandIdentifierTest extends BaseTest
 
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
-        $this->assertEquals(HandType::ROYAL_FLUSH['id'], $this->handIdentifier->identifiedHandType['handType']['id']);
+        $this->assertEquals(HandType::ROYAL_FLUSH['id'], $this->handIdentifier->getIdentifiedHandType()['handType']['id']);
     }
 }

@@ -10,24 +10,24 @@ use Atsmacode\CardGames\Constants\Suit;
 
 class HandIdentifier
 {
-    public $handTypes;
+    private array $handTypes;
 
-    public $identifiedHandType = [
+    private array $identifiedHandType = [
         'handType'    => null,
         'activeCards' => [],
         'kicker'      => null
     ];
 
-    public array      $allCards;
-    public int|bool   $highCard      = false;
-    public array      $pairs         = [];
-    public array|bool $threeOfAKind  = false;
-    public array|bool $straight      = false;
-    public array|bool $flush         = false;
-    public array|bool $fullHouse     = false;
-    public array|bool $fourOfAKind   = false;
-    public array|bool $straightFlush = false;
-    public array|bool $royalFlush    = false;
+    private array      $allCards;
+    private int|bool   $highCard = false;
+    private array      $pairs = [];
+    private array      $threeOfAKind = [];
+    private array      $straight;
+    private array      $flush;
+    private array|bool $fullHouse = false;
+    private array      $fourOfAKind;
+    private array      $straightFlush;
+    private array      $royalFlush ;
     
     protected $handMethods = [
         'hasRoyalFlush',
@@ -45,6 +45,36 @@ class HandIdentifier
     public function __construct()
     {
         $this->handTypes = HandType::ALL;
+    }
+
+    public function getHandTypes(): array
+    {
+        return $this->handTypes;
+    }
+
+    public function getHighCard(): int|bool
+    {
+        return $this->highCard;
+    }
+
+    public function getPairs(): array
+    {
+        return $this->pairs;
+    }
+
+    public function getThreeOfAKind(): array
+    {
+        return $this->threeOfAKind;
+    }
+
+    public function getFourOfAKind(): array
+    {
+        return $this->fourOfAKind;
+    }
+
+    public function getIdentifiedHandType(): array
+    {
+        return $this->identifiedHandType;
     }
 
     public function identify(array $wholeCards, array $communityCards): self
@@ -377,7 +407,7 @@ class HandIdentifier
             $flushCards = $this->filterAllCards('suit_id', $suit['suit_id']);
 
             if (5 <= count($flushCards)) {
-                $this->flush                             = $suit;
+                $this->flush                             = $flushCards;
                 $this->identifiedHandType['activeCards'] = array_column($flushCards, 'ranking');
                 $this->identifiedHandType['handType']    = $this->getHandType('Flush');
                 $this->identifiedHandType['kicker']      = $this->checkFlushForAceKicker($this->identifiedHandType['activeCards'])
@@ -403,7 +433,7 @@ class HandIdentifier
         }
 
         $this->pairs                             = [];
-        $this->threeOfAKind                      = false;
+        $this->threeOfAKind                      = [];
         $this->identifiedHandType['activeCards'] = [];
 
         return $this;
@@ -489,7 +519,7 @@ class HandIdentifier
             }, ARRAY_FILTER_USE_BOTH);
 
             if ($straightFlush && 5 <= count($straightFlush)) {
-                $this->straightFlush                       = true;
+                $this->straightFlush                       = $straightFlush;
                 $this->identifiedHandType['handType']      = $this->getHandType('Straight Flush');
                 $this->identifiedHandType['activeCards'][] = $straightFlush;
                 $this->identifiedHandType['kicker']        = $this->getMax($straightFlush, 'ranking');
