@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "atsmacode/card-games",
-            "version": "v2.0.5",
+            "version": "v2.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/atsmacode/card-games.git",
-                "reference": "1cb5c858ce577beef555879d5443ec9daa3e3e68"
+                "reference": "00d1eaba66831a6bf43d7c22d149d0c47258e0e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atsmacode/card-games/zipball/1cb5c858ce577beef555879d5443ec9daa3e3e68",
-                "reference": "1cb5c858ce577beef555879d5443ec9daa3e3e68",
+                "url": "https://api.github.com/repos/atsmacode/card-games/zipball/00d1eaba66831a6bf43d7c22d149d0c47258e0e6",
+                "reference": "00d1eaba66831a6bf43d7c22d149d0c47258e0e6",
                 "shasum": ""
             },
             "require": {
@@ -46,9 +46,9 @@
             "description": "Base package to support any type of card based game",
             "support": {
                 "issues": "https://github.com/atsmacode/card-games/issues",
-                "source": "https://github.com/atsmacode/card-games/tree/v2.0.5"
+                "source": "https://github.com/atsmacode/card-games/tree/v2.0.6"
             },
-            "time": "2023-02-04T11:43:23+00:00"
+            "time": "2023-02-09T18:34:24+00:00"
         },
         {
             "name": "atsmacode/framework",
