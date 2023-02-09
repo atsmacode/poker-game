@@ -77,7 +77,7 @@ class HandIdentifierTest extends BaseTest
         $this->assertEquals('High Card', $this->handIdentifier->getIdentifiedHandType()['handType']['name']);
 
         $this->assertEquals(
-            14,
+            Rank::ACE_HIGH_RANK_ID,
             $this->handIdentifier->getHighCard()
         );
     }
@@ -204,7 +204,7 @@ class HandIdentifierTest extends BaseTest
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
         $this->assertEquals(HandType::STRAIGHT['id'], $this->handIdentifier->getIdentifiedHandType()['handType']['id']);
-        $this->assertEquals(14, $this->handIdentifier->getIdentifiedHandType()['kicker']);
+        $this->assertEquals(Rank::ACE_HIGH_RANK_ID, $this->handIdentifier->getIdentifiedHandType()['kicker']);
     }
 
     /**

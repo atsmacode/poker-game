@@ -1,7 +1,5 @@
 <?php
 
-/** @todo Replace 1 & 14 with HIGH_ACE_ID & LOW_ACE_ID constants.*/
-
 namespace Atsmacode\PokerGame\HandIdentifier;
 
 use Atsmacode\PokerGame\Constants\HandType;
@@ -92,7 +90,7 @@ class HandIdentifier
     {
         if (in_array(1, $activeCards)) {
             $activeCardsLessThanAce = array_filter($activeCards, function($value) {
-                return 1 !== $value;
+                return Rank::ACE_RANK_ID !== $value;
             });
 
             return max($activeCardsLessThanAce);
@@ -101,14 +99,9 @@ class HandIdentifier
         return false;
     }
 
-    /**
-     * Ace is technically ranked 1 in the DB, but because it can be
-     * used high or low, we need to switch it to 14 so it can be
-     * ranked higher than a king (13) if required.
-     */
     private function checkForHighAceActiveCardRanking(array $rank): int|bool
     {
-        if ($rank['ranking'] === 1) { return 14; }
+        if ($rank['ranking'] === Rank::ACE_RANK_ID) { return Rank::ACE_HIGH_RANK_ID; }
 
         return false;
     }
@@ -217,7 +210,7 @@ class HandIdentifier
     public function highestCard(): self
     {
         if ($this->getMin($this->allCards, 'ranking') === 1) {
-            $this->highCard = 14;
+            $this->highCard = Rank::ACE_HIGH_RANK_ID;
         } else {
             $this->highCard = $this->getMax($this->allCards, 'ranking');
         }
@@ -258,7 +251,7 @@ class HandIdentifier
     public function hasTwoPair(): bool|self
     {
         foreach(Rank::ALL as $rank){
-            if (count($this->filterAllCards('rank_id', $rank['rank_id'])) === 2) {
+            if (2 === count($this->filterAllCards('rank_id', $rank['rank_id']))) {
                 $this->pairs[]                             = $rank;
                 $this->identifiedHandType['activeCards'][] = $this->checkForHighAceActiveCardRanking($rank) ?: $rank['ranking'];
                 /*
@@ -273,7 +266,7 @@ class HandIdentifier
             }
         }
 
-        if (count($this->pairs) >= 2) {
+        if (2 <= count($this->pairs)) {
             $this->identifiedHandType['handType'] = $this->getHandType('Two Pair');
             return true;
         }
@@ -322,11 +315,11 @@ class HandIdentifier
             }
 
             switch ($value['ranking']) {
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
+                case Rank::ACE_RANK_ID:
+                case Rank::DEUCE_RANK_ID:
+                case Rank::THREE_RANK_ID:
+                case Rank::FOUR_RANK_ID:
+                case Rank::FIVE_RANK_ID:
                     if ($value['ranking'] !== $previousCardRanking) { return true; }
                     break;
             }
@@ -357,11 +350,11 @@ class HandIdentifier
             }
 
             switch ($value['ranking']) {
-                case 1:
-                case 13:
-                case 12:
-                case 11:
-                case 10:
+                case Rank::ACE_RANK_ID:
+                case Rank::KING_RANK_ID:
+                case Rank::QUEEN_RANK_ID:
+                case Rank::JACK_RANK_ID:
+                case Rank::TEN_RANK_ID:
                     if ($value['ranking'] !== $previousCardRanking) { return true; }
                     break;
             }
@@ -373,7 +366,7 @@ class HandIdentifier
             $this->straight                          = $straight;
             $this->identifiedHandType['handType']    = $this->getHandType('Straight');
             $this->identifiedHandType['activeCards'] = array_column($straight, 'ranking');
-            $this->identifiedHandType['kicker']      = 14;
+            $this->identifiedHandType['kicker']      = Rank::ACE_HIGH_RANK_ID;
 
             return true;
         }
