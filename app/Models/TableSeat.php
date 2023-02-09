@@ -3,7 +3,6 @@
 namespace Atsmacode\PokerGame\Models;
 
 use Atsmacode\PokerGame\Constants\Action;
-use Atsmacode\Framework\Collection\Collection;
 use Atsmacode\Framework\Dbal\Model;
 
 class TableSeat extends Model

@@ -2,7 +2,6 @@
 
 namespace Atsmacode\PokerGame\Models;
 
-use Atsmacode\Framework\Collection\Collection;
 use Atsmacode\Framework\Dbal\Model;
 
 class Player extends Model
