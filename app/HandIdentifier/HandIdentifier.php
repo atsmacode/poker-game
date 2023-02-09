@@ -187,23 +187,17 @@ class HandIdentifier
     private function filterStraightCards(array $cards): array
     {
         return array_filter($cards, function($value, $key) use ($cards) {
-            /** Using next/prev ranking +/- 2 to prevent K,Q,9,8,7 being set as a straight, for example. */
-            $nextCardExists         = array_key_exists($key + 1, $cards);
-            $previousCardExists     = array_key_exists($key - 1, $cards);
-            $twoCardsInFrontExists  = array_key_exists($key + 2, $cards);
-            $twoCardsPreviousExists = array_key_exists($key - 2, $cards);
+            $nextCardExists     = array_key_exists($key + 1, $cards);
+            $previousCardExists = array_key_exists($key - 1, $cards);
 
-            $nextCardRankingPlusOne          = $nextCardExists ? $cards[$key + 1]['ranking'] + 1 : null;
-            $previousCardRankingMinusOne     = $previousCardExists? $cards[$key - 1]['ranking'] - 1 : null;
-            $twoCardsInFrontRankingPlusTwo   = $twoCardsInFrontExists ? $cards[$key + 2]['ranking'] + 2 : null;
-            $twoCardsPreviousRankingMinusTwo = $twoCardsPreviousExists ? $cards[$key - 2]['ranking'] - 2 : null;
+            $nextCardRankingPlusOne      = $nextCardExists ? $cards[$key + 1]['ranking'] + 1 : null;
+            $previousCardRankingMinusOne = $previousCardExists? $cards[$key - 1]['ranking'] - 1 : null;
 
             if ($nextCardExists && !$previousCardExists) { return $value['ranking'] === $nextCardRankingPlusOne; }
 
             if (!$nextCardExists && $previousCardExists) { return $value['ranking'] === $previousCardRankingMinusOne; }
 
-            return $value['ranking'] === $previousCardRankingMinusOne || $value['ranking'] === $nextCardRankingPlusOne &&
-                $value['ranking'] === $twoCardsPreviousRankingMinusTwo || $value['ranking'] === $twoCardsInFrontRankingPlusTwo;
+            return $value['ranking'] === $previousCardRankingMinusOne && $value['ranking'] === $nextCardRankingPlusOne;
         }, ARRAY_FILTER_USE_BOTH);
     }
 

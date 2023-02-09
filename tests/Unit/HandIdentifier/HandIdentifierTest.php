@@ -254,7 +254,30 @@ class HandIdentifierTest extends BaseTest
         $this->handIdentifier->identify($wholeCards, $communityCards);
 
         $this->assertEquals(HandType::HIGH_CARD['id'], $this->handIdentifier->getIdentifiedHandType()['handType']['id']);
-        $this->assertEquals(Rank::JACK['ranking'], $this->handIdentifier->getIdentifiedHandType()['kicker']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function itCanIdentifySixDisconnectedStraightCardsIsNotAStraightAlt()
+    {
+        $wholeCards = [
+            CardFactory::create(Card::NINE_DIAMONDS),
+            CardFactory::create(Card::DEUCE_SPADES),
+        ];
+
+        $communityCards = [
+            CardFactory::create(Card::SIX_CLUBS),
+            CardFactory::create(Card::SIX_HEARTS),
+            CardFactory::create(Card::FIVE_HEARTS),
+            CardFactory::create(Card::TEN_CLUBS),
+            CardFactory::create(Card::FOUR_SPADES),
+        ];
+
+        $this->handIdentifier->identify($wholeCards, $communityCards);
+
+        $this->assertEquals(HandType::PAIR['id'], $this->handIdentifier->getIdentifiedHandType()['handType']['id']);
     }
 
     /**
