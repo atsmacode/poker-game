@@ -180,6 +180,40 @@ class HandIdentifier
         return array_values($this->allCards);
     }
 
+    private function removeDuplicates(array $cards): array
+    {
+        return array_values(array_filter($cards, function ($value, $key) use ($cards) {
+            if (array_key_exists($key - 1, $cards)) {
+                return $value['ranking'] !== $cards[$key - 1]['ranking'];
+            }
+
+            return true;
+        }, ARRAY_FILTER_USE_BOTH));
+    }
+
+    private function filterStraightCards(array $cards): array
+    {
+        return array_filter($cards, function($value, $key) use ($cards) {
+            /** Using next/prev ranking +/- 2 to prevent K,Q,9,8,7 being set as a straight, for example. */
+            $nextCardExists         = array_key_exists($key + 1, $cards);
+            $previousCardExists     = array_key_exists($key - 1, $cards);
+            $twoCardsInFrontExists  = array_key_exists($key + 2, $cards);
+            $twoCardsPreviousExists = array_key_exists($key - 2, $cards);
+
+            $nextCardRankingPlusOne          = $nextCardExists ? $cards[$key + 1]['ranking'] + 1 : null;
+            $previousCardRankingMinusOne     = $previousCardExists? $cards[$key - 1]['ranking'] - 1 : null;
+            $twoCardsInFrontRankingPlusTwo   = $twoCardsInFrontExists ? $cards[$key + 2]['ranking'] + 2 : null;
+            $twoCardsPreviousRankingMinusTwo = $twoCardsPreviousExists ? $cards[$key - 2]['ranking'] - 2 : null;
+
+            if ($nextCardExists && !$previousCardExists) { return $value['ranking'] === $nextCardRankingPlusOne; }
+
+            if (!$nextCardExists && $previousCardExists) { return $value['ranking'] === $previousCardRankingMinusOne; }
+
+            return $value['ranking'] === $previousCardRankingMinusOne || $value['ranking'] === $nextCardRankingPlusOne &&
+                $value['ranking'] === $twoCardsPreviousRankingMinusTwo || $value['ranking'] === $twoCardsInFrontRankingPlusTwo;
+        }, ARRAY_FILTER_USE_BOTH);
+    }
+
     public function highestCard(): self
     {
         if ($this->getMin($this->allCards, 'ranking') === 1) {
@@ -300,7 +334,7 @@ class HandIdentifier
 
         $straight = array_slice($sortedCardsDesc, 0, 5);
 
-        if ($straight && 5 <= count($straight)) {
+        if ($straight && 5 === count($straight)) {
             $this->straight                          = $straight;
             $this->identifiedHandType['handType']    = $this->getHandType('Straight');
             $this->identifiedHandType['activeCards'] = array_column($straight, 'ranking');
@@ -335,7 +369,7 @@ class HandIdentifier
 
         $straight = array_slice($sortedCardsDesc, 0, 5);
 
-        if ($straight && 5 <= count($straight)) {
+        if ($straight && 5 === count($straight)) {
             $this->straight                          = $straight;
             $this->identifiedHandType['handType']    = $this->getHandType('Straight');
             $this->identifiedHandType['activeCards'] = array_column($straight, 'ranking');
@@ -350,46 +384,12 @@ class HandIdentifier
     private function hasAnyOtherStraight(): bool
     {
         $cardsSortByDesc  = $this->sortAllCardsByDescRanking();
-        $removeDuplicates = array_values(array_filter($cardsSortByDesc, function ($value, $key) use ($cardsSortByDesc) {
-            if (array_key_exists($key - 1, $cardsSortByDesc)) {
-                return $value['ranking'] !== $cardsSortByDesc[$key - 1]['ranking'];
-            }
+        $removeDuplicates = $this->removeDuplicates($cardsSortByDesc);
+        $removeDuplicates = array_slice($removeDuplicates, 0, 5);
 
-            return true;
-        }, ARRAY_FILTER_USE_BOTH));
+        $straight = $this->filterStraightCards($removeDuplicates);
 
-        $straight = array_filter($removeDuplicates, function($value, $key) use ($removeDuplicates) {
-            $nextCardRankingPlusOne      = null;
-            $previousCardRankingMinusOne = null;
-            $previousCardRanking         = null;
-
-            if (array_key_exists($key + 1, $removeDuplicates)) {
-                $nextCardRankingPlusOne = $removeDuplicates[$key + 1]['ranking'] + 1;
-            }
-
-            if (array_key_exists($key - 1, $removeDuplicates)) {
-                $previousCardRankingMinusOne = $removeDuplicates[$key - 1]['ranking'] - 1;
-                $previousCardRanking         = $removeDuplicates[$key - 1]['ranking'];
-            }
-
-            /** Had to add extra logic to prevent K,Q,9,8,7 being set as a straight, for example. */
-            $twoCardsInFrontRankingPlusTwo   = null;
-            $twoCardsPreviousRankingMinusTwo = null;
-
-            if (array_key_exists($key + 2, $removeDuplicates)) {
-                $twoCardsInFrontRankingPlusTwo = $removeDuplicates[$key + 2]['ranking'] + 2;
-            }
-
-            if (array_key_exists($key - 2, $removeDuplicates)) {
-                $twoCardsPreviousRankingMinusTwo = $removeDuplicates[$key - 2]['ranking'] - 2;
-            }
-
-            return ($value['ranking'] !== $previousCardRanking) &&
-                (($value['ranking'] === $previousCardRankingMinusOne || $value['ranking'] === $nextCardRankingPlusOne) &&
-                    ($value['ranking'] === $twoCardsPreviousRankingMinusTwo || $value['ranking'] === $twoCardsInFrontRankingPlusTwo));
-        }, ARRAY_FILTER_USE_BOTH);
-
-        if ($straight && 5 <= count($straight)) {
+        if ($straight && 5 === count($straight)) {
             $this->straight                          = $straight;
             $this->identifiedHandType['handType']    = $this->getHandType('Straight');
             $this->identifiedHandType['activeCards'] = array_column($straight, 'ranking');
@@ -480,45 +480,15 @@ class HandIdentifier
 
     public function hasStraightFlush(): bool|self
     {
-        foreach(Suit::ALL as $suit){
+        foreach (Suit::ALL as $suit) {
             /* Remove cards not in this suit. This also takes care of duplicates. */
             $onlyThisSuit = array_values(array_filter($this->sortAllCardsByDescRanking(), function ($item) use ($suit) {
                 return $item['suit_id'] === $suit['suit_id'];
             }));
 
-            $straightFlush = array_filter($onlyThisSuit, function($value, $key) use ($suit, $onlyThisSuit) {
-                $nextCardRankingPlusOne      = null;
-                $previousCardRankingMinusOne = null;
+            $straightFlush = $this->filterStraightCards($onlyThisSuit);
 
-                if (array_key_exists($key + 1, $onlyThisSuit)) {
-                    $nextCardRankingPlusOne = $onlyThisSuit[$key + 1]['ranking'] + 1;
-                }
-
-                if (array_key_exists($key - 1, $onlyThisSuit)) {
-                    $previousCardRankingMinusOne = $onlyThisSuit[$key - 1]['ranking'] - 1;
-                }
-
-                /*
-                 * Had to add extra logic to prevent K,Q,9,8,7 being set as a straight, for example.
-                 * And checking if the current rank has already been counted towards a straight.
-                 * Which makes this method quite long - extract or simplify.
-                 */
-                $twoCardsInFrontRankingPlusTwo = null;
-                $twoCardsPreviousRankingMinusTwo = null;
-
-                if (array_key_exists($key + 2, $onlyThisSuit)) {
-                    $twoCardsInFrontRankingPlusTwo = $onlyThisSuit[$key + 2]['ranking'] + 2;
-                }
-
-                if (array_key_exists($key - 2, $onlyThisSuit)) {
-                    $twoCardsPreviousRankingMinusTwo = $onlyThisSuit[$key - 2]['ranking'] - 2;
-                }
-
-                return ($value['ranking'] === $previousCardRankingMinusOne || $value['ranking'] === $nextCardRankingPlusOne) &&
-                    ($value['ranking'] === $twoCardsPreviousRankingMinusTwo || $value['ranking'] === $twoCardsInFrontRankingPlusTwo);
-            }, ARRAY_FILTER_USE_BOTH);
-
-            if ($straightFlush && 5 <= count($straightFlush)) {
+            if ($straightFlush && 5 === count($straightFlush)) {
                 $this->straightFlush                       = $straightFlush;
                 $this->identifiedHandType['handType']      = $this->getHandType('Straight Flush');
                 $this->identifiedHandType['activeCards'][] = $straightFlush;
