@@ -85,9 +85,3 @@ return [
 ];
 
 ```
-
-# Todo:
-
-- Review all TODO comments and implement solution
-- Once everything above is tidied/finalised, add remaining unit tests from original app
-- Add DB indexes, tests get slower once DB gets fuller
