@@ -10,11 +10,16 @@ class Hand extends Model
     protected string $table = 'hands';
     private int      $table_id;
     private ?int     $game_type_id;
-    private ?string  $completed_on;
+    private ?string  $completed_on = null;
 
     public function getTableId(): int
     {
         return $this->table_id;
+    }
+
+    public function getCompletedOn(): ?string
+    {
+        return $this->completed_on;
     }
 
     public function streets(): array

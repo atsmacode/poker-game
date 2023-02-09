@@ -106,6 +106,6 @@ class GamePlay
 
     protected function theLastHandWasCompleted()
     {
-        return isset($this->gameState->getHand()->completed_on);
+        return null !== $this->gameState->getHand()->getCompletedOn();
     }
 }
