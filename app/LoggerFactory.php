@@ -11,7 +11,7 @@ class LoggerFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        $config = (new PokerGameConfigProvider())->get();
+        $config = $container->get(PokerGameConfigProvider::class);
         $logger = new Logger('poker-game');
 
         $logger->pushHandler(new StreamHandler($config['logger']['path']));
