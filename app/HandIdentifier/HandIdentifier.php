@@ -26,19 +26,6 @@ class HandIdentifier
     private array      $fourOfAKind;
     private array      $straightFlush;
     private array      $royalFlush ;
-    
-    protected $handMethods = [
-        'hasRoyalFlush',
-        'hasStraightFlush',
-        'hasFourOfAKind',
-        'hasFullHouse',
-        'hasFlush',
-        'hasStraight',
-        'hasThreeOfAKind',
-        'hasTwoPair',
-        'hasPair',
-        'highestCard'
-    ];
 
     public function __construct()
     {
@@ -79,11 +66,25 @@ class HandIdentifier
     {
         $this->allCards = array_merge($wholeCards, $communityCards);
 
-        foreach ($this->handMethods as $handMethod) {
-            if ($this->{$handMethod}() === true) { break; }
-        }
+        if (true === $this->hasRoyalFlush()) { return $this; }
 
-        return $this;
+        if (true === $this->hasStraightFlush()) { return $this; }
+
+        if (true === $this->hasFourOfAKind()) { return $this; }
+
+        if (true === $this->hasFullHouse()) { return $this; }
+
+        if (true === $this->hasFlush()) { return $this; }
+
+        if (true === $this->hasStraight()) { return $this; }
+
+        if (true === $this->hasThreeOfAKind()) { return $this; }
+
+        if (true === $this->hasTwoPair()) { return $this; }
+
+        if (true === $this->hasPair()) { return $this; }
+
+        return $this->highestCard();
     }
 
     private function checkFlushForAceKicker(array $activeCards): mixed
