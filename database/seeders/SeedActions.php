@@ -25,7 +25,7 @@ class SeedActions extends Database
                 $queryBuilder->executeStatement();
             }
         } catch(\Exception $e) {
-            error_log($e->getMessage());
+            $this->logger->error($e->getMessage(), ['class' => self::class, 'method' => __METHOD__]);
         }
     }
 }

@@ -2,6 +2,11 @@
 
 namespace Atsmacode\PokerGame;
 
+use Monolog\Handler\StreamHandler;
+use Monolog\Level;
+use Monolog\Logger;
+use Psr\Log\LoggerInterface;
+
 class DependencyConfig
 {
     public function get()
@@ -20,6 +25,8 @@ class DependencyConfig
                         => \Atsmacode\PokerGame\Database\DbalLiveFactory::class,
                     \PDO::class
                         => \Atsmacode\PokerGame\Database\PdoLiveFactory::class,
+                    \Psr\Log\LoggerInterface::class 
+                        => \Atsmacode\PokerGame\LoggerFactory::class,
                     \Atsmacode\PokerGame\Dealer\PokerDealer::class
                         => \Atsmacode\PokerGame\Dealer\PokerDealerFactory::class,
                     \Atsmacode\PokerGame\Models\Street::class

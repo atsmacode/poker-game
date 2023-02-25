@@ -28,7 +28,7 @@ class Stack extends Model
 
             return $queryBuilder->executeStatement();
         } catch (\Exception $e) {
-            error_log(__METHOD__ . ': ' . $e->getMessage());
+            $this->logger->error($e->getMessage(), ['class' => self::class, 'method' => __METHOD__]);
         }
     }
 }

@@ -31,7 +31,7 @@ class CreateHands extends Database
 
             $this->connection->exec(array_shift($sql));
         } catch(\Exception $e) {
-            error_log($e->getMessage());
+            $this->logger->error($e->getMessage(), ['class' => self::class, 'method' => __METHOD__]);
         }
     }
 
@@ -53,7 +53,7 @@ class CreateHands extends Database
 
             $this->connection->exec(array_shift($sql));
         } catch(\Exception $e) {
-            error_log($e->getMessage());
+            $this->logger->error($e->getMessage(), ['class' => self::class, 'method' => __METHOD__]);
         }
     }
 
@@ -75,7 +75,7 @@ class CreateHands extends Database
 
             $this->connection->exec(array_shift($sql));
         } catch(\Exception $e) {
-            error_log($e->getMessage());
+            $this->logger->error($e->getMessage(), ['class' => self::class, 'method' => __METHOD__]);
         }
     }
 }

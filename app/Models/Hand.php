@@ -6,10 +6,10 @@ use Atsmacode\Framework\Dbal\Model;
 
 class Hand extends Model
 {
-    protected string $table = 'hands';
-    private int      $table_id;
-    private ?int     $game_type_id;
-    private ?string  $completed_on = null;
+    protected string          $table = 'hands';
+    private int               $table_id;
+    private ?int              $game_type_id;
+    private ?string           $completed_on = null;
 
     public function getTableId(): int
     {
@@ -33,7 +33,7 @@ class Hand extends Model
 
             return $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
         } catch(\Exception $e) {
-            error_log(__METHOD__ . ': ' . $e->getMessage());
+            $this->logger->error($e->getMessage(), ['class' => self::class, 'method' => __METHOD__]);
         }
     }
 
@@ -49,7 +49,7 @@ class Hand extends Model
 
             return $queryBuilder->executeStatement() ? $queryBuilder->fetchAssociative() : [];
         } catch(\Exception $e) {
-            error_log(__METHOD__ . ': ' . $e->getMessage());
+            $this->logger->error($e->getMessage(), ['class' => self::class, 'method' => __METHOD__]);
         }
     }
 
@@ -64,7 +64,7 @@ class Hand extends Model
 
             return $queryBuilder->executeStatement();
         } catch(\Exception $e) {
-            error_log(__METHOD__ . ': ' . $e->getMessage());
+            $this->logger->error($e->getMessage(), ['class' => self::class, 'method' => __METHOD__]);
         }
     }
 
@@ -100,7 +100,7 @@ class Hand extends Model
 
             return $this;
         } catch(\Exception $e) {
-            error_log(__METHOD__ . ': ' . $e->getMessage());
+            $this->logger->error($e->getMessage(), ['class' => self::class, 'method' => __METHOD__]);
         }
     }
 
@@ -117,7 +117,7 @@ class Hand extends Model
 
             return $queryBuilder->executeStatement() ? $queryBuilder->fetchAssociative() : [];
         } catch(\Exception $e) {
-            error_log(__METHOD__ . ': ' . $e->getMessage());
+            $this->logger->error($e->getMessage(), ['class' => self::class, 'method' => __METHOD__]);
         }
     }
 
@@ -154,7 +154,7 @@ class Hand extends Model
 
             return $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
         } catch(\Exception $e) {
-            error_log(__METHOD__ . ': ' . $e->getMessage());
+            $this->logger->error($e->getMessage(), ['class' => self::class, 'method' => __METHOD__]);
         }
     }
 
@@ -184,7 +184,7 @@ class Hand extends Model
 
             return $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
         } catch (\Exception $e) {
-            error_log(__METHOD__ . ': ' . $e->getMessage());
+            $this->logger->error($e->getMessage(), ['class' => self::class, 'method' => __METHOD__]);
         }
     }
 }

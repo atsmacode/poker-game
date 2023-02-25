@@ -42,7 +42,7 @@ class CreatePlayerActionLogs extends Database
 
             $this->connection->exec(array_shift($sql));
         } catch(\PDOException $e) {
-            error_log($e->getMessage());
+            $this->logger->error($e->getMessage(), ['class' => self::class, 'method' => __METHOD__]);
         }
     }
 }

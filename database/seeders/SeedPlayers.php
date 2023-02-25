@@ -44,7 +44,7 @@ class SeedPlayers extends Database
                 $inserted++;
             }
         } catch(\PDOException $e) {
-            error_log($e->getMessage());
+            $this->logger->error($e->getMessage(), ['class' => self::class, 'method' => __METHOD__]);
         }
     }
 
@@ -59,7 +59,7 @@ class SeedPlayers extends Database
 
             $queryBuilder->executeStatement();
         } catch(\Exception $e) {
-            error_log($e->getMessage());
+            $this->logger->error($e->getMessage(), ['class' => self::class, 'method' => __METHOD__]);
         }
     }
 }
