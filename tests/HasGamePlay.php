@@ -34,10 +34,7 @@ trait HasGamePlay
     {
         $playerModel = $this->container->build(Player::class);
 
-        return $playerModel->create([
-            'name'  => 'Player ' . $player,
-            'email' => sprintf('player%d@rrh.com', $player)
-        ]);
+        return $playerModel->create(['name'  => 'Player ' . $player]);
     }
 
     private function createTableSeat(int $tableId, int $playerId)

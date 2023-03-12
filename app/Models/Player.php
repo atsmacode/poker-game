@@ -8,7 +8,6 @@ class Player extends Model
 {
     protected string $table = 'players';
     private string   $name;
-    private string   $email;
 
     public function stacks(): array
     {

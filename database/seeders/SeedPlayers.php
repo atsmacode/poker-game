@@ -24,16 +24,13 @@ class SeedPlayers extends Database
             while($inserted < $seats){
                 $seatId = $inserted + 1;
                 $name = 'Player ' . $seatId;
-                $email = 'player' . $seatId . '@rrh.com';
 
                 $queryBuilder = $this->connection->createQueryBuilder();
 
                 $queryBuilder
                     ->insert('players')
                     ->setValue('name', $queryBuilder->createNamedParameter($name))
-                    ->setValue('email', $queryBuilder->createNamedParameter($email))
-                    ->setParameter($queryBuilder->createNamedParameter($name), $name)
-                    ->setParameter($queryBuilder->createNamedParameter($email), $email);
+                    ->setParameter($queryBuilder->createNamedParameter($name), $name);
 
                 $queryBuilder->executeStatement();
 

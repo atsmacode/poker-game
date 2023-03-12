@@ -19,7 +19,6 @@ class CreatePlayers extends Database
 
             $table->addColumn('id', 'integer', ['unsigned' => true])->setAutoincrement(true);
             $table->addColumn('name', 'string', ['length' => 32])->setNotnull(true);
-            $table->addColumn('email', 'string', ['length' => 32])->setNotnull(true);
             $table->setPrimaryKey(['id']);
 
             $dbPlatform = $this->connection->getDatabasePlatform();

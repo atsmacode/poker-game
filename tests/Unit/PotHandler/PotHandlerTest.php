@@ -44,10 +44,7 @@ class PotHandlerTest extends BaseTest
     {
 
         $table  = $this->tableModel->create(['name' => 'Test Table', 'seats' => 3]);
-        $player = $this->playerModel->create([
-            'name' => 'Player 1',
-            'email' => 'player1@rrh.com'
-        ]);
+        $player = $this->playerModel->create(['name' => 'Player 1']);
 
         $stack = $this->stackModel->create([
             'amount' => 1000,

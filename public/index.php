@@ -1,5 +1,6 @@
 <?php
 
+use Atsmacode\PokerGame\Controllers\Player\Controller as PlayerController;
 use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\HandController as PlheHandController;
 use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\PlayerActionController as PlhePlayerActionController;
 use Atsmacode\PokerGame\Controllers\PotLimitOmaha\HandController as PlomHandController;
@@ -19,13 +20,8 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 }
 
-/** The requests are empty, this is here just to test the container dependencies */
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $request = Request::create(
-        uri: '',
-        method: 'POST',
-        content: json_encode([])
-    );
+    $request = Request::createFromGlobals();
 
     if (str_contains($_SERVER['REQUEST_URI'], 'action/plhe')) {
         echo $serviceManager->get(PlhePlayerActionController::class)->action($request);
@@ -33,6 +29,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (str_contains($_SERVER['REQUEST_URI'], 'action/plom')) {
         echo $serviceManager->get(PlomPlayerActionController::class)->action($request);
+    }
+
+    if (str_contains($_SERVER['REQUEST_URI'], '/users')) {
+        echo $serviceManager->get(PlayerController::class)->create($request);
     }
 }
 
