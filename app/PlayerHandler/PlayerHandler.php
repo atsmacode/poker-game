@@ -31,7 +31,7 @@ class PlayerHandler implements PlayerHandlerInterface
                 ? $this->gameState->getWholeCards()[$playerAction['player_id']]
                 : [];
 
-            $playerData[] = [
+            $playerData[$playerAction['table_seat_id']] = [
                 'stack'            => $stack ?? null,
                 'name'             => $playerAction['playerName'],
                 'action_id'        => $playerAction['action_id'],
