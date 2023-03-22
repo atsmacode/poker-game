@@ -45,9 +45,7 @@ abstract class SitController
             if (2 > count($this->tableModel->hasMultiplePlayers($tableId))) {
                 return new Response(json_encode([
                     'message' => 'Waiting for more players to join.',
-                    'players' => array(
-                        $this->setWaitingPlayerData($playerId, $playerSeat->getId())
-                    )
+                    'players' => $this->setWaitingPlayerData($playerId, $playerSeat->getId())
                 ]));
             }
         }
