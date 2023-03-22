@@ -18,7 +18,8 @@ use Atsmacode\PokerGame\Database\Seeders\SeedActions;
 use Atsmacode\PokerGame\Database\Seeders\SeedHandTypes;
 use Atsmacode\PokerGame\Database\Seeders\SeedPlayers;
 use Atsmacode\PokerGame\Database\Seeders\SeedStreets;
-use Atsmacode\PokerGame\Database\Seeders\SeedTables;
+use Atsmacode\PokerGame\Database\Seeders\SeedDevTable;
+use Atsmacode\PokerGame\Database\Seeders\SeedTable;
 
 #[AsCommand(
     name: 'app:build-poker-game',
@@ -41,11 +42,12 @@ class BuildPokerGame extends Migrator
         CreateStacks::class,
         CreatePots::class,
         SeedHandTypes::class,
-        SeedTables::class,
+        SeedDevTable::class,
         SeedPlayers::class,
         SeedStreets::class,
         SeedActions::class,
-        CreatePlayerActionLogs::class
+        CreatePlayerActionLogs::class,
+        SeedTable::class,
     ];
 
     protected static $defaultName = 'app:build-poker-game';

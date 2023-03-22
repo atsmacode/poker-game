@@ -23,7 +23,7 @@ class SeedPlayers extends Database
 
             while($inserted < $seats){
                 $seatId = $inserted + 1;
-                $name = 'Player ' . $seatId;
+                $name   = 'Player ' . $seatId;
 
                 $queryBuilder = $this->connection->createQueryBuilder();
 

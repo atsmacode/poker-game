@@ -4,7 +4,7 @@ namespace Atsmacode\PokerGame\Database\Seeders;
 
 use Atsmacode\Framework\Database\Database;
 
-class SeedTables extends Database
+class SeedDevTable extends Database
 {
     public static array $methods = [
         'seed'
@@ -20,7 +20,6 @@ class SeedTables extends Database
 
     private function createTable(): void
     {
-        /** TODO: only supporting 1 table for the time being. */
         $name  = 'Table 1';
 
         try {
