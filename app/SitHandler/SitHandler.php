@@ -14,8 +14,12 @@ class SitHandler
         private TableSeat $tableSeatModel
     ) {}
 
-    public function sit(int $playerId): GameState
+    public function sit(int $playerId, ?int $thisSeat = null): TableSeat
     {
-        return $this->gameState;
+        $tableSeat = $this->tableSeatModel->getFirstAvailableSeat($thisSeat);
+
+        $tableSeat->update(['player_id' => $playerId]);
+
+        return $tableSeat;
     }
 }

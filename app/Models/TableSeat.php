@@ -137,4 +137,28 @@ class TableSeat extends Model
             $this->logger->error($e->getMessage(), ['class' => self::class, 'method' => __METHOD__]);
         }
     }
+
+    public function getFirstAvailableSeat(?int $thisTable = null): self
+    {
+        try {
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder
+                ->select('*')
+                ->from('table_seats')
+                ->where('table_id != 1')
+                ->andWhere('player_id IS NULL');
+
+            if (null !== $thisTable) { $queryBuilder->andWhere('table_id = ' . $thisTable); }
+
+            $rows = $queryBuilder->executeQuery() ? $queryBuilder->fetchAssociative() : [];
+
+            $this->content = $rows;
+            
+            $this->setModelProperties($rows);
+
+            return $this;
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage(), ['class' => self::class, 'method' => __METHOD__]);
+        }
+    }
 }

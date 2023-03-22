@@ -92,6 +92,8 @@ class DependencyConfig
                         => \Atsmacode\PokerGame\Controllers\PlayerActionControllerFactory::class,
                     \Atsmacode\PokerGame\Controllers\Player\Controller::class
                         => \Atsmacode\PokerGame\Controllers\ControllerFactory::class,
+                    \Atsmacode\PokerGame\SitHandler\SitHandler::class
+                        => \Atsmacode\PokerGame\SitHandler\SitHandlerFactory::class,
                 ],
             ],
         ];

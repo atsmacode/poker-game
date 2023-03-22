@@ -12,11 +12,11 @@ require('../config/container.php');
 
 if($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (str_contains($_SERVER['REQUEST_URI'], 'play/plhe')) {
-        echo $serviceManager->get(PlheSitController::class)->play();
+        echo $serviceManager->get(PlheSitController::class)->sit();
     }
     
     if (str_contains($_SERVER['REQUEST_URI'], 'play/plom')) {
-        echo $serviceManager->get(PlomSitController::class)->play();
+        echo $serviceManager->get(PlomSitController::class)->sit();
     }
 }
 

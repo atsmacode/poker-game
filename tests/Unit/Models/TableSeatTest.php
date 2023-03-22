@@ -48,4 +48,19 @@ class TableSeatTest extends BaseTest
 
         $this->assertEquals($this->gameState->getSeats()[1]['id'], $tableSeat->getId());
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function itCanGetTheFirstAvailableSeat()
+    {
+        $table = $this->tableModel->create(['name' => 'Test Table', 'seats' => 1]);
+
+        $this->tableSeatModel->create(['table_id' => $table->getId()]);
+
+        $tableSeat = $this->tableSeatModel->getFirstAvailableSeat($table->getId());
+
+        $this->assertEquals($table->getId(), $tableSeat->getContent()['table_id']);
+    }
 }
