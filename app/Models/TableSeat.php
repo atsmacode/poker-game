@@ -11,7 +11,7 @@ class TableSeat extends Model
     private ?int     $number;
     private bool     $can_continue;
     private int      $is_dealer;
-    private int      $player_id;
+    private ?int     $player_id;
     private int      $table_id;
     private ?string  $updated_at;
 
@@ -154,7 +154,7 @@ class TableSeat extends Model
 
             $this->content = $rows;
             
-            $this->setModelProperties($rows);
+            $this->setModelProperties([$rows]);
 
             return $this;
         } catch (\Exception $e) {
