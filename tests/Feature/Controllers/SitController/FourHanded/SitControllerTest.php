@@ -1,12 +1,12 @@
 <?php
 
-namespace Atsmacode\PokerGame\Tests\Feature\Controllers\HandController\FourHanded;
+namespace Atsmacode\PokerGame\Tests\Feature\Controllers\SitController\FourHanded;
 
 use Atsmacode\PokerGame\Tests\BaseTest;
 use Atsmacode\PokerGame\Tests\HasActionPosts;
 use Atsmacode\PokerGame\Tests\HasGamePlay;
 
-class HandControllerTest extends BaseTest
+class SitControllerTest extends BaseTest
 {
     use HasGamePlay, HasActionPosts;
 
@@ -23,7 +23,7 @@ class HandControllerTest extends BaseTest
      */
     public function it_can_start_the_game()
     {
-        $response = $this->handControllerResponse();
+        $response = $this->sitControllerResponse();
 
         // The small blind was posted
         $this->assertEquals(25, $response['players'][1]['bet_amount']);
@@ -49,7 +49,7 @@ class HandControllerTest extends BaseTest
      */
     public function the_pre_flop_action_will_initially_be_on_the_player_four()
     {
-        $response = $this->handControllerResponse();
+        $response = $this->sitControllerResponse();
 
         $this->assertTrue($response['players'][3]['action_on']);
     }

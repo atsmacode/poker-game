@@ -2,10 +2,10 @@
 
 namespace Atsmacode\PokerGame\Controllers\PotLimitHoldEm;
 
-use Atsmacode\PokerGame\Controllers\HandController as BaseHandController;
+use Atsmacode\PokerGame\Controllers\SitController as BaseSitController;
 use Atsmacode\PokerGame\Game\PotLimitHoldEm;
 
-class HandController extends BaseHandController
+class SitController extends BaseSitController
 {
     protected string $game = PotLimitHoldEm::class;
 }

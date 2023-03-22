@@ -51,7 +51,7 @@ class GamePlay
         ];
     }
 
-    /** Specific start method to start new hand on page refresh in HandController */
+    /** Specific start method to start new hand on page refresh in SitController */
     public function start($currentDealer = null)
     {
         return $this->response($this->start, $currentDealer);

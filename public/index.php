@@ -1,9 +1,9 @@
 <?php
 
 use Atsmacode\PokerGame\Controllers\Player\Controller as PlayerController;
-use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\Dev\HandController as PlheHandController;
+use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\Dev\SitController as PlheSitController;
 use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\PlayerActionController as PlhePlayerActionController;
-use Atsmacode\PokerGame\Controllers\PotLimitOmaha\Dev\HandController as PlomHandController;
+use Atsmacode\PokerGame\Controllers\PotLimitOmaha\Dev\SitController as PlomSitController;
 use Atsmacode\PokerGame\Controllers\PotLimitOmaha\PlayerActionController as PlomPlayerActionController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -12,11 +12,11 @@ require('../config/container.php');
 
 if($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (str_contains($_SERVER['REQUEST_URI'], 'play/plhe')) {
-        echo $serviceManager->get(PlheHandController::class)->play();
+        echo $serviceManager->get(PlheSitController::class)->play();
     }
     
     if (str_contains($_SERVER['REQUEST_URI'], 'play/plom')) {
-        echo $serviceManager->get(PlomHandController::class)->play();
+        echo $serviceManager->get(PlomSitController::class)->play();
     }
 }
 

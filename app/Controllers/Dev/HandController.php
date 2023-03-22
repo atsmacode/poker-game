@@ -8,7 +8,7 @@ use Atsmacode\PokerGame\Models\Hand;
 use Laminas\ServiceManager\ServiceManager;
 use Symfony\Component\HttpFoundation\Response;
 
-abstract class HandController
+abstract class SitController
 {
     /**
      * To be set to the fully qualified class name of an 

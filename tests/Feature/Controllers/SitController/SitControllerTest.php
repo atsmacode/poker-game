@@ -1,13 +1,13 @@
 <?php
 
-namespace Atsmacode\PokerGame\Tests\Feature\Controllers\HandController;
+namespace Atsmacode\PokerGame\Tests\Feature\Controllers\SitController;
 
-use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\HandController as PotLimitHoldEmHandController;
+use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\SitController as PotLimitHoldEmSitController;
 use Atsmacode\PokerGame\Tests\BaseTest;
 use Atsmacode\PokerGame\Tests\HasActionPosts;
 use Atsmacode\PokerGame\Tests\HasGamePlay;
 
-class HandControllerTest extends BaseTest
+class SitControllerTest extends BaseTest
 {
     use HasGamePlay, HasActionPosts;
 
@@ -26,7 +26,7 @@ class HandControllerTest extends BaseTest
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
-        $response = $this->handControllerResponse();
+        $response = $this->sitControllerResponse();
 
         $this->assertEquals(
             $this->validResponseKeys(),
@@ -40,7 +40,7 @@ class HandControllerTest extends BaseTest
      */
     public function with_blinds_25_and_50_the_pot_size_will_be_75_once_the_hand_is_started()
     {
-        $response = $this->handControllerResponse();
+        $response = $this->sitControllerResponse();
 
         $this->assertEquals(75, $response['pot']);
     }

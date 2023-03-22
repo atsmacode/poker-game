@@ -77,7 +77,7 @@ class GameState
         $this->hand = $hand;
     }
 
-    public function getHand(): Hand
+    public function getHand(): ?Hand
     {
         return $this->hand;
     }

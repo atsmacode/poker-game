@@ -6,7 +6,7 @@ It can be pulled in via composer to be used within a parent front-end package, b
 
 A brief description of how it works is:
 
-- The HandController starts a new Hand
+- The SitController starts a new Hand
 - The PlayerActionController accept a Request containing information on which Hand is being played, and what the last thing to happen was (who was the last to act and what action did they take)
 - This data is passed to the ActionHandler which updates the status of all players accordingly and returns a GameState object containing all the information of the current Hand
 - The GameState is passed to a GamePlay class which decides what should happen next in the Hand

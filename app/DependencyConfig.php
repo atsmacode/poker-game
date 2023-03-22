@@ -78,14 +78,14 @@ class DependencyConfig
                         => \Atsmacode\PokerGame\GameState\GameStateFactory::class,
                     \Atsmacode\PokerGame\ActionHandler\ActionHandler::class
                         => \Atsmacode\PokerGame\ActionHandler\ActionHandlerFactory::class,
-                    \Atsmacode\PokerGame\Controllers\PotLimitHoldEm\HandController::class
-                        => \Atsmacode\PokerGame\Controllers\HandControllerFactory::class,
-                    \Atsmacode\PokerGame\Controllers\PotLimitOmaha\HandController::class
-                        => \Atsmacode\PokerGame\Controllers\HandControllerFactory::class,
-                    \Atsmacode\PokerGame\Controllers\Dev\PotLimitHoldEm\HandController::class
-                        => \Atsmacode\PokerGame\Controllers\HandControllerFactory::class,
-                    \Atsmacode\PokerGame\Controllers\Dev\PotLimitOmaha\HandController::class
-                        => \Atsmacode\PokerGame\Controllers\HandControllerFactory::class,
+                    \Atsmacode\PokerGame\Controllers\PotLimitHoldEm\SitController::class
+                        => \Atsmacode\PokerGame\Controllers\SitControllerFactory::class,
+                    \Atsmacode\PokerGame\Controllers\PotLimitOmaha\SitController::class
+                        => \Atsmacode\PokerGame\Controllers\SitControllerFactory::class,
+                    \Atsmacode\PokerGame\Controllers\Dev\PotLimitHoldEm\SitController::class
+                        => \Atsmacode\PokerGame\Controllers\SitControllerFactory::class,
+                    \Atsmacode\PokerGame\Controllers\Dev\PotLimitOmaha\SitController::class
+                        => \Atsmacode\PokerGame\Controllers\SitControllerFactory::class,
                     \Atsmacode\PokerGame\Controllers\PotLimitHoldEm\PlayerActionController::class
                         => \Atsmacode\PokerGame\Controllers\PlayerActionControllerFactory::class,
                     \Atsmacode\PokerGame\Controllers\PotLimitOmaha\PlayerActionController::class
