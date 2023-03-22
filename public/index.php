@@ -1,9 +1,9 @@
 <?php
 
 use Atsmacode\PokerGame\Controllers\Player\Controller as PlayerController;
-use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\HandController as PlheHandController;
+use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\Dev\HandController as PlheHandController;
 use Atsmacode\PokerGame\Controllers\PotLimitHoldEm\PlayerActionController as PlhePlayerActionController;
-use Atsmacode\PokerGame\Controllers\PotLimitOmaha\HandController as PlomHandController;
+use Atsmacode\PokerGame\Controllers\PotLimitOmaha\Dev\HandController as PlomHandController;
 use Atsmacode\PokerGame\Controllers\PotLimitOmaha\PlayerActionController as PlomPlayerActionController;
 use Symfony\Component\HttpFoundation\Request;
 
