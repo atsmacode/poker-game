@@ -82,6 +82,10 @@ class DependencyConfig
                         => \Atsmacode\PokerGame\Controllers\HandControllerFactory::class,
                     \Atsmacode\PokerGame\Controllers\PotLimitOmaha\HandController::class
                         => \Atsmacode\PokerGame\Controllers\HandControllerFactory::class,
+                    \Atsmacode\PokerGame\Controllers\Dev\PotLimitHoldEm\HandController::class
+                        => \Atsmacode\PokerGame\Controllers\HandControllerFactory::class,
+                    \Atsmacode\PokerGame\Controllers\Dev\PotLimitOmaha\HandController::class
+                        => \Atsmacode\PokerGame\Controllers\HandControllerFactory::class,
                     \Atsmacode\PokerGame\Controllers\PotLimitHoldEm\PlayerActionController::class
                         => \Atsmacode\PokerGame\Controllers\PlayerActionControllerFactory::class,
                     \Atsmacode\PokerGame\Controllers\PotLimitOmaha\PlayerActionController::class
