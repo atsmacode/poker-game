@@ -47,11 +47,14 @@ class SeedTable extends Database
 
             while($inserted < $this->seats){
                 $queryBuilder = $this->connection->createQueryBuilder();
+                $seatNumber   = $inserted + 1;
 
                 $queryBuilder
                     ->insert('table_seats')
                     ->setValue('table_id', $queryBuilder->createNamedParameter($this->tableId))
-                    ->setParameter($queryBuilder->createNamedParameter($this->tableId), $this->tableId);
+                    ->setValue('number', $queryBuilder->createNamedParameter($seatNumber))
+                    ->setParameter($queryBuilder->createNamedParameter($this->tableId), $this->tableId)
+                    ->setParameter($queryBuilder->createNamedParameter($seatNumber), $seatNumber);
 
                 $queryBuilder->executeStatement();
 
