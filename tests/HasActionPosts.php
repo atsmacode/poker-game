@@ -21,6 +21,8 @@ trait HasActionPosts
        
         $response = (new PotLimitHoldEmSitController($this->container))->sit($this->table->getId(), $currentDealer);
 
+        //var_dump(json_decode($response->getContent(), true));
+
         return json_decode($response->getContent(), true);
     }
 

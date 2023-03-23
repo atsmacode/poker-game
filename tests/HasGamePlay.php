@@ -37,13 +37,14 @@ trait HasGamePlay
         return $playerModel->create(['name'  => 'Player ' . $player]);
     }
 
-    private function createTableSeat(int $tableId, int $playerId)
+    private function createTableSeat(int $tableId, int $playerId, int $number)
     {
         $tableSeatModel = $this->container->build(TableSeat::class);
 
         return $tableSeatModel->create([
             'table_id'  => $tableId,
-            'player_id' => $playerId
+            'player_id' => $playerId,
+            'number'    => $number,
         ]);
     }
 
@@ -68,9 +69,9 @@ trait HasGamePlay
         $this->playerTwo = $this->createPlayer(2);
         $this->playerThree = $this->createPlayer(3);
 
-        $this->tableSeatOne   = $this->createTableSeat($this->table->getId(), $this->playerOne->getId());
-        $this->tableSeatTwo   = $this->createTableSeat($this->table->getId(), $this->playerTwo->getId());
-        $this->tableSeatThree = $this->createTableSeat($this->table->getId(), $this->playerThree->getId());
+        $this->tableSeatOne   = $this->createTableSeat($this->table->getId(), $this->playerOne->getId(), 1);
+        $this->tableSeatTwo   = $this->createTableSeat($this->table->getId(), $this->playerTwo->getId(), 2);
+        $this->tableSeatThree = $this->createTableSeat($this->table->getId(), $this->playerThree->getId(), 3);
 
         $this->setGamePlay();
     }
@@ -85,10 +86,10 @@ trait HasGamePlay
         $this->playerThree = $this->createPlayer(3);
         $this->playerFour = $this->createPlayer(4);
 
-        $this->tableSeatOne   = $this->createTableSeat($this->table->getId(), $this->playerOne->getId());
-        $this->tableSeatTwo   = $this->createTableSeat($this->table->getId(), $this->playerTwo->getId());
-        $this->tableSeatThree = $this->createTableSeat($this->table->getId(), $this->playerThree->getId());
-        $this->tableSeatFour  = $this->createTableSeat($this->table->getId(), $this->playerFour->getId());
+        $this->tableSeatOne   = $this->createTableSeat($this->table->getId(), $this->playerOne->getId(), 1);
+        $this->tableSeatTwo   = $this->createTableSeat($this->table->getId(), $this->playerTwo->getId(), 2);
+        $this->tableSeatThree = $this->createTableSeat($this->table->getId(), $this->playerThree->getId(), 3);
+        $this->tableSeatFour  = $this->createTableSeat($this->table->getId(), $this->playerFour->getId(), 4);
 
         $this->setGamePlay();
     }
@@ -105,12 +106,12 @@ trait HasGamePlay
         $this->playerFive = $this->createPlayer(5);
         $this->playerSix = $this->createPlayer(6);
 
-        $this->tableSeatOne   = $this->createTableSeat($this->table->getId(), $this->playerOne->getId());
-        $this->tableSeatTwo   = $this->createTableSeat($this->table->getId(), $this->playerTwo->getId());
-        $this->tableSeatThree = $this->createTableSeat($this->table->getId(), $this->playerThree->getId());
-        $this->tableSeatFour  = $this->createTableSeat($this->table->getId(), $this->playerFour->getId());
-        $this->tableSeatFive  = $this->createTableSeat($this->table->getId(), $this->playerFive->getId());
-        $this->tableSeatSix   = $this->createTableSeat($this->table->getId(), $this->playerSix->getId());
+        $this->tableSeatOne   = $this->createTableSeat($this->table->getId(), $this->playerOne->getId(), 1);
+        $this->tableSeatTwo   = $this->createTableSeat($this->table->getId(), $this->playerTwo->getId(), 2);
+        $this->tableSeatThree = $this->createTableSeat($this->table->getId(), $this->playerThree->getId(), 3);
+        $this->tableSeatFour  = $this->createTableSeat($this->table->getId(), $this->playerFour->getId(), 4);
+        $this->tableSeatFive  = $this->createTableSeat($this->table->getId(), $this->playerFive->getId(), 5);
+        $this->tableSeatSix   = $this->createTableSeat($this->table->getId(), $this->playerSix->getId(), 6);
 
         $this->setGamePlay();
     }

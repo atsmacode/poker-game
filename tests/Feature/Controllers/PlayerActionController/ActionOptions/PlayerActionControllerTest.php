@@ -29,11 +29,11 @@ class PlayerActionControllerTest extends BaseTest
         $request  = $this->setPlayerFourRaisesPost();
         $response = $this->actionControllerResponse($request);
 
-        $this->assertTrue($response['players'][0]['action_on']);
+        $this->assertTrue($response['players'][1]['action_on']);
 
-        $this->assertContains(Action::FOLD, $response['players'][0]['availableOptions']);
-        $this->assertContains(Action::CALL, $response['players'][0]['availableOptions']);
-        $this->assertContains(Action::RAISE, $response['players'][0]['availableOptions']);
+        $this->assertContains(Action::FOLD, $response['players'][1]['availableOptions']);
+        $this->assertContains(Action::CALL, $response['players'][1]['availableOptions']);
+        $this->assertContains(Action::RAISE, $response['players'][1]['availableOptions']);
     }
 
     /**
@@ -49,11 +49,11 @@ class PlayerActionControllerTest extends BaseTest
         $request  = $this->setPlayerOneFoldsPost();
         $response = $this->actionControllerResponse($request);
 
-        $this->assertTrue($response['players'][1]['action_on']);
+        $this->assertTrue($response['players'][2]['action_on']);
 
-        $this->assertContains(Action::FOLD, $response['players'][1]['availableOptions']);
-        $this->assertContains(Action::CALL, $response['players'][1]['availableOptions']);
-        $this->assertContains(Action::RAISE, $response['players'][1]['availableOptions']);
+        $this->assertContains(Action::FOLD, $response['players'][2]['availableOptions']);
+        $this->assertContains(Action::CALL, $response['players'][2]['availableOptions']);
+        $this->assertContains(Action::RAISE, $response['players'][2]['availableOptions']);
     }
 
     /**
@@ -67,8 +67,8 @@ class PlayerActionControllerTest extends BaseTest
         $request  = $this->setPlayerFourFoldsPost();
         $response = $this->actionControllerResponse($request);
 
-        $this->assertTrue($response['players'][0]['action_on']);
-        $this->assertEmpty($response['players'][3]['availableOptions']);
+        $this->assertTrue($response['players'][1]['action_on']);
+        $this->assertEmpty($response['players'][4]['availableOptions']);
     }
 
     /**
@@ -82,11 +82,11 @@ class PlayerActionControllerTest extends BaseTest
         $request  = $this->setPlayerTwoCallsPost();
         $response = $this->actionControllerResponse($request);
 
-        $this->assertTrue($response['players'][2]['action_on']);
+        $this->assertTrue($response['players'][3]['action_on']);
 
-        $this->assertContains(Action::FOLD, $response['players'][2]['availableOptions']);
-        $this->assertContains(Action::CHECK, $response['players'][2]['availableOptions']);
-        $this->assertContains(Action::RAISE, $response['players'][2]['availableOptions']);
+        $this->assertContains(Action::FOLD, $response['players'][3]['availableOptions']);
+        $this->assertContains(Action::CHECK, $response['players'][3]['availableOptions']);
+        $this->assertContains(Action::RAISE, $response['players'][3]['availableOptions']);
     }
     /**
      * @test
@@ -102,11 +102,11 @@ class PlayerActionControllerTest extends BaseTest
         $request  = $this->setPlayerTwoFoldsPost();
         $response = $this->actionControllerResponse($request);
 
-        $this->assertTrue($response['players'][2]['action_on']);
+        $this->assertTrue($response['players'][3]['action_on']);
 
-        $this->assertContains(Action::FOLD, $response['players'][2]['availableOptions']);
-        $this->assertContains(Action::CHECK, $response['players'][2]['availableOptions']);
-        $this->assertContains(Action::RAISE, $response['players'][2]['availableOptions']);
+        $this->assertContains(Action::FOLD, $response['players'][3]['availableOptions']);
+        $this->assertContains(Action::CHECK, $response['players'][3]['availableOptions']);
+        $this->assertContains(Action::RAISE, $response['players'][3]['availableOptions']);
     }
 
     /**
@@ -121,11 +121,11 @@ class PlayerActionControllerTest extends BaseTest
         $request  = $this->setPlayerFourCallsPost();
         $response = $this->actionControllerResponse($request);
 
-        $this->assertTrue($response['players'][0]['action_on']);
+        $this->assertTrue($response['players'][1]['action_on']);
 
-        $this->assertContains(Action::FOLD, $response['players'][0]['availableOptions']);
-        $this->assertContains(Action::CALL, $response['players'][0]['availableOptions']);
-        $this->assertContains(Action::RAISE, $response['players'][0]['availableOptions']);
+        $this->assertContains(Action::FOLD, $response['players'][1]['availableOptions']);
+        $this->assertContains(Action::CALL, $response['players'][1]['availableOptions']);
+        $this->assertContains(Action::RAISE, $response['players'][1]['availableOptions']);
     }
 
     /**
@@ -141,11 +141,11 @@ class PlayerActionControllerTest extends BaseTest
         $request  = $this->givenActionsMeanNewStreetIsDealt();
         $response = $this->actionControllerResponse($request);
 
-        $this->assertTrue($response['players'][2]['action_on']);
+        $this->assertTrue($response['players'][3]['action_on']);
 
-        $this->assertContains(Action::FOLD, $response['players'][2]['availableOptions']);
-        $this->assertContains(Action::CHECK, $response['players'][2]['availableOptions']);
-        $this->assertContains(Action::BET, $response['players'][2]['availableOptions']);
+        $this->assertContains(Action::FOLD, $response['players'][3]['availableOptions']);
+        $this->assertContains(Action::CHECK, $response['players'][3]['availableOptions']);
+        $this->assertContains(Action::BET, $response['players'][3]['availableOptions']);
     }
 
     private function givenActionsMeanNewStreetIsDealt()

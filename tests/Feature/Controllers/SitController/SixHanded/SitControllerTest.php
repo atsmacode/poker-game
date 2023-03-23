@@ -25,7 +25,7 @@ class SitControllerTest extends BaseTest
     {
         $response = $this->sitControllerResponse();
 
-        $this->assertTrue($response['players'][3]['action_on']);
+        $this->assertTrue($response['players'][4]['action_on']);
     }
 
     /**
@@ -38,8 +38,8 @@ class SitControllerTest extends BaseTest
 
         $response = $this->sitControllerResponse($currentDealer);
 
-        $this->assertEquals(1, $response['players'][5]['small_blind']);
-        $this->assertEquals(1, $response['players'][0]['big_blind']);
+        $this->assertEquals(1, $response['players'][6]['small_blind']);
+        $this->assertEquals(1, $response['players'][1]['big_blind']);
     }
 
     /**
@@ -52,7 +52,7 @@ class SitControllerTest extends BaseTest
 
         $response = $this->sitControllerResponse($currentDealer);
 
-        $this->assertEquals(1, $response['players'][0]['small_blind']);
-        $this->assertEquals(1, $response['players'][1]['big_blind']);
+        $this->assertEquals(1, $response['players'][1]['small_blind']);
+        $this->assertEquals(1, $response['players'][2]['big_blind']);
     }
 }

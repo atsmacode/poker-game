@@ -28,7 +28,7 @@ class PlayerActionControllerTest extends BaseTest
         $request  = $this->setPlayerFourCallsPost();
         $response = $this->actionControllerResponse($request);
 
-        $this->assertEquals(1, $response['players'][3]['can_continue']);
+        $this->assertEquals(1, $response['players'][4]['can_continue']);
     }
 
     /**
@@ -45,7 +45,7 @@ class PlayerActionControllerTest extends BaseTest
         $request  = $this->setPlayerFourFoldsPost();
         $response = $this->actionControllerResponse($request);
 
-        $this->assertEquals(0, $response['players'][3]['can_continue']);
+        $this->assertEquals(0, $response['players'][4]['can_continue']);
     }
 
     /**
@@ -85,7 +85,7 @@ class PlayerActionControllerTest extends BaseTest
         $response = $this->actionControllerResponse($request);
 
         $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
-        $this->assertEquals(1, $response['players'][2]['can_continue']);
+        $this->assertEquals(1, $response['players'][3]['can_continue']);
         $this->assertEquals($this->playerThree->getId(), $response['winner']['player']['player_id']);
     }
 
@@ -105,7 +105,7 @@ class PlayerActionControllerTest extends BaseTest
         // We are still on the pre-flop action
         $this->assertCount(1, $this->gameState->updateHandStreets()->getHandStreets());
 
-        $this->assertTrue($response['players'][3]['action_on']);
+        $this->assertTrue($response['players'][4]['action_on']);
     }
 
     /**
@@ -125,7 +125,7 @@ class PlayerActionControllerTest extends BaseTest
 
         $this->assertCount(2, $this->handStreetModel->find(['hand_id' => $this->gameState->handId()])->getContent());
 
-        $this->assertTrue($response['players'][2]['action_on']);
+        $this->assertTrue($response['players'][3]['action_on']);
     }
 
     /**
@@ -143,8 +143,8 @@ class PlayerActionControllerTest extends BaseTest
         $request  = $this->setPost();
         $response = $this->actionControllerResponse($request);
 
-        $this->assertEquals(1, $response['players'][0]['small_blind']);
-        $this->assertEquals(1, $response['players'][1]['big_blind']);
+        $this->assertEquals(1, $response['players'][1]['small_blind']);
+        $this->assertEquals(1, $response['players'][2]['big_blind']);
     }
 
     /**
@@ -160,7 +160,7 @@ class PlayerActionControllerTest extends BaseTest
         $request  = $this->givenActionsMeanNewStreetIsDealt();
         $response = $this->actionControllerResponse($request);
 
-        $this->assertTrue($response['players'][2]['action_on']);
+        $this->assertTrue($response['players'][3]['action_on']);
     }
 
     private function givenBigBlindRaisesPreFlopCaller()
