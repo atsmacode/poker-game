@@ -18,7 +18,8 @@ class Table extends Model
             $queryBuilder
                 ->select('*')
                 ->from('table_seats', 'ts')
-                ->where('table_id = ' . $queryBuilder->createNamedParameter($tableId));
+                ->where('table_id = ' . $queryBuilder->createNamedParameter($tableId))
+                ->andWhere('player_id IS NOT NULL');
 
             return $queryBuilder->executeStatement() ? $queryBuilder->fetchAllAssociative() : [];
         } catch (\Exception $e) {
