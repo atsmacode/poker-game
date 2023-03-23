@@ -16,6 +16,10 @@ class SitHandler
 
     public function sit(int $playerId, ?int $thisSeat = null): TableSeat
     {
+        $currentSeat = $this->tableSeatModel->getCurrentPlayerSeat($playerId);
+
+        if (null !== $currentSeat) { return $currentSeat; }
+
         $tableSeat = $this->tableSeatModel->getFirstAvailableSeat($thisSeat);
 
         $tableSeat->update(['player_id' => $playerId]);

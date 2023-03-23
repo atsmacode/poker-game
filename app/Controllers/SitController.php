@@ -34,7 +34,7 @@ abstract class SitController
     ): Response {
         if (null !== $playerId) {
             $playerSeat = $this->sitHandler->sit($playerId);
-            $tableId    = $playerSeat->getId();
+            $tableId    = $playerSeat->getTableId();
 
             if (2 > count($this->tableModel->hasMultiplePlayers($tableId))) {
                 return new Response(json_encode([
