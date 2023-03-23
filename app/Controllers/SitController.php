@@ -13,13 +13,7 @@ use Laminas\ServiceManager\ServiceManager;
 use Symfony\Component\HttpFoundation\Response;
 
 abstract class SitController
-{ 
-    /**
-     * To be set to the fully qualified class name of an 
-     * implementation of the Game interface.
-     */
-    protected string $game = '';
-
+{
     private Hand       $handModel;
     private Table      $tableModel;
     private SitHandler $sitHandler;
