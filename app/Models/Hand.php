@@ -142,7 +142,8 @@ class Hand extends Model
                     'ts.id table_seat_id',
                     's.amount stack',
                     'a.name actionName',
-                    'p.name playerName'
+                    'p.name playerName',
+                    'ts.number seat_number'
                 )
                 ->from('table_seats', 'ts')
                 ->leftJoin('ts', 'player_actions', 'pa', 'ts.id = pa.table_seat_id')

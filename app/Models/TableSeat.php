@@ -25,6 +25,11 @@ class TableSeat extends Model
         return $this->player_id;
     }
 
+    public function getNumber(): int
+    {
+        return $this->number;
+    }
+
     public function playerAfterDealer(int $handId, int $dealer): self
     {
         try {

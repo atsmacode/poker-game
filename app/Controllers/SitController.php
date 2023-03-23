@@ -45,7 +45,7 @@ abstract class SitController
             if (2 > count($this->tableModel->hasMultiplePlayers($tableId))) {
                 return new Response(json_encode([
                     'message' => 'Waiting for more players to join.',
-                    'players' => $this->setWaitingPlayerData($playerId, $playerSeat->getId())
+                    'players' => $this->setWaitingPlayerData($playerId, $playerSeat->getId(), $playerSeat->getNumber())
                 ]));
             }
         }
@@ -67,12 +67,12 @@ abstract class SitController
         ]));
     }
 
-    private function setWaitingPlayerData(int $playerId, int $tableSeatId,)
+    private function setWaitingPlayerData(int $playerId, int $tableSeatId, int $seatNumber)
     {
         $playerName =  $this->playerModel->find(['id' => $playerId])->getName();
 
         return array(
-            $tableSeatId => [
+            $seatNumber => [
                 'stack'            => null,
                 'name'             => $playerName,
                 'action_id'        => null,
