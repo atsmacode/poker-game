@@ -13,7 +13,9 @@ class GamePlayTest extends BaseTest
     {
         parent::setUp();
 
-        $this->isThreeHanded();
+        $this->isThreeHanded()
+            ->setHand()
+            ->setGamePlay();
     }
 
     /** @test */

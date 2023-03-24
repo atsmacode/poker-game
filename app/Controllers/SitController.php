@@ -44,13 +44,22 @@ abstract class SitController
             }
         }
 
-        $hand = $this->handModel->create(['table_id' => $tableId ?? 1]);
+        $currentHand         = $this->handModel->find(['table_id' => $tableId, 'completed_on' => null]);
+        $currentHandIsActive = !empty($currentHand->getContent());
 
+        $hand = $currentHandIsActive
+            ? $currentHand
+            : $this->handModel->create(['table_id' => $tableId ?? 1]);
+
+        $gameState       = $this->container->build(GameState::class, ['hand' => $hand]);
         $gamePlayService = $this->container->build(GamePlay::class, [
             'game'      => $this->container->get($this->game),
-            'gameState' => $this->container->build(GameState::class, ['hand' => $hand])
+            'gameState' => $gameState
         ]);
-        $gamePlay = $gamePlayService->start($currentDealer ?? null);
+
+        $gamePlay = $currentHandIsActive
+            ? $gamePlayService->play($gameState)
+            : $gamePlayService->start($currentDealer);
 
         return new Response(json_encode([
             'deck'           => $gamePlay['deck'],

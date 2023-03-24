@@ -15,7 +15,9 @@ class PlayerActionControllerTest extends BaseTest
     {
         parent::setUp();
 
-        $this->isFourHanded();
+        $this->isFourHanded()
+            ->setHand()
+            ->setGamePlay();
     }
 
     /**

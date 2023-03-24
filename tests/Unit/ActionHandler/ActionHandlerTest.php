@@ -19,7 +19,9 @@ class ActionHandlerTest extends BaseTest
     {
         parent::setUp();
 
-        $this->isThreeHanded();
+        $this->isThreeHanded()
+            ->setHand()
+            ->setGamePlay();
 
         $this->potModel      = $this->container->build(Pot::class);
         $this->actionHandler = $this->container->build(

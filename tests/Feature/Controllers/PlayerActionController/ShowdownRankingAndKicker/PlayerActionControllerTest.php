@@ -25,10 +25,13 @@ class PlayerActionControllerTest extends BaseTest
     {
         parent::setUp();
 
-        $this->isThreeHanded();
-
         $this->start               = $this->container->build(Start::class);
         $this->handStreetCardModel = $this->container->build(HandStreetCard::class);
+
+        $this->isThreeHanded()
+            ->setHand()
+            ->setGamePlay()
+            ->givenTheHandHasStarted();
     }
 
    /**
@@ -37,8 +40,6 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function highCardKingBeatsHighCardQueen()
     {
-        $this->givenTheHandHasStarted();
-
         $wholeCards = [
             [
                 'player'  => $this->playerThree,
@@ -91,8 +92,6 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function aceKingBeatsAceQueen()
     {
-        $this->givenTheHandHasStarted();
-
         $wholeCards = [
             [
                 'player'  => $this->playerThree,
@@ -145,8 +144,6 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function jacksBeatTens()
     {
-        $this->givenTheHandHasStarted();
-
         $wholeCards = [
             [
                 'player'  => $this->playerThree,
@@ -199,8 +196,6 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function threeSevensBeatsThreeSixes()
     {
-        $this->givenTheHandHasStarted();
-
         $wholeCards = [
             [
                 'player'  => $this->playerThree,
@@ -253,8 +248,6 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function kingHighStraightBeatsQueenHighStraight()
     {
-        $this->givenTheHandHasStarted();
-
         $wholeCards = [
             [
                 'player'  => $this->playerThree,
@@ -307,8 +300,6 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function aceHighFlushBeatsQueenHighFlush()
     {
-        $this->givenTheHandHasStarted();
-
         $wholeCards = [
             [
                 'player'  => $this->playerThree,
@@ -361,8 +352,6 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function aceHighFlushWithKingKickerBeatsAceHighFlushWithQueenKicker()
     {
-        $this->givenTheHandHasStarted();
-
         $wholeCards = [
             [
                 'player'  => $this->playerThree,
@@ -415,8 +404,6 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function tensFullOfFoursBeatsTensFullOfThrees()
     {
-        $this->givenTheHandHasStarted();
-
         $wholeCards = [
             [
                 'player' => $this->playerThree,
@@ -469,8 +456,6 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function fourTensBeatsFourNines()
     {
-        $this->givenTheHandHasStarted();
-
         $wholeCards = [
             [
                 'player' => $this->playerThree,
@@ -523,8 +508,6 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function kingHighStraightFlushBeatsQueenHighStraightFlush()
     {
-        $this->givenTheHandHasStarted();
-
         $wholeCards = [
             [
                 'player' => $this->playerThree,
@@ -577,8 +560,6 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function eightHighStraightBeatsTwoPlayersWithSevenHighStraight()
     {
-        $this->givenTheHandHasStarted();
-
         $wholeCards = [
             [
                 'player'  => $this->playerThree,
@@ -662,5 +643,7 @@ class PlayerActionControllerTest extends BaseTest
             ->initiatePlayerStacks()
             ->setDealerAndBlindSeats()
             ->getGameState();
+
+        return $this;
     }
 }

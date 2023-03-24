@@ -26,10 +26,13 @@ class PlayerActionControllerTest extends BaseTest
     {
         parent::setUp();
 
-        $this->isThreeHanded();
-
         $this->start               = $this->container->build(Start::class);
         $this->handStreetCardModel = $this->container->build(HandStreetCard::class);
+
+        $this->isThreeHanded()
+            ->setHand()
+            ->setGamePlay()
+            ->givenTheHandHasStarted();
     }
 
    /**
@@ -37,9 +40,7 @@ class PlayerActionControllerTest extends BaseTest
      * @return void
      */
     public function pairBeatsHighCard()
-    { 
-        $this->givenTheHandHasStarted();
-
+    {
         $wholeCards = [
             [
                 'player' => $this->playerThree,
@@ -92,8 +93,6 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function twoPairBeatsPair()
     {
-        $this->givenTheHandHasStarted();
-
         $wholeCards = [
             [
                 'player' => $this->playerThree,
@@ -146,8 +145,6 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function tripsBeatsTwoPair()
     {
-        $this->givenTheHandHasStarted();
-
         $wholeCards = [
             [
                 'player' => $this->playerThree,
@@ -200,8 +197,6 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function straightBeatsTrips()
     {
-        $this->givenTheHandHasStarted();
-
         $wholeCards = [
             [
                 'player' => $this->playerThree,
@@ -254,8 +249,6 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function flushBeatsStraight()
     {
-        $this->givenTheHandHasStarted();
-
         $wholeCards = [
             [
                 'player' => $this->playerThree,
@@ -308,8 +301,6 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function fullHouseBeatsFlush()
     {
-        $this->givenTheHandHasStarted();
-
         $wholeCards = [
             [
                 'player' => $this->playerThree,
@@ -362,8 +353,6 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function quadsBeatsFullHouse()
     {
-        $this->givenTheHandHasStarted();
-
         $wholeCards = [
             [
                 'player' => $this->playerThree,
@@ -416,8 +405,6 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function straightFlushBeatsQuads()
     {
-        $this->givenTheHandHasStarted();
-
         $wholeCards = [
             [
                 'player' => $this->playerThree,
@@ -470,8 +457,6 @@ class PlayerActionControllerTest extends BaseTest
      */
     public function royalFlushBeatsStraightFlush()
     {
-        $this->givenTheHandHasStarted();
-
         $wholeCards = [
             [
                 'player' => $this->playerThree,

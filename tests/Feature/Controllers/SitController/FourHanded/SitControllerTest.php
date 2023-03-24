@@ -14,7 +14,9 @@ class SitControllerTest extends BaseTest
     {
         parent::setUp();
 
-        $this->isFourHanded();
+        $this->isFourHanded()
+            ->setGamePlay();
+        
     }
 
     /**

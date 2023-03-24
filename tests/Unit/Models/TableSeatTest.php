@@ -13,7 +13,9 @@ class TableSeatTest extends BaseTest
     {
         parent::setUp();
 
-        $this->isThreeHanded();
+        $this->isThreeHanded()
+            ->sethand()
+            ->setGamePlay();
     }
 
     /**

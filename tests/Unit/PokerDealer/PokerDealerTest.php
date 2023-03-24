@@ -15,7 +15,9 @@ class PokerDealerTest extends BaseTest
     {
         parent::setUp();
 
-        $this->isThreeHanded();
+        $this->isThreeHanded()
+            ->setHand()
+            ->setGamePlay();
     }
 
     /**
@@ -25,7 +27,6 @@ class PokerDealerTest extends BaseTest
      */
     public function it_can_deal_cards_to_multiple_players_at_a_table()
     {
-
         foreach($this->table->getSeats() as $tableSeat){
             $this->assertCount(0, $this->playerModel->getWholeCards($this->hand->getId(), $tableSeat['player_id']));
         }
@@ -43,7 +44,6 @@ class PokerDealerTest extends BaseTest
      */
     public function it_can_deal_a_street_card()
     {
-
         $handStreet = $this->handStreetModel->create([
             'street_id' => $this->streetModel->find(['name' => 'Flop'])->getId(),
             'hand_id'   => $this->handModel->create(['table_id' => $this->table->getId()])->getId()

@@ -15,7 +15,7 @@ class SitControllerTest extends BaseTest
     {
         parent::setUp();
 
-        $this->isSixHanded();
+        $this->isSixHanded()->setGamePlay();
     }
 
     /**
