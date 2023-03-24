@@ -76,6 +76,19 @@ trait HasGamePlay
         return $this;
     }
 
+    private function isHeadsUp()
+    {
+        $this->setTable(2);
+
+        $this->playerOne = $this->createPlayer(1);
+        $this->playerTwo = $this->createPlayer(2);
+
+        $this->tableSeatOne   = $this->createTableSeat($this->table->getId(), $this->playerOne->getId(), 1);
+        $this->tableSeatTwo   = $this->createTableSeat($this->table->getId(), $this->playerTwo->getId(), 2);
+
+        return $this;
+    }
+
     private function isThreeHanded()
     {
         $this->setTable(3);
