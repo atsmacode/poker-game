@@ -4,6 +4,7 @@ namespace Atsmacode\PokerGame\Console\Commands;
 
 use Atsmacode\Framework\Console\Commands\Migrator;
 use Atsmacode\PokerGame\Database\Migrations\CreateActions;
+use Atsmacode\PokerGame\Database\Migrations\CreateDecks;
 use Atsmacode\PokerGame\Database\Migrations\CreateHands;
 use Atsmacode\PokerGame\Database\Migrations\CreateHandTypes;
 use Atsmacode\PokerGame\Database\Migrations\CreatePlayerActionLogs;
@@ -41,6 +42,7 @@ class BuildPokerGame extends Migrator
         CreatePlayerActions::class,
         CreateStacks::class,
         CreatePots::class,
+        CreateDecks::class,
         SeedHandTypes::class,
         SeedDevTable::class,
         SeedPlayers::class,
