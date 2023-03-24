@@ -134,9 +134,11 @@ class GameState
         $this->latestAction = $playerAction;
     }
 
-    public function getLatestAction(): ?PlayerAction
+    public function getLatestAction(): PlayerAction
     {
-        return $this->latestAction ?? null;
+        return isset($this->latestAction)
+            ? $this->latestAction
+            : $this->gameData->getLatestAction($this->handId);
     }
 
     public function setDeck(array $deck): void

@@ -13,18 +13,18 @@ class SitControllerTest extends BaseTest
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->isHeadsUp()
-            ->setGamePlay();
     }
 
     /**
      * @test
      * @return void
      */
-    public function it_can_start_the_game()
+    public function itCanStartTheGame()
     {
-        $response = $this->sitControllerResponse(null);
+        $this->isHeadsUp()
+            ->setGamePlay();
+        
+        $response = $this->sitControllerResponse();
 
         // The small blind was posted by the dealer
         $this->assertEquals(25, $response['players'][1]['bet_amount']);
@@ -45,8 +45,28 @@ class SitControllerTest extends BaseTest
      * @test
      * @return void
      */
-    public function the_pre_flop_action_will_initially_be_on_the_dealer()
+    public function thePreFlopActionWillInitiallyBeOnTheDealer()
     {
+        $this->isHeadsUp()
+            ->setGamePlay();
+
+        $response = $this->sitControllerResponse();
+
+        $this->assertTrue($response['players'][1]['action_on']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function itCanResumeTheGame()
+    {
+        $this->isHeadsUp()
+            ->setHand()
+            ->setGamePlay();
+
+        $this->gamePlay->start();
+        
         $response = $this->sitControllerResponse();
 
         $this->assertTrue($response['players'][1]['action_on']);

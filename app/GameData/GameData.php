@@ -5,6 +5,7 @@ namespace Atsmacode\PokerGame\GameData;
 use Atsmacode\PokerGame\Models\Hand;
 use Atsmacode\PokerGame\Models\HandStreetCard;
 use Atsmacode\PokerGame\Models\Player;
+use Atsmacode\PokerGame\Models\PlayerAction;
 use Atsmacode\PokerGame\Models\Table;
 use Atsmacode\PokerGame\Models\TableSeat;
 
@@ -18,7 +19,8 @@ class GameData
         private Table          $tableModel,
         private HandStreetCard $handStreetCardModel,
         private Player         $playerModel,
-        private TableSeat      $tableSeatModel
+        private TableSeat      $tableSeatModel,
+        private PlayerAction   $playerActionModel
     ) {}
 
     public function getSeats(int $tableId): array
@@ -56,5 +58,10 @@ class GameData
     public function getBigBlind(int $handId): array
     {
         return $this->tableSeatModel->getBigBlind($handId);
+    }
+
+    public function getLatestAction(int $handId): PlayerAction
+    {
+        return $this->playerActionModel->getLatestAction($handId);
     }
 }
