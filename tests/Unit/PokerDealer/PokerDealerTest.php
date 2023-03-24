@@ -88,7 +88,7 @@ class PokerDealerTest extends BaseTest
         $this->pokerDealer->setDeck()->saveDeck($this->hand->getId());
 
         $dealerDeck = $this->pokerDealer->getDeck();
-        $savedDeck  = $this->deckModel->find(['hand_id' => $this->hand->getId()]);
+        $savedDeck  = $this->pokerDealer->setSavedDeck($this->hand->getId());
 
         $this->assertSame($dealerDeck, $savedDeck->getDeck());
     }

@@ -44,8 +44,7 @@ abstract class PlayerActionController
 
         $gamePlayService = $this->container->build(GamePlay::class, [
             'game'      => $this->container->get($this->game),
-            'gameState' => $gameState,
-            'deck'      => $requestBody['deck'],
+            'gameState' => $gameState
         ]);
         $gamePlay = $gamePlayService->play($gameState);
 

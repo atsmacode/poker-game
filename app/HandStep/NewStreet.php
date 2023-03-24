@@ -37,7 +37,7 @@ class NewStreet extends HandStep
 
         $this->gameState->getGameDealer()->dealStreetCards(
             $handStreet, $this->gameState->getGame()->streets[$handStreetCount + 1]['community_cards']
-        );
+        )->saveDeck($this->gameState->getHand()->getId());
 
         $this->updatePlayerStatusesOnNewStreet($handStreet->getId());
         $this->gameState->updateHandStreets();

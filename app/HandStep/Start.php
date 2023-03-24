@@ -29,17 +29,22 @@ class Start extends HandStep
     public function handle(GameState $gameState, TableSeat $currentDealer = null): GameState
     {
         $this->gameState = $gameState;
+        $handId          = $this->gameState->getHand()->getId();
 
         $this->initiateStreetActions()->initiatePlayerStacks()->setDealerAndBlindSeats($currentDealer);
         $this->gameState->setPlayers();
-        $this->gameState->getGameDealer()->setDeck()->shuffle();
+
+        $this->gameState->getGameDealer()
+            ->setDeck()
+            ->shuffle()
+            ->saveDeck($handId);
 
         if($this->gameState->getGame()->streets[1]['whole_cards']){
             $this->gameState->getGameDealer()->dealTo(
                 $this->gameState->getSeats(),
                 $this->gameState->getGame()->streets[1]['whole_cards'],
-                $this->gameState->getHand()->getId(),
-            );
+                $handId
+            )->saveDeck($handId);
         }
 
         return $this->gameState;

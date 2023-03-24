@@ -5,6 +5,7 @@ namespace Atsmacode\PokerGame\Dealer;
 use Atsmacode\PokerGame\Models\HandStreetCard;
 use Atsmacode\PokerGame\Models\WholeCard;
 use Atsmacode\CardGames\Dealer\Dealer;
+use Atsmacode\CardGames\Deck\Deck as BaseDeck;
 use Atsmacode\PokerGame\Models\Deck;
 
 class PokerDealer extends Dealer
@@ -76,5 +77,19 @@ class PokerDealer extends Dealer
             'hand_id' => $handId,
             'cards'   => json_encode($this->deck)
         ]);
+    }
+
+    public function setSavedDeck(int $handId): self
+    {
+        $savedDeck    = $this->deckModel->find(['hand_id' => $handId]);
+        $hasSavedDeck = !empty($savedDeck->getContent());
+
+        if ($hasSavedDeck) {
+            $this->deck = $savedDeck->getDeck();
+        } else {
+            $this->deck = (new BaseDeck())->cards;
+        }
+
+        return $this;
     }
 }
