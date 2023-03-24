@@ -5,12 +5,14 @@ namespace Atsmacode\PokerGame\Dealer;
 use Atsmacode\PokerGame\Models\HandStreetCard;
 use Atsmacode\PokerGame\Models\WholeCard;
 use Atsmacode\CardGames\Dealer\Dealer;
+use Atsmacode\PokerGame\Models\Deck;
 
 class PokerDealer extends Dealer
 {
     public function __construct(
         private WholeCard      $wholeCardModel,
-        private HandStreetCard $handStreetCardModel
+        private HandStreetCard $handStreetCardModel,
+        private Deck           $deckModel
     ) {}
 
     public function dealTo(array $players, int $cardCount, ?int $handId)
@@ -66,5 +68,13 @@ class PokerDealer extends Dealer
         ]);
 
         return $this;
+    }
+
+    public function saveDeck(int $handId): void
+    {
+        $this->deckModel->create([
+            'hand_id' => $handId,
+            'cards'   => json_encode($this->deck)
+        ]);
     }
 }

@@ -56,6 +56,8 @@ class DependencyConfig
                         => \Atsmacode\Framework\Models\ModelFactory::class,
                     \Atsmacode\PokerGame\Models\HandType::class
                         => \Atsmacode\Framework\Models\ModelFactory::class,
+                    \Atsmacode\PokerGame\Models\Deck::class
+                        => \Atsmacode\Framework\Models\ModelFactory::class,
                     \Atsmacode\PokerGame\PlayerHandler\PlayerHandler::class
                         => \Atsmacode\PokerGame\PlayerHandler\PlayerHandlerFactory::class,
                     \Atsmacode\PokerGame\BetHandler\BetHandler::class

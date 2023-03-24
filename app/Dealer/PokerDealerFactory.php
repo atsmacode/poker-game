@@ -2,6 +2,7 @@
 
 namespace Atsmacode\PokerGame\Dealer;
 
+use Atsmacode\PokerGame\Models\Deck;
 use Atsmacode\PokerGame\Models\HandStreetCard;
 use Atsmacode\PokerGame\Models\WholeCard;
 use Laminas\ServiceManager\Factory\FactoryInterface;
@@ -13,10 +14,12 @@ class PokerDealerFactory implements FactoryInterface
     {
         $wholeCardModel      = $container->get(WholeCard::class);
         $handStreetCardModel = $container->get(HandStreetCard::class);
+        $deckModel           = $container->get(Deck::class);
 
         return new PokerDealer(
             $wholeCardModel,
-            $handStreetCardModel
+            $handStreetCardModel,
+            $deckModel
         );
     }
 }

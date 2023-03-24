@@ -11,7 +11,6 @@ use Atsmacode\PokerGame\Models\Table;
 
 class GameState
 {
-    private array         $deck;
     private array         $communityCards = [];
     private array         $wholeCards = [];
     private ?array        $winner = null;
@@ -139,16 +138,6 @@ class GameState
         return isset($this->latestAction)
             ? $this->latestAction
             : $this->gameData->getLatestAction($this->handId);
-    }
-
-    public function setDeck(array $deck): void
-    {
-        $this->deck = $deck;
-    }
-
-    public function getDeck(): array
-    {
-        return $this->deck;
     }
 
     public function getPot(): int
