@@ -32,10 +32,10 @@ class PokerDealer extends Dealer
             $dealtCards++;
         }
 
-        return $this;
+        return $this->updateDeck($handId);
     }
 
-    public function dealStreetCards($handStreet, $cardCount)
+    public function dealStreetCards(int $handId, $handStreet, $cardCount)
     {
         $dealtCards = 0;
 
@@ -50,7 +50,7 @@ class PokerDealer extends Dealer
             $dealtCards++;
         }
 
-        return $this;
+        return $this->updateDeck($handId);
     }
 
     /**
@@ -59,7 +59,7 @@ class PokerDealer extends Dealer
      * @param string $suit
      * @return $this
      */
-    public function dealThisStreetCard($rank, $suit, $handStreet)
+    public function dealThisStreetCard(int $handId, $rank, $suit, $handStreet)
     {
         $cardId = $this->pickCard($rank, $suit)->getCard()['id'];
 
@@ -68,15 +68,25 @@ class PokerDealer extends Dealer
             'hand_street_id' => $handStreet->getId()
         ]);
 
-        return $this;
+        return $this->updateDeck($handId);
     }
 
-    public function saveDeck(int $handId): void
+    public function saveDeck(int $handId): self
     {
         $this->deckModel->create([
             'hand_id' => $handId,
             'cards'   => json_encode($this->deck)
         ]);
+
+        return $this;
+    }
+
+    public function updateDeck(int $handId): self
+    {
+        $deck = $this->deckModel->find(['hand_id' => $handId]);
+        $deck->update(['cards' => $this->deck]);
+
+        return $this;
     }
 
     public function setSavedDeck(int $handId): self

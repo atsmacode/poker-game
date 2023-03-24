@@ -31,14 +31,16 @@ class PokerDealerTest extends BaseTest
      */
     public function itCanDealCardsToMultiplePlayersAtATable()
     {
+        $handId = $this->hand->getId();
+
         foreach($this->table->getSeats() as $tableSeat){
-            $this->assertCount(0, $this->playerModel->getWholeCards($this->hand->getId(), $tableSeat['player_id']));
+            $this->assertCount(0, $this->playerModel->getWholeCards($handId, $tableSeat['player_id']));
         }
 
-        $this->pokerDealer->setDeck()->shuffle()->dealTo($this->table->getSeats(), 1, $this->hand->getId());
+        $this->pokerDealer->setDeck()->saveDeck($handId)->shuffle()->dealTo($this->table->getSeats(), 1, $handId);
 
         foreach($this->table->getSeats() as $tableSeat){
-            $this->assertCount(1, $this->playerModel->getWholeCards($this->hand->getId(), $tableSeat['player_id']));
+            $this->assertCount(1, $this->playerModel->getWholeCards($handId, $tableSeat['player_id']));
         }
     }
 
@@ -48,12 +50,14 @@ class PokerDealerTest extends BaseTest
      */
     public function itCanDealAStreetCard()
     {
+        $handId     =  $this->hand->getId();
         $handStreet = $this->handStreetModel->create([
             'street_id' => $this->streetModel->find(['name' => 'Flop'])->getId(),
             'hand_id'   => $this->handModel->create(['table_id' => $this->table->getId()])->getId()
         ]);
 
-        $this->pokerDealer->setDeck()->dealStreetCards(
+        $this->pokerDealer->setDeck()->saveDeck($handId)->dealStreetCards(
+            $handId,
             $handStreet,
             1
         );
@@ -67,6 +71,7 @@ class PokerDealerTest extends BaseTest
      */
     public function itCanDealASpecificStreetCard()
     {
+        $handId     =  $this->hand->getId();
         $handStreet = $this->handStreetModel->create([
             'street_id' => $this->streetModel->find(['name' => 'Flop'])->getId(),
             'hand_id'   => $this->handModel->create(['table_id' => $this->table->getId()])->getId()
@@ -74,7 +79,12 @@ class PokerDealerTest extends BaseTest
 
         $card = CardFactory::create(Card::ACE_HEARTS);
 
-        $this->pokerDealer->setDeck()->dealThisStreetCard($card['rank'], $card['suit'], $handStreet);
+        $this->pokerDealer->setDeck()->saveDeck($handId)->dealThisStreetCard(
+            $handId,
+            $card['rank'],
+            $card['suit'],
+            $handStreet
+        );
 
         $this->assertContains($card['id'], array_column($handStreet->cards(), 'card_id'));
     }
@@ -91,5 +101,21 @@ class PokerDealerTest extends BaseTest
         $savedDeck  = $this->pokerDealer->setSavedDeck($this->hand->getId());
 
         $this->assertSame($dealerDeck, $savedDeck->getDeck());
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function itCanUpdateADeck()
+    {
+        $this->pokerDealer->setDeck()->saveDeck($this->hand->getId());
+
+        $this->pokerDealer->dealTo($this->table->getSeats(), 1, $this->hand->getId());
+
+        $dealerDeck = $this->pokerDealer->getDeck();
+        $savedDeck  = $this->pokerDealer->setSavedDeck($this->hand->getId());
+
+        $this->assertNotSame($dealerDeck, $savedDeck->getDeck());
     }
 }
