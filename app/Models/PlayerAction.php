@@ -51,4 +51,27 @@ class PlayerAction extends Model
     {
         return $this->table_seat_id;
     }
+
+    public function getLatestAction(int $handId): self
+    {
+        try {
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder
+                ->select('*')
+                ->from('player_actions', 'pa')
+                ->leftJoin('pa', 'player_action_logs', 'pal', 'pa.id = pal.player_status_id')
+                ->where('pa.hand_id = ' . $handId)
+                ->orderBy('pal.id', 'DESC');
+
+            $rows = $queryBuilder->executeQuery() ? $queryBuilder->fetchAssociative() : [];
+
+            $this->content = $rows;
+            
+            $this->setModelProperties([$rows]);
+
+            return $this;
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage(), ['class' => self::class, 'method' => __METHOD__]);
+        }
+    }
 }
