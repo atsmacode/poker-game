@@ -46,7 +46,7 @@ class Start extends HandStep
                 $this->gameState->getSeats(),
                 $this->gameState->getGame()->streets[1]['whole_cards'],
                 $handId
-            )->setSavedDeck($handId);
+            );
         }
 
         return $this->gameState;

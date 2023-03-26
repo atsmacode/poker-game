@@ -96,11 +96,7 @@ class PokerDealer extends Dealer
         $savedDeck    = $this->deckModel->find(['hand_id' => $handId]);
         $hasSavedDeck = !empty($savedDeck->getContent());
 
-        if ($hasSavedDeck) {
-            $this->deck = $savedDeck->getDeck();
-        } else {
-            $this->deck = (new BaseDeck())->cards;
-        }
+        if ($hasSavedDeck) { $this->deck = $savedDeck->getDeck(); }
 
         return $this;
     }
