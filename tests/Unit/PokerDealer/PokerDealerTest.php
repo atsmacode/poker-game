@@ -109,13 +109,12 @@ class PokerDealerTest extends BaseTest
      */
     public function itCanUpdateADeck()
     {
-        $this->pokerDealer->setDeck()->saveDeck($this->hand->getId());
+        $dealerDeck = $this->pokerDealer->setDeck()->saveDeck($this->hand->getId())->getDeck();
 
         $this->pokerDealer->dealTo($this->table->getSeats(), 1, $this->hand->getId());
 
-        $dealerDeck = $this->pokerDealer->getDeck();
-        $savedDeck  = $this->pokerDealer->setSavedDeck($this->hand->getId());
+        $updatedDeck  = $this->pokerDealer->setSavedDeck($this->hand->getId());
 
-        $this->assertNotSame($dealerDeck, $savedDeck->getDeck());
+        $this->assertNotSame($dealerDeck, $updatedDeck->getDeck());
     }
 }
