@@ -48,7 +48,6 @@ class SitControllerTest extends BaseTest
     public function validResponseKeys()
     {
         return [
-            'deck',
             'pot',
             'communityCards',
             'players',

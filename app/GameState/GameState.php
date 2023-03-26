@@ -248,11 +248,11 @@ class GameState
         return $this->game;
     }
 
-    public function setGameDealer(?array $deck): void
+    public function setGameDealer(): void
     {
         $this->dealer = isset($this->handId)
             ? $this->pokerDealer->setSavedDeck($this->handId)
-            : $this->pokerDealer->setDeck();
+            : $this->pokerDealer;
     }
 
     public function getGameDealer(): PokerDealer

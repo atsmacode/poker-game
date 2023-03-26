@@ -34,7 +34,6 @@ abstract class SitController
         $gamePlay = $gamePlayService->start($currentDealer ?? null);
 
         return new Response(json_encode([
-            'deck'           => $gamePlay['deck'],
             'pot'            => $gamePlay['pot'],
             'communityCards' => $gamePlay['communityCards'],
             'players'        => $gamePlay['players'],

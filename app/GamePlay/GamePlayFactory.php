@@ -17,7 +17,6 @@ class GamePlayFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        $deck      = isset($options['deck']) ? $options['deck'] : null;
         $gameState = isset($options['gameState']) ? $options['gameState'] : new GameState(
             $container->get(GameData::class),
             $container->get(PokerDealer::class),
@@ -31,8 +30,7 @@ class GamePlayFactory implements FactoryInterface
             $container->get(NewStreet::class),
             $container->get(Showdown::class),
             $container->get(PlayerHandler::class),
-            $container->get(TableSeat::class),
-            $deck
+            $container->get(TableSeat::class)
         );
     }
 }

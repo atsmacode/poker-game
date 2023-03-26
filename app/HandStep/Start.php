@@ -31,11 +31,13 @@ class Start extends HandStep
         $this->gameState = $gameState;
         $handId          = $this->gameState->getHand()->getId();
 
-        $this->initiateStreetActions()->initiatePlayerStacks()->setDealerAndBlindSeats($currentDealer);
+        $this->initiateStreetActions()
+            ->initiatePlayerStacks()
+            ->setDealerAndBlindSeats($currentDealer);
+            
         $this->gameState->setPlayers();
 
         $this->gameState->getGameDealer()
-            ->setDeck()
             ->shuffle()
             ->saveDeck($handId);
 

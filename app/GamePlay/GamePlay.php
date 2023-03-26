@@ -24,11 +24,10 @@ class GamePlay
         private NewStreet     $newStreet,
         private Showdown      $showdown,
         private PlayerHandler $playerHandler,
-        private TableSeat     $tableSeats,
-                array         $deck = null
+        private TableSeat     $tableSeats
     ) {
         $this->gameState->setGame($game);
-        $this->gameState->setGameDealer($deck);
+        $this->gameState->setGameDealer();
     }
 
     public function setGameState(GameState $gameState): void
@@ -43,7 +42,6 @@ class GamePlay
         $this->gameState = $step ? $step->handle($this->gameState, $currentDealer) : $this->gameState;
 
         return [
-            'deck'           => $this->gameState->getGameDealer()->getDeck(),
             'pot'            => $this->gameState->getPot(),
             'communityCards' => $this->gameState->getCommunityCards(),
             'players'        => $this->playerHandler->handle($this->gameState),

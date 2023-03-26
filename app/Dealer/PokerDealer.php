@@ -14,7 +14,9 @@ class PokerDealer extends Dealer
         private WholeCard      $wholeCardModel,
         private HandStreetCard $handStreetCardModel,
         private Deck           $deckModel
-    ) {}
+    ) {
+        $this->deck = (new BaseDeck())->cards;
+    }
 
     public function dealTo(array $players, int $cardCount, ?int $handId)
     {
