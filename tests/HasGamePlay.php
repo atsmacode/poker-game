@@ -227,6 +227,19 @@ trait HasGamePlay
         $this->gameState->setLatestAction($playerAction);
     }
 
+    private function givenPlayerTwoChecks()
+    {
+        $playerAction = $this->playerActionFactory->create(
+            playerActionId: $this->gameState->getPlayers()[2]['player_action_id'],
+            handId:         $this->gameState->handId(),
+            actionId:       Action::CHECK_ID,
+            betAmount:      null,
+            active:         1,
+        );
+
+        $this->gameState->setLatestAction($playerAction);
+    }
+
     private function givenPlayerTwoCanContinue()
     {
         $this->tableSeatModel->find(['id' => $this->gameState->getSeats()[1]['id']])
