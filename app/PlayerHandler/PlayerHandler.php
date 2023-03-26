@@ -59,7 +59,13 @@ class PlayerHandler implements PlayerHandlerInterface
         $firstActivePlayer = $this->gameState->firstActivePlayer();
         $lastToAct         = $this->gameState->getLatestAction()->getTableSeatId();
 
-        if ($this->gameState->isNewStreet()) {
+        /** 
+         * isNewStreet is set at the time a new street is dealt.
+         * 
+         * The second condition is used to handle a player returning 
+         * to seat after a new street has already been dealt.
+         */
+        if ($this->gameState->isNewStreet() || ($this->gameState->isHeadsUp() && 1 < $this->gameState->handStreetCount())) {
             return $this->getThePlayerActionShouldBeOnForANewStreet($firstActivePlayer);
         }
 

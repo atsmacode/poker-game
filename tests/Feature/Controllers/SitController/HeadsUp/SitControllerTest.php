@@ -21,8 +21,7 @@ class SitControllerTest extends BaseTest
      */
     public function itCanStartTheGame()
     {
-        $this->isHeadsUp()
-            ->setGamePlay();
+        $this->isHeadsUp()->setGamePlay();
         
         $response = $this->sitControllerResponse();
 
@@ -47,8 +46,7 @@ class SitControllerTest extends BaseTest
      */
     public function thePreFlopActionWillInitiallyBeOnTheDealer()
     {
-        $this->isHeadsUp()
-            ->setGamePlay();
+        $this->isHeadsUp()->setGamePlay();
 
         $response = $this->sitControllerResponse();
 

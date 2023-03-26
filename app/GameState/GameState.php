@@ -269,4 +269,9 @@ class GameState
     {
         return $this->bigBlind;
     }
+
+    public function isHeadsUp()
+    {
+        return 2 === count($this->getActivePlayers());
+    }
 }

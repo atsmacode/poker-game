@@ -23,6 +23,17 @@ trait HasActionPosts
         return json_decode($response->getContent(), true);
     }
 
+    private function sitControllerResponseWithPlayerId($currentDealer = null, int $playerId = null): array
+    {
+        $response = (new PotLimitHoldEmSitController($this->container))->sit(
+            $this->table->getId(),
+            $currentDealer,
+            $playerId
+        );
+
+        return json_decode($response->getContent(), true);
+    }
+
     private function setPost()
     {
         $requestBody = [
