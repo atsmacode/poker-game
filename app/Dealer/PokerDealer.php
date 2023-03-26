@@ -84,7 +84,7 @@ class PokerDealer extends Dealer
     public function updateDeck(int $handId): self
     {
         $deck = $this->deckModel->find(['hand_id' => $handId]);
-        $deck->update(['cards' => $this->deck]);
+        $deck->update(['cards' => json_encode($this->deck)]);
 
         return $this;
     }
