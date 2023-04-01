@@ -6,10 +6,11 @@ use Atsmacode\PokerGame\Constants\Action;
 use Atsmacode\PokerGame\Tests\BaseTest;
 use Atsmacode\PokerGame\Tests\HasActionPosts;
 use Atsmacode\PokerGame\Tests\HasGamePlay;
+use Atsmacode\PokerGame\Tests\HasStreets;
 
 class PlayerActionControllerTest extends BaseTest
 {
-    use HasGamePlay, HasActionPosts;
+    use HasGamePlay, HasActionPosts, HasStreets;
 
     protected function setUp(): void
     {
@@ -36,6 +37,28 @@ class PlayerActionControllerTest extends BaseTest
         $this->assertContains(Action::FOLD, $response['players'][2]['availableOptions']);
         $this->assertContains(Action::CHECK, $response['players'][2]['availableOptions']);
         $this->assertContains(Action::BET, $response['players'][2]['availableOptions']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function actionWillBeOnTheDealerAfterBigBlindActsOnTheFlop()
+    {
+        $this->gamePlay->start();
+
+        $this->setFlop();
+
+        $request  = $this->setPlayerTwoChecksPost();
+        $response = $this->actionControllerResponse($request);
+
+        //var_dump($response);
+
+        $this->assertTrue($response['players'][1]['action_on']);
+
+        $this->assertContains(Action::FOLD, $response['players'][1]['availableOptions']);
+        $this->assertContains(Action::CHECK, $response['players'][1]['availableOptions']);
+        $this->assertContains(Action::BET, $response['players'][1]['availableOptions']);
     }
 
     private function givenActionsMeanNewStreetIsDealt()

@@ -52,6 +52,8 @@ abstract class SitController
             : $this->handModel->create(['table_id' => $tableId ?? 1]);
 
         $gameState       = $this->container->build(GameState::class, ['hand' => $hand]);
+        $gameState->setReturningPlayer();
+
         $gamePlayService = $this->container->build(GamePlay::class, [
             'game'      => $this->container->get($this->game),
             'gameState' => $gameState

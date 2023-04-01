@@ -56,17 +56,18 @@ class PlayerHandler implements PlayerHandlerInterface
 
     private function getActionOn(): array
     {
+        $dealer            = $this->gameState->getHand()->getDealer();
         $firstActivePlayer = $this->gameState->firstActivePlayer();
         $lastToAct         = $this->gameState->getLatestAction()->getTableSeatId();
 
-        /** 
-         * isNewStreet is set at the time a new street is dealt.
-         * 
-         * The second condition is used to handle a player returning 
-         * to seat after a new street has already been dealt.
-         */
-        if ($this->gameState->isNewStreet() || ($this->gameState->isHeadsUp() && 1 < $this->gameState->handStreetCount())) {
-            return $this->getActionOnForNewStreet($firstActivePlayer);
+        if (
+            $this->gameState->isNewStreet() ||
+            (
+                $this->gameState->isReturningPlayer()
+                && $this->dealerIsFirstActivePlayerHeadsUpPostFlop($dealer, $firstActivePlayer)
+            )
+        ) {
+            return $this->getActionOnForNewStreet($dealer, $firstActivePlayer);
         }
 
         $activePlayersAfterLastToAct = array_filter($this->gameState->getActivePlayers(), function ($value) use ($lastToAct) {
@@ -78,9 +79,8 @@ class PlayerHandler implements PlayerHandlerInterface
         return $playerAfterLastToAct ?: $firstActivePlayer;
     }
 
-    private function getActionOnForNewStreet(array $firstActivePlayer): array
+    private function getActionOnForNewStreet(array $dealer, array $firstActivePlayer): array
     {
-        $dealer            = $this->gameState->getHand()->getDealer();
         $playerAfterDealer = $this->tableSeatModel->playerAfterDealer($this->gameState->handId(), $dealer['table_seat_id']);
 
         return 0 < count($playerAfterDealer->getContent()) ? $playerAfterDealer->getContent()[0] : $firstActivePlayer;
@@ -132,5 +132,13 @@ class PlayerHandler implements PlayerHandlerInterface
         return count($this->gameState->getHandStreets()) === 1 &&
             $playerAction['big_blind'] &&
             !in_array(Action::RAISE['id'], array_column($playerActions, 'action_id'));
+    }
+
+    private function dealerIsFirstActivePlayerHeadsUpPostFlop(array $dealer, array $firstActivePlayer): bool
+    {
+        return
+            1 < $this->gameState->handStreetCount()
+            && $this->gameState->isHeadsUp()
+            && $dealer['table_seat_id'] === $firstActivePlayer['table_seat_id'];
     }
 }
