@@ -47,7 +47,7 @@ class PlayerHandler implements PlayerHandlerInterface
                 'small_blind'      => $playerAction['small_blind'],
                 'whole_cards'      => $wholeCards,
                 'action_on'        => $actionOn,
-                'availableOptions' => $actionOn ? $this->getAvailableOptionsBasedOnLatestAction($playerAction) : []
+                'availableOptions' => $actionOn ? $this->getOptionsViaLatestAction($playerAction) : []
             ];
         }
 
@@ -66,7 +66,7 @@ class PlayerHandler implements PlayerHandlerInterface
          * to seat after a new street has already been dealt.
          */
         if ($this->gameState->isNewStreet() || ($this->gameState->isHeadsUp() && 1 < $this->gameState->handStreetCount())) {
-            return $this->getThePlayerActionShouldBeOnForANewStreet($firstActivePlayer);
+            return $this->getActionOnForNewStreet($firstActivePlayer);
         }
 
         $activePlayersAfterLastToAct = array_filter($this->gameState->getActivePlayers(), function ($value) use ($lastToAct) {
@@ -78,7 +78,7 @@ class PlayerHandler implements PlayerHandlerInterface
         return $playerAfterLastToAct ?: $firstActivePlayer;
     }
 
-    private function getThePlayerActionShouldBeOnForANewStreet(array $firstActivePlayer): array
+    private function getActionOnForNewStreet(array $firstActivePlayer): array
     {
         $dealer            = $this->gameState->getHand()->getDealer();
         $playerAfterDealer = $this->tableSeatModel->playerAfterDealer($this->gameState->handId(), $dealer['table_seat_id']);
@@ -86,7 +86,7 @@ class PlayerHandler implements PlayerHandlerInterface
         return 0 < count($playerAfterDealer->getContent()) ? $playerAfterDealer->getContent()[0] : $firstActivePlayer;
     }
 
-    private function getAvailableOptionsBasedOnLatestAction($playerAction): array
+    private function getOptionsViaLatestAction($playerAction): array
     {
         $latestAction      = $this->gameState->getLatestAction();
         $continuingBetters = $this->tableSeatModel->getContinuingBetters((string) $this->gameState->getHand()->getId());
