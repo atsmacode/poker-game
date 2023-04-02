@@ -26,7 +26,6 @@ class GameState
     private Game          $game;
     private PokerDealer   $dealer;
     private array         $bigBlind;
-    private bool          $returningPlayer = false;
 
     public function __construct(
         private GameData    $gameData,
@@ -275,17 +274,6 @@ class GameState
     public function isHeadsUp()
     {
         return 2 === count($this->getActivePlayers());
-    }
-
-    public function setReturningPlayer()
-    {
-        $this->returningPlayer = true;
-    }
-
-    /** isReturningPlayer means a player is 'returning' to the table via SitController */
-    public function isReturningPlayer()
-    {
-        return $this->returningPlayer;
     }
 
     public function streetHasNoActions(int $handStreetId): bool

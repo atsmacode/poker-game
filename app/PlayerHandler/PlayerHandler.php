@@ -60,13 +60,7 @@ class PlayerHandler implements PlayerHandlerInterface
         $firstActivePlayer = $this->gameState->firstActivePlayer();
         $lastToAct         = $this->gameState->getLatestAction()->getTableSeatId();
 
-        if (
-            $this->gameState->isNewStreet() 
-            // || (
-            //     $this->gameState->isReturningPlayer()
-            //     && $this->dealerIsFirstActivePlayerHeadsUpPostFlop($dealer, $firstActivePlayer)
-            // )
-        ) {
+        if ($this->gameState->isNewStreet()) {
             return $this->getActionOnForNewStreet($dealer, $firstActivePlayer);
         }
 
