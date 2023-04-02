@@ -290,6 +290,9 @@ class GameState
 
     public function streetHasNoActions(int $handStreetId): bool
     {
-        return 0 === count($this->gameData->getStreetActions($handStreetId));
+        $actions = $this->gameData->getStreetActions($handStreetId);
+        $acted   = array_filter($actions, function($value){ return null !== $value['action_id']; });
+
+        return 0 === count($acted);
     }
 }
