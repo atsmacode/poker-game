@@ -37,18 +37,20 @@ class PlayerActionFactory
             'active'     => $active
         ]);
 
-        $this->playerActionLogModel->create([
-            'player_status_id' => $playerAction->getId(),
-            'bet_amount'       => $playerAction->getBetAmount(),
-            'big_blind'        => (int) $playerAction->isBigBlind(),
-            'small_blind'      => (int) $playerAction->isSmallBlind(),
-            'player_id'        => $playerAction->getPlayerId(),
-            'action_id'        => $playerAction->getActionId(),
-            'hand_id'          => $handId,
-            'hand_street_id'   => $playerAction->getHandStreetId(),
-            'table_seat_id'    => $playerAction->getTableSeatId(),
-            'created_at'       => date('Y-m-d H:i:s', time())
-        ]);
+        if (null !== $actionId) {
+            $this->playerActionLogModel->create([
+                'player_status_id' => $playerAction->getId(),
+                'bet_amount'       => $playerAction->getBetAmount(),
+                'big_blind'        => (int) $playerAction->isBigBlind(),
+                'small_blind'      => (int) $playerAction->isSmallBlind(),
+                'player_id'        => $playerAction->getPlayerId(),
+                'action_id'        => $playerAction->getActionId(),
+                'hand_id'          => $handId,
+                'hand_street_id'   => $playerAction->getHandStreetId(),
+                'table_seat_id'    => $playerAction->getTableSeatId(),
+                'created_at'       => date('Y-m-d H:i:s', time())
+            ]);
+        }
 
         return $playerAction;
     }

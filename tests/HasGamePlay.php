@@ -175,6 +175,19 @@ trait HasGamePlay
         $this->gameState->setLatestAction($playerAction);
     }
 
+    private function givenPlayerOnePreviouslyCalled()
+    {
+        $playerAction = $this->playerActionFactory->create(
+            playerActionId: $this->gameState->getPlayers()[0]['player_action_id'],
+            handId:         $this->gameState->handId(),
+            actionId:       null,
+            betAmount:      50,
+            active:         1,
+        );
+
+        $this->gameState->setLatestAction($playerAction);
+    }
+
     private function givenPlayerOneFolds()
     {
         $playerAction = $this->playerActionFactory->create(
@@ -240,6 +253,19 @@ trait HasGamePlay
         $this->gameState->setLatestAction($playerAction);
     }
 
+    private function givenPlayerTwoPreviouslyChecked()
+    {
+        $playerAction = $this->playerActionFactory->create(
+            playerActionId: $this->gameState->getPlayers()[1]['player_action_id'],
+            handId:         $this->gameState->handId(),
+            actionId:       null,
+            betAmount:      null,
+            active:         1,
+        );
+
+        $this->gameState->setLatestAction($playerAction);
+    }
+
     private function givenPlayerTwoCanContinue()
     {
         $this->tableSeatModel->find(['id' => $this->gameState->getSeats()[1]['id']])
@@ -262,6 +288,19 @@ trait HasGamePlay
             playerActionId: $this->gameState->getPlayers()[2]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::CALL_ID,
+            betAmount:      50,
+            active:         1,
+        );
+
+        $this->gameState->setLatestAction($playerAction);
+    }
+
+    private function givenPlayerThreePreviouslyCalled()
+    {
+        $playerAction = $this->playerActionFactory->create(
+            playerActionId: $this->gameState->getPlayers()[2]['player_action_id'],
+            handId:         $this->gameState->handId(),
+            actionId:       null,
             betAmount:      50,
             active:         1,
         );

@@ -7,14 +7,19 @@ use Atsmacode\PokerGame\Tests\BaseTest;
 use Atsmacode\PokerGame\Tests\HasActionPosts;
 use Atsmacode\PokerGame\Tests\HasGamePlay;
 use Atsmacode\PokerGame\Tests\HasStreets;
+use Atsmacode\PokerGame\Models\PlayerAction;
 
 class PlayerActionControllerTest extends BaseTest
 {
     use HasGamePlay, HasActionPosts, HasStreets;
 
+    private PlayerAction $playerActionModel;
+
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->playerActionModel  = $this->container->build(PlayerAction::class);
 
         $this->isSixHanded()
             ->setHand()
@@ -25,11 +30,13 @@ class PlayerActionControllerTest extends BaseTest
      * @test
      * @return void
      */
-    public function a_player_facing_a_raise_call_fold_can_fold_call_or_raise()
+    public function aPlayerFacingAPreviousRaiseCanFoldCallOrRaise()
     {
         $this->gamePlay->start();
 
         $this->setFlop();
+
+        $this->updateActionsOnNewStreet();
 
         $this->givenPlayerFourRaises();
         $this->givenPlayerFourCanContinue();
@@ -37,7 +44,7 @@ class PlayerActionControllerTest extends BaseTest
         $this->givenPlayerFiveCalls();
         $this->givenPlayerFiveCanContinue();
 
-        $request  = $this->setPlayerSixFoldsPost();
+        $request  = $this->setPlayerSixFoldsPost(streetNumber: 1);
         $response = $this->actionControllerResponse($request);
 
         $this->assertTrue($response['players'][1]['action_on']);
@@ -75,5 +82,19 @@ class PlayerActionControllerTest extends BaseTest
         $this->assertContains(Action::FOLD, $response['players'][3]['availableOptions']);
         $this->assertContains(Action::CHECK, $response['players'][3]['availableOptions']);
         $this->assertContains(Action::RAISE, $response['players'][3]['availableOptions']);
+    }
+
+    private function updateActionsOnNewStreet(): void
+    {
+        $this->gameState->updateHandStreets();
+
+        $handStreets  = $this->gameState->getHandStreets();
+        $latestStreet = array_pop($handStreets);
+
+        $this->playerActionModel->find(['hand_id' => $this->gameState->handId()])
+            ->updateBatch([
+                'action_id'      => null,
+                'hand_street_id' => $latestStreet['id']
+            ], 'hand_id = ' . $this->gameState->handId());
     }
 }

@@ -91,12 +91,12 @@ trait HasActionPosts
         );
     }
 
-    private function setPlayerTwoChecksPost()
+    private function setPlayerTwoChecksPost(int $streetNumber = null)
     {
         $requestBody = [
             'player_id'      => $this->playerTwo->getId(),
             'table_seat_id'  => $this->gameState->getSeats()[1]['id'],
-            'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()[0]['id'],
+            'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()[$streetNumber ?: 0]['id'],
             'action_id'      => Action::CHECK_ID,
             'bet_amount'     => null,
             'active'         => 1,
@@ -243,12 +243,12 @@ trait HasActionPosts
         );
     }
 
-    private function setPlayerSixFoldsPost()
+    private function setPlayerSixFoldsPost(int $streetNumber = null)
     {
         $requestBody = [
             'player_id'      => $this->playerSix->getId(),
             'table_seat_id'  => $this->gameState->getSeats()[5]['id'],
-            'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()[0]['id'],
+            'hand_street_id' => $this->gameState->updateHandStreets()->getHandStreets()[$streetNumber ?: 0]['id'],
             'action_id'      => Action::FOLD_ID,
             'bet_amount'     => null,
             'active'         => 0,

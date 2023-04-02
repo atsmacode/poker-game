@@ -5,6 +5,7 @@ namespace Atsmacode\PokerGame\Tests\Feature\Controllers\SitController\ThreeHande
 use Atsmacode\PokerGame\Tests\BaseTest;
 use Atsmacode\PokerGame\Tests\HasActionPosts;
 use Atsmacode\PokerGame\Tests\HasGamePlay;
+use Atsmacode\PokerGame\Tests\HasStreets;
 
 class SitControllerTest extends BaseTest
 {

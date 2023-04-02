@@ -61,11 +61,11 @@ class PlayerHandler implements PlayerHandlerInterface
         $lastToAct         = $this->gameState->getLatestAction()->getTableSeatId();
 
         if (
-            $this->gameState->isNewStreet() ||
-            (
-                $this->gameState->isReturningPlayer()
-                && $this->dealerIsFirstActivePlayerHeadsUpPostFlop($dealer, $firstActivePlayer)
-            )
+            $this->gameState->isNewStreet() 
+            // || (
+            //     $this->gameState->isReturningPlayer()
+            //     && $this->dealerIsFirstActivePlayerHeadsUpPostFlop($dealer, $firstActivePlayer)
+            // )
         ) {
             return $this->getActionOnForNewStreet($dealer, $firstActivePlayer);
         }

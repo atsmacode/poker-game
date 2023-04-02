@@ -41,6 +41,8 @@ class GamePlay
         
         $this->gameState = $step ? $step->handle($this->gameState, $currentDealer) : $this->gameState;
 
+        $this->handleNewStreet();
+
         return [
             'pot'            => $this->gameState->getPot(),
             'communityCards' => $this->gameState->getCommunityCards(),
@@ -105,5 +107,15 @@ class GamePlay
     protected function theLastHandWasCompleted()
     {
         return null !== $this->gameState->getHand()->getCompletedOn();
+    }
+
+    private function handleNewStreet(): void
+    {
+        $handStreets  = $this->gameState->getHandStreets();
+        $latestStreet = array_pop($handStreets);
+
+        if (0 < count($handStreets) && $this->gameState->streetHasNoActions($latestStreet['id'])) {
+            $this->gameState->setNewStreet();
+        }
     }
 }

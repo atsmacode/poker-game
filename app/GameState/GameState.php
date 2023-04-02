@@ -287,4 +287,9 @@ class GameState
     {
         return $this->returningPlayer;
     }
+
+    public function streetHasNoActions(int $handStreetId): bool
+    {
+        return 0 === count($this->gameData->getStreetActions($handStreetId));
+    }
 }

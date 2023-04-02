@@ -64,4 +64,9 @@ class GameData
     {
         return $this->playerActionModel->getLatestAction($handId);
     }
+
+    public function getStreetActions(int $handStreetId): array
+    {
+        return $this->playerActionModel->getStreetActions($handStreetId);
+    }
 }
