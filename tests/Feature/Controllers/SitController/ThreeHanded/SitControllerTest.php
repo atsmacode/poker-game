@@ -22,7 +22,7 @@ class SitControllerTest extends BaseTest
      * @test
      * @return void
      */
-    public function it_can_start_the_game()
+    public function itCanStartTheGame()
     {
         $response = $this->sitControllerResponse();
 
@@ -48,7 +48,7 @@ class SitControllerTest extends BaseTest
      * @test
      * @return void
      */
-    public function the_pre_flop_action_will_initially_be_on_player_one()
+    public function thePreFlopActionWillInitiallyBeOnPlayerOne()
     {
         $response = $this->sitControllerResponse();
 
