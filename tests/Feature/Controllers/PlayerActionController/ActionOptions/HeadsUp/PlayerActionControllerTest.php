@@ -52,8 +52,6 @@ class PlayerActionControllerTest extends BaseTest
         $request  = $this->setPlayerTwoChecksPost();
         $response = $this->actionControllerResponse($request);
 
-        //var_dump($response);
-
         $this->assertTrue($response['players'][1]['action_on']);
 
         $this->assertContains(Action::FOLD, $response['players'][1]['availableOptions']);
