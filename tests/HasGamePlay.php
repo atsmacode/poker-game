@@ -230,7 +230,7 @@ trait HasGamePlay
     private function givenPlayerTwoChecks()
     {
         $playerAction = $this->playerActionFactory->create(
-            playerActionId: $this->gameState->getPlayers()[2]['player_action_id'],
+            playerActionId: $this->gameState->getPlayers()[1]['player_action_id'],
             handId:         $this->gameState->handId(),
             actionId:       Action::CHECK_ID,
             betAmount:      null,
@@ -254,6 +254,19 @@ trait HasGamePlay
             ->update([
                 'can_continue' => 0
             ]);
+    }
+
+    private function givenPlayerThreeCalls()
+    {
+        $playerAction = $this->playerActionFactory->create(
+            playerActionId: $this->gameState->getPlayers()[2]['player_action_id'],
+            handId:         $this->gameState->handId(),
+            actionId:       Action::CALL_ID,
+            betAmount:      50,
+            active:         1,
+        );
+
+        $this->gameState->setLatestAction($playerAction);
     }
 
     private function givenPlayerThreeChecks()
