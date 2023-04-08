@@ -237,29 +237,17 @@ class Start extends HandStep
     {
         $currentDealer = $this->setDealer($currentDealerSet);
 
-        /** TODO: These must be called in order. Also will only work if all seats have a stack/player.*/
         if ($this->noDealerIsSetOrThereIsNoSeatAfterTheCurrentDealer($currentDealer)) {
 
             $dealer         = $this->gameState->getSeats()[0];
             $smallBlindSeat = $this->gameState->getSeat($dealer['id']);
             $bigBlindSeat   = $this->gameState->getSeat($dealer['id'] + 1);
 
-        } else if ($this->thereAreThreeSeatsAfterTheCurrentDealer($currentDealer)) {
-            
-            $dealer         = $this->gameState->getSeat($currentDealer['id'] + 1);
-            $smallBlindSeat = $this->gameState->getSeat($dealer['id'] + 1);
-            $bigBlindSeat   = $this->gameState->getSeat($dealer['id'] + 2);
-
-        } else if ($this->thereAreTwoSeatsAfterTheCurrentDealer($currentDealer)) {
-
-            $dealer         = $this->gameState->getSeat($currentDealer['id'] + 1);
-            $smallBlindSeat = $this->gameState->getSeat($dealer['id'] + 1);
-            $bigBlindSeat   = $this->gameState->getSeats()[0];
-
         } else {
+
             $dealer         = $this->gameState->getSeat($currentDealer['id'] + 1);
-            $smallBlindSeat = $this->gameState->getSeats()[0];
-            $bigBlindSeat   = $this->gameState->getSeats()[1];
+            $smallBlindSeat = $this->gameState->getSeats()[1];
+            $bigBlindSeat   = $this->gameState->getSeats()[0];
 
         }
 

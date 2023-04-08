@@ -34,4 +34,38 @@ class SitControllerTest extends BaseTest
 
         $this->assertEquals(true, $response['players'][2]['action_on']);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function whenCurrentDealerIsPlayerOnePlayerTwoWillBeTheNewDealer()
+    {
+        $currentDealer = $this->tableSeatModel->find([
+            'id' => $this->gameState->getSeats()[0]['id']
+        ]);
+        
+        $this->gamePlay->start($currentDealer);
+
+        $response = $this->sitControllerResponseWithPlayerId(playerId: $this->playerOne->getId());
+
+        $this->assertEquals(1, $response['players'][2]['is_dealer']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function whenCurrentDealerIsPlayerOnePlayerTwoWillBeTheNewSmallBlind()
+    {
+        $currentDealer = $this->tableSeatModel->find([
+            'id' => $this->gameState->getSeats()[0]['id']
+        ]);
+
+        $this->gamePlay->start($currentDealer);
+
+        $response = $this->sitControllerResponseWithPlayerId(playerId: $this->playerOne->getId());
+
+        $this->assertEquals(1, $response['players'][2]['small_blind']);
+    }
 }
