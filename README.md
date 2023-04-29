@@ -28,6 +28,23 @@ It is by no means a finished poker game. Here are some of the things it does not
 
 The testing is primarily based on Feature tests where I've set-up a range of scenarios.
 
+# Documentation
+
+*I've saved some examples of how I plan and map out changes using Lucid Charts:*
+
+**Improvments**
+
+- [Game Play Extraction](/documentation/improvements/gameplay_extraction.pdf)
+- [Kickers](/documentation/improvements/kickers.pdf)
+- [Log Player Actions](/documentation/improvements/log_player_actions.pdf)
+- [Sit Players at Tables](/documentation/improvements/sit_players_at_tables.pdf)
+
+**Planning**
+
+- [Bet & Pot Process](/documentation/planning/bet_and_pot_process.pdf)
+- [Database Design](/documentation/planning/database_design.pdf)
+- [General Hand Flow](/documentation/planning/general_hand_flow.pdf)
+
 # Environment
 
 ## PHP
