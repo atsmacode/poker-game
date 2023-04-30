@@ -51,7 +51,8 @@ class SitControllerTest extends BaseTest
             'pot',
             'communityCards',
             'players',
-            'winner'
+            'winner',
+            'sitout'
         ];
     }
 }
