@@ -52,7 +52,7 @@ class SitControllerTest extends BaseTest
             'communityCards',
             'players',
             'winner',
-            'sitout'
+            'sittingOut'
         ];
     }
 }

@@ -61,19 +61,13 @@ abstract class SitController
             ? $gamePlayService->play($gameState)
             : $gamePlayService->start($currentDealer);
 
-        return new Response(json_encode([
-            'pot'            => $gamePlay['pot'],
-            'communityCards' => $gamePlay['communityCards'],
-            'players'        => $gamePlay['players'],
-            'winner'         => $gamePlay['winner'],
-            'sitout'        => $playerId ? $this->isPlayerSittingOut($playerId, $gameState) : false
-        ]));
+        return new Response(json_encode($gamePlay));
     }
 
-    private function isPlayerSittingOut(int $playerId, GameState $gameState)
-    {
-        return !in_array($playerId, array_column($gameState->getPlayers(), 'player_id'));
-    }
+    // private function isPlayerSittingOut(int $playerId, GameState $gameState)
+    // {
+    //     return !in_array($playerId, array_column($gameState->getPlayers(), 'player_id'));
+    // }
 
     private function setWaitingPlayerData(int $playerId, int $tableSeatId, int $seatNumber)
     {

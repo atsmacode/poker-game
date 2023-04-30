@@ -47,7 +47,8 @@ class GamePlay
             'pot'            => $this->gameState->getPot(),
             'communityCards' => $this->gameState->getCommunityCards(),
             'players'        => $this->playerHandler->handle($this->gameState),
-            'winner'         => $this->gameState->getWinner()
+            'winner'         => $this->gameState->getWinner(),
+            'sittingOut'     => $this->gameState->getSittingOutPlayers()
         ];
     }
 

@@ -183,6 +183,14 @@ class GameState
         return $this->players;
     }
 
+    public function getSittingOutPlayers()
+    {
+        return array_diff(
+            array_column($this->getSeats(), 'player_id'),
+            array_column($this->getPlayers(), 'player_id')
+        );
+    }
+
     public function getActivePlayers(): array
     {
         return array_filter($this->players, function($player){
