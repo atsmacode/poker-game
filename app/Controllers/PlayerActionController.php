@@ -48,11 +48,6 @@ abstract class PlayerActionController
         ]);
         $gamePlay = $gamePlayService->play($gameState);
 
-        return new Response(json_encode([
-            'pot'            => $gamePlay['pot'],
-            'communityCards' => $gamePlay['communityCards'],
-            'players'        => $gamePlay['players'],
-            'winner'         => $gamePlay['winner']
-        ]));
+        return new Response(json_encode($gamePlay));
     }
 }
