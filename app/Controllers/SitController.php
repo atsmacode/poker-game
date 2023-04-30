@@ -64,11 +64,6 @@ abstract class SitController
         return new Response(json_encode($gamePlay));
     }
 
-    // private function isPlayerSittingOut(int $playerId, GameState $gameState)
-    // {
-    //     return !in_array($playerId, array_column($gameState->getPlayers(), 'player_id'));
-    // }
-
     private function setWaitingPlayerData(int $playerId, int $tableSeatId, int $seatNumber)
     {
         $playerName =  $this->playerModel->find(['id' => $playerId])->getName();
