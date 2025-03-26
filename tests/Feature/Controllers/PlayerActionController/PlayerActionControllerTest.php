@@ -43,7 +43,8 @@ class PlayerActionControllerTest extends BaseTest
             'pot',
             'communityCards',
             'players',
-            'winner'
+            'winner',
+            'sittingOut'
         ];
     }
 }
