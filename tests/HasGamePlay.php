@@ -9,6 +9,7 @@ use Atsmacode\PokerGame\GameState\GameState;
 use Atsmacode\PokerGame\HandStep\Start;
 use Atsmacode\PokerGame\Models\Hand;
 use Atsmacode\PokerGame\Models\Player;
+use Atsmacode\PokerGame\Models\Table;
 use Atsmacode\PokerGame\Models\TableSeat;
 
 trait HasGamePlay
@@ -23,6 +24,7 @@ trait HasGamePlay
     private Player    $playerFour;
     private Player    $playerFive;
     private Player    $playerSix;
+    private Table     $table;
     private TableSeat $tableSeatOne;
     private TableSeat $tableSeatTwo;
     private TableSeat $tableSeatThree;
